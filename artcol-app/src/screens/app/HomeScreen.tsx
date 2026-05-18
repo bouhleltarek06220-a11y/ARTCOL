@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Screen } from '@/components/Screen';
 import { Button } from '@/components/Button';
+import { Avatar } from '@/components/Avatar';
 import { useAuth } from '@/context/AuthContext';
 import { colors, fonts, fontSize, radius, spacing } from '@/lib/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,6 +20,18 @@ export function HomeScreen({ navigation }: Props) {
           <Text style={styles.greeting}>Salut</Text>
           <Text style={styles.name}>{profile?.display_name ?? 'Artiste'}</Text>
         </View>
+        <Pressable
+          onPress={() => navigation.navigate('Profile')}
+          accessibilityRole="button"
+          accessibilityLabel="Voir mon profil"
+        >
+          <Avatar
+            uri={profile?.avatar_url}
+            displayName={profile?.display_name ?? 'A'}
+            size={48}
+            ring={false}
+          />
+        </Pressable>
       </View>
 
       <View style={styles.placeholderCard}>
@@ -45,7 +58,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginTop: spacing['3xl'],
     marginBottom: spacing['3xl'],
   },

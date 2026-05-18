@@ -1,23 +1,31 @@
-# 🌸 ARTCOL — App Mobile (Phase 1)
+# 🌸 ARTCOL — App Mobile (Phases 1 + 2)
 
 Réseau social cross-platform pour artistes en quête de visibilité.
 Stack : **React Native + Expo + Supabase + Cloudinary** · Design : **ARTCOL**
 
 ---
 
-## 📦 Ce qui est livré dans cette Phase 1
+## 📦 Ce qui est livré (Phases 1 + 2)
 
-✅ Setup complet React Native + Expo (TypeScript strict)
-✅ Auth Supabase (signup, signin, signout, persistance session)
-✅ Schéma DB Postgres avec **Row Level Security** (table `profiles`)
-✅ Trigger SQL : création auto de profil à l'inscription
-✅ Écrans : Welcome, SignUp, SignIn, Home, Profile, EditProfile
-✅ Design system ARTCOL appliqué (palette, fontes, composants)
-✅ Navigation conditionnelle (Auth vs App selon session)
-✅ Storage bucket Supabase `avatars` prêt pour Phase 2
+**Phase 1** ✅
+- Setup complet React Native + Expo (TypeScript strict)
+- Auth Supabase (signup, signin, signout, persistance session)
+- Schéma DB Postgres avec **Row Level Security** (table `profiles`)
+- Trigger SQL : création auto de profil à l'inscription
+- Écrans : Welcome, SignUp, SignIn, Home, Profile, EditProfile
+- Design system ARTCOL (palette, fontes, composants)
+- Navigation conditionnelle (Auth vs App selon session)
 
-❌ **Pas encore** : avatar upload, feed, amis, notifications, Cloudinary
-(arrivent en Phases 2-7)
+**Phase 2** ✅
+- Composant `Avatar` réutilisable (image ou fallback initiales, ring néon)
+- Picker photo via `expo-image-picker` (galerie, crop carré 1:1)
+- Compression locale via `expo-image-manipulator` (resize 512×512, JPEG 0.8)
+- Upload vers bucket Supabase `avatars` (path `{uid}/avatar.jpg`, cohérent RLS, upsert)
+- Cache-busting via query string `?v=timestamp`
+- Avatar visible dans Home (header tappable), Profile et EditProfile
+
+❌ **Pas encore** : feed, amis, collaborations, notifications push, Cloudinary CDN
+(arrivent en Phases 3-7)
 
 ---
 
@@ -174,10 +182,10 @@ artcol-app/
 
 ## 🛣️ Roadmap des prochaines phases
 
-| Phase | Contenu | Estimation |
-|-------|---------|------------|
-| **2** | Avatar upload (Supabase Storage + Cloudinary), profils enrichis | 1-2 sessions |
-| **3** | Feed de performances : posts texte/photo/vidéo/audio, like, commentaire | 3-4 sessions |
+| Phase | Contenu | Statut |
+|-------|---------|--------|
+| **2** | Avatar upload (Supabase Storage), composant Avatar réutilisable | ✅ livrée |
+| **3** | Feed de performances : posts texte/photo/vidéo/audio, like, commentaire | À venir |
 | **4** | Système d'amis : follow, demande, liste, recherche d'artistes | 2-3 sessions |
 | **5** | Collaborations : invitations entre artistes, statuts (en cours / accepté / refusé) | 2-3 sessions |
 | **6** | Notifications push (Expo Notifications) + écran notifications | 1-2 sessions |

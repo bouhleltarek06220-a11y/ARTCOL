@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '@/components/Screen';
 import { Button } from '@/components/Button';
+import { Avatar } from '@/components/Avatar';
 import { useAuth } from '@/context/AuthContext';
 import { colors, fonts, fontSize, radius, spacing } from '@/lib/theme';
 import type { AppStackParamList } from '@/navigation/AppNavigator';
@@ -40,11 +41,11 @@ export function ProfileScreen({ navigation }: Props) {
   return (
     <Screen scroll>
       <View style={styles.header}>
-        <View style={styles.avatarPlaceholder}>
-          <Text style={styles.avatarInitials}>
-            {profile.display_name.slice(0, 2).toUpperCase()}
-          </Text>
-        </View>
+        <Avatar
+          uri={profile.avatar_url}
+          displayName={profile.display_name}
+          size={96}
+        />
         <Text style={styles.displayName}>{profile.display_name}</Text>
         <Text style={styles.username}>@{profile.username}</Text>
       </View>
@@ -80,27 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: spacing['3xl'],
     marginBottom: spacing['3xl'],
-  },
-  avatarPlaceholder: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: colors.bgElevated,
-    borderWidth: 2,
-    borderColor: colors.neonLime,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.lg,
-    shadowColor: colors.neonLime,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  avatarInitials: {
-    fontFamily: fonts.displayBold,
-    fontSize: fontSize['3xl'],
-    color: colors.neonLime,
+    gap: spacing.lg,
   },
   displayName: {
     fontFamily: fonts.displayBold,
@@ -111,7 +92,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.mono,
     fontSize: fontSize.sm,
     color: colors.neonViolet,
-    marginTop: spacing.xs,
+    marginTop: -spacing.md,
   },
   card: {
     backgroundColor: colors.bgElevated,

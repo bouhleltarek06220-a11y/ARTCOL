@@ -32,7 +32,14 @@
     },
     "plugins": [
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "ARTCOL a besoin d'accéder à tes photos pour mettre à jour ton avatar.",
+          "cameraPermission": "ARTCOL a besoin de l'appareil photo pour prendre une photo de profil."
+        }
+      ]
     ],
     "extra": {
       "eas": {
