@@ -3011,8 +3011,11 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 </div>
 <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--brd)">
 <h4 style="font-size:13px;font-weight:700;margin-bottom:8px">🔑 Configuration Brevo (envoi réel)</h4>
-<p style="font-size:11px;color:var(--t2);margin-bottom:10px">Créez un compte gratuit sur <a href="https://www.brevo.com" target="_blank">brevo.com</a> (300 emails/jour). Récupérez votre clé API dans Paramètres → API.</p>
-<div class="form-group"><label>Clé API Brevo</label><input id="camp-brevo-key" type="password" placeholder="xkeysib-..." oninput="CRM.campaigns.saveBrevoKey(this.value)"></div>
+<div id="brevo-proxy-info" style="font-size:11px;padding:8px 10px;border-radius:6px;background:rgba(13,158,109,.08);border:1px solid rgba(13,158,109,.2);color:var(--ok);margin-bottom:10px;display:none">
+  🛡️ <strong>Mode équipe activé</strong> — la clé Brevo est gérée par Tarek côté Supabase, tu n'as rien à configurer ici. Toi, Julie et Myriam pouvez envoyer les mails sans toucher au champ ci-dessous.
+</div>
+<p style="font-size:11px;color:var(--t2);margin-bottom:10px">Fallback : si le proxy Supabase n'est pas configuré, colle ta propre clé API Brevo ici. Créer un compte sur <a href="https://www.brevo.com" target="_blank">brevo.com</a> (300 emails/jour gratuits).</p>
+<div class="form-group"><label>Clé API Brevo (optionnel si proxy activé)</label><input id="camp-brevo-key" type="password" placeholder="xkeysib-... (laisser vide si proxy actif)" oninput="CRM.campaigns.saveBrevoKey(this.value)"></div>
 <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
 <button class="btn-s" onclick="CRM.campaigns.testBrevo()" style="font-size:11px">🧪 Tester la connexion</button>
 <span id="camp-brevo-status" style="font-size:11px;color:var(--t2)"></span>
@@ -4458,17 +4461,17 @@ window.CRM = {
     async healthCheck(force) {
       // Evite de spammer l'endpoint : cache 60s
       if (!force && this._proxyReady && (Date.now() - this._lastHealthCheck) < 60000) return this._proxyReady;
-      if (!this._proxyUrl) return { claude: false, whisper: false, proxy_reachable: false };
+      if (!this._proxyUrl) return { claude: false, whisper: false, brevo: false, proxy_reachable: false };
       try {
         const r = await fetch(this._proxyUrl, {
           method: 'GET',
           headers: { 'Authorization': 'Bearer ' + (CRM.auth.session?.access_token || SUPA_KEY) }
         });
         const j = await r.json();
-        this._proxyReady = { claude: !!j.claude_ready, whisper: !!j.whisper_ready, proxy_reachable: true };
+        this._proxyReady = { claude: !!j.claude_ready, whisper: !!j.whisper_ready, brevo: !!j.brevo_ready, proxy_reachable: true };
         this._lastHealthCheck = Date.now();
       } catch(e) {
-        this._proxyReady = { claude: false, whisper: false, proxy_reachable: false };
+        this._proxyReady = { claude: false, whisper: false, brevo: false, proxy_reachable: false };
       }
       return this._proxyReady;
     },
@@ -4550,11 +4553,91 @@ window.CRM = {
       return await r.json();
     },
 
+    // ═══ BREVO (transactional emails) via proxy ═══
+    async callBrevo(payload) {
+      // 1. Tenter le proxy si dispo et configuré
+      const health = await this.healthCheck();
+      if (health.proxy_reachable && health.brevo) {
+        try {
+          const r = await fetch(this._proxyUrl + '?service=brevo&endpoint=send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type':  'application/json',
+              'Authorization': 'Bearer ' + (CRM.auth.session?.access_token || SUPA_KEY)
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await r.json().catch(()=>({}));
+          if (r.ok) return { ok: true, data };
+          if (r.status === 503) { console.warn('[AI] Proxy Brevo pas configuré, fallback localStorage'); }
+          else { throw new Error(data.error || data.message || 'Proxy Brevo error ' + r.status); }
+        } catch(e) {
+          console.warn('[AI] Proxy Brevo échoué, fallback direct :', e);
+        }
+      }
+      // 2. Fallback : appel direct (clé localStorage)
+      const key = (localStorage.getItem('playazur_crm_brevo_key') || '').trim();
+      if (!key) throw new Error('Clé API Brevo absente (ni proxy ni localStorage)');
+      const r = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'api-key': key, 'Content-Type': 'application/json', 'accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(data.message || 'Brevo error ' + r.status);
+      return { ok: true, data };
+    },
+
+    async testBrevo() {
+      // Tente proxy → GET /v3/account (renvoie email + plan)
+      const health = await this.healthCheck();
+      if (health.proxy_reachable && health.brevo) {
+        try {
+          const r = await fetch(this._proxyUrl + '?service=brevo&endpoint=account', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + (CRM.auth.session?.access_token || SUPA_KEY) }
+          });
+          if (r.ok) return await r.json();
+        } catch(e) { console.warn('[AI] testBrevo proxy échoué :', e); }
+      }
+      const key = (localStorage.getItem('playazur_crm_brevo_key') || '').trim();
+      if (!key) throw new Error('Clé API Brevo absente');
+      const r = await fetch('https://api.brevo.com/v3/account', {
+        headers: { 'api-key': key, 'accept': 'application/json' }
+      });
+      if (!r.ok) throw new Error('Brevo error ' + r.status);
+      return await r.json();
+    },
+
+    async brevoEvents(tags, limit) {
+      tags = tags || 'playazur-crm-campaign';
+      limit = limit || 50;
+      const health = await this.healthCheck();
+      if (health.proxy_reachable && health.brevo) {
+        try {
+          const r = await fetch(this._proxyUrl + '?service=brevo&endpoint=events&tags=' + encodeURIComponent(tags) + '&limit=' + limit, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + (CRM.auth.session?.access_token || SUPA_KEY) }
+          });
+          if (r.ok) return await r.json();
+        } catch(e) { console.warn('[AI] brevoEvents proxy échoué :', e); }
+      }
+      const key = (localStorage.getItem('playazur_crm_brevo_key') || '').trim();
+      if (!key) throw new Error('Clé API Brevo absente');
+      const r = await fetch('https://api.brevo.com/v3/smtp/statistics/events?limit=' + limit + '&tags=' + encodeURIComponent(tags), {
+        headers: { 'api-key': key, 'accept': 'application/json' }
+      });
+      if (!r.ok) throw new Error('Brevo error ' + r.status);
+      return await r.json();
+    },
+
     modeString() {
       const h = this._proxyReady;
       if (!h) return '⏳';
-      if (h.claude && h.whisper) return '🛡️ Proxy sécurisé';
-      if (h.proxy_reachable) return '⚠️ Proxy partiel (secrets à configurer)';
+      const ready = [h.claude && 'Claude', h.whisper && 'Whisper', h.brevo && 'Brevo'].filter(Boolean);
+      if (ready.length === 3) return '🛡️ Proxy sécurisé (Claude + Whisper + Brevo)';
+      if (h.proxy_reachable && ready.length) return '🛡️ Proxy partiel : ' + ready.join(' + ');
+      if (h.proxy_reachable) return '⚠️ Proxy joignable mais aucun secret configuré';
       return '🔑 Fallback localStorage';
     }
   },
@@ -7446,8 +7529,8 @@ async function dvSendEmail(idx){
   if(!d){CRM.ui.toast('Document introuvable','err');return}
   const p=d.prospectId?CRM.prospects.find(x=>x.id===d.prospectId):null;
   if(!p||!p.email){CRM.ui.toast('❌ Pas d\'email pour ce prospect','err');return}
-  const brevoKey=localStorage.getItem('playazur_crm_brevo_key')||'';
-  if(!brevoKey){CRM.ui.toast('❌ Clé Brevo non configurée — allez dans Campagnes > Config','err');return}
+  // [v12] L'envoi passe par CRM.ai.callBrevo() : proxy Supabase si configuré, fallback localStorage sinon.
+  // Plus besoin de vérifier la clé ici — le proxy ou le fallback s'en occupent.
   const user=CRM.currentUser||{name:'BizDev',email:'noreply@playazur.fr'};
   const sigData=CRM.signature?CRM.signature.load():{};
   const senderEmail=sigData.email||user.email||'noreply@playazur.fr';
@@ -7486,18 +7569,13 @@ ${d.notes?'<div style="background:#fffbeb;padding:12px;border-radius:8px;margin-
 </div>`;
   CRM.ui.toast('📧 Envoi en cours vers '+p.email+'...','info');
   try{
-    const resp=await fetch('https://api.brevo.com/v3/smtp/email',{
-      method:'POST',
-      headers:{'api-key':brevoKey,'Content-Type':'application/json','accept':'application/json'},
-      body:JSON.stringify({
-        sender:{name:senderName,email:senderEmail},
-        to:[{email:p.email,name:((p.firstName||'')+' '+(p.lastName||'')).trim()||p.company}],
-        subject:subject,
-        htmlContent:'<!DOCTYPE html><html><body>'+htmlBody+'</body></html>',
-        tags:['playazur-crm-devis']
-      })
+    await CRM.ai.callBrevo({
+      sender:{name:senderName,email:senderEmail},
+      to:[{email:p.email,name:((p.firstName||'')+' '+(p.lastName||'')).trim()||p.company}],
+      subject:subject,
+      htmlContent:'<!DOCTYPE html><html><body>'+htmlBody+'</body></html>',
+      tags:['playazur-crm-devis']
     });
-    if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.message||'Erreur Brevo '+resp.status)}
     d.status='envoye';
     d.sentDate=new Date().toISOString();
     d.sentTo=p.email;
@@ -8743,37 +8821,29 @@ document.addEventListener('visibilitychange',async()=>{
       .replace(/\{website\}/gi, prospect.website||'');
   }
 
-  // Brevo API: send email
+  // [v12] Brevo helpers passent désormais par CRM.ai (proxy Supabase si configuré,
+  // fallback localStorage avec apiKey si proxy indispo). Signatures conservées
+  // pour compat avec le reste du module campagnes.
+
   async function brevoSend(apiKey, to, toName, subject, htmlBody, senderName, senderEmail){
-    const resp = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method:'POST',
-      headers:{'api-key':apiKey,'Content-Type':'application/json','accept':'application/json'},
-      body:JSON.stringify({
-        sender:{name:senderName||'Play Azur',email:senderEmail||'noreply@playazur.fr'},
-        to:[{email:to,name:toName||''}],
-        subject:subject,
-        htmlContent:'<html><body style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.7;color:#222">'+htmlBody.replace(/\n/g,'<br>')+'</body></html>',
-        tags:['playazur-crm-campaign']
-      })
+    const res = await CRM.ai.callBrevo({
+      sender:{name:senderName||'Play Azur',email:senderEmail||'noreply@playazur.fr'},
+      to:[{email:to,name:toName||''}],
+      subject:subject,
+      htmlContent:'<html><body style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.7;color:#222">'+htmlBody.replace(/\n/g,'<br>')+'</body></html>',
+      tags:['playazur-crm-campaign']
     });
-    if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.message||'Brevo error '+resp.status)}
-    return resp.json();
+    return res.data;
   }
 
-  // Brevo API: test connection
   async function brevoTest(apiKey){
-    const resp = await fetch('https://api.brevo.com/v3/account',{headers:{'api-key':apiKey,'accept':'application/json'}});
-    if(!resp.ok) throw new Error('Clé invalide');
-    return resp.json();
+    // CRM.ai.testBrevo prend le proxy en priorité, sinon utilise la clé localStorage
+    return await CRM.ai.testBrevo();
   }
 
-  // Brevo API: get email events (tracking)
   async function brevoEvents(apiKey, tag, limit=50){
-    const resp = await fetch('https://api.brevo.com/v3/smtp/statistics/events?limit='+limit+'&tags=playazur-crm-campaign',{
-      headers:{'api-key':apiKey,'accept':'application/json'}
-    });
-    if(!resp.ok) return {events:[]};
-    return resp.json();
+    try { return await CRM.ai.brevoEvents(tag||'playazur-crm-campaign', limit); }
+    catch(e) { console.warn('[brevoEvents]', e); return {events:[]}; }
   }
 
   CRM.campaigns = {
@@ -9321,8 +9391,14 @@ document.addEventListener('visibilitychange',async()=>{
       // Validate before launch
       if(!c.sequence||!c.sequence.length){CRM.ui.toast('❌ Ajoutez au moins une étape','err');_busy=false;return}
       if(!c.prospectIds||!c.prospectIds.length){CRM.ui.toast('❌ Ajoutez des prospects','err');_busy=false;return}
+      // [v12] On accepte soit proxy Brevo configuré côté Supabase, soit clé localStorage en fallback.
       const brevoKey=getBrevoKey();
-      if(!brevoKey){CRM.ui.toast('❌ Configurez votre clé Brevo (onglet Config)','err');_busy=false;return}
+      const proxyOk = (CRM.ai._proxyReady && CRM.ai._proxyReady.brevo);
+      if(!brevoKey && !proxyOk){
+        // Tente un refresh du healthcheck au cas où on ne l'aurait pas encore fait
+        try { const h = await CRM.ai.healthCheck(true); if(!h || !h.brevo){ CRM.ui.toast('❌ Aucune source Brevo configurée (ni proxy Supabase, ni clé locale)','err');_busy=false;return} }
+        catch(e) { CRM.ui.toast('❌ Configurez votre clé Brevo (onglet Config) ou demandez à Tarek de configurer le proxy','err');_busy=false;return}
+      }
 
       const prospectsWithEmail=c.prospectIds.map(id=>CRM.prospects.find(p=>p.id===id)).filter(p=>p&&p.email);
       if(!prospectsWithEmail.length){CRM.ui.toast('❌ Aucun prospect avec email','err');_busy=false;return}
@@ -9367,8 +9443,13 @@ document.addEventListener('visibilitychange',async()=>{
       if(_busy)return;_busy=true;
       const c=this.data.find(x=>x.id===this.selected);
       if(!c||c.status!=='active'){_busy=false;return}
+      // [v12] Soit proxy Brevo (Supabase), soit clé localStorage
       const brevoKey=getBrevoKey();
-      if(!brevoKey){CRM.ui.toast('❌ Clé Brevo manquante','err');_busy=false;return}
+      const proxyOk = (CRM.ai._proxyReady && CRM.ai._proxyReady.brevo);
+      if(!brevoKey && !proxyOk){
+        try { const h = await CRM.ai.healthCheck(true); if(!h || !h.brevo){ CRM.ui.toast('❌ Aucune source Brevo configurée','err');_busy=false;return} }
+        catch(e) { CRM.ui.toast('❌ Clé Brevo manquante','err');_busy=false;return}
+      }
 
       // Find prospects ready for next step
       let sent=0;
@@ -9406,24 +9487,27 @@ document.addEventListener('visibilitychange',async()=>{
     saveBrevoKey(val){localStorage.setItem(BREVO_KEY_STORE,val)},
 
     async testBrevo(){
-      const key=getBrevoKey();
-      if(!key){CRM.ui.toast('⚠️ Entrez une clé API Brevo','warn');return}
       const el=document.getElementById('camp-brevo-status');
       el.textContent='🔄 Test en cours...';el.style.color='var(--warn)';
       try{
-        const account=await brevoTest(key);
-        el.textContent='✅ Connecté : '+account.email+' ('+account.plan?.[0]?.type+')';
+        // [v12] Privilégie le proxy si configuré, sinon utilise la clé localStorage
+        const account=await CRM.ai.testBrevo();
+        const via = (CRM.ai._proxyReady && CRM.ai._proxyReady.brevo) ? '🛡️ via proxy Supabase' : '🔑 via clé locale';
+        el.textContent='✅ Connecté : '+account.email+' ('+(account.plan?.[0]?.type||'?')+') · '+via;
         el.style.color='var(--ok)';
         CRM.ui.toast('✅ Brevo connecté : '+account.email,'ok');
       }catch(e){
-        el.textContent='❌ '+e.message;el.style.color='var(--err)';
+        el.textContent='❌ '+e.message+' — Soit Tarek doit configurer le secret BREVO_API_KEY côté Supabase, soit colle une clé locale ci-dessus.';
+        el.style.color='var(--err)';
         CRM.ui.toast('❌ Connexion Brevo échouée','err');
       }
     },
 
     async refreshStats(){
+      // [v12] On essaie via le proxy d'abord ; pas besoin de clé locale si le proxy est configuré
+      const proxyOk = (CRM.ai._proxyReady && CRM.ai._proxyReady.brevo);
       const key=getBrevoKey();
-      if(!key){CRM.ui.toast('⚠️ Clé Brevo requise pour les stats','warn');return}
+      if(!key && !proxyOk){CRM.ui.toast('⚠️ Aucune source Brevo configurée (ni proxy, ni clé locale)','warn');return}
       CRM.ui.toast('📊 Récupération des stats Brevo...','ok');
       try{
         const data=await brevoEvents(key,'playazur-crm-campaign',100);
@@ -9463,6 +9547,17 @@ document.addEventListener('visibilitychange',async()=>{
       document.querySelectorAll('.camp-tab').forEach(t=>t.classList.toggle('active',t.dataset.ctab===tab));
       if(tab==='prospects')this.showPicker();
       if(tab==='analytics'){const c=this.data.find(x=>x.id===this.selected);if(c)this.renderAnalytics(c)}
+      if(tab==='settings') this.updateBrevoUiHint();
+    },
+
+    // [v12] Affiche le bandeau "mode équipe activé" si le proxy Brevo est configuré
+    async updateBrevoUiHint(){
+      const info=document.getElementById('brevo-proxy-info');
+      if(!info) return;
+      try {
+        const h = await CRM.ai.healthCheck();
+        info.style.display = (h && h.brevo) ? 'block' : 'none';
+      } catch(e){ info.style.display='none'; }
     }
   };
 
