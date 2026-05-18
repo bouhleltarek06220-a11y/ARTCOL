@@ -1,92 +1,83 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- AJOUT DE JULIE ET MYRIAM AU CRM PLAY AZUR
+-- ÉQUIPE PLAY AZUR — état actuel (auto-vérifié le 2026-05-18)
 -- ═══════════════════════════════════════════════════════════════════════════
 --
--- À EXÉCUTER DANS SUPABASE (SQL Editor) APRÈS avoir créé leurs comptes
--- côté Authentication.
+-- ✅ Les 3 comptes sont DÉJÀ créés dans Supabase Auth + user_roles.
+-- Aucune action requise pour l'instant. Ce fichier sert de référence et de
+-- modèle pour ajouter un futur 4e membre (ex : Bastien, Bruno…).
 --
--- ÉTAPES PRÉALABLES (à faire UNE FOIS dans Supabase Dashboard) :
+-- ─── Composition actuelle ───────────────────────────────────────────────────
 --
--- 1. Va sur https://supabase.com/dashboard/project/dmztalsmreugfwojsaar
--- 2. Menu gauche : Authentication → Users → bouton "Add user" → "Create new user"
--- 3. Crée Julie :
---      - Email          : <son email pro>
---      - Password       : <mot de passe temporaire, ex : Jp2026#a1b2c3d4e5f6>
---                          (le pattern Jp2026#XXXXXXXXXXXX est reconnu par le code
---                           qui forcera Julie à le changer au premier login)
---      - Auto Confirm User : ✅ COCHE LA CASE (sinon elle ne pourra pas se connecter)
--- 4. Idem pour Myriam.
--- 5. Note les UUID générés (visibles dans la colonne "UID" de la liste des users).
--- 6. Remplace ci-dessous JULIE_USER_ID et MYRIAM_USER_ID par leurs UUID réels.
--- 7. Exécute ce script dans SQL Editor.
+--   tarek   | Tarek Bouhlel    | owner  | tarek.bouhlel@rocket-school.eu
+--   julie   | Julie MORSIANI   | editor | julie.morsiani@rocket-school.eu
+--   myriam  | Myriam DOU       | editor | mdou9441@gmail.com
+--
+-- Tarek a déjà loggué plusieurs fois.
+-- Julie et Myriam ont leur compte confirmé mais ne se sont pas encore
+-- connectées. Tarek leur transmettra l'URL Vercel + leur mot de passe
+-- temporaire après le 1er déploiement.
 --
 -- ═══════════════════════════════════════════════════════════════════════════
+-- COMMENT VÉRIFIER L'ÉTAT (à coller dans Supabase SQL Editor)
+-- ═══════════════════════════════════════════════════════════════════════════
 
--- ─── JULIE ─────────────────────────────────────────────────────────────────
-INSERT INTO public.user_roles (
-  user_id,
-  short_id,
-  full_name,
-  initials,
-  role,
-  avatar_color,
-  departments,
-  dept_names
-) VALUES (
-  'JULIE_USER_ID'::uuid,                  -- ⚠️ REMPLACE par l'UUID de Julie
-  'julie',                                 -- identifiant court (utilisé dans le code)
-  'Julie Martin',                          -- ⚠️ ADAPTE le nom complet
-  'JM',                                    -- initiales (auto-générées dans l'UI sinon)
-  'editor',                                -- rôle : 'owner' / 'editor' / 'viewer'
-  '#FF3D9A',                               -- couleur d'avatar (rose Play Azur)
-  ARRAY['06', '83', '13'],                 -- départements assignés (Alpes-Mar., Var, B.-du-Rhône)
-  '06 Alpes-Mar. · 83 Var · 13 Bouches-du-Rhône'
-)
-ON CONFLICT (user_id) DO UPDATE SET
-  full_name    = EXCLUDED.full_name,
-  initials     = EXCLUDED.initials,
-  role         = EXCLUDED.role,
-  avatar_color = EXCLUDED.avatar_color,
-  departments  = EXCLUDED.departments,
-  dept_names   = EXCLUDED.dept_names;
-
--- ─── MYRIAM ────────────────────────────────────────────────────────────────
-INSERT INTO public.user_roles (
-  user_id,
-  short_id,
-  full_name,
-  initials,
-  role,
-  avatar_color,
-  departments,
-  dept_names
-) VALUES (
-  'MYRIAM_USER_ID'::uuid,                 -- ⚠️ REMPLACE par l'UUID de Myriam
-  'myriam',
-  'Myriam Durand',                         -- ⚠️ ADAPTE le nom complet
-  'MD',
-  'editor',
-  '#FF6B5C',                               -- couleur d'avatar (corail Play Azur)
-  ARRAY['75', '69', '33', '31'],           -- Paris, Lyon, Bordeaux, Toulouse
-  '75 Paris · 69 Rhône · 33 Gironde · 31 Hte-Garonne'
-)
-ON CONFLICT (user_id) DO UPDATE SET
-  full_name    = EXCLUDED.full_name,
-  initials     = EXCLUDED.initials,
-  role         = EXCLUDED.role,
-  avatar_color = EXCLUDED.avatar_color,
-  departments  = EXCLUDED.departments,
-  dept_names   = EXCLUDED.dept_names;
-
--- ─── VÉRIFICATION ──────────────────────────────────────────────────────────
 SELECT
   ur.short_id,
   ur.full_name,
   ur.role,
   ur.dept_names,
   au.email,
-  au.created_at,
-  au.last_sign_in_at
+  au.email_confirmed_at IS NOT NULL AS email_confirmed,
+  au.last_sign_in_at,
+  ur.created_at
 FROM public.user_roles ur
 LEFT JOIN auth.users au ON au.id = ur.user_id
 ORDER BY ur.role DESC, ur.full_name;
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- AJOUTER UN NOUVEAU MEMBRE (modèle, à adapter)
+-- ═══════════════════════════════════════════════════════════════════════════
+--
+-- 1. Supabase Dashboard → Authentication → Users → "Add user" → "Create new user"
+--      - Email     : <email pro du membre>
+--      - Password  : Jp2026#XXXXXXXXXXXX  (12 chars hex aléatoires après #)
+--                    → ce pattern force le changement de mot de passe au 1er login
+--      - Auto Confirm User : ✅ COCHER
+-- 2. Récupère son UUID dans la liste des users (colonne UID).
+-- 3. Décommente et adapte le INSERT ci-dessous, puis exécute :
+
+/*
+INSERT INTO public.user_roles (
+  user_id, short_id, full_name, initials, role, avatar_color, departments, dept_names
+) VALUES (
+  'PASTE_UUID_ICI'::uuid,
+  'prenom_short',
+  'Prénom NOM',
+  'PN',
+  'editor',                 -- ou 'owner' / 'viewer'
+  '#f59e0b',                -- couleur d'avatar (palette : 1B6FFF, FF3D9A, 10b981, a855f7, f59e0b, FF6B5C)
+  ARRAY['06', '83'],        -- départements assignés
+  '06 Alpes-Mar. · 83 Var'
+)
+ON CONFLICT (user_id) DO UPDATE SET
+  full_name    = EXCLUDED.full_name,
+  initials     = EXCLUDED.initials,
+  role         = EXCLUDED.role,
+  avatar_color = EXCLUDED.avatar_color,
+  departments  = EXCLUDED.departments,
+  dept_names   = EXCLUDED.dept_names;
+*/
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- DÉBLOQUER UN COMPTE VERROUILLÉ APRÈS TROP DE TENTATIVES
+-- ═══════════════════════════════════════════════════════════════════════════
+--
+-- Si Julie ou Myriam tape son mot de passe 5 fois faux, son compte est
+-- verrouillé 30 min. Pour la débloquer manuellement :
+
+/*
+SELECT public.release_lockout(id) FROM public.account_lockouts
+WHERE email = 'julie.morsiani@rocket-school.eu'
+  AND released_at IS NULL
+  AND locked_until > now();
+*/
