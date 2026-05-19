@@ -3205,7 +3205,7 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 <div class="form-group"><label>Adresse</label><input id="mp-address"></div>
 <div class="form-group"><label>Code postal</label><input id="mp-postalCode"></div>
 <div class="form-group"><label>Département</label>
-<select id="mp-dept"><option value="">—</option><option value="06">06 — Alpes-Maritimes</option><option value="13">13 — Bouches-du-Rhône</option><option value="83">83 — Var</option><option value="84">84 — Vaucluse</option><option value="75">75 — Paris</option><option value="69">69 — Rhône</option><option value="33">33 — Gironde</option><option value="31">31 — Haute-Garonne</option><option value="autre">Autre</option></select></div>
+<select id="mp-dept"><option value="">— Sélectionner un département —</option></select></div>
 <div class="form-group"><label>Statut</label><select id="mp-status" onchange="toggleSubStatusSection()"></select></div>
 <div class="form-group" id="mp-substatus-group" style="display:none"><label>Sous-statut contact</label><select id="mp-subStatus" onchange="toggleCallbackRow()"><option value="">— Aucun —</option></select></div>
 <div class="form-group callback-row" id="mp-callback-group"><label>📅 Date de rappel</label><div style="display:flex;gap:6px"><input type="date" id="mp-callbackDate"><input type="time" id="mp-callbackTime" value="09:00"></div></div>
@@ -4156,15 +4156,124 @@ window.CRM_CONFIG = {
   ],
   // [PLAY AZUR v1.0] Départements de référence — PACA prioritaire (Nice = base Play Azur Prod)
   // + métropoles culturelles avec patrimoine fort. Modifiable dans Settings.
+  // [v15] 101 départements français (96 métropole + 2A/2B + 5 DROM)
+  // Groupés par région avec une couleur par région pour la carte / kanban / table.
   departments: {
-    "06":{name:"Alpes-Maritimes",code:"06",city:"Nice",color:"#1B6FFF"},
-    "13":{name:"Bouches-du-Rhône",code:"13",city:"Marseille",color:"#1B6FFF"},
-    "83":{name:"Var",code:"83",city:"Toulon",color:"#1B6FFF"},
-    "84":{name:"Vaucluse",code:"84",city:"Avignon",color:"#1B6FFF"},
-    "75":{name:"Paris",code:"75",city:"Paris",color:"#FF3D9A"},
-    "69":{name:"Rhône",code:"69",city:"Lyon",color:"#FF6B5C"},
-    "33":{name:"Gironde",code:"33",city:"Bordeaux",color:"#FFB627"},
-    "31":{name:"Haute-Garonne",code:"31",city:"Toulouse",color:"#FFB627"}
+    // — Auvergne-Rhône-Alpes —
+    "01":{name:"Ain",code:"01",city:"Bourg-en-Bresse",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "03":{name:"Allier",code:"03",city:"Moulins",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "07":{name:"Ardèche",code:"07",city:"Privas",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "15":{name:"Cantal",code:"15",city:"Aurillac",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "26":{name:"Drôme",code:"26",city:"Valence",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "38":{name:"Isère",code:"38",city:"Grenoble",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "42":{name:"Loire",code:"42",city:"Saint-Étienne",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "43":{name:"Haute-Loire",code:"43",city:"Le Puy-en-Velay",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "63":{name:"Puy-de-Dôme",code:"63",city:"Clermont-Ferrand",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "69":{name:"Rhône",code:"69",city:"Lyon",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "73":{name:"Savoie",code:"73",city:"Chambéry",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    "74":{name:"Haute-Savoie",code:"74",city:"Annecy",region:"Auvergne-Rhône-Alpes",regionCode:"ARA",color:"#00A8B5"},
+    // — Bourgogne-Franche-Comté —
+    "21":{name:"Côte-d'Or",code:"21",city:"Dijon",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "25":{name:"Doubs",code:"25",city:"Besançon",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "39":{name:"Jura",code:"39",city:"Lons-le-Saunier",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "58":{name:"Nièvre",code:"58",city:"Nevers",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "70":{name:"Haute-Saône",code:"70",city:"Vesoul",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "71":{name:"Saône-et-Loire",code:"71",city:"Mâcon",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "89":{name:"Yonne",code:"89",city:"Auxerre",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    "90":{name:"Territoire de Belfort",code:"90",city:"Belfort",region:"Bourgogne-Franche-Comté",regionCode:"BFC",color:"#9B59B6"},
+    // — Bretagne —
+    "22":{name:"Côtes-d'Armor",code:"22",city:"Saint-Brieuc",region:"Bretagne",regionCode:"BRE",color:"#16A085"},
+    "29":{name:"Finistère",code:"29",city:"Quimper",region:"Bretagne",regionCode:"BRE",color:"#16A085"},
+    "35":{name:"Ille-et-Vilaine",code:"35",city:"Rennes",region:"Bretagne",regionCode:"BRE",color:"#16A085"},
+    "56":{name:"Morbihan",code:"56",city:"Vannes",region:"Bretagne",regionCode:"BRE",color:"#16A085"},
+    // — Centre-Val de Loire —
+    "18":{name:"Cher",code:"18",city:"Bourges",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    "28":{name:"Eure-et-Loir",code:"28",city:"Chartres",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    "36":{name:"Indre",code:"36",city:"Châteauroux",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    "37":{name:"Indre-et-Loire",code:"37",city:"Tours",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    "41":{name:"Loir-et-Cher",code:"41",city:"Blois",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    "45":{name:"Loiret",code:"45",city:"Orléans",region:"Centre-Val de Loire",regionCode:"CVL",color:"#E67E22"},
+    // — Corse —
+    "2A":{name:"Corse-du-Sud",code:"2A",city:"Ajaccio",region:"Corse",regionCode:"COR",color:"#C0392B"},
+    "2B":{name:"Haute-Corse",code:"2B",city:"Bastia",region:"Corse",regionCode:"COR",color:"#C0392B"},
+    // — Grand Est —
+    "08":{name:"Ardennes",code:"08",city:"Charleville-Mézières",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "10":{name:"Aube",code:"10",city:"Troyes",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "51":{name:"Marne",code:"51",city:"Châlons-en-Champagne",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "52":{name:"Haute-Marne",code:"52",city:"Chaumont",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "54":{name:"Meurthe-et-Moselle",code:"54",city:"Nancy",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "55":{name:"Meuse",code:"55",city:"Bar-le-Duc",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "57":{name:"Moselle",code:"57",city:"Metz",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "67":{name:"Bas-Rhin",code:"67",city:"Strasbourg",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "68":{name:"Haut-Rhin",code:"68",city:"Colmar",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    "88":{name:"Vosges",code:"88",city:"Épinal",region:"Grand Est",regionCode:"GES",color:"#2E86C1"},
+    // — Hauts-de-France —
+    "02":{name:"Aisne",code:"02",city:"Laon",region:"Hauts-de-France",regionCode:"HDF",color:"#C2185B"},
+    "59":{name:"Nord",code:"59",city:"Lille",region:"Hauts-de-France",regionCode:"HDF",color:"#C2185B"},
+    "60":{name:"Oise",code:"60",city:"Beauvais",region:"Hauts-de-France",regionCode:"HDF",color:"#C2185B"},
+    "62":{name:"Pas-de-Calais",code:"62",city:"Arras",region:"Hauts-de-France",regionCode:"HDF",color:"#C2185B"},
+    "80":{name:"Somme",code:"80",city:"Amiens",region:"Hauts-de-France",regionCode:"HDF",color:"#C2185B"},
+    // — Île-de-France —
+    "75":{name:"Paris",code:"75",city:"Paris",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "77":{name:"Seine-et-Marne",code:"77",city:"Melun",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "78":{name:"Yvelines",code:"78",city:"Versailles",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "91":{name:"Essonne",code:"91",city:"Évry",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "92":{name:"Hauts-de-Seine",code:"92",city:"Nanterre",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "93":{name:"Seine-Saint-Denis",code:"93",city:"Bobigny",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "94":{name:"Val-de-Marne",code:"94",city:"Créteil",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    "95":{name:"Val-d'Oise",code:"95",city:"Pontoise",region:"Île-de-France",regionCode:"IDF",color:"#FF3D9A"},
+    // — Normandie —
+    "14":{name:"Calvados",code:"14",city:"Caen",region:"Normandie",regionCode:"NOR",color:"#5D6D7E"},
+    "27":{name:"Eure",code:"27",city:"Évreux",region:"Normandie",regionCode:"NOR",color:"#5D6D7E"},
+    "50":{name:"Manche",code:"50",city:"Saint-Lô",region:"Normandie",regionCode:"NOR",color:"#5D6D7E"},
+    "61":{name:"Orne",code:"61",city:"Alençon",region:"Normandie",regionCode:"NOR",color:"#5D6D7E"},
+    "76":{name:"Seine-Maritime",code:"76",city:"Rouen",region:"Normandie",regionCode:"NOR",color:"#5D6D7E"},
+    // — Nouvelle-Aquitaine —
+    "16":{name:"Charente",code:"16",city:"Angoulême",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "17":{name:"Charente-Maritime",code:"17",city:"La Rochelle",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "19":{name:"Corrèze",code:"19",city:"Tulle",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "23":{name:"Creuse",code:"23",city:"Guéret",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "24":{name:"Dordogne",code:"24",city:"Périgueux",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "33":{name:"Gironde",code:"33",city:"Bordeaux",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "40":{name:"Landes",code:"40",city:"Mont-de-Marsan",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "47":{name:"Lot-et-Garonne",code:"47",city:"Agen",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "64":{name:"Pyrénées-Atlantiques",code:"64",city:"Pau",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "79":{name:"Deux-Sèvres",code:"79",city:"Niort",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "86":{name:"Vienne",code:"86",city:"Poitiers",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    "87":{name:"Haute-Vienne",code:"87",city:"Limoges",region:"Nouvelle-Aquitaine",regionCode:"NAQ",color:"#FFB627"},
+    // — Occitanie —
+    "09":{name:"Ariège",code:"09",city:"Foix",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "11":{name:"Aude",code:"11",city:"Carcassonne",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "12":{name:"Aveyron",code:"12",city:"Rodez",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "30":{name:"Gard",code:"30",city:"Nîmes",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "31":{name:"Haute-Garonne",code:"31",city:"Toulouse",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "32":{name:"Gers",code:"32",city:"Auch",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "34":{name:"Hérault",code:"34",city:"Montpellier",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "46":{name:"Lot",code:"46",city:"Cahors",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "48":{name:"Lozère",code:"48",city:"Mende",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "65":{name:"Hautes-Pyrénées",code:"65",city:"Tarbes",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "66":{name:"Pyrénées-Orientales",code:"66",city:"Perpignan",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "81":{name:"Tarn",code:"81",city:"Albi",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    "82":{name:"Tarn-et-Garonne",code:"82",city:"Montauban",region:"Occitanie",regionCode:"OCC",color:"#FF6B5C"},
+    // — Pays de la Loire —
+    "44":{name:"Loire-Atlantique",code:"44",city:"Nantes",region:"Pays de la Loire",regionCode:"PDL",color:"#27AE60"},
+    "49":{name:"Maine-et-Loire",code:"49",city:"Angers",region:"Pays de la Loire",regionCode:"PDL",color:"#27AE60"},
+    "53":{name:"Mayenne",code:"53",city:"Laval",region:"Pays de la Loire",regionCode:"PDL",color:"#27AE60"},
+    "72":{name:"Sarthe",code:"72",city:"Le Mans",region:"Pays de la Loire",regionCode:"PDL",color:"#27AE60"},
+    "85":{name:"Vendée",code:"85",city:"La Roche-sur-Yon",region:"Pays de la Loire",regionCode:"PDL",color:"#27AE60"},
+    // — Provence-Alpes-Côte d'Azur (siège mission) —
+    "04":{name:"Alpes-de-Haute-Provence",code:"04",city:"Digne-les-Bains",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    "05":{name:"Hautes-Alpes",code:"05",city:"Gap",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    "06":{name:"Alpes-Maritimes",code:"06",city:"Nice",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    "13":{name:"Bouches-du-Rhône",code:"13",city:"Marseille",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    "83":{name:"Var",code:"83",city:"Toulon",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    "84":{name:"Vaucluse",code:"84",city:"Avignon",region:"Provence-Alpes-Côte d'Azur",regionCode:"PAC",color:"#1B6FFF"},
+    // — Outre-mer (DROM) —
+    "971":{name:"Guadeloupe",code:"971",city:"Basse-Terre",region:"Outre-mer (DROM)",regionCode:"DRO",color:"#8E44AD"},
+    "972":{name:"Martinique",code:"972",city:"Fort-de-France",region:"Outre-mer (DROM)",regionCode:"DRO",color:"#8E44AD"},
+    "973":{name:"Guyane",code:"973",city:"Cayenne",region:"Outre-mer (DROM)",regionCode:"DRO",color:"#8E44AD"},
+    "974":{name:"La Réunion",code:"974",city:"Saint-Denis",region:"Outre-mer (DROM)",regionCode:"DRO",color:"#8E44AD"},
+    "976":{name:"Mayotte",code:"976",city:"Mamoudzou",region:"Outre-mer (DROM)",regionCode:"DRO",color:"#8E44AD"}
   },
   // [PLAY AZUR v1.0] Carte centrée sur Nice (Play Azur Prod · siège mission)
   map:{ center:[43.7102, 7.2620], zoom:6 },
@@ -6866,8 +6975,44 @@ function populateFilterDropdowns(){
   if(fs){fs.innerHTML='<option value="">Tous statuts</option>'+CRM_CONFIG.pipeline.map(p=>'<option value="'+p.id+'">'+p.icon+' '+p.label+'</option>').join('')}
   const fu=document.getElementById('filter-user');
   if(fu){fu.innerHTML='<option value="">Tous commerciaux</option>'+CRM_CONFIG.users.map(u=>'<option value="'+u.id+'">'+u.name+'</option>').join('')}
+  // [v15] Helper : peuple un <select> de département avec <optgroup> par région
+  // (lecture optimisée pour 101 entrées).
+  function buildDeptOptionsGrouped(includeAllOption, allLabel){
+    const byRegion = {};
+    Object.values(CRM_CONFIG.departments||{}).forEach(d => {
+      const r = d.region || 'Autres';
+      if(!byRegion[r]) byRegion[r] = [];
+      byRegion[r].push(d);
+    });
+    // Tri intelligent : PACA en tête (siège mission), puis ordre alphabétique
+    const regions = Object.keys(byRegion).sort((a,b) => {
+      if(a.startsWith('Provence')) return -1;
+      if(b.startsWith('Provence')) return 1;
+      return a.localeCompare(b, 'fr');
+    });
+    let out = '';
+    if(includeAllOption) out += '<option value="">'+(allLabel||'Tous dép.')+'</option>';
+    regions.forEach(r => {
+      out += '<optgroup label="— '+r+' —">';
+      byRegion[r].sort((a,b) => a.code.localeCompare(b.code, 'fr', {numeric:true}))
+        .forEach(d => { out += '<option value="'+d.code+'">'+d.code+' — '+d.name+'</option>'; });
+      out += '</optgroup>';
+    });
+    return out;
+  }
+  window.buildDeptOptionsGrouped = buildDeptOptionsGrouped;
+
   const fd=document.getElementById('filter-dept');
-  if(fd){fd.innerHTML='<option value="">Tous dép.</option>'+Object.entries(CRM_CONFIG.departments).map(([id,d])=>'<option value="'+id+'">'+d.code+' — '+d.name+'</option>').join('')}
+  if(fd){fd.innerHTML = buildDeptOptionsGrouped(true, 'Tous dép.');}
+  // Modale prospect
+  const mpd=document.getElementById('mp-dept');
+  if(mpd){mpd.innerHTML = '<option value="">— Sélectionner un département —</option>' + buildDeptOptionsGrouped(false);}
+  // Modale CallTool (script d'appel guidé)
+  const ctd=document.getElementById('ct-dept');
+  if(ctd){ctd.innerHTML = '<option value="">— Département —</option>' + buildDeptOptionsGrouped(false);}
+  // Modale Campagnes (filtre prospects à enrôler)
+  const cfd=document.getElementById('camp-filter-dept');
+  if(cfd){cfd.innerHTML = buildDeptOptionsGrouped(true, 'Tous dép.');}
   // Sub-status select in modal form
   const mss=document.getElementById('mp-subStatus');
   if(mss){mss.innerHTML=CRM_CONFIG.contactSubStatuses.map(s=>'<option value="'+s.id+'">'+s.icon+' '+s.label+'</option>').join('')}
@@ -11708,16 +11853,7 @@ STYLE: Français. Direct. Actionnable. Inclus des <action> tags quand pertinent.
           <div class="ct-field">
             <label for="ct-dept">Dépt.</label>
             <select id="ct-dept">
-              <option value="">—</option>
-              <option value="06">06 Alpes-Mar.</option>
-              <option value="13">13 B.-du-Rhône</option>
-              <option value="83">83 Var</option>
-              <option value="84">84 Vaucluse</option>
-              <option value="75">75 Paris</option>
-              <option value="69">69 Rhône</option>
-              <option value="33">33 Gironde</option>
-              <option value="31">31 Hte-Garonne</option>
-              <option value="autre">Autre</option>
+              <option value="">— Département —</option>
             </select>
           </div>
         </div>
