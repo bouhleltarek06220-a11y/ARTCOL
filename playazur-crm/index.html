@@ -11629,7 +11629,7 @@ CRM.xiaomi = {
     el.innerHTML=actions.map(a=>'<div class="xiaomi-act" onclick="CRM.xiaomi._exec(\''+a.run+'\')">'+a.label+'</div>').join('');
   },
 
-  send(text){
+  async send(text){
     const inp=document.getElementById('xiaomi-input');
     const msg=text||(inp?inp.value.trim():'');
     if(!msg||this.isTyping)return;
@@ -11639,9 +11639,20 @@ CRM.xiaomi = {
     // Try local command first
     const local=this._parseLocal(msg);
     if(local){this.messages.push({role:'action',content:'✅ '+local});this._render();return}
-    // API or fallback
+    // [v17] Décide entre API (via proxy ou clé locale) et fallback :
+    //   - Si proxy Claude ready (Supabase Secrets) OU clé localStorage → API
+    //   - Sinon → fallback offline
+    // On await le healthcheck pour ne pas tomber en fallback à tort quand le proxy n'a pas
+    // encore eu le temps de répondre (premier message tapé juste après le login).
+    let proxyOk = false;
+    try {
+      if (window.CRM && CRM.ai) {
+        const h = await CRM.ai.healthCheck();
+        proxyOk = !!(h && h.claude);
+      }
+    } catch(e) {}
     const key=this._getKey();
-    if(key)this._callAPI(msg); else this._fallback(msg);
+    if(key || proxyOk) this._callAPI(msg); else this._fallback(msg);
   },
 
   clear(){
@@ -13126,6 +13137,18 @@ STYLE: Français. Direct. Actionnable. Inclus des <action> tags quand pertinent.
     }catch(e){return ''}
   }
 
+  // [v17] Helpers "ready" : true si on a SOIT le proxy Supabase configuré, SOIT une clé locale.
+  // Ces helpers remplacent les anciens "if(getOpenAIKey())" qui bloquaient à tort quand
+  // seul le proxy était configuré.
+  function whisperReady(){
+    if(window.CRM && CRM.ai && CRM.ai._proxyReady && CRM.ai._proxyReady.whisper) return true;
+    return !!getOpenAIKey();
+  }
+  function claudeReady(){
+    if(window.CRM && CRM.ai && CRM.ai._proxyReady && CRM.ai._proxyReady.claude) return true;
+    return !!getClaudeKey();
+  }
+
   // ─── START RECORDING ──────────────────────────────────────────────────
   async function startRecording(){
     if(REC.isRecording) return;
@@ -13246,17 +13269,17 @@ STYLE: Français. Direct. Actionnable. Inclus des <action> tags quand pertinent.
         // Fermer le contexte audio
         if(REC.audioContext){ try{ REC.audioContext.close(); }catch(e){} REC.audioContext = null; }
         showAudioPlayer();
-        // Afficher la barre Whisper si dual-stream actif + clé OpenAI présente
-        if(REC.hasProspectAudio && getOpenAIKey()){
+        // [v17] Afficher la barre Whisper si dual-stream actif + Whisper ready (proxy OU clé)
+        if(REC.hasProspectAudio && whisperReady()){
           const wb = $('ct-whisper-bar');
           if(wb) wb.classList.add('show');
-        } else if(REC.hasProspectAudio && !getOpenAIKey()){
+        } else if(REC.hasProspectAudio && !whisperReady()){
           const wb = $('ct-whisper-bar');
           if(wb){
             wb.classList.add('show');
             // Remplacer le bouton par un message
             const btnW = $('ct-whisper-btn');
-            if(btnW) btnW.innerHTML = '⚙️ Configurer clé OpenAI';
+            if(btnW) btnW.innerHTML = '⚙️ Configurer Whisper (proxy ou clé locale)';
             if(btnW) btnW.onclick = ()=>{ try{document.getElementById('hdr-set').click()}catch(e){} };
           }
         }
@@ -13365,7 +13388,7 @@ STYLE: Français. Direct. Actionnable. Inclus des <action> tags quand pertinent.
     let msg = '⏹ Enregistrement arrêté — ' + segCount + ' segment(s) transcrit(s)';
     if(REC.hasProspectAudio){
       msg += ' · 🎧 Audio 2 voix capturé';
-      if(getOpenAIKey()){
+      if(whisperReady()){
         msg += ' · lance Whisper pour transcrire le prospect';
       }
     }
