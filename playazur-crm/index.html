@@ -7477,12 +7477,20 @@ function initMapOverlays(){
     ubh+='<button class="map-user-btn" style="color:'+u.color+'" onclick="CRM.filters.assignedTo=CRM.filters.assignedTo===\''+u.id+'\'?\'\':'+'\''+u.id+'\';CRM.ui.refresh();CRM.ui.renderFilters();CRM.map.render();this.classList.toggle(\'on\')">'+u.initials+' '+u.name+'</button>';
   });
   document.getElementById('map-user-btns').innerHTML=ubh;
-  // Dept buttons
-  let dbh='';
-  Object.entries(CRM_CONFIG.departments).forEach(([id,d])=>{
-    const user=CRM_CONFIG.users.find(u=>u.departments&&u.departments.includes(id));
-    dbh+='<button class="map-dept-btn" style="color:'+(user?user.color:d.color)+'" onclick="zoomToDept(\''+id+'\')">'+d.code+'</button>';
+  // [v16] Plus de 101 boutons dépt sur la carte — un dropdown compact qui zoome
+  // sur le dépt choisi (groupé par région). Quelques favoris PACA en accès rapide.
+  const PACA_FAVS = ['06','13','83','84'];
+  let dbh = '';
+  PACA_FAVS.forEach(id => {
+    const d = CRM_CONFIG.departments[id];
+    if(!d) return;
+    const user = CRM_CONFIG.users.find(u => u.departments && u.departments.includes(id));
+    dbh += '<button class="map-dept-btn" style="color:'+(user?user.color:d.color)+'" onclick="zoomToDept(\''+id+'\')">'+d.code+'</button>';
   });
+  // Dropdown pour les 97 autres
+  dbh += '<select onchange="if(this.value){zoomToDept(this.value);this.selectedIndex=0}" style="height:26px;font-size:11px;padding:0 6px;border-radius:8px;border:1px solid var(--brd);background:var(--sur);color:var(--t2);cursor:pointer;max-width:160px"><option value="">🔍 Zoomer sur dépt…</option>'
+       + (typeof buildDeptOptionsGrouped === 'function' ? buildDeptOptionsGrouped(false) : '')
+       + '</select>';
   document.getElementById('map-dept-btns').innerHTML=dbh;
   // Legend users
   let luh='';
