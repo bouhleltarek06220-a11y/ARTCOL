@@ -2361,6 +2361,7 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 <div class="search-box"><input type="text" id="search-input" placeholder="Rechercher..." oninput="clearTimeout(window._searchTimer);window._searchTimer=setTimeout(()=>CRM.table.search(this.value),250)"></div>
 <select id="filter-status" onchange="CRM.filters.status=this.value;CRM.tablePage=0;CRM.ui.refresh();toggleSubStatusFilter()" style="width:140px"><option value="">Tous statuts</option></select>
 <select id="filter-substatus" onchange="CRM.filters.subStatus=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px;display:none"><option value="">Tous sous-statuts</option></select>
+<select id="filter-axe" onchange="CRM.filters.axe=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:170px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💰 Financeurs</option><option value="influenceur">🎤 Influenceurs</option></select>
 <select id="filter-user" onchange="CRM.filters.assignedTo=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px"><option value="">Tous commerciaux</option></select>
 <select id="filter-dept" onchange="CRM.filters.dept=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:140px"><option value="">Tous dép.</option></select>
 <select id="filter-source" onchange="CRM.filters.source=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:180px"><option value="">Toutes sources</option></select>
@@ -2373,7 +2374,8 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 <table class="crm-table" id="prospects-table" style="min-width:1100px">
 <thead><tr>
 <th style="width:36px;text-align:center"><input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)" style="width:auto;cursor:pointer"></th>
-<th onclick="CRM.table.sort('company')">Agence ↕</th>
+<th onclick="CRM.table.sort('axe')" title="Axe stratégique : Lieu / Financeur / Influenceur" style="min-width:120px">Axe ↕</th>
+<th onclick="CRM.table.sort('company')">Organisation ↕</th>
 <th onclick="CRM.table.sort('city')">Ville ↕</th>
 <th onclick="CRM.table.sort('dept')">Dép. ↕</th>
 <th onclick="CRM.table.sort('phone')">Tél</th>
@@ -3188,7 +3190,13 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 </div>
 </div>
 <div class="form-grid">
-<div class="form-group"><label>Nom de l'agence *</label><input id="mp-company" placeholder="Ex: ERA Immobilier"></div>
+<div class="form-group full" style="border:2px solid var(--brd);border-radius:10px;padding:12px 14px;background:var(--sur2);margin-bottom:6px">
+  <label style="font-weight:700;color:var(--uc);font-size:13px;margin-bottom:6px;display:block">🎯 Axe stratégique Lost Chapter *</label>
+  <div id="mp-axe-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  <input type="hidden" id="mp-axe" value="lieu">
+  <div id="mp-axe-desc" style="font-size:11px;color:var(--t2);margin-top:6px;font-style:italic"></div>
+</div>
+<div class="form-group"><label>Nom de l'organisation *</label><input id="mp-company" placeholder="Ex: Arènes de Nîmes / Crédit Mutuel / Bazar du Grenier"></div>
 <div class="form-group"><label>Ville *</label><input id="mp-city"></div>
 <div class="form-group"><label>Contact (Nom)</label><input id="mp-lastName"></div>
 <div class="form-group"><label>Contact (Prénom)</label><input id="mp-firstName"></div>
@@ -3771,8 +3779,8 @@ window._paIsLocalMode = function() {
 };
 window._paIsCloudMode = function() { return !window._paIsLocalMode(); };
 
-function toDb(p){return{id:p.id,company:p.company||'',city:p.city||'',dept:p.dept||'',first_name:p.firstName||'',last_name:p.lastName||'',email:p.email||'',phone:p.phone||'',address:p.address||'',postal_code:p.postalCode||'',website:p.website||'',linkedin_url:p.linkedinUrl||'',lat:p.lat||0,lng:p.lng||0,rating:p.rating||0,reviews:p.reviews||0,status:p.status||'lead',sub_status:p.subStatus||'',callback_date:p.callbackDate||'',score:p.score||50,assigned_to:p.assignedTo||'',tags:p.tags||[],notes:p.notes||'',actions:JSON.stringify(p.actions||[]),created_at:p.createdAt||new Date().toISOString(),dirigeant:p.dirigeant||'',fonction:p.fonction||'',raison_sociale:p.raisonSociale||'',siren:p.siren||'',siret:p.siret||'',forme_juridique:p.formeJuridique||'',date_creation:p.dateCreation||'',code_ape:p.codeApe||'',libelle_ape:p.libelleApe||'',effectif:p.effectif||0,ca:p.ca||0,annee_ca:p.anneeCa||'',capital:p.capital||0,categorie_insee:p.categorieInsee||'',facebook:p.facebook||'',source:p.source||'',offre_apimo:p.offreApimo||'',nb_users:p.nbUsers||1,crm_actuel:p.crmActuel||'',date_fin_engagement:p.dateFinEngagement||'',is_client:p.isClient||false}}
-function fromDb(r){return{id:r.id,company:r.company||'',city:r.city||'',dept:r.dept||'',firstName:r.first_name||'',lastName:r.last_name||'',email:r.email||'',phone:r.phone||'',address:r.address||'',postalCode:r.postal_code||'',website:r.website||'',linkedinUrl:r.linkedin_url||'',lat:r.lat||0,lng:r.lng||0,rating:r.rating||0,reviews:r.reviews||0,status:r.status||'lead',subStatus:r.sub_status||'',callbackDate:r.callback_date||'',score:r.score||50,assignedTo:r.assigned_to||'',tags:r.tags||[],notes:r.notes||'',actions:(typeof r.actions==='string'?(()=>{try{return JSON.parse(r.actions)}catch(e){return[]}})():r.actions)||[],createdAt:r.created_at||'',dirigeant:r.dirigeant||'',fonction:r.fonction||'',raisonSociale:r.raison_sociale||'',siren:r.siren||'',siret:r.siret||'',formeJuridique:r.forme_juridique||'',dateCreation:r.date_creation||'',codeApe:r.code_ape||'',libelleApe:r.libelle_ape||'',effectif:r.effectif||0,ca:r.ca||0,anneeCa:r.annee_ca||'',capital:r.capital||0,categorieInsee:r.categorie_insee||'',facebook:r.facebook||'',source:r.source||'',offreApimo:r.offre_apimo||'',nbUsers:r.nb_users||1,crmActuel:r.crm_actuel||'',dateFinEngagement:r.date_fin_engagement||'',isClient:r.is_client||false}}
+function toDb(p){return{id:p.id,company:p.company||'',city:p.city||'',dept:p.dept||'',first_name:p.firstName||'',last_name:p.lastName||'',email:p.email||'',phone:p.phone||'',address:p.address||'',postal_code:p.postalCode||'',website:p.website||'',linkedin_url:p.linkedinUrl||'',lat:p.lat||0,lng:p.lng||0,rating:p.rating||0,reviews:p.reviews||0,status:p.status||'lead',sub_status:p.subStatus||'',callback_date:p.callbackDate||'',score:p.score||50,assigned_to:p.assignedTo||'',tags:p.tags||[],notes:p.notes||'',actions:JSON.stringify(p.actions||[]),created_at:p.createdAt||new Date().toISOString(),dirigeant:p.dirigeant||'',fonction:p.fonction||'',raison_sociale:p.raisonSociale||'',siren:p.siren||'',siret:p.siret||'',forme_juridique:p.formeJuridique||'',date_creation:p.dateCreation||'',code_ape:p.codeApe||'',libelle_ape:p.libelleApe||'',effectif:p.effectif||0,ca:p.ca||0,annee_ca:p.anneeCa||'',capital:p.capital||0,categorie_insee:p.categorieInsee||'',facebook:p.facebook||'',source:p.source||'',offre_apimo:p.offreApimo||'',nb_users:p.nbUsers||1,crm_actuel:p.crmActuel||'',date_fin_engagement:p.dateFinEngagement||'',is_client:p.isClient||false,axe:p.axe||'lieu'}}
+function fromDb(r){return{id:r.id,company:r.company||'',city:r.city||'',dept:r.dept||'',firstName:r.first_name||'',lastName:r.last_name||'',email:r.email||'',phone:r.phone||'',address:r.address||'',postalCode:r.postal_code||'',website:r.website||'',linkedinUrl:r.linkedin_url||'',lat:r.lat||0,lng:r.lng||0,rating:r.rating||0,reviews:r.reviews||0,status:r.status||'lead',subStatus:r.sub_status||'',callbackDate:r.callback_date||'',score:r.score||50,assignedTo:r.assigned_to||'',tags:r.tags||[],notes:r.notes||'',actions:(typeof r.actions==='string'?(()=>{try{return JSON.parse(r.actions)}catch(e){return[]}})():r.actions)||[],createdAt:r.created_at||'',dirigeant:r.dirigeant||'',fonction:r.fonction||'',raisonSociale:r.raison_sociale||'',siren:r.siren||'',siret:r.siret||'',formeJuridique:r.forme_juridique||'',dateCreation:r.date_creation||'',codeApe:r.code_ape||'',libelleApe:r.libelle_ape||'',effectif:r.effectif||0,ca:r.ca||0,anneeCa:r.annee_ca||'',capital:r.capital||0,categorieInsee:r.categorie_insee||'',facebook:r.facebook||'',source:r.source||'',offreApimo:r.offre_apimo||'',nbUsers:r.nb_users||1,crmActuel:r.crm_actuel||'',dateFinEngagement:r.date_fin_engagement||'',isClient:r.is_client||false,axe:r.axe||'lieu'}}
 
 async function cloudSync(p,_retry=0){
   if(!supa)return false;
@@ -3788,7 +3796,7 @@ async function cloudSync(p,_retry=0){
     // [FIX v9.7.8] Fallback basic INCLUT maintenant sub_status + callback_date + tous champs métier pour ne pas perdre ces données
     if(_retry===0){
       try{
-        const b={id:p.id,company:p.company||'',city:p.city||'',dept:p.dept||'',first_name:p.firstName||'',last_name:p.lastName||'',email:p.email||'',phone:p.phone||'',address:p.address||'',postal_code:p.postalCode||'',website:p.website||'',linkedin_url:p.linkedinUrl||'',lat:p.lat||0,lng:p.lng||0,rating:p.rating||0,reviews:p.reviews||0,status:p.status||'lead',sub_status:p.subStatus||'',callback_date:p.callbackDate||'',score:p.score||50,assigned_to:p.assignedTo||'',tags:p.tags||[],notes:p.notes||'',actions:JSON.stringify(p.actions||[]),created_at:p.createdAt||new Date().toISOString(),offre_apimo:p.offreApimo||'',nb_users:p.nbUsers||1,crm_actuel:p.crmActuel||'',date_fin_engagement:p.dateFinEngagement||'',is_client:p.isClient||false};
+        const b={id:p.id,company:p.company||'',city:p.city||'',dept:p.dept||'',first_name:p.firstName||'',last_name:p.lastName||'',email:p.email||'',phone:p.phone||'',address:p.address||'',postal_code:p.postalCode||'',website:p.website||'',linkedin_url:p.linkedinUrl||'',lat:p.lat||0,lng:p.lng||0,rating:p.rating||0,reviews:p.reviews||0,status:p.status||'lead',sub_status:p.subStatus||'',callback_date:p.callbackDate||'',score:p.score||50,assigned_to:p.assignedTo||'',tags:p.tags||[],notes:p.notes||'',actions:JSON.stringify(p.actions||[]),created_at:p.createdAt||new Date().toISOString(),offre_apimo:p.offreApimo||'',nb_users:p.nbUsers||1,crm_actuel:p.crmActuel||'',date_fin_engagement:p.dateFinEngagement||'',is_client:p.isClient||false,axe:p.axe||'lieu'};
         const{error:e2}=await supa.from('prospects').upsert(b,{onConflict:'id'});
         if(e2)throw e2;
         console.log('[SYNC✅ basic]',p.company,'| sub_status bien inclus:',b.sub_status);
@@ -3907,7 +3915,8 @@ async function cloudSeed(list){
           created_at:p.createdAt||new Date().toISOString(),
           offre_apimo:p.offreApimo||'',nb_users:p.nbUsers||1,
           crm_actuel:p.crmActuel||'',date_fin_engagement:p.dateFinEngagement||'',
-          is_client:p.isClient||false
+          is_client:p.isClient||false,
+          axe:p.axe||'lieu'
         }));
         await supa.from('prospects').upsert(basics,{onConflict:'id'});
         console.log('[SEED] Batch '+batchNum+' OK via fallback basic (incluant sub_status)');
@@ -4126,6 +4135,16 @@ window.CRM_CONFIG = {
     { id:"won",       label:"Signé / Engagé",color:"#10b981", icon:"✅" },
     { id:"lost",      label:"Perdu",         color:"#ef4444", icon:"❌" }
   ],
+  // [v13] 3 axes BizDev Lost Chapter — catégorisation business de chaque prospect.
+  // Chaque prospect appartient à exactement un axe (lieu / financeur / influenceur).
+  axes: [
+    { id:"lieu",        label:"Lieu",        color:"#1B6FFF", icon:"🏛️",
+      desc:"Monument historique, château, théâtre, citadelle, abbaye — où l'événement se passe" },
+    { id:"financeur",   label:"Financeur",   color:"#FFB627", icon:"💰",
+      desc:"Banque, office de tourisme, mécène, CNC, DRAC, Région, sponsor — qui finance" },
+    { id:"influenceur", label:"Influenceur", color:"#FF3D9A", icon:"🎤",
+      desc:"Streamer Twitch, JDR pro, vulgarisateur — qui joue / incarne le projet" }
+  ],
   contactSubStatuses: [
     { id:"",              label:"— Aucun —",       color:"#3b82f6", icon:"📞" },
     { id:"messagerie",    label:"Messagerie",      color:"#8b5cf6", icon:"📱" },
@@ -4188,7 +4207,7 @@ window.CRM = {
   prospects: [],
   // [PLAY AZUR v1.0] CRM.prospects vidé à l'init — cloudLoad() charge les prospects Lost Chapter depuis Supabase
   currentUser: null,
-  filters: { search:'', status:'', subStatus:'', assignedTo:'', dept:'', tag:'', source:'' },
+  filters: { search:'', status:'', subStatus:'', assignedTo:'', dept:'', tag:'', source:'', axe:'' },
   activeView: 'table',
   sortCol: 'score', sortDir: -1, tablePage: 0, pageSize: 20,
   editingId: null,
@@ -5409,6 +5428,7 @@ window.CRM = {
         const scColor = sc>=80?'var(--ok)':sc>=50?'var(--warn)':'var(--err)';
         return `<tr>
           <td style="text-align:center" onclick="event.stopPropagation()"><input type="checkbox" class="row-check" data-id="${p.id}" onchange="toggleSelect('${p.id}',this.checked)" style="width:auto;cursor:pointer;accent-color:var(--uc)"></td>
+          <td onclick="CRM.prospect.showEdit('${p.id}')" style="cursor:pointer">${axeBadgeHtml(p.axe)}</td>
           <td onclick="CRM.prospect.showEdit('${p.id}')" style="cursor:pointer"><strong>${p.company||p.lastName||'—'}</strong>${p.lastName?'<br><span style=\"font-size:11px;color:var(--t2)\">'+p.firstName+' '+p.lastName+'</span>':''}</td>
           <td>${p.city||'—'}</td>
           <td>${dept?'<span style=\"font-size:11px;padding:2px 8px;border-radius:8px;background:'+dept.color+'22;color:'+dept.color+'\">'+dept.code+'</span>':'—'}</td>
@@ -5586,10 +5606,11 @@ window.CRM = {
       const mailBtn = email?`<a class="kc-qa-btn" href="mailto:${email}" onclick="event.stopPropagation()">✉️</a>`:'';
       const waBtn = phone?`<button class="kc-qa-btn" onclick="event.stopPropagation();var c='${phone}'.replace(/\\D/g,'').replace(/^0/,'33');window.open('https://wa.me/'+c)">💬</button>`:'';
       const name = (p.company||p.lastName||'—').replace(/'/g,'&#39;');
-      return `<div class="kanban-card" draggable="true" ondragstart="CRM.kanban.drag(event,'${p.id}')" onclick="CRM.prospect.showEdit('${p.id}')">`+
+      return `<div class="kanban-card" draggable="true" ondragstart="CRM.kanban.drag(event,'${p.id}')" onclick="CRM.prospect.showEdit('${p.id}')" style="border-left:3px solid ${getAxe(p.axe).color}">`+
         (urgBadge?`<div style="margin-bottom:4px">${urgBadge}</div>`:'')+
         `<div class="kc-name">${name}</div>`+
         `<div class="kc-meta">`+
+          `<span style="font-size:9.5px">${axeBadgeHtml(p.axe)}</span>`+
           (p.city?`<span>${p.city}</span>`:'')+
           (dept?`<span class="kc-dept" style="background:${dept.color}22;color:${dept.color}">${dept.code}</span>`:'')+
           (user?`<span class="assigned-av" style="background:${user.color};width:18px;height:18px;font-size:8px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;flex-shrink:0">${user.initials}</span>`:'')+
@@ -5768,11 +5789,25 @@ window.CRM = {
       const demos = all.filter(p=>p.status==='demo').length;
       const rate = all.length ? Math.round(won/all.length*100) : 0;
 
-      document.getElementById('dash-kpis').innerHTML = [
+      // [v13] KPIs par axe stratégique (Lieu / Financeur / Influenceur)
+      const byAxe = {};
+      (CRM_CONFIG.axes||[]).forEach(a => { byAxe[a.id] = all.filter(p => (p.axe||'lieu') === a.id); });
+      const axeCards = (CRM_CONFIG.axes||[]).map(a => {
+        const list = byAxe[a.id] || [];
+        const wonCount = list.filter(p => p.status === 'won').length;
+        return `<div class="kpi-card" style="border-left:4px solid ${a.color};cursor:pointer"
+                     onclick="CRM.filters.axe='${a.id}';CRM.tablePage=0;CRM.ui.switchView('table');CRM.ui.refresh();document.getElementById('filter-axe').value='${a.id}'">
+          <div class="kpi-icon" style="color:${a.color}">${a.icon}</div>
+          <div class="kpi-val" style="color:${a.color}">${list.length}</div>
+          <div class="kpi-label"><strong>${a.label}</strong> · ${wonCount} engagé${wonCount>1?'s':''}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('dash-kpis').innerHTML = axeCards + [
         {icon:'👥',val:all.length,label:'Total prospects'},
         {icon:'🔥',val:active,label:'Actifs'},
         {icon:'📈',val:rate+'%',label:'Taux conversion'},
-        {icon:'💻',val:demos,label:'Démos planifiées'}
+        {icon:'💻',val:demos,label:'RDV planifiés'}
       ].map(k=>`<div class="kpi-card"><div class="kpi-icon">${k.icon}</div><div class="kpi-val">${k.val}</div><div class="kpi-label">${k.label}</div></div>`).join('');
 
       // Pipeline chart
@@ -5822,6 +5857,7 @@ window.CRM = {
       document.getElementById('mp-lng').value='';
       document.getElementById('mp-status-bar').style.display='none';
       document.getElementById('mp-isClient').checked=false;
+      renderAxeSelector('lieu'); // [v13] axe par défaut sur nouveau prospect
       CRM.ui.showModal('modal-prospect');
     },
     showEdit(id) {
@@ -5878,6 +5914,7 @@ window.CRM = {
       document.getElementById('mp-crmActuel').value=p.crmActuel||'';
       document.getElementById('mp-dateFinEngagement').value=p.dateFinEngagement||'';
       document.getElementById('mp-isClient').checked=!!p.isClient;
+      renderAxeSelector(p.axe||'lieu'); // [v13] axe stratégique du prospect
       document.querySelectorAll('.offre-opt').forEach(function(cb){cb.checked=false});
       calcOffreApimo();
       document.getElementById('mp-tags').value=(p.tags||[]).join(', ');
@@ -5924,6 +5961,8 @@ window.CRM = {
       data.crmActuel = document.getElementById('mp-crmActuel').value;
       data.dateFinEngagement = document.getElementById('mp-dateFinEngagement').value;
       data.isClient = document.getElementById('mp-isClient').checked;
+      // [v13] Axe stratégique : lu depuis le hidden input nourri par renderAxeSelector()
+      data.axe = (document.getElementById('mp-axe').value || 'lieu');
       // Collect enriched readonly fields (preserve on edit, init on create)
       ['dirigeant','fonction','raisonSociale','siren','siret','formeJuridique','dateCreation','codeApe','libelleApe','effectif','ca','capital','categorieInsee','facebook','source'].forEach(f=>{
         const el=document.getElementById('mp-'+f);
@@ -6559,6 +6598,7 @@ window.CRM = {
     if(f.dept) list = list.filter(p=>p.dept===f.dept);
     if(f.tag) list = list.filter(p=>p.tags&&p.tags.includes(f.tag));
     if(f.source) list = list.filter(p=>p.source&&p.source.includes(f.source));
+    if(f.axe) list = list.filter(p=>(p.axe||'lieu')===f.axe); // [v13] filtre axe stratégique
     return list;
   }
 };
@@ -8741,6 +8781,48 @@ function openSettings(){
   CRM.ui.showModal('modal-settings');
 }
 function applyRBAC(){var o=isOwner();var t=document.getElementById('team-add');if(t)t.style.display=o?'':'none'}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// [v13] AXE STRATÉGIQUE — Lieu / Financeur / Influenceur
+// ═══════════════════════════════════════════════════════════════════════════
+
+function getAxe(id){ return (CRM_CONFIG.axes||[]).find(a=>a.id===id) || (CRM_CONFIG.axes||[])[0]; }
+
+function renderAxeSelector(currentAxe){
+  // Dessine les 3 boutons d'axe dans la modale prospect et nourrit #mp-axe
+  const wrap = document.getElementById('mp-axe-btns');
+  const hidden = document.getElementById('mp-axe');
+  const desc = document.getElementById('mp-axe-desc');
+  if(!wrap || !hidden) return;
+  currentAxe = currentAxe || 'lieu';
+  hidden.value = currentAxe;
+  wrap.innerHTML = (CRM_CONFIG.axes||[]).map(a=>{
+    const active = (a.id === currentAxe);
+    return '<button type="button" data-axe="'+a.id+'" onclick="setAxeOnEdit(\''+a.id+'\')" '
+      + 'style="flex:1;min-width:130px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;'
+      + 'border:2px solid '+(active?a.color:'var(--brd)')+';'
+      + 'background:'+(active?a.color+'22':'var(--sur)')+';'
+      + 'color:'+(active?a.color:'var(--t2)')+';transition:all .15s">'
+      + a.icon+' '+a.label+'</button>';
+  }).join('');
+  if(desc){
+    const a = getAxe(currentAxe);
+    desc.textContent = a ? a.desc : '';
+  }
+}
+
+function setAxeOnEdit(id){
+  document.getElementById('mp-axe').value = id;
+  renderAxeSelector(id);
+}
+
+function axeBadgeHtml(axeId){
+  const a = getAxe(axeId||'lieu');
+  if(!a) return '';
+  return '<span title="'+a.desc+'" style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;'
+    + 'background:'+a.color+'1f;color:'+a.color+';border:1px solid '+a.color+'40;white-space:nowrap">'
+    + a.icon+' '+a.label+'</span>';
+}
 
 // INIT (v10 — Supabase Auth session check)
 loadTeam();
