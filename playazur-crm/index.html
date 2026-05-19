@@ -4181,7 +4181,9 @@ window.CRM_CONFIG = {
     email:{
       enabled:true, mode:"mailto",
       templates:[
-        { id:"lieu", label:"🏛️ Approche LIEU patrimoine", subject:"Lost Chapter — proposition de partenariat avec {company}",
+        { id:"lieu_patrimoine_2027", label:"🏛️ Approche LIEU patrimoine — Édition 2027 (PAF)", subject:"Play Azur Festival 2027 — recherche d'un lieu historique pour {company}",
+          body:"Bonjour {firstName},\n\nJe me permets de vous contacter au nom de l'association Play Azur, organisatrice du Play Azur Festival, convention dédiée à la pop culture (cosplay, manga, jeux vidéo) dont la 9e édition vient de se tenir à Nice en avril 2026 avec près de 24 000 visiteurs.\n\nDans le cadre de notre développement pour l'édition 2027, nous sommes à la recherche d'un lieu historique emblématique qui deviendrait le décor naturel de notre événement — sans aménagement lourd, le patrimoine lui-même étant au cœur de la scénographie.\n\nNotre démarche est simple : nous souhaitons co-construire un partenariat avec votre collectivité, dans lequel la mise à disposition du lieu serait compensée par les retombées économiques directes générées sur votre territoire :\n\n• 24 000 visiteurs sur un weekend\n• Nuitées hôtelières, restauration, commerces locaux\n• Visibilité médiatique nationale et sur les réseaux sociaux\n• Rayonnement du patrimoine auprès d'un public jeune (18-35 ans)\n\nNotre événement est payant, professionnel, avec une organisation rodée depuis 9 éditions. Nous travaillons dans le respect total des lieux que nous investissons.\n\nNous serions ravis d'échanger avec vous sur les modalités d'un tel partenariat et de vous présenter notre dossier complet.\n\nDans l'attente de votre retour, je reste disponible pour tout échange.\n\nCordialement," },
+        { id:"lieu", label:"🏛️ Approche LIEU patrimoine — Lost Chapter (JDR)", subject:"Lost Chapter — proposition de partenariat avec {company}",
           body:"Bonjour {firstName},\n\nJe me permets de vous contacter pour vous présenter Lost Chapter, un projet culturel innovant porté par Play Azur Production.\n\nLe concept : une soirée jeu de rôle live, jouée par des créateurs de contenu reconnus, diffusée sur Twitch (audience cumulée potentielle : plusieurs milliers de spectateurs en direct), tournée dans un lieu patrimonial d'exception.\n\nCe que nous apportons à {company} :\n• Une mise en lumière patrimoniale via un format innovant\n• Un public neuf (jeunes adultes, familles, passionnés d'Histoire)\n• Une visibilité Twitch + YouTube + réseaux sociaux\n• Une co-construction avec vos équipes\n• Une rediffusion durable et un livre-histoire qui prolonge l'expérience\n• Aucun coût pour vous : Play Azur prend en charge logistique, captation, équipe, costumes\n\nSeriez-vous disponible pour un échange de 20 minutes en visio ?\n\nCordialement,\n{currentUser}\nBizDev — Play Azur Production" },
         { id:"streamer", label:"🎙️ Approche STREAMER / créateur", subject:"Lost Chapter — un projet JDR live qui pourrait vous intéresser",
           body:"Bonjour {firstName},\n\nGrand fan de votre travail sur {company}. Je vous contacte pour vous présenter Lost Chapter, un projet de Play Azur Production qui croise pop culture, vulgarisation historique et streaming.\n\nLe pitch : une soirée JDR live de 2h30, animée par un maître de jeu reconnu, avec 4 créateurs invités qui incarnent des personnages dans un scénario historique. Tournage dans un lieu patrimonial. Diffusion Twitch + livre-histoire pour prolonger l'expérience.\n\nPourquoi vous : votre audience, votre approche éditoriale, votre légitimité. Nous cherchons soit un streamer principal (qui héberge l'émission sur sa chaîne), soit un créateur invité (l'un des 4 joueurs).\n\nJ'aimerais en discuter avec vous — 20 minutes en visio quand vous le souhaitez.\n\nCordialement,\n{currentUser}\nBizDev — Play Azur Production" },
@@ -6078,6 +6080,51 @@ window.CRM = {
       sig += '— — — — — — — — — — — — — — — — — —';
       return sig;
     },
+
+    // [v14] Signature HTML riche (avec logo Play Azur) pour les mails envoyés via Brevo
+    // Utilise l'URL Vercel absolue du logo pour que l'image s'affiche chez le destinataire.
+    buildHtml() {
+      const d = this.load() || {};
+      const me = (typeof teamMembers !== 'undefined') ? teamMembers.find(m => m.id === (CRM.currentUser && CRM.currentUser.id)) : null;
+      const name = d.name || (CRM.currentUser && CRM.currentUser.fullName) || (CRM.currentUser && CRM.currentUser.name) || '';
+      const title = d.title || (me && me.jobTitle) || 'Business Developer';
+      const phone = d.phone || (me && me.phone) || '';
+      const email = d.email || (me && me.email) || (CRM.currentUser && CRM.currentUser._email) || '';
+      const linkedin = d.linkedin || '';
+      const calendly = localStorage.getItem('playazur_crm_calendly') || '';
+      // Logo : URL absolue du logo Play Azur déployé sur Vercel (visible chez le destinataire)
+      const logoUrl = 'https://crm-play-azur.vercel.app/icons/icon-192.png';
+      const brand   = '#1B6FFF';
+      const accent  = '#FFB627';
+
+      const rowsHtml =
+        (phone    ? '<div style="margin:2px 0"><span style="color:#666">Tél.</span> <a href="tel:'+phone+'" style="color:#222;text-decoration:none;font-weight:600">'+phone+'</a></div>' : '')+
+        (email    ? '<div style="margin:2px 0"><span style="color:#666">Email</span> <a href="mailto:'+email+'" style="color:'+brand+';text-decoration:none;font-weight:600">'+email+'</a></div>' : '')+
+        (linkedin ? '<div style="margin:2px 0"><a href="'+linkedin+'" style="color:'+brand+';text-decoration:none;font-weight:600">LinkedIn ↗</a></div>' : '')+
+        (calendly ? '<div style="margin:6px 0"><a href="'+calendly+'" style="display:inline-block;padding:6px 12px;background:'+brand+';color:#fff;border-radius:6px;text-decoration:none;font-weight:600;font-size:12px">📅 Prendre rendez-vous</a></div>' : '');
+
+      return ''
+        + '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin-top:28px;border-top:2px solid '+brand+';padding-top:14px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#222;max-width:600px">'
+        +   '<tr>'
+        +     '<td valign="top" style="padding-right:14px;width:80px">'
+        +       '<img src="'+logoUrl+'" alt="Play Azur" width="72" height="72" style="display:block;border-radius:12px;border:1px solid #eee">'
+        +     '</td>'
+        +     '<td valign="top" style="font-size:13px;line-height:1.55">'
+        +       '<div style="font-size:15px;font-weight:800;color:#111">'+name+'</div>'
+        +       '<div style="font-size:12.5px;color:'+brand+';font-weight:700;margin-bottom:6px">'+title+' · Play Azur</div>'
+        +       rowsHtml
+        +     '</td>'
+        +   '</tr>'
+        +   '<tr><td colspan="2" style="padding-top:12px;border-top:1px dashed #ddd;margin-top:10px">'
+        +     '<div style="font-size:11px;color:#666;line-height:1.5;padding-top:8px">'
+        +       '<strong style="color:'+brand+'">Play Azur</strong> · Association de médiation scientifique, culturelle &amp; événementielle<br>'
+        +       '<span style="color:'+accent+';font-weight:700">🎪 Play Azur Festival</span> — 9<sup>e</sup> édition · 24 000 visiteurs · Nice (06) · Avril 2026<br>'
+        +       '60+ productions · 6M+ vues · YouTube · Twitch · TikTok'
+        +     '</div>'
+        +   '</td></tr>'
+        + '</table>';
+    },
+
     preview() {
       this.save();
       const sig = this.build();
@@ -8908,11 +8955,20 @@ document.addEventListener('visibilitychange',async()=>{
   // pour compat avec le reste du module campagnes.
 
   async function brevoSend(apiKey, to, toName, subject, htmlBody, senderName, senderEmail){
+    // [v14] Strip l'ancienne "Cordialement, ..." du body pour éviter de dupliquer
+    // avec la signature HTML riche qu'on ajoute ensuite.
+    let cleanedBody = htmlBody;
+    try { if (CRM.signature && CRM.signature.stripOldClosing) cleanedBody = CRM.signature.stripOldClosing(htmlBody); } catch(e){}
+    const sigHtml = (CRM.signature && CRM.signature.buildHtml) ? CRM.signature.buildHtml() : '';
+    const bodyHtml = '<html><body style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:#222;max-width:680px;margin:0 auto;padding:24px 18px">'
+      + cleanedBody.replace(/\n/g,'<br>')
+      + sigHtml
+      + '</body></html>';
     const res = await CRM.ai.callBrevo({
       sender:{name:senderName||'Play Azur',email:senderEmail||'noreply@playazur.fr'},
       to:[{email:to,name:toName||''}],
       subject:subject,
-      htmlContent:'<html><body style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.7;color:#222">'+htmlBody.replace(/\n/g,'<br>')+'</body></html>',
+      htmlContent:bodyHtml,
       tags:['playazur-crm-campaign']
     });
     return res.data;
