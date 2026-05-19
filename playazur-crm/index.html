@@ -5476,14 +5476,23 @@ window.CRM = {
     },
     renderFilters() {
       const bar = document.getElementById('filters-bar');
+      // [v16] Plus de chips par département dans la vue Prospects — trop encombrant avec 101 dépts.
+      // Le dropdown #filter-dept en haut à droite (avec optgroup par région) suffit.
+      // On garde uniquement les chips "commercial" pour switch rapide entre Tous/Julie/Myriam/Tarek.
       let html = '<div class="filter-chip'+(CRM.filters.assignedTo?'':' on')+'" onclick="CRM.filters.assignedTo=\'\';CRM.ui.refresh();CRM.ui.renderFilters()">Tous</div>';
       CRM_CONFIG.users.forEach(u => {
         html += `<div class="filter-chip${CRM.filters.assignedTo===u.id?' on':''}" onclick="CRM.filters.assignedTo='${u.id}';CRM.ui.refresh();CRM.ui.renderFilters()" style="${CRM.filters.assignedTo===u.id?'border-color:'+u.color+';color:'+u.color:''}"><span style="width:8px;height:8px;border-radius:50%;background:${u.color};display:inline-block"></span>${u.name}</div>`;
       });
-      html += '<span style="width:1px;height:20px;background:var(--brd);display:inline-block"></span>';
-      Object.entries(CRM_CONFIG.departments).forEach(([id,d]) => {
-        html += `<div class="filter-chip${CRM.filters.dept===id?' on':''}" onclick="CRM.filters.dept=CRM.filters.dept==='${id}'?'':'${id}';CRM.ui.refresh();CRM.ui.renderFilters()">${d.code}</div>`;
-      });
+      // Si un département est actif (sélectionné dans le dropdown), on affiche un chip "X retirer"
+      // pour permettre de désactiver le filtre d'un clic sans rouvrir le dropdown.
+      if (CRM.filters.dept) {
+        const d = CRM_CONFIG.departments[CRM.filters.dept];
+        if (d) {
+          html += '<span style="width:1px;height:20px;background:var(--brd);display:inline-block"></span>';
+          html += '<div class="filter-chip on" style="border-color:'+d.color+';color:'+d.color+'" onclick="CRM.filters.dept=\'\';CRM.ui.refresh();CRM.ui.renderFilters();var s=document.getElementById(\'filter-dept\');if(s)s.value=\'\'">'
+                  + d.code + ' — ' + d.name + ' ✕</div>';
+        }
+      }
       bar.innerHTML = html;
     },
     showModal(id) { document.getElementById(id).classList.add('show'); },
