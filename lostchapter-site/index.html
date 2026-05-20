@@ -873,6 +873,52 @@ section{padding:90px 24px;position:relative}
     0 0 80px rgba(201,155,92,.25);
   position:relative;z-index:2;
 }
+/* ---------- SOCIAL LINKS (sous le QR) ---------- */
+.social-divider{
+  display:flex;align-items:center;justify-content:center;
+  margin:48px auto 18px;max-width:520px;
+  gap:14px;
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(242,230,208,.5);
+}
+.social-divider::before,.social-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(201,155,92,.35), transparent);
+}
+.social-links{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:14px;
+  margin-top:0;
+}
+.social-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(160deg,rgba(61,36,24,.7),rgba(26,15,8,.85));
+  border:1px solid rgba(201,155,92,.4);
+  color:var(--cream);text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s ease,background .35s ease,color .35s ease,box-shadow .35s ease;
+}
+.social-link svg{width:22px;height:22px;fill:currentColor;display:block}
+.social-link:hover{
+  transform:translateY(-5px) scale(1.06);
+  box-shadow:0 12px 28px rgba(0,0,0,.45);
+}
+/* Couleurs officielles au hover */
+.social-link--instagram:hover{color:#fff;background:radial-gradient(circle at 30% 110%, #FED576 0%, #F47133 25%, #BC3081 50%, #4C63D2 100%);border-color:transparent}
+.social-link--tiktok:hover{color:#fff;background:#010101;border-color:#25F4EE;box-shadow:0 12px 28px rgba(37,244,238,.35), -2px 2px 0 #25F4EE inset, 2px -2px 0 #FE2C55 inset}
+.social-link--facebook:hover{color:#fff;background:#1877F2;border-color:#1877F2}
+.social-link--x:hover{color:#fff;background:#000;border-color:#fff}
+.social-link--youtube:hover{color:#fff;background:#FF0000;border-color:#FF0000}
+.social-link--linktree:hover{color:#fff;background:#43E660;border-color:#43E660}
+.social-link--web:hover{color:var(--brown);background:linear-gradient(135deg,var(--gold-bright),var(--gold));border-color:var(--gold-bright)}
+
+@media (max-width:560px){
+  .social-link{width:44px;height:44px}
+  .social-link svg{width:20px;height:20px}
+  .social-divider{font-size:10px;letter-spacing:2px;margin-top:36px}
+}
+
 .qr-frame::before{
   /* Petits coins or comme un cadre médiéval */
   content:'';
@@ -1774,6 +1820,33 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
     <div class="qr-frame reveal d2">
       <svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" style="display:block" aria-label="QR code vers https://lostchapter.vercel.app" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#F2E6D0" d="M0 0h41v41H0z"/><path stroke="#3D2418" d="M4 4.5h7m4 0h3m1 0h1m1 0h6m1 0h1m1 0h7M4 5.5h1m5 0h1m2 0h1m3 0h2m3 0h3m3 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h2m3 0h1m1 0h7m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m1 0h3m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h3m1 0h4m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m3 0h2m2 0h3m1 0h6m2 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M14 11.5h2m1 0h1m1 0h1m1 0h1m4 0h1m1 0h1M7 12.5h2m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h2m3 0h1m4 0h2M4 13.5h3m1 0h2m2 0h2m3 0h1m1 0h1m1 0h7m1 0h1m1 0h4M6 14.5h1m2 0h3m2 0h5m1 0h1m1 0h2m2 0h6m2 0h3M5 15.5h1m2 0h1m3 0h1m1 0h2m2 0h5m2 0h2m1 0h1m2 0h2m1 0h1M7 16.5h5m2 0h2m2 0h1m2 0h1m2 0h2m1 0h2m1 0h1M6 17.5h3m4 0h1m2 0h1m1 0h1m2 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m2 0h2m2 0h3m1 0h4m7 0h1m2 0h2M4 19.5h1m2 0h2m3 0h2m1 0h2m3 0h1m3 0h1m3 0h1m3 0h3M5 20.5h3m2 0h1m3 0h1m1 0h3m1 0h3m6 0h2m1 0h2m1 0h1M4 21.5h1m3 0h1m7 0h2m2 0h3m1 0h1m1 0h1m1 0h1m1 0h4m2 0h1M4 22.5h5m1 0h2m1 0h2m1 0h2m2 0h8m1 0h3m1 0h4M4 23.5h3m4 0h3m1 0h2m7 0h1m2 0h10M4 24.5h1m1 0h1m1 0h3m3 0h2m1 0h2m4 0h2m3 0h2m3 0h1m2 0h1M4 25.5h2m3 0h1m1 0h1m2 0h2m3 0h1m1 0h1m2 0h1m5 0h4M4 26.5h1m1 0h3m1 0h1m2 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h1m1 0h1m2 0h2M4 27.5h1m3 0h2m1 0h1m2 0h1m3 0h7m7 0h1m1 0h1M4 28.5h3m1 0h1m1 0h1m2 0h8m1 0h1m1 0h1m3 0h5m3 0h1M12 29.5h4m2 0h1m1 0h2m2 0h1m2 0h2m3 0h1m1 0h2M4 30.5h7m1 0h1m1 0h2m2 0h6m1 0h4m1 0h1m1 0h1M4 31.5h1m5 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h1m2 0h2m3 0h1m1 0h2M4 32.5h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h1m1 0h2m3 0h1m1 0h7m1 0h1M4 33.5h1m1 0h3m1 0h1m1 0h1m2 0h6m1 0h2m1 0h1m2 0h2m1 0h1m1 0h3M4 34.5h1m1 0h3m1 0h1m4 0h1m3 0h2m2 0h1m1 0h2m1 0h1m3 0h1m1 0h3M4 35.5h1m5 0h1m2 0h6m1 0h2m2 0h1m4 0h2m2 0h4M4 36.5h7m3 0h3m4 0h1m3 0h4m1 0h1m1 0h2"/></svg>
     </div>
+
+    <div class="social-divider reveal d3"><span>Ou suivez Play Azur sur</span></div>
+
+    <div class="social-links reveal d3">
+      <a href="https://www.instagram.com/playazur/" target="_blank" rel="noopener noreferrer" class="social-link social-link--instagram" aria-label="Instagram Play Azur — @playazur">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.27-2.91.56-.79.31-1.46.72-2.13 1.39C1.34 2.69.93 3.36.62 4.15.33 4.91.12 5.78.06 7.06.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.27 2.15.56 2.91.31.79.72 1.46 1.39 2.13.67.67 1.34 1.08 2.13 1.39.76.29 1.63.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.27 2.91-.56.79-.31 1.46-.72 2.13-1.39.67-.67 1.08-1.34 1.39-2.13.29-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.27-2.15-.56-2.91-.31-.79-.72-1.46-1.39-2.13C21.31 1.34 20.64.93 19.85.62 19.09.33 18.22.12 16.94.06 15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-11.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@playazur" target="_blank" rel="noopener noreferrer" class="social-link social-link--tiktok" aria-label="TikTok Play Azur — @playazur">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.39a8.16 8.16 0 0 0 4.77 1.52V6.69h-1.84z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/playazur" target="_blank" rel="noopener noreferrer" class="social-link social-link--facebook" aria-label="Facebook Play Azur">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+      </a>
+      <a href="https://x.com/playazur" target="_blank" rel="noopener noreferrer" class="social-link social-link--x" aria-label="X (Twitter) Play Azur — @playazur">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@PlayAzurFestival" target="_blank" rel="noopener noreferrer" class="social-link social-link--youtube" aria-label="YouTube Play Azur Festival">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://linktr.ee/playazur" target="_blank" rel="noopener noreferrer" class="social-link social-link--linktree" aria-label="Linktree Play Azur">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.736 5.853L17.717 1.6l2.69 2.547-4.169 4.054h5.952v3.671h-5.97l4.187 4.082-2.69 2.523-5.97-6.022-5.971 6.022-2.689-2.523 4.186-4.082h-5.97v-3.671h5.952L3.255 4.147 5.945 1.6l3.981 4.253V0h3.81v5.853zM9.926 16.622h3.81V24h-3.81v-7.378z"/></svg>
+      </a>
+      <a href="https://playazur.fr/" target="_blank" rel="noopener noreferrer" class="social-link social-link--web" aria-label="Site officiel Play Azur — playazur.fr">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.84 6.85c1.13 1.52 1.83 3.4 1.91 5.45h-3.51c-.08-2-.59-3.85-1.41-5.3a8.04 8.04 0 0 1 3.01-.15zM12 2.06c1.27.74 2.32 2.32 2.95 4.49H9.05C9.68 4.38 10.73 2.8 12 2.06zM2.39 13.7h3.51c.08 2 .59 3.85 1.41 5.3a8.04 8.04 0 0 1-3.01.15A7.97 7.97 0 0 1 2.39 13.7zm0-3.4a7.97 7.97 0 0 1 1.91-5.45 8.04 8.04 0 0 1 3.01.15c-.82 1.45-1.33 3.3-1.41 5.3H2.39zm9.61 11.64c-1.27-.74-2.32-2.32-2.95-4.49h5.9c-.63 2.17-1.68 3.75-2.95 4.49zM15.32 13.7H8.68c-.09-.55-.14-1.12-.14-1.7s.05-1.15.14-1.7h6.64c.09.55.14 1.12.14 1.7s-.05 1.15-.14 1.7zm.51 5.45a8.04 8.04 0 0 1-3.01.15c.82-1.45 1.33-3.3 1.41-5.3h3.51a7.97 7.97 0 0 1-1.91 5.45z"/></svg>
+      </a>
+    </div>
+
   </div>
 </section>
 
