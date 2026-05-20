@@ -6045,10 +6045,12 @@ window.CRM = {
   leads: {
     items: [],
     _supportLabels: {
-      mecenat: '💝 Mécénat',
-      sponsor: '🤝 Sponsoring',
+      public:      '🎭 Particulier',
+      commune:     '🏛 Commune · Patrimoine',
+      mecenat:     '💝 Mécénat',
+      sponsor:     '🤝 Sponsoring',
       institution: '🏛 Institution',
-      autre: '❓ À discuter'
+      autre:       '❓ À discuter'
     },
     _amountLabels: {
       '<1k':       '< 1 000 €',
@@ -6101,23 +6103,30 @@ window.CRM = {
       const msgPreview = (l.message || '').slice(0, 140);
       const honeypot = l.honeypot_filled ? '<span style="background:#ef444422;color:#ef4444;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px" title="Honeypot rempli — probablement un bot">🤖 SPAM</span>' : '';
       const convertedTo = l.prospect_id ? `<a href="#" onclick="event.preventDefault();CRM.prospect.showEdit('${l.prospect_id}')" style="font-size:11px;color:var(--ok);text-decoration:underline">→ voir le prospect</a>` : '';
+      const cityLine = (l.postal_code || l.city) ? `<div>📍 ${esc((l.postal_code||'') + (l.postal_code && l.city ? ' ' : '') + (l.city||''))}</div>` : '';
+      const monumentLine = l.monument ? `<div>🏛 <strong>${esc(l.monument)}</strong></div>` : '';
+      const structureLine = l.support_type === 'public'
+        ? `<div style="font-size:12px;color:var(--t2);margin-top:2px;font-style:italic">Particulier</div>`
+        : `<div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>`;
       return `<div style="background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:14px;border-left:4px solid ${st.color}">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
           <div style="flex:1;min-width:0">
             <div style="font-weight:600;font-size:14px;color:var(--t1)">${esc(l.full_name)}${honeypot}</div>
-            <div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>
+            ${structureLine}
           </div>
           <span style="background:${st.color}22;color:${st.color};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap">${st.icon} ${st.label}</span>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;font-size:11px">
           <span style="background:var(--sur2);padding:2px 8px;border-radius:8px">${supLabel}</span>
-          <span style="background:var(--sur2);padding:2px 8px;border-radius:8px">💰 ${amtLabel}</span>
+          ${l.support_type === 'pro' || amtLabel !== 'Non précisé' ? '<span style="background:var(--sur2);padding:2px 8px;border-radius:8px">💰 '+amtLabel+'</span>' : ''}
           <span style="color:var(--t3)">${dateStr}</span>
         </div>
-        <div style="font-size:12px;line-height:1.45;color:var(--t2);margin-bottom:10px">
+        <div style="font-size:12px;line-height:1.55;color:var(--t2);margin-bottom:10px">
           <div>✉ <a href="mailto:${esc(l.email)}" style="color:var(--ac)">${esc(l.email)}</a></div>
           ${l.phone ? '<div>📞 <a href="tel:'+esc(l.phone)+'" style="color:var(--ac)">'+esc(l.phone)+'</a></div>' : ''}
-          ${msgPreview ? '<div style="margin-top:6px;padding:8px;background:var(--sur2);border-radius:6px;font-style:italic">"'+esc(msgPreview)+(l.message.length>140?'…':'')+'"</div>' : ''}
+          ${cityLine}
+          ${monumentLine}
+          ${msgPreview ? '<div style="margin-top:6px;padding:8px;background:var(--sur2);border-radius:6px;font-style:italic;white-space:pre-wrap">"'+esc(msgPreview)+(l.message.length>140?'…':'')+'"</div>' : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           ${l.status==='converted' ? convertedTo : '<button class="btn-s" style="background:var(--ac);color:#fff;border-color:var(--ac);flex:1" onclick="CRM.leads.openQualify(\''+l.id+'\')">🎯 Qualifier &amp; convertir</button>'}
@@ -6146,15 +6155,18 @@ window.CRM = {
       this._qualifyingId = id;
       const supLabel = this._supportLabels[l.support_type] || l.support_type;
       const amtLabel = this._amountLabels[l.amount_range] !== undefined ? this._amountLabels[l.amount_range] : l.amount_range;
+      const cityLine2 = (l.postal_code || l.city) ? ` · 📍 ${esc((l.postal_code||'') + (l.postal_code && l.city ? ' ' : '') + (l.city||''))}` : '';
+      const monumentLine2 = l.monument ? `<div style="font-size:12px;color:var(--t2);margin-bottom:6px">🏛 ${esc(l.monument)}</div>` : '';
       document.getElementById('leadQualifySummary').innerHTML = `
         <div style="font-weight:600;font-size:14px;margin-bottom:4px">${esc(l.full_name)} <span style="font-weight:400;color:var(--t2)">— ${esc(l.structure)}</span></div>
         ${l.role ? '<div style="font-size:12px;color:var(--t2);margin-bottom:6px">'+esc(l.role)+'</div>' : ''}
+        ${monumentLine2}
         <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-bottom:6px">
           <span style="background:var(--sur);padding:2px 8px;border-radius:8px">${supLabel}</span>
           <span style="background:var(--sur);padding:2px 8px;border-radius:8px">💰 ${amtLabel}</span>
         </div>
-        <div style="font-size:12px;color:var(--t2)">✉ ${esc(l.email)} ${l.phone?' · 📞 '+esc(l.phone):''}</div>
-        ${l.message ? '<div style="margin-top:8px;padding:8px;background:var(--sur);border-radius:6px;font-style:italic;font-size:12px">"'+esc(l.message)+'"</div>' : ''}
+        <div style="font-size:12px;color:var(--t2)">✉ ${esc(l.email)} ${l.phone?' · 📞 '+esc(l.phone):''}${cityLine2}</div>
+        ${l.message ? '<div style="margin-top:8px;padding:8px;background:var(--sur);border-radius:6px;font-style:italic;font-size:12px;white-space:pre-wrap">"'+esc(l.message)+'"</div>' : ''}
       `;
       // Suggère un axe par défaut basé sur le type de soutien
       let suggested = 'financeur';
@@ -6195,6 +6207,8 @@ window.CRM = {
         '💰 Ordre de grandeur : ' + amtLabel
       ];
       if(l.role) noteParts.push('🎯 Rôle : ' + l.role);
+      if(l.monument) noteParts.push('🏛 Site / monument : ' + l.monument);
+      if(l.postal_code || l.city) noteParts.push('📍 Localisation : ' + (l.postal_code||'') + (l.postal_code && l.city ? ' ' : '') + (l.city||''));
       if(l.message) noteParts.push('💬 Message :\n' + l.message);
       if(l.referrer) noteParts.push('🔗 Referrer : ' + l.referrer);
       const newProspect = {
@@ -6205,11 +6219,13 @@ window.CRM = {
         lastName,
         email: l.email || '',
         phone: l.phone || '',
+        city: l.city || '',
+        postalCode: l.postal_code || '',
         status: 'lead',
         subStatus: '',
         score: 70,
         assignedTo: (CRM.currentUser && CRM.currentUser.id) || '', // qualifier un lead = action → s'assigne au user courant
-        tags: ['Lead entrant Lost Chapter'],
+        tags: ['Lead entrant Lost Chapter' + (l.support_type === 'public' ? ' · Particulier' : l.support_type === 'commune' ? ' · Commune' : '')],
         notes: noteParts.join('\n'),
         source: 'Landing Lost Chapter',
         fonction: l.role || '',
