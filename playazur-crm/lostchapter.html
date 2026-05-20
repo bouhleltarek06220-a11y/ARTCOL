@@ -351,9 +351,13 @@ section{padding:90px 24px;position:relative}
 
 /* ---------- STATS ---------- */
 .stats{
-  background:linear-gradient(180deg,#221408,#1A0F08);
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.84) 0%, rgba(26,15,8,.7) 45%, rgba(26,15,8,.92) 100%),
+    url('assets/lostchapter-stats-bg.webp') center/cover no-repeat;
+  background-color:#1A0F08;
   border-top:1px solid rgba(201,155,92,.18);
   border-bottom:1px solid rgba(201,155,92,.18);
+  position:relative;
 }
 .stats-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
