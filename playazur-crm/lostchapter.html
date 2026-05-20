@@ -169,6 +169,73 @@ body{
 @keyframes shimmer{0%{left:-100%}50%,100%{left:200%}}
 .hero-cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 44px rgba(201,155,92,.55)}
 
+/* ---------- HERO PORTALS (3 ICP entry doors) ---------- */
+.portals-label{
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(242,230,208,.55);
+  margin:8px 0 18px;
+  opacity:0;animation:revealUp 1s ease-out 1.4s forwards;
+}
+.portals{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;max-width:780px;margin:0 auto;
+  opacity:0;animation:revealUp 1s ease-out 1.55s forwards;
+}
+.portal{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  padding:22px 16px 20px;
+  background:linear-gradient(160deg,rgba(26,15,8,.65),rgba(26,15,8,.85));
+  border:1px solid rgba(201,155,92,.35);
+  border-radius:12px;
+  text-decoration:none;color:var(--cream);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s,background .35s;
+  overflow:hidden;
+}
+.portal::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold-bright),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform .5s ease;
+}
+.portal:hover{
+  transform:translateY(-6px);
+  border-color:rgba(229,199,136,.75);
+  box-shadow:0 18px 50px rgba(0,0,0,.4),0 0 0 1px rgba(229,199,136,.35);
+}
+.portal:hover::before{transform:scaleX(1)}
+.portal-ico{font-size:32px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 4px 10px rgba(201,155,92,.4))}
+.portal-eye{
+  font-family:'Cinzel',serif;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:600;margin-bottom:4px;
+}
+.portal-title{
+  font-family:'Fraunces',serif;font-size:19px;font-weight:500;
+  color:var(--cream);letter-spacing:.2px;margin-bottom:6px;
+}
+.portal-desc{
+  font-family:'Lora',serif;font-size:12px;color:var(--cream-soft);
+  text-align:center;line-height:1.45;opacity:.85;
+}
+/* Accent colors per portal */
+.portal--communes::before{background:linear-gradient(90deg,#9BD17A,#6AA453)}
+.portal--communes .portal-eye{color:#9BD17A}
+.portal--sponsors::before{background:linear-gradient(90deg,#E5C788,#A07840)}
+.portal--sponsors .portal-eye{color:var(--gold-bright)}
+.portal--public::before{background:linear-gradient(90deg,#FFC857,#E0843D)}
+.portal--public .portal-eye{color:#FFC857}
+@media (max-width:700px){
+  .portals{grid-template-columns:1fr;gap:10px;max-width:380px}
+  .portal{flex-direction:row;align-items:center;gap:14px;padding:14px 16px;text-align:left}
+  .portal-ico{font-size:26px;margin:0;flex-shrink:0}
+  .portal-text-wrap{display:flex;flex-direction:column}
+  .portal-desc{text-align:left;font-size:11.5px}
+  .portal-eye{margin-bottom:2px}
+  .portal-title{margin-bottom:2px;font-size:17px}
+}
+
 .scroll-hint{
   position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
   font-family:'Cinzel',serif;
@@ -421,6 +488,89 @@ section{padding:90px 24px;position:relative}
   font-size:14px;color:var(--cream-soft);font-weight:300;
   margin-top:14px;max-width:540px;margin-left:auto;margin-right:auto;
 }
+
+/* ---------- ICP BADGE (replaces kicker for each ICP section) ---------- */
+.icp-badge{
+  display:inline-block;
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:3.5px;text-transform:uppercase;
+  font-weight:600;
+  padding:7px 16px;
+  border-radius:4px;
+  border:1px solid currentColor;
+  margin-bottom:22px;
+  background:rgba(26,15,8,.5);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.icp--communes .icp-badge{color:#9BD17A;text-shadow:0 0 12px rgba(155,209,122,.4)}
+.icp--sponsors .icp-badge{color:var(--gold-bright);text-shadow:0 0 12px rgba(229,199,136,.4)}
+.icp--public .icp-badge{color:#FFC857;text-shadow:0 0 14px rgba(255,200,87,.45)}
+/* Section CTA (sous chaque ICP) */
+.section-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Cinzel',serif;
+  font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--brown);
+  background:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 100%);
+  padding:16px 32px;border-radius:8px;
+  border:none;cursor:pointer;
+  margin-top:36px;
+  box-shadow:0 8px 28px rgba(201,155,92,.4);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.section-cta:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px rgba(201,155,92,.55)}
+.icp--communes .section-cta{background:linear-gradient(135deg,#B4DC9C 0%,#7FB069 100%);box-shadow:0 8px 28px rgba(127,176,105,.4)}
+.icp--communes .section-cta:hover{box-shadow:0 14px 40px rgba(127,176,105,.55)}
+.icp--public .section-cta{background:linear-gradient(135deg,#FFD680 0%,#E59B3C 100%);box-shadow:0 8px 28px rgba(255,200,87,.45)}
+.icp--public .section-cta:hover{box-shadow:0 14px 40px rgba(255,200,87,.6)}
+
+/* ---------- SECTION PUBLIC ---------- */
+.public-section{
+  background:
+    linear-gradient(180deg, rgba(35,18,4,.75) 0%, rgba(35,18,4,.55) 45%, rgba(35,18,4,.85) 100%),
+    radial-gradient(ellipse at 50% 30%, rgba(255,200,87,.18) 0%, transparent 60%),
+    linear-gradient(180deg,#1A0F08 0%,#241509 50%,#1A0F08 100%);
+  background-color:#1A0F08;
+  color:var(--cream);
+  position:relative;
+  text-align:center;
+}
+.public-section .h2{color:var(--cream)}
+.public-section .h2 em{color:#FFC857;font-style:italic}
+.public-section .lead{color:var(--cream-soft)}
+.public-section .lead strong{color:#FFD680}
+.public-section .lead.dropcap::first-letter{
+  background:linear-gradient(180deg,#FFD680,#E0843D);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:0 2px 18px rgba(255,200,87,.4);
+}
+.public-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;margin-top:48px;
+  position:relative;z-index:2;
+}
+.public-card{
+  background:linear-gradient(160deg,rgba(61,36,24,.7),rgba(35,18,4,.8));
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,200,87,.28);
+  border-radius:12px;padding:28px 22px;
+  transition:transform .35s ease,border-color .35s,box-shadow .35s;
+  position:relative;overflow:hidden;
+}
+.public-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#FFD680,#E0843D);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s ease;
+}
+.public-card:hover{transform:translateY(-6px);border-color:rgba(255,200,87,.6);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+.public-card:hover::before{transform:scaleX(1)}
+.public-icon{display:block;font-size:34px;margin-bottom:14px;filter:drop-shadow(0 4px 12px rgba(255,200,87,.4))}
+.public-title{
+  font-family:'Fraunces',serif;font-size:19px;font-weight:600;
+  color:var(--cream);margin-bottom:8px;letter-spacing:-.2px;
+}
+.public-text{font-size:14.5px;color:var(--cream-soft);font-weight:300;line-height:1.65}
+.public-text strong{color:#FFD680;font-weight:500}
 
 /* ---------- CTA FINAL ---------- */
 .final{
@@ -920,12 +1070,33 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <header class="hero">
   <div class="dust" id="dust"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow"><span>Play Azur Production · Appel à soutien</span></div>
+    <div class="hero-eyebrow"><span>Play Azur Production · Le projet</span></div>
     <h1 class="hero-title"><span class="word">L<img src="assets/lostchapter-logo.svg" alt="O" class="title-o">ST</span> <span class="word">CHAPTER</span></h1>
     <div class="hero-sub">RÉVEILLEZ L'HISTOIRE</div>
     <p class="hero-line">Et si un <em>monument oublié</em> redevenait, le temps d'une journée, le théâtre vivant de sa propre légende ?</p>
     <div class="hero-deco">⚜</div>
-    <a href="#soutenir" class="hero-cta">Découvrir le projet →</a>
+
+    <div class="portals-label">Choisissez votre porte d'entrée</div>
+    <div class="portals">
+      <a href="#communes" class="portal portal--communes">
+        <span class="portal-ico" aria-hidden="true">🏛️</span>
+        <span class="portal-eye">Je gère</span>
+        <span class="portal-title">Un patrimoine</span>
+        <span class="portal-desc">Mairie · OT · Monument · Conservation</span>
+      </a>
+      <a href="#sponsors" class="portal portal--sponsors">
+        <span class="portal-ico" aria-hidden="true">💎</span>
+        <span class="portal-eye">Je soutiens</span>
+        <span class="portal-title">Le projet</span>
+        <span class="portal-desc">Entreprise · Fondation · Mécénat</span>
+      </a>
+      <a href="#public" class="portal portal--public">
+        <span class="portal-ico" aria-hidden="true">🎭</span>
+        <span class="portal-eye">Je veux</span>
+        <span class="portal-title">Vivre l'aventure</span>
+        <span class="portal-desc">Particulier · Famille · Communauté</span>
+      </a>
+    </div>
   </div>
   <div class="scroll-hint">
     <span>Faites défiler</span>
@@ -937,10 +1108,9 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <section class="concept">
   <div class="wrap center">
     <p class="concept-phrase reveal">
-      On joue <span class="hl">l'histoire vraie</span> d'un lieu patrimonial, en direct,
-      portée par des <span class="hl">créateurs Twitch</span>,
-      sur un scénario écrit par une <span class="hl">chercheuse du CNRS</span> —
-      devant le public sur place et <span class="hl">des milliers de spectateurs</span> connectés.
+      Lost Chapter, c'est <span class="hl">l'histoire vraie d'un lieu patrimonial</span>, jouée en direct,
+      écrite avec <span class="hl">une chercheuse du CNRS</span>,
+      diffusée devant le public sur place et <span class="hl">des milliers de spectateurs</span> connectés.
     </p>
   </div>
 </section>
@@ -977,41 +1147,48 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 
 <div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
 
-<!-- ============ WHY ============ -->
-<section class="why">
+<!-- ============ POUR LES COMMUNES &amp; LE PATRIMOINE ============ -->
+<section class="why icp icp--communes" id="communes">
   <div class="wrap center">
-    <div class="kicker reveal">Pourquoi soutenir</div>
-    <h2 class="h2 reveal d1">Le patrimoine mérite mieux <em>qu'une vitrine</em></h2>
-    <p class="lead dropcap reveal d2">Il mérite d'être <strong>vécu</strong>. Lost Chapter fait entrer l'histoire dans la culture des nouvelles générations — sans jamais la trahir.</p>
+    <div class="icp-badge reveal">Pour les communes &amp; le patrimoine</div>
+    <h2 class="h2 reveal d1">Vous gérez un site <em>chargé d'histoire</em></h2>
+    <p class="lead dropcap reveal d2">Lost Chapter transforme votre lieu en théâtre vivant de sa propre légende — sans le toucher. <strong>Caution scientifique CNRS, retombées économiques locales, engagement de votre territoire.</strong></p>
 
     <div class="why-grid">
       <div class="why-card reveal d1">
         <span class="why-icon">🏛️</span>
-        <div class="why-title">Faire revivre un lieu</div>
-        <p class="why-text">Un château, une cité, une crypte. <strong>Un lieu chargé d'histoire</strong> redevient le décor de sa propre légende, le temps d'un événement unique — puis rendu intact.</p>
+        <div class="why-title">Valoriser votre site</div>
+        <p class="why-text">Un château, une cité, une crypte. <strong>Votre lieu redevient le décor de sa propre légende</strong>, le temps d'un événement unique — puis rendu intact. Une couverture nationale, sans le coût d'une campagne nationale.</p>
       </div>
       <div class="why-card reveal d2">
-        <span class="why-icon">⚡</span>
-        <div class="why-title">Toucher les jeunes</div>
-        <p class="why-text">Là où ils sont vraiment : sur Twitch et YouTube. <strong>On parle au 18-35 ans</strong> avec leur langage, sur leurs écrans, autour d'un patrimoine qu'ils redécouvrent.</p>
+        <span class="why-icon">🔬</span>
+        <div class="why-title">Caution scientifique CNRS</div>
+        <p class="why-text">Le scénario est écrit par <strong>une chercheuse du CNRS</strong>, dans le cadre d'un programme de recherche partenariale avec l'Université Côte d'Azur. Aucune trahison de l'Histoire. Un cadre académique solide à présenter à votre conseil.</p>
       </div>
       <div class="why-card reveal d3">
-        <span class="why-icon">🗺️</span>
-        <div class="why-title">Valoriser le territoire</div>
-        <p class="why-text">Un coup de projecteur national sur une ville, son histoire, ses commerces. <strong>Des retombées touristiques et médiatiques</strong> mesurables, bien au-delà du jour J.</p>
+        <span class="why-icon">💼</span>
+        <div class="why-title">Retombées éco locales</div>
+        <p class="why-text">Restaurants, hôtellerie, commerces, office de tourisme — <strong>tout votre périmètre bénéficie</strong> de l'afflux du jour J et des semaines suivantes. Un engagement direct pour les acteurs économiques de la commune.</p>
+      </div>
+      <div class="why-card reveal d4">
+        <span class="why-icon">🎬</span>
+        <div class="why-title">Format clé-en-main</div>
+        <p class="why-text">Production complète prise en charge par <strong>Play Azur Production</strong> — équipe technique, son, multi-caméras, scénographie, créateurs partenaires. Vous accueillez, on s'occupe du reste.</p>
       </div>
     </div>
+
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="commune">Proposer mon site →</button>
   </div>
 </section>
 
 <div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
 
-<!-- ============ GAIN ============ -->
-<section class="gain">
+<!-- ============ POUR LES SPONSORS &amp; INVESTISSEURS ============ -->
+<section class="gain icp icp--sponsors" id="sponsors">
   <div class="wrap center">
-    <div class="kicker reveal">Ce que vous y gagnez</div>
-    <h2 class="h2 reveal d1">Un soutien <em>qui vous revient</em></h2>
-    <p class="lead dropcap reveal d2">Soutenir Lost Chapter n'est pas un don à fonds perdu. C'est un partenariat à <strong>retour concret</strong>, sur une cible que personne d'autre ne vous offre.</p>
+    <div class="icp-badge reveal">Pour les sponsors &amp; investisseurs</div>
+    <h2 class="h2 reveal d1">Un partenariat <em>qui vous revient</em></h2>
+    <p class="lead dropcap reveal d2">Soutenir Lost Chapter n'est pas un don à fonds perdu. C'est un partenariat à <strong>retour concret</strong>, sur une cible que personne d'autre ne vous offre — fiscalement avantageux, validé scientifiquement, exposé en direct.</p>
 
     <div class="gain-grid">
       <div class="gain-item reveal d1">
@@ -1041,6 +1218,44 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       <div class="fiscal-label">de votre soutien, déductible des impôts</div>
       <p class="fiscal-note">Un don de 5 000 € ne vous coûte réellement que 2 000 €. Le reste, c'est l'État qui le porte — et vous, vous portez l'histoire.</p>
     </div>
+
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="sponsor">Participer au projet →</button>
+  </div>
+</section>
+
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
+
+<!-- ============ POUR LE PUBLIC &amp; LA COMMUNAUTÉ ============ -->
+<section class="public-section icp icp--public" id="public">
+  <div class="wrap center">
+    <div class="icp-badge reveal">Pour le public &amp; la communauté</div>
+    <h2 class="h2 reveal d1">Vivre <em>l'aventure</em></h2>
+    <p class="lead dropcap reveal d2">Pour les passionnés d'Histoire, les amateurs de live Twitch, les familles, les communautés de créateurs — Lost Chapter, c'est l'expérience d'un événement où l'Histoire prend vie sous vos yeux. <strong>Vraie, immersive, partagée.</strong></p>
+
+    <div class="public-grid">
+      <div class="public-card reveal d1">
+        <span class="public-icon">🏰</span>
+        <div class="public-title">Sur place</div>
+        <p class="public-text">Assistez à l'événement <strong>dans le monument lui-même</strong>. Acteurs, décors, scénographie, immersion totale dans l'atmosphère du jour J.</p>
+      </div>
+      <div class="public-card reveal d2">
+        <span class="public-icon">📺</span>
+        <div class="public-title">En direct sur Twitch</div>
+        <p class="public-text">Suivez le live multi-caméras porté par des <strong>créateurs Twitch reconnus</strong>. Chat actif, communauté présente, replays disponibles sur YouTube.</p>
+      </div>
+      <div class="public-card reveal d3">
+        <span class="public-icon">📜</span>
+        <div class="public-title">Une vraie histoire</div>
+        <p class="public-text">Le scénario est écrit avec <strong>une chercheuse du CNRS</strong>. Ce n'est pas une fiction — c'est l'Histoire vraie de votre territoire, racontée autrement.</p>
+      </div>
+      <div class="public-card reveal d4">
+        <span class="public-icon">🎭</span>
+        <div class="public-title">Pour tous</div>
+        <p class="public-text"><strong>Familles, jeunes, communautés Twitch, passionnés d'Histoire</strong> — un événement qui parle au 7-77 ans, chacun à sa façon.</p>
+      </div>
+    </div>
+
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="public">Je veux être prévenu de la prochaine aventure →</button>
   </div>
 </section>
 
@@ -1183,8 +1398,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
             <span class="field-error">Merci d'indiquer votre nom.</span>
           </div>
           <div class="field" data-field="structure">
-            <label for="structure">Votre structure<span class="req">*</span></label>
-            <input type="text" id="structure" name="structure" placeholder="Entreprise, OT, fondation…" autocomplete="organization" required maxlength="160">
+            <label for="structure">Votre structure <span class="field-hint">(facultatif si particulier)</span></label>
+            <input type="text" id="structure" name="structure" placeholder="Entreprise, OT, fondation, commune…" autocomplete="organization" maxlength="160">
             <span class="field-error">Merci d'indiquer votre structure.</span>
           </div>
         </div>
@@ -1207,19 +1422,27 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         </div>
 
         <div class="field" data-field="support_type">
-          <label>Type de participation envisagée<span class="req">*</span></label>
+          <label>Vous êtes<span class="req">*</span></label>
           <div class="radio-grid">
             <label class="radio-card">
-              <input type="radio" name="support_type" value="mecenat" required>
-              <span class="dot"></span><span>Mécénat (60% déductible)</span>
+              <input type="radio" name="support_type" value="public" required>
+              <span class="dot"></span><span>🎭 Particulier · Visiteur</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="support_type" value="commune">
+              <span class="dot"></span><span>🏛️ Commune · Patrimoine</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="support_type" value="mecenat">
+              <span class="dot"></span><span>💎 Mécénat (60% déductible)</span>
             </label>
             <label class="radio-card">
               <input type="radio" name="support_type" value="sponsor">
-              <span class="dot"></span><span>Sponsoring / partenariat</span>
+              <span class="dot"></span><span>🤝 Sponsoring / partenariat</span>
             </label>
             <label class="radio-card">
               <input type="radio" name="support_type" value="institution">
-              <span class="dot"></span><span>Subvention institutionnelle</span>
+              <span class="dot"></span><span>🏢 Subvention institutionnelle</span>
             </label>
             <label class="radio-card">
               <input type="radio" name="support_type" value="autre">
@@ -1352,8 +1575,14 @@ const btnSubmit   = document.getElementById('btnSubmit');
 const feedback    = document.getElementById('formFeedback');
 let lastFocus     = null;
 
-function openModal(){
+function openModal(ev){
   lastFocus = document.activeElement;
+  /* Pré-sélection du type selon le bouton cliqué (data-form-context) */
+  const ctx = ev && ev.currentTarget && ev.currentTarget.dataset ? ev.currentTarget.dataset.formContext : null;
+  if(ctx){
+    const radio = form.querySelector('input[name=support_type][value="'+ctx+'"]');
+    if(radio){ radio.checked = true; }
+  }
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
@@ -1400,7 +1629,7 @@ const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function validate(data){
   let ok = true;
   if(!data.full_name || data.full_name.length < 2){ setFieldError('full_name', true); ok = false; } else setFieldError('full_name', false);
-  if(!data.structure || data.structure.length < 2){ setFieldError('structure', true); ok = false; } else setFieldError('structure', false);
+  if(data.support_type !== 'public' && (!data.structure || data.structure.length < 2)){ setFieldError('structure', true); ok = false; } else setFieldError('structure', false);
   if(!data.email || !EMAIL_RX.test(data.email)){ setFieldError('email', true); ok = false; } else setFieldError('email', false);
   if(!data.support_type){ setFieldError('support_type', true); ok = false; } else setFieldError('support_type', false);
   return ok;
@@ -1420,13 +1649,20 @@ form.addEventListener('submit', async (e) => {
 
   const honeypot = document.getElementById('website').value.trim();
 
+  const supportType = (form.querySelector('input[name=support_type]:checked')||{}).value || '';
+  let structureValue = form.structure.value.trim();
+  /* Si Particulier sans structure renseignée, on remplit automatiquement pour satisfaire la contrainte DB (>= 2 caractères) */
+  if(supportType === 'public' && structureValue.length < 2){
+    structureValue = 'Particulier';
+  }
+
   const data = {
     full_name:    form.full_name.value.trim(),
-    structure:    form.structure.value.trim(),
+    structure:    structureValue,
     role:         form.role.value.trim(),
     email:        form.email.value.trim(),
     phone:        form.phone.value.trim(),
-    support_type: (form.querySelector('input[name=support_type]:checked')||{}).value || '',
+    support_type: supportType,
     amount_range: (form.querySelector('input[name=amount_range]:checked')||{}).value || '',
     message:      form.message.value.trim(),
     honeypot_filled: honeypot.length > 0,
