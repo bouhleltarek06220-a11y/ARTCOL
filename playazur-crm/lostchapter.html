@@ -268,13 +268,23 @@ section{padding:90px 24px;position:relative}
 }
 
 /* ---------- WHY ---------- */
+.why{
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.78) 0%, rgba(26,15,8,.6) 45%, rgba(26,15,8,.85) 100%),
+    url('assets/lostchapter-pourquoi-bg.webp') center/cover no-repeat;
+  background-color:#1A0F08;
+  position:relative;
+}
 .why-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:20px;margin-top:48px;
+  position:relative;z-index:2;
 }
 .why-card{
-  background:linear-gradient(160deg,rgba(61,36,24,.55),rgba(26,15,8,.55));
-  border:1px solid rgba(201,155,92,.2);
+  background:linear-gradient(160deg,rgba(61,36,24,.78),rgba(26,15,8,.82));
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(201,155,92,.28);
   border-radius:14px;padding:34px 28px;
   position:relative;overflow:hidden;
   transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s;
@@ -829,7 +839,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 </section>
 
 <!-- ============ WHY ============ -->
-<section>
+<section class="why">
   <div class="wrap center">
     <div class="kicker reveal">Pourquoi soutenir</div>
     <h2 class="h2 reveal d1">Le patrimoine mérite mieux <em>qu'une vitrine</em></h2>
