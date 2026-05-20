@@ -213,6 +213,43 @@ section{padding:90px 24px;position:relative}
   color:var(--cream-soft);font-weight:300;
   max-width:680px;margin:0 auto;line-height:1.7;
 }
+.lead.dropcap::first-letter{
+  font-family:'Cinzel',serif;
+  font-size:clamp(58px,7.5vw,82px);
+  font-weight:700;
+  float:left;
+  line-height:.85;
+  padding:6px 14px 0 0;
+  margin-top:4px;
+  color:var(--gold-bright);
+  text-shadow:0 2px 18px rgba(229,199,136,.4);
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.gain .lead.dropcap::first-letter{
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.section-fleuron{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  margin:0 auto;padding:20px 24px 0;
+  color:var(--gold);
+  max-width:680px;
+}
+.section-fleuron::before,.section-fleuron::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent);
+}
+.section-fleuron-mark{
+  font-size:clamp(20px,2.4vw,28px);
+  color:var(--gold-bright);
+  text-shadow:0 0 14px rgba(229,199,136,.5);
+  letter-spacing:8px;
+}
 .lead strong{color:var(--cream);font-weight:600}
 
 /* ---------- CONCEPT ---------- */
@@ -862,12 +899,14 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   </div>
 </section>
 
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
+
 <!-- ============ WHY ============ -->
 <section class="why">
   <div class="wrap center">
     <div class="kicker reveal">Pourquoi soutenir</div>
     <h2 class="h2 reveal d1">Le patrimoine mérite mieux <em>qu'une vitrine</em></h2>
-    <p class="lead reveal d2">Il mérite d'être <strong>vécu</strong>. Lost Chapter fait entrer l'histoire dans la culture des nouvelles générations — sans jamais la trahir.</p>
+    <p class="lead dropcap reveal d2">Il mérite d'être <strong>vécu</strong>. Lost Chapter fait entrer l'histoire dans la culture des nouvelles générations — sans jamais la trahir.</p>
 
     <div class="why-grid">
       <div class="why-card reveal d1">
@@ -889,12 +928,14 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   </div>
 </section>
 
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
+
 <!-- ============ GAIN ============ -->
 <section class="gain">
   <div class="wrap center">
     <div class="kicker reveal">Ce que vous y gagnez</div>
     <h2 class="h2 reveal d1">Un soutien <em>qui vous revient</em></h2>
-    <p class="lead reveal d2">Soutenir Lost Chapter n'est pas un don à fonds perdu. C'est un partenariat à <strong>retour concret</strong>, sur une cible que personne d'autre ne vous offre.</p>
+    <p class="lead dropcap reveal d2">Soutenir Lost Chapter n'est pas un don à fonds perdu. C'est un partenariat à <strong>retour concret</strong>, sur une cible que personne d'autre ne vous offre.</p>
 
     <div class="gain-grid">
       <div class="gain-item reveal d1">
@@ -926,6 +967,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
     </div>
   </div>
 </section>
+
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
 
 <!-- ============ FINAL CTA ============ -->
 <section class="final" id="soutenir">
