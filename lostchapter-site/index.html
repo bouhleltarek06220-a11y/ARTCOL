@@ -47,15 +47,17 @@ body{
   padding:40px 24px;
   position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(201,155,92,.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, rgba(160,120,64,.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(26,15,8,.55) 0%, rgba(26,15,8,.35) 35%, rgba(26,15,8,.7) 75%, rgba(26,15,8,.95) 100%),
+    url('/assets/hero-bg.webp') center/cover no-repeat,
     linear-gradient(180deg, #1A0F08 0%, #241509 60%, #1A0F08 100%);
+  background-color:#1A0F08;
 }
 .hero::before{
   content:'';position:absolute;inset:0;
-  background-image:radial-gradient(circle, rgba(229,199,136,.08) 1px, transparent 1px);
-  background-size:34px 34px;opacity:.5;
+  background-image:radial-gradient(circle, rgba(229,199,136,.06) 1px, transparent 1px);
+  background-size:34px 34px;opacity:.3;
   animation:driftGrid 40s linear infinite;
+  pointer-events:none;
 }
 @keyframes driftGrid{from{background-position:0 0}to{background-position:34px 34px}}
 
