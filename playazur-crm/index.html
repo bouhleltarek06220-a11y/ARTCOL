@@ -3996,8 +3996,13 @@ function startRealtime(){
           if(CRM.activeView==='leads') CRM.leads.render();
           if(!lead.honeypot_filled){
             const supLabel = (CRM.leads._supportLabels[lead.support_type]) || lead.support_type;
-            const amtLabel = (CRM.leads._amountLabels[lead.amount_range] !== undefined) ? CRM.leads._amountLabels[lead.amount_range] : lead.amount_range;
-            CRM.ui.toast('📥 Nouveau lead : '+(lead.structure||lead.full_name)+' · '+supLabel+' · '+amtLabel, 'info');
+            let extra;
+            if(lead.support_type === 'createur'){
+              extra = (CRM.leads._audienceLabels[lead.audience_range] || '') ? '🎯 '+CRM.leads._audienceLabels[lead.audience_range] : '';
+            } else {
+              extra = (CRM.leads._amountLabels[lead.amount_range] !== undefined) ? CRM.leads._amountLabels[lead.amount_range] : lead.amount_range;
+            }
+            CRM.ui.toast('📥 Nouveau lead : '+(lead.structure||lead.full_name)+' · '+supLabel+(extra?' · '+extra:''), 'info');
           }
         }
       } else if(payload.eventType==='UPDATE'){
@@ -6050,7 +6055,24 @@ window.CRM = {
       mecenat:     '💝 Mécénat',
       sponsor:     '🤝 Sponsoring',
       institution: '🏛 Institution',
+      createur:    '🎥 Créateur · Streamer',
       autre:       '❓ À discuter'
+    },
+    _audienceLabels: {
+      '<1k':    '< 1k',
+      '1-10k':  '1—10k',
+      '10-50k': '10—50k',
+      '50-200k':'50—200k',
+      '200k+':  '200k+',
+      '':       ''
+    },
+    _contentTypeLabels: {
+      histoire:      '📜 Histoire',
+      gaming:        '🎮 Gaming',
+      irl:           '📡 IRL',
+      vulgarisation: '🧠 Vulgarisation',
+      lifestyle:     '✨ Lifestyle',
+      autre:         'Autre'
     },
     _amountLabels: {
       '<1k':       '< 1 000 €',
@@ -6107,7 +6129,28 @@ window.CRM = {
       const monumentLine = l.monument ? `<div>🏛 <strong>${esc(l.monument)}</strong></div>` : '';
       const structureLine = l.support_type === 'public'
         ? `<div style="font-size:12px;color:var(--t2);margin-top:2px;font-style:italic">Particulier</div>`
-        : `<div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>`;
+        : l.support_type === 'createur'
+          ? `<div style="font-size:12px;color:#C997FF;margin-top:2px;font-style:italic">Créateur de contenu</div>`
+          : `<div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>`;
+      /* Bloc créateur : comptes sociaux + audience + types de contenu */
+      let creatorBlock = '';
+      if(l.support_type === 'createur'){
+        const socials = [];
+        if(l.twitch_handle)    socials.push('<span style="background:#9146FF22;color:#C997FF;padding:1px 7px;border-radius:6px;font-size:11px">🟣 '+esc(l.twitch_handle)+'</span>');
+        if(l.youtube_url)      socials.push('<span style="background:#FF000022;color:#FF6B6B;padding:1px 7px;border-radius:6px;font-size:11px">📺 '+esc(l.youtube_url)+'</span>');
+        if(l.tiktok_handle)    socials.push('<span style="background:#00f2ea22;color:#7AE3DE;padding:1px 7px;border-radius:6px;font-size:11px">🎵 '+esc(l.tiktok_handle)+'</span>');
+        if(l.instagram_handle) socials.push('<span style="background:#E4405F22;color:#F08CA0;padding:1px 7px;border-radius:6px;font-size:11px">📸 '+esc(l.instagram_handle)+'</span>');
+        if(l.x_handle)         socials.push('<span style="background:#ffffff15;color:var(--t2);padding:1px 7px;border-radius:6px;font-size:11px">🐦 '+esc(l.x_handle)+'</span>');
+        const audLabel = this._audienceLabels[l.audience_range] || '';
+        const audChip  = audLabel ? '<span style="background:var(--sur2);padding:1px 7px;border-radius:6px;font-size:11px;font-weight:600">🎯 '+audLabel+'</span>' : '';
+        const contentChips = (l.content_type||'').split(',').filter(Boolean).map(v => {
+          const lbl = this._contentTypeLabels[v.trim()] || v.trim();
+          return '<span style="background:var(--sur2);padding:1px 7px;border-radius:6px;font-size:11px;color:var(--t2)">'+lbl+'</span>';
+        }).join(' ');
+        if(socials.length || audChip || contentChips){
+          creatorBlock = '<div style="margin:6px 0 4px;display:flex;flex-wrap:wrap;gap:4px">'+socials.join(' ')+' '+audChip+' '+contentChips+'</div>';
+        }
+      }
       return `<div style="background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:14px;border-left:4px solid ${st.color}">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
           <div style="flex:1;min-width:0">
@@ -6126,6 +6169,7 @@ window.CRM = {
           ${l.phone ? '<div>📞 <a href="tel:'+esc(l.phone)+'" style="color:var(--ac)">'+esc(l.phone)+'</a></div>' : ''}
           ${cityLine}
           ${monumentLine}
+          ${creatorBlock}
           ${msgPreview ? '<div style="margin-top:6px;padding:8px;background:var(--sur2);border-radius:6px;font-style:italic;white-space:pre-wrap">"'+esc(msgPreview)+(l.message.length>140?'…':'')+'"</div>' : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -6170,7 +6214,9 @@ window.CRM = {
       `;
       // Suggère un axe par défaut basé sur le type de soutien
       let suggested = 'financeur';
-      if(l.support_type === 'autre') suggested = 'donateur';
+      if(l.support_type === 'autre' || l.support_type === 'public') suggested = 'donateur';
+      else if(l.support_type === 'commune') suggested = 'lieu';
+      else if(l.support_type === 'createur') suggested = 'influenceur';
       const btnsHtml = (CRM_CONFIG.axes || []).map(a => {
         const isDefault = a.id === suggested;
         return `<button onclick="CRM.leads.qualifyAs('${a.id}')"
@@ -6209,6 +6255,18 @@ window.CRM = {
       if(l.role) noteParts.push('🎯 Rôle : ' + l.role);
       if(l.monument) noteParts.push('🏛 Site / monument : ' + l.monument);
       if(l.postal_code || l.city) noteParts.push('📍 Localisation : ' + (l.postal_code||'') + (l.postal_code && l.city ? ' ' : '') + (l.city||''));
+      if(l.support_type === 'createur'){
+        if(l.twitch_handle)    noteParts.push('🟣 Twitch : '    + l.twitch_handle);
+        if(l.youtube_url)      noteParts.push('📺 YouTube : '   + l.youtube_url);
+        if(l.tiktok_handle)    noteParts.push('🎵 TikTok : '    + l.tiktok_handle);
+        if(l.instagram_handle) noteParts.push('📸 Instagram : ' + l.instagram_handle);
+        if(l.x_handle)         noteParts.push('🐦 X / Twitter : ' + l.x_handle);
+        if(l.audience_range)   noteParts.push('🎯 Audience approx. : ' + (this._audienceLabels[l.audience_range] || l.audience_range));
+        if(l.content_type){
+          const types = l.content_type.split(',').filter(Boolean).map(v => this._contentTypeLabels[v.trim()] || v.trim());
+          if(types.length) noteParts.push('🎬 Contenu : ' + types.join(', '));
+        }
+      }
       if(l.message) noteParts.push('💬 Message :\n' + l.message);
       if(l.referrer) noteParts.push('🔗 Referrer : ' + l.referrer);
       const newProspect = {
@@ -6225,7 +6283,7 @@ window.CRM = {
         subStatus: '',
         score: 70,
         assignedTo: (CRM.currentUser && CRM.currentUser.id) || '', // qualifier un lead = action → s'assigne au user courant
-        tags: ['Lead entrant Lost Chapter' + (l.support_type === 'public' ? ' · Particulier' : l.support_type === 'commune' ? ' · Commune' : '')],
+        tags: ['Lead entrant Lost Chapter' + (l.support_type === 'public' ? ' · Particulier' : l.support_type === 'commune' ? ' · Commune' : l.support_type === 'createur' ? ' · Créateur' : '')],
         notes: noteParts.join('\n'),
         source: 'Landing Lost Chapter',
         fonction: l.role || '',
