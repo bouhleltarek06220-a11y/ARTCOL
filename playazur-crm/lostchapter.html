@@ -747,6 +747,105 @@ section{padding:90px 24px;position:relative}
 }
 .participer-cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 32px rgba(42,78,115,.5)}
 
+/* ---------- SECTION TEASER (Edition 1 Coming Soon) ---------- */
+.teaser{
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(201,155,92,.12) 0%, transparent 60%),
+    linear-gradient(180deg,#1A0F08 0%,#241509 50%,#1A0F08 100%);
+  background-color:#1A0F08;
+  text-align:center;
+  position:relative;
+}
+.teaser::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(229,199,136,.06) 1px, transparent 1px);
+  background-size:34px 34px;opacity:.4;
+  pointer-events:none;
+}
+.teaser .wrap{position:relative;z-index:2;max-width:920px}
+.teaser-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Cinzel',serif;
+  font-size:13px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold-bright);font-weight:700;
+  margin-bottom:18px;
+  text-shadow:0 0 24px rgba(229,199,136,.4);
+}
+.teaser-fleur{font-size:11px;color:var(--gold);opacity:.8}
+.teaser-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(32px,5.2vw,56px);
+  font-weight:500;line-height:1.05;
+  color:var(--cream);letter-spacing:-.8px;
+  margin-bottom:14px;
+}
+.teaser-title em{color:var(--gold-bright);font-style:italic}
+.teaser-sub{
+  font-size:16px;color:var(--cream-soft);font-weight:300;
+  max-width:600px;margin:0 auto 40px;line-height:1.6;
+}
+.teaser-sub strong{color:var(--gold-bright);font-weight:500}
+
+/* Frame cinema 16:9 avec ecrin dore */
+.teaser-frame{
+  position:relative;
+  max-width:820px;margin:0 auto;
+  aspect-ratio:16/9;
+  border-radius:14px;overflow:hidden;
+  background:#000;
+  border:2px solid var(--gold);
+  box-shadow:
+    0 0 0 6px rgba(26,15,8,.9),
+    0 0 0 7px rgba(229,199,136,.55),
+    0 30px 80px rgba(0,0,0,.65),
+    0 0 100px rgba(201,155,92,.2);
+}
+.teaser-video{
+  display:block;width:100%;height:100%;object-fit:cover;
+  background:#000;
+}
+/* Overlay 'COMING SOON' subtil en bas-droite */
+.teaser-overlay{
+  position:absolute;bottom:14px;right:14px;
+  pointer-events:none;
+  z-index:2;
+}
+.teaser-overlay-label{
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold-bright);font-weight:600;
+  background:rgba(26,15,8,.78);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  padding:7px 14px;border-radius:6px;
+  border:1px solid rgba(229,199,136,.4);
+  text-shadow:0 0 12px rgba(229,199,136,.5);
+}
+/* L'overlay disparait quand la video joue (fluid UX) */
+.teaser-video:not([paused]) + .teaser-overlay{opacity:0;transition:opacity .4s ease}
+
+.teaser-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Cinzel',serif;
+  font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--brown);
+  background:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 100%);
+  padding:16px 32px;border-radius:8px;
+  border:none;cursor:pointer;
+  margin-top:40px;
+  box-shadow:0 8px 28px rgba(201,155,92,.4);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.teaser-cta:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px rgba(201,155,92,.55)}
+
+@media (max-width:560px){
+  .teaser-eyebrow{font-size:11px;letter-spacing:3.5px;gap:10px}
+  .teaser-sub{font-size:14.5px;margin-bottom:32px}
+  .teaser-frame{border-radius:10px;border-width:1.5px}
+  .teaser-overlay{bottom:8px;right:8px}
+  .teaser-overlay-label{font-size:10px;letter-spacing:2px;padding:5px 10px}
+  .teaser-cta{font-size:12.5px;padding:14px 22px;letter-spacing:1px}
+}
+
 /* ---------- CTA FINAL ---------- */
 .final{
   background:
@@ -1767,6 +1866,29 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       </div>
 
     </div>
+  </div>
+</section>
+
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
+
+<!-- ============ TEASER EDITION 1 ============ -->
+<section class="teaser" id="teaser">
+  <div class="wrap center">
+    <div class="teaser-eyebrow reveal"><span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span></div>
+    <h2 class="teaser-title reveal d1">La bande-annonce <em>arrive</em></h2>
+    <p class="teaser-sub reveal d2">8 secondes pour entrevoir ce qui se prépare. La première date sera révélée <strong>très bientôt</strong>.</p>
+
+    <div class="teaser-frame reveal d3">
+      <video class="teaser-video" controls preload="metadata" playsinline poster="">
+        <source src="assets/lostchapter-teaser.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture vidéo HTML5.
+      </video>
+      <div class="teaser-overlay">
+        <div class="teaser-overlay-label">COMING SOON</div>
+      </div>
+    </div>
+
+    <button type="button" class="teaser-cta reveal d4" data-open-form data-form-context="public">Être prévenu en avant-première →</button>
   </div>
 </section>
 
