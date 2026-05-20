@@ -2038,6 +2038,13 @@ body #app-header .h-sep{
 <script>
 // SECURITY: HTML sanitizer
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+// Helper unifié : ajoute une action ET auto-assigne au user courant si le prospect est libre
+function pushAction(p, action){
+  if(!p) return;
+  if(window.CRM && CRM.prospect && CRM.prospect.autoAssign) CRM.prospect.autoAssign(p);
+  p.actions = p.actions || [];
+  p.actions[p.actions.length] = action;
+}
 </script>
 </head>
 <body>
@@ -5888,7 +5895,7 @@ window.CRM = {
       this._lastDrop = {id,prevStatus};
       p.status = status;
       p.actions = p.actions||[];
-      p.actions.push({type:'status',text:'→ '+newLbl,date:new Date().toISOString(),by:CRM.currentUser.name});
+      pushAction(p, {type:'status',text:'→ '+newLbl,date:new Date().toISOString(),by:CRM.currentUser.name});
       CRM.save();
       cloudSync(p).then(ok=>CRM.ui.toast('→ '+newLbl+(ok?' ☁️':' ⚠️'),ok?'ok':'warn'));
       this.render();
@@ -5901,7 +5908,7 @@ window.CRM = {
       this._lastDrop = {id,prevStatus};
       p.status = newStatus;
       p.actions = p.actions||[];
-      p.actions.push({type:'status',text:'→ '+newLabel,date:new Date().toISOString(),by:CRM.currentUser.name});
+      pushAction(p, {type:'status',text:'→ '+newLabel,date:new Date().toISOString(),by:CRM.currentUser.name});
       CRM.save();
       cloudSync(p).then(ok=>CRM.ui.toast('→ '+newLabel+(ok?' ☁️':' ⚠️'),ok?'ok':'warn'));
       this.render();
@@ -6201,7 +6208,7 @@ window.CRM = {
         status: 'lead',
         subStatus: '',
         score: 70,
-        assignedTo: CRM.currentUser?.id || 'tarek',
+        assignedTo: (CRM.currentUser && CRM.currentUser.id) || '', // qualifier un lead = action → s'assigne au user courant
         tags: ['Lead entrant Lost Chapter'],
         notes: noteParts.join('\n'),
         source: 'Landing Lost Chapter',
@@ -6247,6 +6254,24 @@ window.CRM = {
 
   // PROSPECT CRUD
   prospect: {
+    // [auto-assign] Tout prospect non assigné se voit attribué automatiquement
+    // au user qui effectue une action concrète (statut, RDV, mail, etc.).
+    // N'écrase JAMAIS une assignation existante — on ne vole pas le boulot des autres.
+    autoAssign(p, opts){
+      if(!p) return;
+      const cur = (CRM.currentUser && CRM.currentUser.id) || '';
+      if(!cur) return;
+      if(!p.assignedTo || p.assignedTo === ''){
+        p.assignedTo = cur;
+        p.actions = p.actions || [];
+        pushAction(p, {
+          type:'assign',
+          text:'👤 Auto-assigné à '+ (CRM.currentUser.name || cur),
+          date:new Date().toISOString(),
+          by:CRM.currentUser.name || cur
+        });
+      }
+    },
     showAdd() {
       CRM.editingId = null;
       document.getElementById('mp-title').textContent = 'Nouveau prospect';
@@ -6254,7 +6279,7 @@ window.CRM = {
       document.getElementById('mp-dept').value='';
       document.getElementById('mp-status').value='lead';
       document.getElementById('mp-score').value='50';
-      document.getElementById('mp-assignedTo').value=CRM.currentUser.id;
+      document.getElementById('mp-assignedTo').value=''; // [auto-assign] non assigné par défaut — s'assigne au 1er user qui agit dessus
       document.getElementById('mp-rating').value='';
       document.getElementById('mp-reviews').value='';
       document.getElementById('mp-lat').value='';
@@ -6355,6 +6380,10 @@ window.CRM = {
       }
       data.score = parseInt(document.getElementById('mp-score').value)||50;
       data.assignedTo = document.getElementById('mp-assignedTo').value;
+      // [auto-assign] Si l'utilisateur sauve une fiche encore non assignée → il devient l'owner
+      if(!data.assignedTo && CRM.currentUser && CRM.currentUser.id){
+        data.assignedTo = CRM.currentUser.id;
+      }
       data.rating = parseFloat(document.getElementById('mp-rating').value)||0;
       data.reviews = parseInt(document.getElementById('mp-reviews').value)||0;
       data.lat = parseFloat(document.getElementById('mp-lat').value)||0;
@@ -8116,7 +8145,7 @@ ${d.notes?'<div style="background:#fffbeb;padding:12px;border-radius:8px;margin-
     CRM.ui.toast('✅ '+d.ref+' envoyé à '+p.email,'ok');
     // Log action on prospect
     if(!p.actions)p.actions=[];
-    p.actions.push({type:'email_devis',text:title+' '+d.ref+' envoyé par email',date:new Date().toISOString(),by:user.name||''});
+    pushAction(p, {type:'email_devis',text:title+' '+d.ref+' envoyé par email',date:new Date().toISOString(),by:user.name||''});
     CRM.save();
   }catch(e){
     CRM.ui.toast('❌ Erreur envoi : '+e.message,'err');
@@ -8614,7 +8643,7 @@ function inlineStatusChange(prospectId, newStatus) {
   p._lastLocalChange=Date.now(); // [FIX v9.7.7]
   p._syncPending=true; // [v9.7.8]
   p.actions = p.actions || [];
-  p.actions.push({type:'status', text:'→ '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
+  pushAction(p, {type:'status', text:'→ '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
   CRM.save();
   cloudSync(p).then(ok=>{if(ok){p._syncPending=false;setTimeout(()=>CRM.table.render(),200);}});
   CRM.ui.toast(p.company+' → '+label+' ☁️', 'ok');
@@ -8640,7 +8669,7 @@ async function inlineSubStatusChange(prospectId, newSubStatus) {
   p._lastLocalChange = Date.now();
   p._syncPending = true;
   p.actions = p.actions||[];
-  p.actions.push({type:'substatus', text:'📞 '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
+  pushAction(p, {type:'substatus', text:'📞 '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
   CRM.save();
   console.log('[INLINE-SUB] '+p.company+' | '+oldSub+' → '+newSubStatus);
   CRM.table.render(); // re-render immédiat pour feedback visuel
@@ -8681,7 +8710,7 @@ async function quickStatus(statusId, btn) {
   p._lastLocalChange=Date.now(); // [FIX v9.7.7]
   p.actions = p.actions || [];
   const label = (CRM_CONFIG.pipeline.find(s=>s.id===statusId)||{}).label || statusId;
-  p.actions.push({type:'status', text:'→ '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
+  pushAction(p, {type:'status', text:'→ '+label, date:new Date().toISOString(), by:CRM.currentUser.name});
   CRM.save();
   // Update UI immediately
   document.getElementById('mp-status').value = statusId;
@@ -8784,7 +8813,7 @@ async function quickSubStatus(subId, btn){
   p._lastLocalChange=Date.now(); // [FIX v9.7.7] Protection anti-écrasement par le poll
   p._syncPending=true; // [FIX v9.7.8] Marqueur visuel "en attente"
   p.actions=p.actions||[];
-  p.actions.push({type:'substatus',text:'📞 '+lbl,date:new Date().toISOString(),by:CRM.currentUser.name});
+  pushAction(p, {type:'substatus',text:'📞 '+lbl,date:new Date().toISOString(),by:CRM.currentUser.name});
   // Update form select
   var ss=document.getElementById('mp-subStatus');if(ss)ss.value=p.subStatus;
   toggleCallbackRow();
@@ -8833,7 +8862,7 @@ async function saveCallbackQuick(){
   p.callbackDate=dEl.value+'T'+(tEl?tEl.value:'09:00');
   p._lastLocalChange=Date.now(); // [FIX v9.7.7]
   p.actions=p.actions||[];
-  p.actions.push({type:'callback',text:'📅 Rappel planifié le '+dEl.value+' à '+(tEl?tEl.value:'09:00'),date:new Date().toISOString(),by:CRM.currentUser.name});
+  pushAction(p, {type:'callback',text:'📅 Rappel planifié le '+dEl.value+' à '+(tEl?tEl.value:'09:00'),date:new Date().toISOString(),by:CRM.currentUser.name});
   CRM.save();
   var synced=await cloudSync(p);
   CRM.ui.toast('📅 Rappel enregistré → '+dEl.value+(synced?' ☁️':' ⚠️'),'ok');
@@ -9208,7 +9237,7 @@ function saveRDV(){
     if(p){
       p.actions=p.actions||[];
       const type=RDV_TYPES[data.type]||RDV_TYPES.autre;
-      p.actions.push({type:'rdv',text:type.icon+' '+type.label+' planifie le '+data.date+' a '+data.time,date:new Date().toISOString(),by:CRM.currentUser.name});
+      pushAction(p, {type:'rdv',text:type.icon+' '+type.label+' planifie le '+data.date+' a '+data.time,date:new Date().toISOString(),by:CRM.currentUser.name});
       CRM.save();cloudSync(p);
     }
   }
@@ -13085,7 +13114,7 @@ STYLE: Français. Direct. Actionnable. Inclus des <action> tags quand pertinent.
             const scriptTxt = scriptLabels[s.scriptType] || s.scriptType;
             const durTxt = STATE.timerSeconds > 0 ? Math.floor(STATE.timerSeconds/60)+'min'+String(STATE.timerSeconds%60).padStart(2,'0')+'s' : '';
 
-            p.actions.push({
+            pushAction(p, {
               type: 'call',
               text: '📞 '+scriptTxt+' · '+issueTxt+(durTxt?' · '+durTxt:'')+(s.outcome.notes_globales?' · '+s.outcome.notes_globales.slice(0,80):''),
               date: nowIso(),
