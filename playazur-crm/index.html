@@ -2369,7 +2369,7 @@ function pushAction(p, action){
 <div class="search-box"><input type="text" id="search-input" placeholder="Rechercher..." oninput="clearTimeout(window._searchTimer);window._searchTimer=setTimeout(()=>CRM.table.search(this.value),250)"></div>
 <select id="filter-status" onchange="CRM.filters.status=this.value;CRM.tablePage=0;CRM.ui.refresh();toggleSubStatusFilter()" style="width:140px"><option value="">Tous statuts</option></select>
 <select id="filter-substatus" onchange="CRM.filters.subStatus=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px;display:none"><option value="">Tous sous-statuts</option></select>
-<select id="filter-axe" onchange="CRM.filters.axe=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:190px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💼 Donateurs Pro</option><option value="influenceur">🎤 Influenceurs</option><option value="donateur">👤 Donateurs Particuliers</option></select>
+<select id="filter-axe" onchange="CRM.filters.axe=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:200px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💼 Donateurs Pro</option><option value="influenceur">🎤 Influenceurs</option><option value="donateur">👤 Donateurs Particuliers</option><option value="benevole_presse">🎭 Équipe & Médias</option></select>
 <select id="filter-user" onchange="CRM.filters.assignedTo=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px"><option value="">Tous commerciaux</option></select>
 <select id="filter-dept" onchange="CRM.filters.dept=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:140px"><option value="">Tous dép.</option></select>
 <select id="filter-source" onchange="CRM.filters.source=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:180px"><option value="">Toutes sources</option></select>
@@ -3996,11 +3996,16 @@ function startRealtime(){
           if(CRM.activeView==='leads') CRM.leads.render();
           if(!lead.honeypot_filled){
             const supLabel = (CRM.leads._supportLabels[lead.support_type]) || lead.support_type;
-            let extra;
+            let extra = '';
             if(lead.support_type === 'createur'){
               extra = (CRM.leads._audienceLabels[lead.audience_range] || '') ? '🎯 '+CRM.leads._audienceLabels[lead.audience_range] : '';
+            } else if(lead.support_type === 'equipe'){
+              extra = (CRM.leads._activityLabels[lead.activity_type] || lead.activity_type || '');
+            } else if(lead.support_type === 'presse'){
+              extra = (CRM.leads._mediaLabels[lead.media_type] || lead.media_type || '');
             } else {
-              extra = (CRM.leads._amountLabels[lead.amount_range] !== undefined) ? CRM.leads._amountLabels[lead.amount_range] : lead.amount_range;
+              const amt = (CRM.leads._amountLabels[lead.amount_range] !== undefined) ? CRM.leads._amountLabels[lead.amount_range] : lead.amount_range;
+              if(amt) extra = amt;
             }
             CRM.ui.toast('📥 Nouveau lead : '+(lead.structure||lead.full_name)+' · '+supLabel+(extra?' · '+extra:''), 'info');
           }
@@ -4227,7 +4232,9 @@ window.CRM_CONFIG = {
     { id:"influenceur", label:"Influenceur",       color:"#FF3D9A", icon:"🎤",
       desc:"Streamer Twitch, JDR pro, vulgarisateur — qui joue / incarne le projet" },
     { id:"donateur",    label:"Donateur Particulier", color:"#A78BFA", icon:"👤",
-      desc:"Personne physique soutenant le projet (mécénat individuel, sympathisant, ambassadeur)" }
+      desc:"Personne physique soutenant le projet (mécénat individuel, sympathisant, ambassadeur)" },
+    { id:"benevole_presse", label:"Équipe & Médias", color:"#5A8FBF", icon:"🎭",
+      desc:"Artistes, bénévoles, équipe terrain (sécurité, accueil, billetterie), artisans locaux exposants, journalistes radio/TV/presse écrite/web" }
   ],
   contactSubStatuses: [
     { id:"",              label:"— Aucun —",       color:"#3b82f6", icon:"📞" },
@@ -6056,7 +6063,23 @@ window.CRM = {
       sponsor:     '🤝 Sponsoring',
       institution: '🏛 Institution',
       createur:    '🎥 Créateur · Streamer',
+      equipe:      '🎭 Équipe · Talent',
+      presse:      '📰 Presse · Média',
       autre:       '❓ À discuter'
+    },
+    _activityLabels: {
+      danseur:'💃 Danseur', comedien:'🎭 Comédien', musicien:'🎵 Musicien',
+      photographe:'📸 Photographe', videaste:'🎬 Vidéaste',
+      maquilleur:'💄 Maquilleur', costumier:'🧵 Costumier', regie:'🎚️ Régie',
+      benevole:'🙋 Bénévole', securite:'🛡️ Sécurité', billetterie:'🎫 Billetterie',
+      guide_info:'ℹ️ Guide info', artisan_local:'🏺 Artisan local', commerce_local:'🛍️ Commerce local',
+      autre:'Autre'
+    },
+    _mediaLabels: {
+      radio:'📻 Radio', tv:'📺 TV', presse_ecrite:'📰 Presse écrite',
+      webzine:'🌐 Webzine', podcast:'🎙️ Podcast',
+      photoreporter:'📸 Photoreporter', influenceur_media:'💬 Influenceur média',
+      autre:'Autre'
     },
     _audienceLabels: {
       '<1k':    '< 1k',
@@ -6131,7 +6154,41 @@ window.CRM = {
         ? `<div style="font-size:12px;color:var(--t2);margin-top:2px;font-style:italic">Particulier</div>`
         : l.support_type === 'createur'
           ? `<div style="font-size:12px;color:#C997FF;margin-top:2px;font-style:italic">Créateur de contenu</div>`
-          : `<div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>`;
+          : l.support_type === 'equipe'
+            ? `<div style="font-size:12px;color:#9FC5DF;margin-top:2px;font-style:italic">Équipe / Talent</div>`
+            : l.support_type === 'presse'
+              ? `<div style="font-size:12px;color:#9FC5DF;margin-top:2px">${esc(l.media_name||l.structure)}${l.media_type?' · '+(this._mediaLabels[l.media_type]||l.media_type):''}</div>`
+              : `<div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>`;
+      /* Bloc equipe : activité + dispo + portfolio */
+      let equipeBlock = '';
+      if(l.support_type === 'equipe'){
+        const chips = [];
+        if(l.activity_type)   chips.push('<span style="background:#5A8FBF22;color:#9FC5DF;padding:1px 7px;border-radius:6px;font-size:11px;font-weight:600">'+(this._activityLabels[l.activity_type]||l.activity_type)+'</span>');
+        if(l.availability){
+          const labels = {pre_prod:'Pré-prod', j_moins_1:'J-1', jour_j:'Jour J', j_plus_1:'J+1'};
+          l.availability.split(',').filter(Boolean).forEach(v => {
+            chips.push('<span style="background:var(--sur2);padding:1px 7px;border-radius:6px;font-size:11px;color:var(--t2)">📅 '+(labels[v.trim()]||v.trim())+'</span>');
+          });
+        }
+        if(l.portfolio_url) chips.push('<a href="'+esc(l.portfolio_url)+'" target="_blank" rel="noopener" style="background:#5A8FBF22;color:#9FC5DF;padding:1px 7px;border-radius:6px;font-size:11px;text-decoration:none">🔗 Portfolio</a>');
+        if(chips.length) equipeBlock = '<div style="margin:6px 0 4px;display:flex;flex-wrap:wrap;gap:4px">'+chips.join(' ')+'</div>';
+        if(l.skills_experience){
+          equipeBlock += '<div style="margin-top:4px;padding:6px 8px;background:var(--sur2);border-radius:6px;font-size:11.5px;font-style:italic;color:var(--t2);white-space:pre-wrap">🛠️ '+esc(l.skills_experience.slice(0,200))+(l.skills_experience.length>200?'…':'')+'</div>';
+        }
+      }
+      /* Bloc presse : audience + type couverture */
+      let presseBlock = '';
+      if(l.support_type === 'presse'){
+        const chips = [];
+        if(l.audience_size) chips.push('<span style="background:var(--sur2);padding:1px 7px;border-radius:6px;font-size:11px;font-weight:600">📊 '+esc(l.audience_size)+'</span>');
+        if(l.coverage_type){
+          const labels = {reportage:'📹 Reportage',interview:'🎤 Interview',live:'🔴 Live',article:'📝 Article',replay:'📼 Replay',podcast_ep:'🎙️ Podcast'};
+          l.coverage_type.split(',').filter(Boolean).forEach(v => {
+            chips.push('<span style="background:#5A8FBF22;color:#9FC5DF;padding:1px 7px;border-radius:6px;font-size:11px">'+(labels[v.trim()]||v.trim())+'</span>');
+          });
+        }
+        if(chips.length) presseBlock = '<div style="margin:6px 0 4px;display:flex;flex-wrap:wrap;gap:4px">'+chips.join(' ')+'</div>';
+      }
       /* Bloc créateur : comptes sociaux + audience + types de contenu */
       let creatorBlock = '';
       if(l.support_type === 'createur'){
@@ -6170,6 +6227,8 @@ window.CRM = {
           ${cityLine}
           ${monumentLine}
           ${creatorBlock}
+          ${equipeBlock}
+          ${presseBlock}
           ${msgPreview ? '<div style="margin-top:6px;padding:8px;background:var(--sur2);border-radius:6px;font-style:italic;white-space:pre-wrap">"'+esc(msgPreview)+(l.message.length>140?'…':'')+'"</div>' : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -6217,6 +6276,7 @@ window.CRM = {
       if(l.support_type === 'autre' || l.support_type === 'public') suggested = 'donateur';
       else if(l.support_type === 'commune') suggested = 'lieu';
       else if(l.support_type === 'createur') suggested = 'influenceur';
+      else if(l.support_type === 'equipe' || l.support_type === 'presse') suggested = 'benevole_presse';
       const btnsHtml = (CRM_CONFIG.axes || []).map(a => {
         const isDefault = a.id === suggested;
         return `<button onclick="CRM.leads.qualifyAs('${a.id}')"
@@ -6267,6 +6327,26 @@ window.CRM = {
           if(types.length) noteParts.push('🎬 Contenu : ' + types.join(', '));
         }
       }
+      if(l.support_type === 'equipe'){
+        if(l.activity_type)     noteParts.push('🎭 Activité : ' + (this._activityLabels[l.activity_type] || l.activity_type));
+        if(l.availability){
+          const labels = {pre_prod:'Pré-production', j_moins_1:'J-1 (montage)', jour_j:'Jour J', j_plus_1:'J+1 (démontage)'};
+          const dispo = l.availability.split(',').filter(Boolean).map(v => labels[v.trim()] || v.trim());
+          if(dispo.length) noteParts.push('📅 Disponibilité : ' + dispo.join(' · '));
+        }
+        if(l.portfolio_url)     noteParts.push('🔗 Portfolio : ' + l.portfolio_url);
+        if(l.skills_experience) noteParts.push('🛠️ Compétences :\n' + l.skills_experience);
+      }
+      if(l.support_type === 'presse'){
+        if(l.media_type)        noteParts.push('📰 Média : ' + (this._mediaLabels[l.media_type] || l.media_type));
+        if(l.media_name)        noteParts.push('📛 Nom du média : ' + l.media_name);
+        if(l.audience_size)     noteParts.push('📊 Audience / tirage : ' + l.audience_size);
+        if(l.coverage_type){
+          const labels = {reportage:'Reportage',interview:'Interview',live:'Live',article:'Article',replay:'Replay',podcast_ep:'Podcast'};
+          const cov = l.coverage_type.split(',').filter(Boolean).map(v => labels[v.trim()] || v.trim());
+          if(cov.length) noteParts.push('🎬 Couverture envisagée : ' + cov.join(', '));
+        }
+      }
       if(l.message) noteParts.push('💬 Message :\n' + l.message);
       if(l.referrer) noteParts.push('🔗 Referrer : ' + l.referrer);
       const newProspect = {
@@ -6283,7 +6363,7 @@ window.CRM = {
         subStatus: '',
         score: 70,
         assignedTo: (CRM.currentUser && CRM.currentUser.id) || '', // qualifier un lead = action → s'assigne au user courant
-        tags: ['Lead entrant Lost Chapter' + (l.support_type === 'public' ? ' · Particulier' : l.support_type === 'commune' ? ' · Commune' : l.support_type === 'createur' ? ' · Créateur' : '')],
+        tags: ['Lead entrant Lost Chapter' + (l.support_type === 'public' ? ' · Particulier' : l.support_type === 'commune' ? ' · Commune' : l.support_type === 'createur' ? ' · Créateur' : l.support_type === 'equipe' ? ' · Équipe' : l.support_type === 'presse' ? ' · Presse' : '')],
         notes: noteParts.join('\n'),
         source: 'Landing Lost Chapter',
         fonction: l.role || '',
