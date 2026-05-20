@@ -364,15 +364,18 @@ section{padding:90px 24px;position:relative}
 /* ---------- CTA FINAL ---------- */
 .final{
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(201,155,92,.2) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(26,15,8,.7) 0%, rgba(26,15,8,.45) 40%, rgba(26,15,8,.75) 100%),
+    url('/assets/final-bg.webp') center/cover no-repeat,
     linear-gradient(180deg,#1A0F08,#241509);
+  background-color:#1A0F08;
   text-align:center;position:relative;overflow:hidden;
   padding:110px 24px;
 }
 .final::before{
   content:'';position:absolute;inset:0;
-  background-image:radial-gradient(circle, rgba(229,199,136,.07) 1px, transparent 1px);
-  background-size:30px 30px;opacity:.5;
+  background-image:radial-gradient(circle, rgba(229,199,136,.06) 1px, transparent 1px);
+  background-size:30px 30px;opacity:.35;
+  pointer-events:none;
 }
 .final-inner{position:relative;z-index:2;max-width:760px;margin:0 auto}
 .final-title{
