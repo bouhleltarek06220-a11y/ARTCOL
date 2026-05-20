@@ -546,6 +546,8 @@ section{padding:90px 24px;position:relative}
 }
 .foot-text{font-size:12px;color:rgba(242,230,208,.4);font-weight:300;line-height:1.7}
 .foot-text strong{color:rgba(242,230,208,.6);font-weight:500}
+.foot-link{color:rgba(229,199,136,.65);text-decoration:none;border-bottom:1px solid rgba(201,155,92,.25);padding-bottom:1px;transition:color .25s,border-color .25s}
+.foot-link:hover{color:var(--gold-bright);border-color:var(--gold-bright)}
 .foot-signature{
   margin-top:26px;padding-top:22px;
   border-top:1px solid rgba(201,155,92,.12);
@@ -1000,7 +1002,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
     <button type="button" class="final-cta reveal d3" data-open-form>Participer au projet →</button>
 
     <div class="site-buttons reveal d4">
-      <a href="https://playazur.fr/" target="_blank" rel="noopener" class="site-btn">
+      <a href="https://playazur.fr/" target="_blank" rel="noopener noreferrer" class="site-btn">
         <span class="site-btn-icon">🌐</span>
         <span class="site-btn-text">
           <span class="site-btn-label">Découvrir</span>
@@ -1008,7 +1010,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         </span>
         <span class="site-btn-arrow">↗</span>
       </a>
-      <a href="https://playazur-prod.fr/" target="_blank" rel="noopener" class="site-btn">
+      <a href="https://playazur-prod.fr/" target="_blank" rel="noopener noreferrer" class="site-btn">
         <span class="site-btn-icon">🎬</span>
         <span class="site-btn-text">
           <span class="site-btn-label">Notre production</span>
@@ -1016,7 +1018,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         </span>
         <span class="site-btn-arrow">↗</span>
       </a>
-      <a href="https://www.youtube.com/@PlayAzurFestival" target="_blank" rel="noopener" class="site-btn">
+      <a href="https://www.youtube.com/@PlayAzurFestival" target="_blank" rel="noopener noreferrer" class="site-btn">
         <span class="site-btn-icon">▶️</span>
         <span class="site-btn-text">
           <span class="site-btn-label">Notre chaîne</span>
@@ -1052,7 +1054,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   <div class="foot-logo">LOST CHAPTER</div>
   <p class="foot-text">
     Une production <strong>Play Azur Production</strong> · Association loi 1901<br>
-    Patrimoine immersif diffusé en direct · Caution scientifique Université Côte d'Azur — CNRS
+    Patrimoine immersif diffusé en direct · Caution scientifique Université Côte d'Azur — CNRS<br>
+    <a href="/mentions-legales" class="foot-link">Mentions légales &amp; confidentialité</a>
   </p>
   <div class="foot-signature">
     Conçu &amp; réalisé par
@@ -1167,7 +1170,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 
         <label class="consent">
           <input type="checkbox" id="consent" required>
-          <span>J'accepte que Play Azur Production conserve ces informations pour me recontacter au sujet de Lost Chapter. Données strictement internes, jamais cédées.</span>
+          <span>J'accepte que Play Azur Production conserve ces informations pour me recontacter au sujet de Lost Chapter. Données strictement internes, jamais cédées. <a href="/mentions-legales" target="_blank" rel="noopener noreferrer">En savoir plus</a></span>
         </label>
 
         <div class="form-feedback" id="formFeedback"></div>
