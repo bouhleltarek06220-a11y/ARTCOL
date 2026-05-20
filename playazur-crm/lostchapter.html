@@ -749,20 +749,34 @@ section{padding:90px 24px;position:relative}
 
 /* ---------- SECTION TEASER (Edition 1 Coming Soon) ---------- */
 .teaser{
-  background:
-    radial-gradient(ellipse at 50% 40%, rgba(201,155,92,.12) 0%, transparent 60%),
-    linear-gradient(180deg,#1A0F08 0%,#241509 50%,#1A0F08 100%);
-  background-color:#1A0F08;
+  background-color:#1A0F08; /* fallback avant chargement vidéo */
   text-align:center;
   position:relative;
+  overflow:hidden;
 }
-.teaser::before{
-  content:'';position:absolute;inset:0;
-  background-image:radial-gradient(circle, rgba(229,199,136,.06) 1px, transparent 1px);
-  background-size:34px 34px;opacity:.4;
+/* Vidéo de fond plein écran, boucle, sans contrôles */
+.teaser-bg-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  z-index:0;
+  pointer-events:none; /* impossible de cliquer dessus */
+}
+/* Overlay sombre dégradé pour la lisibilité du contenu */
+.teaser-bg-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.72) 0%, rgba(26,15,8,.55) 50%, rgba(26,15,8,.85) 100%),
+    radial-gradient(ellipse at center, transparent 0%, rgba(26,15,8,.35) 100%);
+  z-index:1;
   pointer-events:none;
 }
 .teaser .wrap{position:relative;z-index:2;max-width:920px}
+/* Accessibilité : si l'utilisateur a 'prefers-reduced-motion', on freeze la vidéo */
+@media (prefers-reduced-motion:reduce){
+  .teaser-bg-video{display:none}
+  .teaser{background:linear-gradient(180deg,#1A0F08 0%,#241509 50%,#1A0F08 100%)}
+}
 .teaser-eyebrow{
   display:inline-flex;align-items:center;gap:14px;
   font-family:'Cinzel',serif;
@@ -1859,6 +1873,10 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 
 <!-- ============ TEASER EDITION 1 ============ -->
 <section class="teaser" id="teaser">
+  <video class="teaser-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="assets/lostchapter-teaser-bg.mp4" type="video/mp4">
+  </video>
+  <div class="teaser-bg-overlay" aria-hidden="true"></div>
   <div class="wrap center">
     <div class="teaser-eyebrow reveal"><span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span></div>
     <h2 class="teaser-title reveal d1">Coming Soon<span class="teaser-dots">…</span></h2>
