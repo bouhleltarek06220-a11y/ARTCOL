@@ -568,6 +568,59 @@ section{padding:90px 24px;position:relative}
 .foot-signature a:hover{color:var(--gold-bright);text-shadow:0 0 12px rgba(229,199,136,.5)}
 .foot-signature a svg{width:14px;height:14px;fill:currentColor}
 
+/* ============ AMBIENCE AUDIO TOGGLE ============ */
+.audio-toggle{
+  position:fixed;bottom:22px;right:22px;
+  z-index:100;
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 100%);
+  border:2px solid rgba(242,230,208,.4);
+  box-shadow:0 8px 30px rgba(201,155,92,.45),0 0 0 1px rgba(26,15,8,.3) inset;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brown);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,opacity .5s ease;
+  -webkit-tap-highlight-color:transparent;
+  opacity:0;animation:revealUp .8s ease-out 2.2s forwards;
+}
+.audio-toggle:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(201,155,92,.6),0 0 0 1px rgba(26,15,8,.3) inset}
+.audio-toggle:active{transform:scale(.96)}
+.audio-toggle svg{width:22px;height:22px;fill:currentColor;display:block}
+.audio-toggle .ico-on{display:none}
+.audio-toggle.playing .ico-off{display:none}
+.audio-toggle.playing .ico-on{display:block;animation:audioBeat 1.6s ease-in-out infinite}
+@keyframes audioBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.audio-toggle::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid var(--gold-bright);
+  opacity:0;pointer-events:none;
+}
+.audio-toggle.playing::after{animation:audioRing 2.4s ease-out infinite}
+@keyframes audioRing{
+  0%{transform:scale(.85);opacity:.7}
+  100%{transform:scale(1.55);opacity:0}
+}
+.audio-toggle .audio-label{
+  position:absolute;right:64px;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cream);
+  background:rgba(26,15,8,.85);
+  padding:7px 12px;border-radius:4px;
+  border:1px solid rgba(201,155,92,.3);
+  white-space:nowrap;
+  opacity:0;transform:translateX(8px);pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+}
+.audio-toggle:hover .audio-label{opacity:1;transform:translateX(0)}
+@media (max-width:600px){
+  .audio-toggle{width:48px;height:48px;bottom:16px;right:16px}
+  .audio-toggle svg{width:20px;height:20px}
+  .audio-toggle .audio-label{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .audio-toggle, .audio-toggle .ico-on, .audio-toggle::after{animation:none!important}
+}
+
 /* ============ MODAL FORMULAIRE ============ */
 .modal-backdrop{
   position:fixed;inset:0;
@@ -1065,6 +1118,45 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
     </a>
   </div>
 </footer>
+
+<!-- ============ AMBIENCE AUDIO ============ -->
+<audio id="ambience" loop preload="none">
+  <source src="/assets/ambience.mp3" type="audio/mpeg">
+</audio>
+<button type="button" id="audioToggle" class="audio-toggle" aria-label="Activer l'ambiance sonore médiévale" aria-pressed="false">
+  <svg class="ico-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.95 8.95 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/></svg>
+  <svg class="ico-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.74 2.5-2.27 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+  <span class="audio-label">Ambiance médiévale</span>
+</button>
+<script>
+(function(){
+  const audio  = document.getElementById('ambience');
+  const toggle = document.getElementById('audioToggle');
+  if(!audio || !toggle) return;
+  audio.volume = .35;
+  const KEY = 'lostchapter-audio';
+  toggle.addEventListener('click', () => {
+    if(audio.paused){
+      audio.play().then(() => {
+        toggle.classList.add('playing');
+        toggle.setAttribute('aria-pressed','true');
+        toggle.setAttribute('aria-label',"Couper l'ambiance sonore");
+        toggle.querySelector('.audio-label').textContent = 'Ambiance activée';
+        try{localStorage.setItem(KEY,'on')}catch(_){}
+      }).catch(err => {
+        console.warn('[Lost Chapter] audio play refused by browser:', err);
+      });
+    } else {
+      audio.pause();
+      toggle.classList.remove('playing');
+      toggle.setAttribute('aria-pressed','false');
+      toggle.setAttribute('aria-label',"Activer l'ambiance sonore médiévale");
+      toggle.querySelector('.audio-label').textContent = 'Ambiance médiévale';
+      try{localStorage.setItem(KEY,'off')}catch(_){}
+    }
+  });
+})();
+</script>
 
 <!-- ============ MODAL FORMULAIRE ============ -->
 <div class="modal-backdrop" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
