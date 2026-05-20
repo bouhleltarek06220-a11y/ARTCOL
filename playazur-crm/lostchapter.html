@@ -94,7 +94,7 @@ body{
 
 .hero-title{
   font-family:'Cinzel',serif;
-  font-size:clamp(52px,11vw,140px);
+  font-size:clamp(40px,11vw,140px);
   font-weight:700;line-height:.92;
   letter-spacing:2px;
   color:var(--cream);
@@ -1205,13 +1205,37 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   border-color:var(--gold);
 }
 
+/* ---------- TABLETTE (768-1024px) : grids 4-cards passent en 2 cols pour respirer ---------- */
+@media (min-width:768px) and (max-width:1024px){
+  .why-grid, .gain-grid, .public-grid, .creators-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
 @media (max-width:600px){
   section{padding:64px 20px}
   .hero{padding:32px 20px}
   .site-buttons{flex-direction:column;align-items:center}
-  .site-btn{width:100%;max-width:320px}
+  .site-btn{width:100%;max-width:320px;min-width:0}
   .modal{padding:32px 22px 24px}
   .modal-backdrop{padding:20px 12px}
+  .stat-num{font-size:clamp(36px,9vw,56px)}
+  .h2{font-size:clamp(26px,7vw,38px)}
+  .concept-phrase{font-size:clamp(20px,5.5vw,32px)}
+  .lead{font-size:15px}
+  .fiscal-big{font-size:clamp(70px,18vw,100px)}
+}
+
+/* ---------- MOBILE TRÈS PETIT (< 380px : iPhone SE etc.) ---------- */
+@media (max-width:380px){
+  section{padding:54px 16px}
+  .hero{padding:24px 16px}
+  .modal{padding:28px 18px 22px;border-radius:14px}
+  .modal-backdrop{padding:16px 8px}
+  .hero-eyebrow span{font-size:10px;letter-spacing:2.5px;padding:6px 14px}
+  .portals-label{font-size:10px;letter-spacing:3px}
+  .icp-badge{font-size:10px;letter-spacing:2.5px;padding:6px 12px}
+  .section-cta{font-size:12.5px;padding:14px 22px;letter-spacing:1px}
 }
 </style>
 </head>
