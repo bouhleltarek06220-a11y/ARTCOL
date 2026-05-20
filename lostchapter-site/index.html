@@ -6,6 +6,9 @@
 <title>Lost Chapter — Réveillez l'Histoire</title>
 <meta name="description" content="Lost Chapter — un monument oublié redevient le théâtre vivant de sa propre légende. Soutenez un projet patrimoine + Twitch + recherche CNRS.">
 <meta name="theme-color" content="#1A0F08">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -74,6 +77,12 @@ body{
 
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
+.hero-logo{
+  display:block;margin:0 auto 22px;
+  width:clamp(96px,11vw,140px);height:auto;
+  filter:drop-shadow(0 8px 30px rgba(201,155,92,.4));
+  opacity:0;animation:revealUp .9s ease-out 0s forwards;
+}
 .hero-eyebrow{
   font-family:'JetBrains Mono',monospace;
   font-size:12px;letter-spacing:5px;text-transform:uppercase;
@@ -758,6 +767,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <header class="hero">
   <div class="dust" id="dust"></div>
   <div class="hero-inner">
+    <img src="/assets/lostchapter-logo.svg" alt="Lost Chapter" class="hero-logo" width="140" height="140">
     <div class="hero-eyebrow"><span>Play Azur Production · Appel à soutien</span></div>
     <h1 class="hero-title"><span class="word">LOST</span> <span class="word">CHAPTER</span></h1>
     <div class="hero-sub">RÉVEILLEZ L'HISTOIRE</div>
