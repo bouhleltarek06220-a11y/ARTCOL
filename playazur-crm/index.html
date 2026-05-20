@@ -2311,6 +2311,7 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 <div id="sidebar">
 <div class="sb-label">Navigation</div>
 <div class="sb-item active" data-view="table" onclick="CRM.ui.switchView('table')"><span class="icon">📋</span>Prospects<span class="cnt" id="cnt-total">0</span></div>
+<div class="sb-item" data-view="leads" onclick="CRM.ui.switchView('leads')"><span class="icon">📥</span>Leads entrants<span class="cnt" id="cnt-leads" style="background:#A78BFA;color:#fff">0</span></div>
 <div class="sb-item" data-view="kanban" onclick="CRM.ui.switchView('kanban')"><span class="icon">🗂️</span>Pipeline</div>
 <div class="sb-item" data-view="map" onclick="CRM.ui.switchView('map')"><span class="icon">🗺️</span>Carte</div>
 <div class="sb-item" data-view="dashboard" onclick="CRM.ui.switchView('dashboard')"><span class="icon">📊</span>Dashboard</div>
@@ -2361,7 +2362,7 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 <div class="search-box"><input type="text" id="search-input" placeholder="Rechercher..." oninput="clearTimeout(window._searchTimer);window._searchTimer=setTimeout(()=>CRM.table.search(this.value),250)"></div>
 <select id="filter-status" onchange="CRM.filters.status=this.value;CRM.tablePage=0;CRM.ui.refresh();toggleSubStatusFilter()" style="width:140px"><option value="">Tous statuts</option></select>
 <select id="filter-substatus" onchange="CRM.filters.subStatus=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px;display:none"><option value="">Tous sous-statuts</option></select>
-<select id="filter-axe" onchange="CRM.filters.axe=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:170px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💰 Financeurs</option><option value="influenceur">🎤 Influenceurs</option></select>
+<select id="filter-axe" onchange="CRM.filters.axe=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:190px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💼 Donateurs Pro</option><option value="influenceur">🎤 Influenceurs</option><option value="donateur">👤 Donateurs Particuliers</option></select>
 <select id="filter-user" onchange="CRM.filters.assignedTo=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:150px"><option value="">Tous commerciaux</option></select>
 <select id="filter-dept" onchange="CRM.filters.dept=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:140px"><option value="">Tous dép.</option></select>
 <select id="filter-source" onchange="CRM.filters.source=this.value;CRM.tablePage=0;CRM.ui.refresh()" style="width:180px"><option value="">Toutes sources</option></select>
@@ -2812,6 +2813,48 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 </div>
 </div>
 </div>
+<!-- LEADS ENTRANTS — formulaire landing Lost Chapter -->
+<div class="view" id="view-leads">
+<div class="view-head" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <div>
+    <div class="view-title">📥 Leads entrants — Lost Chapter</div>
+    <p style="color:var(--t2);font-size:13px;margin:4px 0 0">Demandes de soutien soumises depuis la landing <a href="https://crm-play-azur.vercel.app/lostchapter" target="_blank" style="color:var(--ac)">lostchapter</a>. Qualifie-les en 1 clic — elles deviennent des prospects.</p>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <select id="leads-filter-status" onchange="CRM.leads.render()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--brd);background:var(--sur2);color:var(--t1);font-size:12px">
+      <option value="new">🆕 Nouveaux</option>
+      <option value="">Tous</option>
+      <option value="seen">👁 Vus</option>
+      <option value="contacted">📞 Contactés</option>
+      <option value="converted">✅ Convertis</option>
+      <option value="spam">🗑 Spam</option>
+      <option value="archived">📦 Archivés</option>
+    </select>
+    <button class="btn-s" onclick="CRM.leads.refresh()" title="Recharger" style="padding:6px 10px">🔄</button>
+  </div>
+</div>
+
+<div id="leads-list" style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px"></div>
+<div id="leads-empty" style="display:none;text-align:center;padding:60px 20px;color:var(--t2)">
+  <div style="font-size:48px;margin-bottom:16px">📭</div>
+  <h3 style="margin:0 0 6px;color:var(--t1)">Aucun lead pour ce filtre</h3>
+  <p style="font-size:13px">Les nouvelles demandes apparaissent ici en temps réel quand quelqu'un soumet le formulaire de soutien.</p>
+</div>
+</div>
+
+<!-- MODAL QUALIFICATION DU LEAD -->
+<div class="modal" id="leadQualifyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--sur);border:1px solid var(--brd);border-radius:12px;max-width:640px;width:100%;padding:28px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <h2 style="margin:0;font-size:20px">🎯 Qualifier ce lead</h2>
+      <button class="btn-s" onclick="CRM.leads.closeQualify()" style="padding:4px 10px;font-size:14px">✕</button>
+    </div>
+    <div id="leadQualifySummary" style="background:var(--sur2);border:1px solid var(--brd);border-radius:8px;padding:14px;margin-bottom:18px;font-size:13px"></div>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:14px">Dans quel <b>axe</b> classer ce contact ? Au clic, on crée le prospect avec toutes les infos pré-remplies, et le lead passe en <b>converti</b>.</p>
+    <div id="leadAxeButtons" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px"></div>
+  </div>
+</div>
+
 <div class="view" id="view-team">
 <div class="team-header">
 <div class="view-title">Gestion de l'Équipe</div>
@@ -3936,6 +3979,31 @@ function startRealtime(){
   if(_realtimeChannel){try{supa.removeChannel(_realtimeChannel)}catch(e){}}
 
   _realtimeChannel=supa.channel('crm-live-'+Date.now())
+    .on('postgres_changes',{event:'*',schema:'public',table:'partner_leads'},payload=>{
+      if(!CRM.leads) return;
+      if(payload.eventType==='INSERT'){
+        const lead = payload.new;
+        if(!CRM.leads.items.find(l => l.id === lead.id)){
+          CRM.leads.items.unshift(lead);
+          CRM.leads.updateBadge();
+          if(CRM.activeView==='leads') CRM.leads.render();
+          if(!lead.honeypot_filled){
+            const supLabel = (CRM.leads._supportLabels[lead.support_type]) || lead.support_type;
+            const amtLabel = (CRM.leads._amountLabels[lead.amount_range] !== undefined) ? CRM.leads._amountLabels[lead.amount_range] : lead.amount_range;
+            CRM.ui.toast('📥 Nouveau lead : '+(lead.structure||lead.full_name)+' · '+supLabel+' · '+amtLabel, 'info');
+          }
+        }
+      } else if(payload.eventType==='UPDATE'){
+        const idx = CRM.leads.items.findIndex(l => l.id === payload.new.id);
+        if(idx>=0) CRM.leads.items[idx] = payload.new;
+        CRM.leads.updateBadge();
+        if(CRM.activeView==='leads') CRM.leads.render();
+      } else if(payload.eventType==='DELETE'){
+        CRM.leads.items = CRM.leads.items.filter(l => l.id !== payload.old.id);
+        CRM.leads.updateBadge();
+        if(CRM.activeView==='leads') CRM.leads.render();
+      }
+    })
     .on('postgres_changes',{event:'*',schema:'public',table:'prospects'},payload=>{
       console.log('[RT] Event:',payload.eventType,'id:',payload.new?.id||payload.old?.id);
 
@@ -4046,6 +4114,8 @@ function startRealtime(){
         CRM.ui.toast('☁️ Synchronisation temps réel activée','ok');
         document.getElementById('cloud-ind').style.color='var(--ok)';
         try{document.getElementById('set-supa-status').textContent='Connecté — sync active';document.getElementById('set-supa-dot').textContent='🟢';document.getElementById('set-cloud-label').textContent='✅ Connecté';document.getElementById('set-cloud-label').style.color='var(--ok)'}catch(e){}
+        // Charge les leads entrants (badge sidebar)
+        if(CRM.leads) CRM.leads.refresh().catch(e=>console.error('[leads] init', e));
       }else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'||status==='CLOSED'){
         console.warn('[RT] Connection lost:',status);
         try{document.getElementById('set-supa-status').textContent='Déconnecté — retry...';document.getElementById('set-supa-dot').textContent='🔴';document.getElementById('cloud-ind').style.color='var(--err)'}catch(e){}
@@ -4135,15 +4205,17 @@ window.CRM_CONFIG = {
     { id:"won",       label:"Signé / Engagé",color:"#10b981", icon:"✅" },
     { id:"lost",      label:"Perdu",         color:"#ef4444", icon:"❌" }
   ],
-  // [v13] 3 axes BizDev Lost Chapter — catégorisation business de chaque prospect.
-  // Chaque prospect appartient à exactement un axe (lieu / financeur / influenceur).
+  // 4 axes BizDev Lost Chapter — catégorisation business de chaque prospect.
+  // Chaque prospect appartient à exactement un axe (lieu / financeur / influenceur / donateur).
   axes: [
-    { id:"lieu",        label:"Lieu",        color:"#1B6FFF", icon:"🏛️",
+    { id:"lieu",        label:"Lieu",              color:"#1B6FFF", icon:"🏛️",
       desc:"Monument historique, château, théâtre, citadelle, abbaye — où l'événement se passe" },
-    { id:"financeur",   label:"Financeur",   color:"#FFB627", icon:"💰",
-      desc:"Banque, office de tourisme, mécène, CNC, DRAC, Région, sponsor — qui finance" },
-    { id:"influenceur", label:"Influenceur", color:"#FF3D9A", icon:"🎤",
-      desc:"Streamer Twitch, JDR pro, vulgarisateur — qui joue / incarne le projet" }
+    { id:"financeur",   label:"Donateur Pro",      color:"#FFB627", icon:"💼",
+      desc:"Entreprise, banque, fondation, office de tourisme, mécène, CNC, DRAC, Région, sponsor" },
+    { id:"influenceur", label:"Influenceur",       color:"#FF3D9A", icon:"🎤",
+      desc:"Streamer Twitch, JDR pro, vulgarisateur — qui joue / incarne le projet" },
+    { id:"donateur",    label:"Donateur Particulier", color:"#A78BFA", icon:"👤",
+      desc:"Personne physique soutenant le projet (mécénat individuel, sympathisant, ambassadeur)" }
   ],
   contactSubStatuses: [
     { id:"",              label:"— Aucun —",       color:"#3b82f6", icon:"📞" },
@@ -5465,6 +5537,7 @@ window.CRM = {
       if(view==='calls' && CRM.callsView) CRM.callsView.render();
       if(view==='workflow') CRM.workflow.render();
       if(view==='concurrence') CRM.competitors.render();
+      if(view==='leads'){ CRM.leads.render(); CRM.leads.refresh(); }
     },
     refresh() {
       document.getElementById('cnt-total').textContent = CRM.prospects.length; document.title='PLAY AZUR CRM — '+CRM.prospects.length+' prospects';
@@ -5959,6 +6032,217 @@ window.CRM = {
       }).join('');
     },
     destroyChart(name) { if(CRM.charts[name]) { CRM.charts[name].destroy(); delete CRM.charts[name]; } }
+  },
+
+  // LEADS ENTRANTS — formulaire landing Lost Chapter (table partner_leads)
+  leads: {
+    items: [],
+    _supportLabels: {
+      mecenat: '💝 Mécénat',
+      sponsor: '🤝 Sponsoring',
+      institution: '🏛 Institution',
+      autre: '❓ À discuter'
+    },
+    _amountLabels: {
+      '<1k':       '< 1 000 €',
+      '1-5k':      '1 — 5 k€',
+      '5-20k':     '5 — 20 k€',
+      '>20k':      '> 20 k€',
+      'a_discuter':'À discuter',
+      '':          'Non précisé'
+    },
+    _statusLabels: {
+      new:      { label:'Nouveau',   color:'#A78BFA', icon:'🆕' },
+      seen:     { label:'Vu',        color:'#6b7280', icon:'👁' },
+      contacted:{ label:'Contacté',  color:'#3b82f6', icon:'📞' },
+      converted:{ label:'Converti',  color:'#10b981', icon:'✅' },
+      spam:     { label:'Spam',      color:'#ef4444', icon:'🗑' },
+      archived: { label:'Archivé',   color:'#374151', icon:'📦' }
+    },
+    async refresh() {
+      if(!supa){ CRM.ui.toast('Mode offline — connexion Supabase requise', 'warn'); return; }
+      try{
+        const { data, error } = await supa.from('partner_leads')
+          .select('*')
+          .order('created_at', { ascending:false });
+        if(error){ console.error('[leads] fetch', error); CRM.ui.toast('Erreur chargement leads', 'err'); return; }
+        this.items = data || [];
+        this.updateBadge();
+        if(CRM.activeView==='leads') this.render();
+      }catch(e){ console.error('[leads]', e); }
+    },
+    updateBadge(){
+      const newCount = this.items.filter(l => l.status === 'new').length;
+      const el = document.getElementById('cnt-leads');
+      if(el){ el.textContent = newCount; el.style.display = newCount ? '' : 'none'; }
+    },
+    render() {
+      const filter = (document.getElementById('leads-filter-status')||{}).value || 'new';
+      const list = filter ? this.items.filter(l => l.status === filter) : this.items;
+      const wrap = document.getElementById('leads-list');
+      const empty = document.getElementById('leads-empty');
+      if(!list.length){ wrap.innerHTML=''; empty.style.display='block'; return; }
+      empty.style.display='none';
+      wrap.innerHTML = list.map(l => this._card(l)).join('');
+    },
+    _card(l){
+      const st = this._statusLabels[l.status] || this._statusLabels.new;
+      const supLabel = this._supportLabels[l.support_type] || l.support_type;
+      const amtLabel = this._amountLabels[l.amount_range] !== undefined ? this._amountLabels[l.amount_range] : l.amount_range;
+      const date = new Date(l.created_at);
+      const dateStr = date.toLocaleDateString('fr-FR', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+      const msgPreview = (l.message || '').slice(0, 140);
+      const honeypot = l.honeypot_filled ? '<span style="background:#ef444422;color:#ef4444;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px" title="Honeypot rempli — probablement un bot">🤖 SPAM</span>' : '';
+      const convertedTo = l.prospect_id ? `<a href="#" onclick="event.preventDefault();CRM.prospect.showEdit('${l.prospect_id}')" style="font-size:11px;color:var(--ok);text-decoration:underline">→ voir le prospect</a>` : '';
+      return `<div style="background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:14px;border-left:4px solid ${st.color}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:14px;color:var(--t1)">${esc(l.full_name)}${honeypot}</div>
+            <div style="font-size:12px;color:var(--t2);margin-top:2px">${esc(l.structure)}${l.role?' · '+esc(l.role):''}</div>
+          </div>
+          <span style="background:${st.color}22;color:${st.color};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap">${st.icon} ${st.label}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;font-size:11px">
+          <span style="background:var(--sur2);padding:2px 8px;border-radius:8px">${supLabel}</span>
+          <span style="background:var(--sur2);padding:2px 8px;border-radius:8px">💰 ${amtLabel}</span>
+          <span style="color:var(--t3)">${dateStr}</span>
+        </div>
+        <div style="font-size:12px;line-height:1.45;color:var(--t2);margin-bottom:10px">
+          <div>✉ <a href="mailto:${esc(l.email)}" style="color:var(--ac)">${esc(l.email)}</a></div>
+          ${l.phone ? '<div>📞 <a href="tel:'+esc(l.phone)+'" style="color:var(--ac)">'+esc(l.phone)+'</a></div>' : ''}
+          ${msgPreview ? '<div style="margin-top:6px;padding:8px;background:var(--sur2);border-radius:6px;font-style:italic">"'+esc(msgPreview)+(l.message.length>140?'…':'')+'"</div>' : ''}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${l.status==='converted' ? convertedTo : '<button class="btn-s" style="background:var(--ac);color:#fff;border-color:var(--ac);flex:1" onclick="CRM.leads.openQualify(\''+l.id+'\')">🎯 Qualifier &amp; convertir</button>'}
+          ${l.status==='new' ? '<button class="btn-s" onclick="CRM.leads.setStatus(\''+l.id+'\',\'seen\')" title="Marquer comme vu">👁</button>' : ''}
+          ${(l.status!=='spam' && l.status!=='converted') ? '<button class="btn-s" onclick="CRM.leads.setStatus(\''+l.id+'\',\'spam\')" title="Marquer comme spam">🗑</button>' : ''}
+          ${(l.status!=='archived' && l.status!=='converted') ? '<button class="btn-s" onclick="CRM.leads.setStatus(\''+l.id+'\',\'archived\')" title="Archiver">📦</button>' : ''}
+        </div>
+      </div>`;
+    },
+    async setStatus(id, newStatus){
+      if(!supa) return;
+      try{
+        const { error } = await supa.from('partner_leads').update({ status:newStatus }).eq('id', id);
+        if(error){ console.error('[leads] setStatus', error); CRM.ui.toast('Erreur mise à jour', 'err'); return; }
+        // Optimistic local update
+        const l = this.items.find(x => x.id === id);
+        if(l) l.status = newStatus;
+        this.updateBadge();
+        if(CRM.activeView==='leads') this.render();
+        CRM.ui.toast('Statut mis à jour', 'ok');
+      }catch(e){ console.error('[leads]', e); }
+    },
+    openQualify(id){
+      const l = this.items.find(x => x.id === id);
+      if(!l) return;
+      this._qualifyingId = id;
+      const supLabel = this._supportLabels[l.support_type] || l.support_type;
+      const amtLabel = this._amountLabels[l.amount_range] !== undefined ? this._amountLabels[l.amount_range] : l.amount_range;
+      document.getElementById('leadQualifySummary').innerHTML = `
+        <div style="font-weight:600;font-size:14px;margin-bottom:4px">${esc(l.full_name)} <span style="font-weight:400;color:var(--t2)">— ${esc(l.structure)}</span></div>
+        ${l.role ? '<div style="font-size:12px;color:var(--t2);margin-bottom:6px">'+esc(l.role)+'</div>' : ''}
+        <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-bottom:6px">
+          <span style="background:var(--sur);padding:2px 8px;border-radius:8px">${supLabel}</span>
+          <span style="background:var(--sur);padding:2px 8px;border-radius:8px">💰 ${amtLabel}</span>
+        </div>
+        <div style="font-size:12px;color:var(--t2)">✉ ${esc(l.email)} ${l.phone?' · 📞 '+esc(l.phone):''}</div>
+        ${l.message ? '<div style="margin-top:8px;padding:8px;background:var(--sur);border-radius:6px;font-style:italic;font-size:12px">"'+esc(l.message)+'"</div>' : ''}
+      `;
+      // Suggère un axe par défaut basé sur le type de soutien
+      let suggested = 'financeur';
+      if(l.support_type === 'autre') suggested = 'donateur';
+      const btnsHtml = (CRM_CONFIG.axes || []).map(a => {
+        const isDefault = a.id === suggested;
+        return `<button onclick="CRM.leads.qualifyAs('${a.id}')"
+          style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 12px;background:${a.color}15;border:2px solid ${isDefault ? a.color : a.color+'40'};border-radius:10px;cursor:pointer;color:${a.color};font-weight:600;font-size:13px;transition:.2s"
+          onmouseover="this.style.background='${a.color}25';this.style.borderColor='${a.color}'"
+          onmouseout="this.style.background='${a.color}15';this.style.borderColor='${isDefault?a.color:a.color+'40'}'">
+          <span style="font-size:28px">${a.icon}</span>
+          <span>${a.label}</span>
+          ${isDefault ? '<span style="font-size:9px;background:'+a.color+';color:#fff;padding:1px 8px;border-radius:6px;font-weight:700;letter-spacing:.5px">SUGGÉRÉ</span>' : ''}
+        </button>`;
+      }).join('');
+      document.getElementById('leadAxeButtons').innerHTML = btnsHtml;
+      document.getElementById('leadQualifyModal').style.display = 'flex';
+    },
+    closeQualify(){
+      document.getElementById('leadQualifyModal').style.display = 'none';
+      this._qualifyingId = null;
+    },
+    async qualifyAs(axeId){
+      const id = this._qualifyingId;
+      if(!id) return;
+      const l = this.items.find(x => x.id === id);
+      if(!l) return;
+      // Split nom complet en first/last
+      const parts = (l.full_name || '').trim().split(/\s+/);
+      const firstName = parts[0] || '';
+      const lastName  = parts.slice(1).join(' ') || '';
+      const supLabel = this._supportLabels[l.support_type] || l.support_type;
+      const amtLabel = this._amountLabels[l.amount_range] !== undefined ? this._amountLabels[l.amount_range] : l.amount_range;
+      const noteParts = [
+        '🌟 Lead entrant — formulaire Lost Chapter',
+        '📅 Reçu le ' + new Date(l.created_at).toLocaleString('fr-FR'),
+        '💼 Type de soutien : ' + supLabel,
+        '💰 Ordre de grandeur : ' + amtLabel
+      ];
+      if(l.role) noteParts.push('🎯 Rôle : ' + l.role);
+      if(l.message) noteParts.push('💬 Message :\n' + l.message);
+      if(l.referrer) noteParts.push('🔗 Referrer : ' + l.referrer);
+      const newProspect = {
+        id: 'p_lead_' + Date.now(),
+        axe: axeId,
+        company: l.structure || l.full_name || 'Lead Lost Chapter',
+        firstName,
+        lastName,
+        email: l.email || '',
+        phone: l.phone || '',
+        status: 'lead',
+        subStatus: '',
+        score: 70,
+        assignedTo: CRM.currentUser?.id || 'tarek',
+        tags: ['Lead entrant Lost Chapter'],
+        notes: noteParts.join('\n'),
+        source: 'Landing Lost Chapter',
+        fonction: l.role || '',
+        createdAt: new Date().toISOString(),
+        actions: [{ by: CRM.currentUser?.name || 'Système', text: 'Converti depuis lead entrant ('+supLabel+')', ts: new Date().toISOString() }]
+      };
+      try{
+        // 1) Crée le prospect dans CRM.prospects
+        CRM.prospects.push(newProspect);
+        safeSet(CRM_CONFIG.storagePrefix+'prospects', JSON.stringify(CRM.prospects));
+        // 2) Push en BDD prospects
+        if(supa){
+          const dbRow = toDb(newProspect);
+          const { error } = await supa.from('prospects').upsert(dbRow);
+          if(error){
+            console.error('[leads] insert prospect', error);
+            CRM.ui.toast('Erreur création prospect : ' + error.message, 'err');
+            return;
+          }
+          // 3) Update lead : converted + prospect_id
+          const { error: e2 } = await supa.from('partner_leads').update({
+            status: 'converted',
+            prospect_id: newProspect.id
+          }).eq('id', id);
+          if(e2){ console.error('[leads] update lead', e2); }
+          // local sync
+          l.status = 'converted';
+          l.prospect_id = newProspect.id;
+        }
+        this.closeQualify();
+        this.updateBadge();
+        if(CRM.activeView==='leads') this.render();
+        CRM.ui.refresh();
+        const axe = CRM_CONFIG.axes.find(a => a.id === axeId);
+        CRM.ui.toast('✅ Lead converti en prospect ' + (axe?axe.label:axeId), 'ok');
+      }catch(e){
+        console.error('[leads] qualify', e);
+        CRM.ui.toast('Erreur conversion : ' + e.message, 'err');
+      }
+    }
   },
 
   // PROSPECT CRUD
