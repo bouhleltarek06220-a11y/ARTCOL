@@ -239,6 +239,30 @@ body{
   .portal-title{margin-bottom:2px;font-size:17px}
 }
 
+/* ---------- HERO secondary link (operational ICPs entry point) ---------- */
+.hero-secondary-link{
+  display:inline-block;
+  margin-top:20px;
+  font-family:'Lora',serif;
+  font-size:12.5px;letter-spacing:.5px;
+  color:rgba(242,230,208,.55);
+  text-decoration:none;
+  padding:6px 14px;border-radius:6px;
+  border:1px solid rgba(122,168,200,.25);
+  background:rgba(26,15,8,.4);
+  transition:color .3s ease,border-color .3s ease,background .3s ease;
+  opacity:0;animation:revealUp 1s ease-out 1.85s forwards;
+}
+.hero-secondary-link em{color:#9FC5DF;font-style:italic;font-weight:500}
+.hero-secondary-link:hover{
+  color:var(--cream);
+  border-color:rgba(159,197,223,.55);
+  background:rgba(42,78,115,.18);
+}
+@media (max-width:560px){
+  .hero-secondary-link{font-size:11.5px;padding:5px 11px;letter-spacing:.3px}
+}
+
 .scroll-hint{
   position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
   font-family:'Cinzel',serif;
@@ -636,6 +660,94 @@ section{padding:90px 24px;position:relative}
 .creators-text{font-size:14.5px;color:var(--cream-soft);font-weight:300;line-height:1.65}
 .creators-text strong{color:#D9B6FF;font-weight:500}
 
+/* ---------- SECTION PARTICIPER (Equipe + Presse) ---------- */
+.participer-section{
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.82) 0%, rgba(26,15,8,.68) 45%, rgba(26,15,8,.92) 100%),
+    radial-gradient(ellipse at 50% 35%, rgba(122,168,200,.15) 0%, transparent 65%),
+    linear-gradient(180deg,#1A0F08 0%,#1F1310 50%,#1A0F08 100%);
+  background-color:#1A0F08;
+  color:var(--cream);
+  position:relative;
+  text-align:center;
+}
+.participer-section::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(159,197,223,.05) 1px, transparent 1px);
+  background-size:34px 34px;opacity:.4;
+  pointer-events:none;
+}
+.icp--participer .icp-badge{color:#9FC5DF;text-shadow:0 0 12px rgba(90,143,191,.4)}
+.participer-section .h2{color:var(--cream)}
+.participer-section .h2 em{color:#9FC5DF;font-style:italic;text-shadow:0 0 22px rgba(90,143,191,.4)}
+.participer-section .lead{color:var(--cream-soft)}
+.participer-section .lead strong{color:#B8D4E5}
+.participer-section .lead.dropcap::first-letter{
+  background:linear-gradient(180deg,#B8D4E5,#5A8FBF);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* Layout 2 sous-blocs cote-a-cote (desktop) */
+.participer-blocks{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:32px;margin-top:48px;
+  position:relative;z-index:2;
+}
+@media (max-width:900px){.participer-blocks{grid-template-columns:1fr;gap:48px}}
+.participer-block{
+  background:linear-gradient(160deg,rgba(40,55,75,.4),rgba(26,15,8,.7));
+  border:1px solid rgba(159,197,223,.22);
+  border-radius:16px;padding:32px 24px 28px;
+  position:relative;
+}
+.participer-block-title{
+  font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:#9FC5DF;font-weight:600;
+  margin-bottom:6px;
+}
+.participer-block-h3{
+  font-family:'Fraunces',serif;
+  font-size:clamp(22px,3.2vw,28px);font-weight:600;
+  color:var(--cream);letter-spacing:-.3px;
+  margin-bottom:18px;
+}
+.participer-cards{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:12px;margin-bottom:24px;
+}
+@media (max-width:480px){.participer-cards{grid-template-columns:1fr}}
+.participer-card{
+  background:rgba(26,15,8,.5);
+  border:1px solid rgba(159,197,223,.18);
+  border-radius:10px;padding:16px 14px;
+  text-align:left;
+  transition:transform .3s ease,border-color .3s ease,background .3s ease;
+}
+.participer-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(159,197,223,.45);
+  background:rgba(42,78,115,.15);
+}
+.participer-card-ico{font-size:22px;display:block;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(90,143,191,.4))}
+.participer-card-title{
+  font-family:'Fraunces',serif;font-size:15px;font-weight:600;
+  color:var(--cream);margin-bottom:3px;letter-spacing:-.1px;
+}
+.participer-card-text{font-size:12.5px;color:var(--cream-soft);line-height:1.5;font-weight:300}
+.participer-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Cinzel',serif;
+  font-size:13px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--cream);
+  background:linear-gradient(135deg,#7AA8C8 0%,#2A4E73 100%);
+  padding:14px 24px;border-radius:8px;
+  border:none;cursor:pointer;
+  box-shadow:0 8px 22px rgba(42,78,115,.35);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.participer-cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 32px rgba(42,78,115,.5)}
+
 /* ---------- CTA FINAL ---------- */
 .final{
   background:
@@ -917,8 +1029,9 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 /* ---------- FLOW PICKER (étape 0 du modal) ---------- */
 .flow-picker{margin-top:8px}
 .flow-picker-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
 }
+@media (max-width:760px){.flow-picker-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
 .flow-card{
   display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:22px 14px;
@@ -955,6 +1068,12 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 .flow-card--createur::before{background:linear-gradient(90deg,#C997FF,#7C2AFF)}
 .flow-card--createur .flow-eye{color:#C997FF}
 .flow-card--createur:hover{border-color:rgba(201,151,255,.75);box-shadow:0 14px 36px rgba(145,70,255,.25)}
+.flow-card--equipe::before{background:linear-gradient(90deg,#9FC5DF,#2A4E73)}
+.flow-card--equipe .flow-eye{color:#9FC5DF}
+.flow-card--equipe:hover{border-color:rgba(159,197,223,.75);box-shadow:0 14px 36px rgba(42,78,115,.25)}
+.flow-card--presse::before{background:linear-gradient(90deg,#9FC5DF,#2A4E73)}
+.flow-card--presse .flow-eye{color:#9FC5DF}
+.flow-card--presse:hover{border-color:rgba(159,197,223,.75);box-shadow:0 14px 36px rgba(42,78,115,.25)}
 @media (max-width:560px){
   .flow-picker-grid{grid-template-columns:1fr}
   .flow-card{flex-direction:row;align-items:center;gap:14px;padding:14px;text-align:left}
@@ -979,7 +1098,30 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 .form--public   .flow-show--public,
 .form--commune  .flow-show--commune,
 .form--pro      .flow-show--pro,
-.form--createur .flow-show--createur{display:block}
+.form--createur .flow-show--createur,
+.form--equipe   .flow-show--equipe,
+.form--presse   .flow-show--presse{display:block}
+
+/* ---------- Native <select> styled like inputs ---------- */
+.form-select{
+  width:100%;
+  font-family:'Lora',serif;font-size:14px;
+  color:var(--cream);
+  background-color:rgba(26,15,8,.6);
+  border:1px solid rgba(201,155,92,.35);
+  border-radius:8px;
+  padding:12px 38px 12px 14px;
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23E5C788' d='M2 4l4 4 4-4'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  cursor:pointer;
+  transition:border-color .2s ease,background-color .2s ease;
+}
+.form-select:focus{outline:none;border-color:var(--gold);background-color:rgba(26,15,8,.8)}
+.form-select option{background:#241509;color:var(--cream)}
+.form-select optgroup{background:#1A0F08;color:var(--gold-bright);font-weight:600}
+.field.invalid .form-select{border-color:var(--danger,#ff7a6e)}
 /* .form-row inside flow-show should grid normally when shown */
 .flow-show > .form-row{margin-bottom:0}
 
@@ -1278,6 +1420,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         <span class="portal-desc">Particulier · Famille · Communauté</span>
       </a>
     </div>
+    <a href="#participer" class="hero-secondary-link">Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em></a>
   </div>
   <div class="scroll-hint">
     <span>Faites défiler</span>
@@ -1478,6 +1621,79 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 
 <div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
 
+<!-- ============ PARTICIPER À L'AVENTURE (Équipe + Presse) ============ -->
+<section class="participer-section icp icp--participer" id="participer">
+  <div class="wrap center">
+    <div class="icp-badge reveal">Participer à l'aventure</div>
+    <h2 class="h2 reveal d1">Construire <em>l'événement</em></h2>
+    <p class="lead dropcap reveal d2">Lost Chapter, c'est aussi <strong>une équipe à construire</strong> et <strong>des médias à embarquer</strong>. Artistes, bénévoles, presse — toutes les bonnes volontés et tous les regards extérieurs sont les bienvenus.</p>
+
+    <div class="participer-blocks">
+
+      <!-- Bloc 1 : Talents & équipe -->
+      <div class="participer-block reveal d1">
+        <div class="participer-block-title">🎭 Talents &amp; équipe</div>
+        <div class="participer-block-h3">Rejoindre les <em>coulisses</em></div>
+        <div class="participer-cards">
+          <div class="participer-card">
+            <span class="participer-card-ico">🎨</span>
+            <div class="participer-card-title">Artistes</div>
+            <p class="participer-card-text">Danseurs, comédiens, musiciens, photographes, vidéastes, maquilleurs, costumiers.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">🙋</span>
+            <div class="participer-card-title">Bénévoles</div>
+            <p class="participer-card-text">Accueil public, vestiaires, logistique terrain, runners — toutes les bonnes volontés.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">🛡️</span>
+            <div class="participer-card-title">Sécurité &amp; info</div>
+            <p class="participer-card-text">Agents de sécurité, billetterie, guides info, encadrement public.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">🏺</span>
+            <div class="participer-card-title">Artisans locaux</div>
+            <p class="participer-card-text">Exposer vos créations le jour J — stands artisans, démonstrations, mini-marché médiéval.</p>
+          </div>
+        </div>
+        <button type="button" class="participer-cta" data-open-form data-form-context="equipe">Rejoindre l'équipe →</button>
+      </div>
+
+      <!-- Bloc 2 : Presse & médias -->
+      <div class="participer-block reveal d2">
+        <div class="participer-block-title">📰 Presse &amp; médias</div>
+        <div class="participer-block-h3">Couvrir <em>l'événement</em></div>
+        <div class="participer-cards">
+          <div class="participer-card">
+            <span class="participer-card-ico">📻</span>
+            <div class="participer-card-title">Radio</div>
+            <p class="participer-card-text">Reportages, interviews live, captation ambiance — France Bleu, locales, indé.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">📺</span>
+            <div class="participer-card-title">TV</div>
+            <p class="participer-card-text">Reportages JT, news 24h, magazines culture — France 3 régions, BFM, locales.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">📰</span>
+            <div class="participer-card-title">Presse écrite</div>
+            <p class="participer-card-text">Articles, dossiers, photoreportage — quotidiens régionaux, magazines culture.</p>
+          </div>
+          <div class="participer-card">
+            <span class="participer-card-ico">🌐</span>
+            <div class="participer-card-title">Web &amp; podcast</div>
+            <p class="participer-card-text">Webzines, blogs spécialisés, podcasts patrimoine / gaming / culture, plateformes vidéo.</p>
+          </div>
+        </div>
+        <button type="button" class="participer-cta" data-open-form data-form-context="presse">Demander une accréditation →</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-fleuron"><span class="section-fleuron-mark">⚜</span></div>
+
 <!-- ============ FINAL CTA ============ -->
 <section class="final" id="soutenir">
   <div class="final-inner">
@@ -1627,6 +1843,18 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
             <span class="flow-eye">Je crée</span>
             <span class="flow-name">Du contenu</span>
             <span class="flow-tag">Twitch · YouTube · TikTok · Insta</span>
+          </button>
+          <button type="button" class="flow-card flow-card--equipe" data-pick="equipe">
+            <span class="flow-ico" aria-hidden="true">🎭</span>
+            <span class="flow-eye">Je rejoins</span>
+            <span class="flow-name">L'équipe</span>
+            <span class="flow-tag">Artiste · Bénévole · Sécurité · Artisan</span>
+          </button>
+          <button type="button" class="flow-card flow-card--presse" data-pick="presse">
+            <span class="flow-ico" aria-hidden="true">📰</span>
+            <span class="flow-eye">Je couvre</span>
+            <span class="flow-name">L'événement</span>
+            <span class="flow-tag">Radio · TV · Presse · Web · Podcast</span>
           </button>
         </div>
       </div>
@@ -1784,6 +2012,130 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
               <label class="radio-card">
                 <input type="checkbox" name="content_type" value="autre">
                 <span class="dot"></span><span>Autre</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITÉ + COMPÉTENCES + DISPO + PORTFOLIO (equipe uniquement) -->
+        <div class="flow-show flow-show--equipe">
+          <div class="field" data-field="activity_type">
+            <label for="activity_type">🎭 Quelle activité ?<span class="req">*</span></label>
+            <select id="activity_type" name="activity_type" class="form-select">
+              <option value="">— Choisir —</option>
+              <optgroup label="Artistes">
+                <option value="danseur">💃 Danseur / chorégraphe</option>
+                <option value="comedien">🎭 Comédien / acteur</option>
+                <option value="musicien">🎵 Musicien / chanteur</option>
+                <option value="photographe">📸 Photographe</option>
+                <option value="videaste">🎬 Vidéaste / cadreur</option>
+                <option value="maquilleur">💄 Maquilleur / SFX</option>
+                <option value="costumier">🧵 Costumier</option>
+                <option value="regie">🎚️ Régie / technique son ou lumière</option>
+              </optgroup>
+              <optgroup label="Équipe terrain">
+                <option value="benevole">🙋 Bénévole accueil / logistique</option>
+                <option value="securite">🛡️ Agent de sécurité</option>
+                <option value="billetterie">🎫 Billetterie / contrôle accès</option>
+                <option value="guide_info">ℹ️ Guide info / orientation public</option>
+              </optgroup>
+              <optgroup label="Local">
+                <option value="artisan_local">🏺 Artisan local — exposition / stand</option>
+                <option value="commerce_local">🛍️ Commerce local — partenariat</option>
+              </optgroup>
+              <option value="autre">Autre — à préciser dans le message</option>
+            </select>
+            <span class="field-error">Choisissez une activité.</span>
+          </div>
+
+          <div class="field" data-field="skills_experience">
+            <label for="skills_experience">🛠️ Compétences / expérience <span class="field-hint">(optionnel mais bienvenu)</span></label>
+            <textarea id="skills_experience" name="skills_experience" rows="3" placeholder="Compagnie de danse contemporaine 8 ans / Diplôme BAFA / Habilitation SSIAP / Photographe événementiel · book sur Insta @…" maxlength="1500"></textarea>
+          </div>
+
+          <div class="field" data-field="availability">
+            <label>📅 Disponibilité <span class="field-hint">(plusieurs choix possibles)</span></label>
+            <div class="radio-grid">
+              <label class="radio-card">
+                <input type="checkbox" name="availability" value="pre_prod">
+                <span class="dot"></span><span>Pré-production (semaines avant)</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="availability" value="j_moins_1">
+                <span class="dot"></span><span>J-1 (montage)</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="availability" value="jour_j">
+                <span class="dot"></span><span>Jour J</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="availability" value="j_plus_1">
+                <span class="dot"></span><span>J+1 (démontage)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field" data-field="portfolio_url">
+            <label for="portfolio_url">🔗 Portfolio / book / showreel <span class="field-hint">(URL, optionnel)</span></label>
+            <input type="url" id="portfolio_url" name="portfolio_url" placeholder="https://votre-site.fr ou lien Insta/Vimeo/Behance…" maxlength="500">
+          </div>
+        </div>
+
+        <!-- MEDIA + NOM + AUDIENCE + COUVERTURE (presse uniquement) -->
+        <div class="flow-show flow-show--presse">
+          <div class="field" data-field="media_type">
+            <label for="media_type">📰 Type de média<span class="req">*</span></label>
+            <select id="media_type" name="media_type" class="form-select">
+              <option value="">— Choisir —</option>
+              <option value="radio">📻 Radio</option>
+              <option value="tv">📺 TV</option>
+              <option value="presse_ecrite">📰 Presse écrite</option>
+              <option value="webzine">🌐 Webzine / site d'actu</option>
+              <option value="podcast">🎙️ Podcast</option>
+              <option value="photoreporter">📸 Photoreporter indépendant</option>
+              <option value="influenceur_media">💬 Influenceur / chroniqueur</option>
+              <option value="autre">Autre</option>
+            </select>
+            <span class="field-error">Choisissez un type de média.</span>
+          </div>
+
+          <div class="field" data-field="media_name">
+            <label for="media_name">📛 Nom du média<span class="req">*</span></label>
+            <input type="text" id="media_name" name="media_name" placeholder="France Bleu Côte d'Azur, Nice-Matin, Brut, podcast Passion Médiévistes…" maxlength="160">
+            <span class="field-error">Indiquez le nom de votre média.</span>
+          </div>
+
+          <div class="field" data-field="audience_size">
+            <label for="audience_size">📊 Audience / tirage <span class="field-hint">(optionnel)</span></label>
+            <input type="text" id="audience_size" name="audience_size" placeholder="50k auditeurs / 12k tirage / 30k followers…" maxlength="60">
+          </div>
+
+          <div class="field" data-field="coverage_type">
+            <label>🎬 Type de couverture envisagée <span class="field-hint">(plusieurs choix possibles)</span></label>
+            <div class="radio-grid">
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="reportage">
+                <span class="dot"></span><span>📹 Reportage sur place</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="interview">
+                <span class="dot"></span><span>🎤 Interview / portrait</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="live">
+                <span class="dot"></span><span>🔴 Direct / live</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="article">
+                <span class="dot"></span><span>📝 Article post-événement</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="replay">
+                <span class="dot"></span><span>📼 Replay / chronique</span>
+              </label>
+              <label class="radio-card">
+                <input type="checkbox" name="coverage_type" value="podcast_ep">
+                <span class="dot"></span><span>🎙️ Épisode podcast dédié</span>
               </label>
             </div>
           </div>
@@ -1972,7 +2324,7 @@ const roleLabel   = document.getElementById('roleLabel');
 const supportTypeHidden = document.getElementById('supportTypeHidden');
 const formBack    = document.getElementById('formBack');
 let lastFocus     = null;
-let currentFlow   = null; /* 'public' | 'commune' | 'pro' | 'createur' */
+let currentFlow   = null; /* 'public' | 'commune' | 'pro' | 'createur' | 'equipe' | 'presse' */
 
 /* CTA contexts → flow mapping. 'sponsor' opens the pro flow with sub-type pre-checked. */
 const CTX_TO_FLOW = {
@@ -1981,20 +2333,24 @@ const CTX_TO_FLOW = {
   'sponsor':     { flow: 'pro', sub: 'sponsor' },
   'mecenat':     { flow: 'pro', sub: 'mecenat' },
   'institution': { flow: 'pro', sub: 'institution' },
-  'createur':    { flow: 'createur' }
+  'createur':    { flow: 'createur' },
+  'equipe':      { flow: 'equipe' },
+  'presse':      { flow: 'presse' }
 };
 
 const FLOW_COPY = {
   'public':   { eye:'Lost Chapter · Vivre l’aventure',           title:'Bienvenue dans <em>l’aventure</em>',         sub:'On vous prévient en avant-première des prochaines dates. Pas de pub, pas de spam — que des nouvelles du projet.' },
   'commune':  { eye:'Lost Chapter · Patrimoine & territoires',   title:'Parlons de <em>votre site</em>',             sub:'Mairie, Office de Tourisme, association, propriétaire — racontez-nous votre lieu. Tarek revient vers vous sous 48 h.' },
   'pro':      { eye:'Lost Chapter · Mécénat & sponsoring',       title:'Faisons <em>connaissance</em>',              sub:'Quelques infos pour qu’on revienne vers vous avec une proposition <strong>adaptée à votre structure</strong>. Tarek vous recontacte sous 48 h ouvrées.' },
-  'createur': { eye:'Lost Chapter · Créateurs & streamers',      title:'On vous veut <em>sur le live</em>',          sub:'Streamer, vidéaste, tiktokeur — racontez-nous votre univers. On revient vers vous avec une proposition de collab <strong>adaptée à votre format</strong>.' }
+  'createur': { eye:'Lost Chapter · Créateurs & streamers',      title:'On vous veut <em>sur le live</em>',          sub:'Streamer, vidéaste, tiktokeur — racontez-nous votre univers. On revient vers vous avec une proposition de collab <strong>adaptée à votre format</strong>.' },
+  'equipe':   { eye:'Lost Chapter · Équipe & talents',           title:'Rejoindre <em>les coulisses</em>',           sub:'Artiste, bénévole, agent de sécurité, artisan local — décrivez ce que vous voulez apporter au projet. Tarek revient vers vous personnellement.' },
+  'presse':   { eye:'Lost Chapter · Accréditation presse',       title:'Couvrir <em>l’événement</em>',               sub:'Radio, TV, presse écrite, web, podcast — racontez-nous votre média et le type de couverture envisagée. On revient avec un dossier presse adapté.' }
 };
 
 function setFlow(flow){
   currentFlow = flow;
   /* CSS-driven show/hide via classes on the form */
-  form.classList.remove('form--public','form--commune','form--pro','form--createur');
+  form.classList.remove('form--public','form--commune','form--pro','form--createur','form--equipe','form--presse');
   form.classList.add('form--' + flow);
   supportTypeHidden.value = flow === 'pro' ? '' : flow;
   /* Adapt labels and placeholders */
@@ -2013,6 +2369,14 @@ function setFlow(flow){
   } else if(flow === 'createur'){
     emailLabel.innerHTML = 'Email<span class="req">*</span>';
     form.email.placeholder = 'contact@votrechaine.tv';
+    phoneLabel.innerHTML = 'Téléphone <span class="field-hint">(facultatif)</span>';
+  } else if(flow === 'equipe'){
+    emailLabel.innerHTML = 'Email<span class="req">*</span>';
+    form.email.placeholder = 'vous@exemple.fr';
+    phoneLabel.innerHTML = 'Téléphone <span class="field-hint">(facultatif)</span>';
+  } else if(flow === 'presse'){
+    emailLabel.innerHTML = 'Email professionnel<span class="req">*</span>';
+    form.email.placeholder = 'vous@nom-du-media.fr';
     phoneLabel.innerHTML = 'Téléphone <span class="field-hint">(facultatif)</span>';
   } else { /* pro */
     emailLabel.innerHTML = 'Email professionnel<span class="req">*</span>';
@@ -2038,7 +2402,7 @@ function resetFlow(){
   currentFlow = null;
   form.hidden = true;
   flowPicker.hidden = false;
-  form.classList.remove('form--public','form--commune','form--pro','form--createur');
+  form.classList.remove('form--public','form--commune','form--pro','form--createur','form--equipe','form--presse');
   /* Reset visible required errors */
   form.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
   const socErr = form.querySelector('[data-creator-socials-error]');
@@ -2134,6 +2498,13 @@ function validate(data, flow){
     else if(socErr) socErr.classList.remove('show');
     if(!data.audience_range){ setFieldError('audience_range', true); ok = false; } else setFieldError('audience_range', false);
   }
+  if(flow === 'equipe'){
+    if(!data.activity_type){ setFieldError('activity_type', true); ok = false; } else setFieldError('activity_type', false);
+  }
+  if(flow === 'presse'){
+    if(!data.media_type){ setFieldError('media_type', true); ok = false; } else setFieldError('media_type', false);
+    if(!data.media_name || data.media_name.length < 2){ setFieldError('media_name', true); ok = false; } else setFieldError('media_name', false);
+  }
   return ok;
 }
 
@@ -2166,16 +2537,22 @@ form.addEventListener('submit', async (e) => {
     supportType = (form.querySelector('input[name=support_type_sub]:checked')||{}).value || '';
   }
 
-  /* Structure : on garde la valeur user pour commune/pro, on synthétise pour public/createur (satisfait CHECK ≥ 2 chars) */
+  /* Structure : on garde la valeur user pour commune/pro, on synthétise pour les autres (satisfait CHECK ≥ 2 chars) */
   let structureValue = form.structure.value.trim();
   if(currentFlow === 'public'){
     structureValue = 'Particulier';
   } else if(currentFlow === 'createur'){
     structureValue = 'Créateur de contenu';
+  } else if(currentFlow === 'equipe'){
+    structureValue = 'Équipe / Talent';
+  } else if(currentFlow === 'presse'){
+    structureValue = (form.media_name.value.trim() || 'Média');
   }
   let roleValue = form.role.value.trim();
-  if(currentFlow === 'public' || currentFlow === 'createur'){
+  if(currentFlow === 'public' || currentFlow === 'createur' || currentFlow === 'equipe'){
     roleValue = '';
+  } else if(currentFlow === 'presse'){
+    roleValue = (form.media_type.value || '');
   }
 
   /* Pour le flow public : on concatène les intérêts cochés au début du message pour traçabilité CRM */
@@ -2200,6 +2577,16 @@ form.addEventListener('submit', async (e) => {
     ? Array.from(form.querySelectorAll('input[name=content_type]:checked')).map(i => i.value).join(',').slice(0,250)
     : '';
 
+  /* Champs equipe : availability multi-checkbox concaténée */
+  const availabilityValue = currentFlow === 'equipe'
+    ? Array.from(form.querySelectorAll('input[name=availability]:checked')).map(i => i.value).join(',').slice(0,250)
+    : '';
+
+  /* Champs presse : coverage_type multi-checkbox concaténée */
+  const coverageTypeValue = currentFlow === 'presse'
+    ? Array.from(form.querySelectorAll('input[name=coverage_type]:checked')).map(i => i.value).join(',').slice(0,250)
+    : '';
+
   const data = {
     full_name:    form.full_name.value.trim(),
     structure:    structureValue,
@@ -2218,6 +2605,14 @@ form.addEventListener('submit', async (e) => {
     x_handle:         currentFlow === 'createur' ? form.x_handle.value.trim()         : '',
     audience_range:   currentFlow === 'createur' ? ((form.querySelector('input[name=audience_range]:checked')||{}).value || '') : '',
     content_type:     contentTypeValue,
+    activity_type:     currentFlow === 'equipe' ? form.activity_type.value             : '',
+    skills_experience: currentFlow === 'equipe' ? form.skills_experience.value.trim()  : '',
+    availability:      availabilityValue,
+    portfolio_url:     currentFlow === 'equipe' ? form.portfolio_url.value.trim()      : '',
+    media_type:        currentFlow === 'presse' ? form.media_type.value                : '',
+    media_name:        currentFlow === 'presse' ? form.media_name.value.trim()         : '',
+    audience_size:     currentFlow === 'presse' ? form.audience_size.value.trim()      : '',
+    coverage_type:     coverageTypeValue,
     message:      messageValue,
     honeypot_filled: honeypot.length > 0,
     user_agent:   navigator.userAgent.slice(0,500),
