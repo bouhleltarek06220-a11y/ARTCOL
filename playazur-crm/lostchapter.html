@@ -315,34 +315,45 @@ section{padding:90px 24px;position:relative}
 .why-text strong{color:var(--cream);font-weight:600}
 
 /* ---------- GAIN ---------- */
-.gain{background:var(--paper);color:var(--ink)}
-.gain .kicker{color:var(--gold-deep)}
-.gain .h2{color:var(--ink)}
-.gain .h2 em{color:var(--gold-deep)}
-.gain .lead{color:#5C4838}
-.gain .lead strong{color:var(--ink)}
+.gain{
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.78) 0%, rgba(26,15,8,.62) 45%, rgba(26,15,8,.85) 100%),
+    url('assets/lostchapter-gagnez-bg.webp') center/cover no-repeat;
+  background-color:#1A0F08;
+  color:var(--cream);
+  position:relative;
+}
+.gain .kicker{color:var(--gold)}
+.gain .h2{color:var(--cream)}
+.gain .h2 em{color:var(--gold-bright)}
+.gain .lead{color:var(--cream-soft)}
+.gain .lead strong{color:var(--cream)}
 .gain-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:16px;margin-top:48px;
+  position:relative;z-index:2;
 }
 .gain-item{
-  background:#FFFCF5;border:1px solid #D9C9A8;
+  background:linear-gradient(160deg,rgba(61,36,24,.78),rgba(26,15,8,.82));
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(201,155,92,.28);
   border-radius:12px;padding:26px 24px;
   transition:transform .35s ease,box-shadow .35s ease,border-color .35s;
   position:relative;
 }
-.gain-item:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(42,24,16,.14);border-color:var(--gold)}
+.gain-item:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(0,0,0,.4);border-color:rgba(201,155,92,.6)}
 .gain-num{
   font-family:'JetBrains Mono',monospace;
-  font-size:12px;font-weight:700;color:var(--gold-deep);
+  font-size:12px;font-weight:700;color:var(--gold-bright);
   letter-spacing:1px;margin-bottom:14px;
 }
 .gain-title{
   font-family:'Fraunces',serif;font-size:19px;font-weight:600;
-  color:var(--ink);margin-bottom:8px;letter-spacing:-.2px;
+  color:var(--cream);margin-bottom:8px;letter-spacing:-.2px;
 }
-.gain-text{font-size:14px;color:#5C4838;font-weight:300;line-height:1.6}
-.gain-text strong{color:var(--ink);font-weight:600}
+.gain-text{font-size:14px;color:var(--cream-soft);font-weight:300;line-height:1.6}
+.gain-text strong{color:var(--cream);font-weight:600}
 
 /* ---------- FISCAL ---------- */
 .fiscal{
