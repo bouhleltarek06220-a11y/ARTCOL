@@ -9603,7 +9603,7 @@ document.addEventListener('visibilitychange',async()=>{
 
   // loadCampaignsFromDb() : fetch depuis Supabase (source d'autorité)
   async function loadCampaignsFromDb(){
-    if(!window.supa) return loadCampaignsCache();
+    if(typeof supa==='undefined' || !supa) return loadCampaignsCache();
     try{
       const { data, error } = await supa.from('campaigns').select('*').order('updated_at',{ascending:false});
       if(error) throw error;
@@ -9619,7 +9619,7 @@ document.addEventListener('visibilitychange',async()=>{
   // saveCampaigns(arr) : compat avec l'ancien usage — sauve cache immédiat + upsert DB en arrière-plan
   function saveCampaigns(arr){
     saveCampaignsCache(arr);
-    if(!window.supa) return;
+    if(typeof supa==='undefined' || !supa) return;
     // Upsert async — on n'attend pas pour ne pas bloquer l'UI
     for(const c of arr){
       const row = _toDbRow(c);
@@ -9634,7 +9634,7 @@ document.addEventListener('visibilitychange',async()=>{
 
   // deleteCampaignFromDb(id) : suppression côté DB (équipe)
   async function deleteCampaignFromDb(id){
-    if(!window.supa) return;
+    if(typeof supa==='undefined' || !supa) return;
     try{
       const { error } = await supa.from('campaigns').delete().eq('id', id);
       if(error) console.warn('[campaigns] delete failed', id, error.message);
@@ -9736,7 +9736,7 @@ document.addEventListener('visibilitychange',async()=>{
     },
 
     async _migrateLocalToDb(){
-      if(!window.supa) return;
+      if(typeof supa==='undefined' || !supa) return;
       try{
         // Attend que la session Supabase soit prête (sinon RLS bloque l'insert)
         let attempts = 0;
@@ -9791,7 +9791,7 @@ document.addEventListener('visibilitychange',async()=>{
 
     // Bouton manuel pour re-tenter la migration
     async forceSyncToTeam(){
-      if(!window.supa){ CRM.ui.toast('❌ Supabase non connecte','err'); return; }
+      if(typeof supa==='undefined' || !supa){ CRM.ui.toast('❌ Supabase non connecte','err'); return; }
       const cache = loadCampaignsCache();
       if(!cache.length){ CRM.ui.toast('ℹ️ Aucune campagne en cache local','info'); return; }
       try{
@@ -9813,7 +9813,7 @@ document.addEventListener('visibilitychange',async()=>{
     },
 
     _subscribeRealtime(){
-      if(!window.supa || this._realtimeChannel) return;
+      if(typeof supa==='undefined' || !supa || this._realtimeChannel) return;
       this._realtimeChannel = supa.channel('crm-campaigns-'+Date.now())
         .on('postgres_changes', {event:'*', schema:'public', table:'campaigns'}, payload => {
           const ev = payload.eventType;
