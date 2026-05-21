@@ -9557,13 +9557,89 @@ document.addEventListener('visibilitychange',async()=>{
 // 📧 MODULE CAMPAGNES MAILING — Séquences multi-étapes + Brevo
 // ═══════════════════════════════════════════════════════════════
 (function(){
+  // [v13] Sync équipe via Supabase — avant : localStorage uniquement = invisible pour Julie/Myriam.
+  // STORE_KEY garde le rôle de cache offline (lecture instant au boot + fallback si Supabase KO).
   const STORE_KEY = 'playazur_crm_campaigns';
   const BREVO_KEY_STORE = 'playazur_crm_brevo_key';
   let _busy = false; // anti double-click global
 
   function uid(){return Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
-  function loadCampaigns(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||[]}catch(e){return[]}}
-  function saveCampaigns(c){try{localStorage.setItem(STORE_KEY,JSON.stringify(c))}catch(e){CRM.ui.toast('⚠️ Stockage saturé','warn')}}
+
+  // === Mapping DB → JS et inverse ===
+  function _fromDbRow(r){
+    let seq = r.sequence; if(typeof seq === 'string'){ try{seq=JSON.parse(seq)}catch(e){seq=[]} }
+    let trk = r.tracking; if(typeof trk === 'string'){ try{trk=JSON.parse(trk)}catch(e){trk={}} }
+    return {
+      id: r.id, name: r.name||'', description: r.description||'',
+      senderName: r.sender_name||'Play Azur',
+      senderEmail: r.sender_email||'noreply@playazur.fr',
+      sequence: Array.isArray(seq)?seq:[],
+      prospectIds: r.prospect_ids||[],
+      tracking: (trk && typeof trk==='object')?trk:{},
+      status: r.status||'draft',
+      createdBy: r.created_by||'',
+      createdAt: r.created_at||'',
+      updatedAt: r.updated_at||''
+    };
+  }
+  function _toDbRow(c){
+    return {
+      id: c.id, name: c.name||'', description: c.description||'',
+      sender_name: c.senderName||'Play Azur',
+      sender_email: c.senderEmail||'noreply@playazur.fr',
+      sequence: c.sequence||[],
+      prospect_ids: c.prospectIds||[],
+      tracking: c.tracking||{},
+      status: c.status||'draft',
+      created_by: c.createdBy || (window.CRM && CRM.currentUser && CRM.currentUser.id) || ''
+    };
+  }
+
+  // === Storage ===
+  // loadCampaignsCache() : lecture instant depuis localStorage (boot rapide)
+  function loadCampaignsCache(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||[]}catch(e){return[]}}
+  function saveCampaignsCache(c){try{localStorage.setItem(STORE_KEY,JSON.stringify(c))}catch(e){}}
+
+  // loadCampaignsFromDb() : fetch depuis Supabase (source d'autorité)
+  async function loadCampaignsFromDb(){
+    if(!window.supa) return loadCampaignsCache();
+    try{
+      const { data, error } = await supa.from('campaigns').select('*').order('updated_at',{ascending:false});
+      if(error) throw error;
+      const list = (data||[]).map(_fromDbRow);
+      saveCampaignsCache(list);
+      return list;
+    }catch(e){
+      console.warn('[campaigns] DB load failed, using cache:', e.message);
+      return loadCampaignsCache();
+    }
+  }
+
+  // saveCampaigns(arr) : compat avec l'ancien usage — sauve cache immédiat + upsert DB en arrière-plan
+  function saveCampaigns(arr){
+    saveCampaignsCache(arr);
+    if(!window.supa) return;
+    // Upsert async — on n'attend pas pour ne pas bloquer l'UI
+    for(const c of arr){
+      const row = _toDbRow(c);
+      supa.from('campaigns').upsert(row).then(({error})=>{
+        if(error){
+          console.warn('[campaigns] upsert failed', c.id, error.message);
+          if(window.CRM && CRM.ui) CRM.ui.toast('⚠️ Sync campagne KO (cache local OK)','warn');
+        }
+      });
+    }
+  }
+
+  // deleteCampaignFromDb(id) : suppression côté DB (équipe)
+  async function deleteCampaignFromDb(id){
+    if(!window.supa) return;
+    try{
+      const { error } = await supa.from('campaigns').delete().eq('id', id);
+      if(error) console.warn('[campaigns] delete failed', id, error.message);
+    }catch(e){console.warn('[campaigns] delete', e)}
+  }
+
   function getBrevoKey(){return localStorage.getItem(BREVO_KEY_STORE)||''}
   function debounce(fn,ms=300){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
 
@@ -9623,11 +9699,67 @@ document.addEventListener('visibilitychange',async()=>{
     editingStep: null,
 
     init(){
-      this.data = loadCampaigns();
+      // Lecture cache instant pour ne pas avoir d'écran vide
+      this.data = loadCampaignsCache();
+      this.updateCount();
+      // Puis fetch DB async (source d'autorité partagée équipe)
+      this.refreshFromDb();
+      // Migration one-shot : si on a des campagnes en cache mais 0 en DB → on les pousse
+      this._migrateLocalToDb();
+      // Subscribe au realtime pour sync inter-équipe
+      this._subscribeRealtime();
       const bk = getBrevoKey();
       const el = document.getElementById('camp-brevo-key');
       if(el && bk) el.value = bk;
+    },
+
+    async refreshFromDb(){
+      const list = await loadCampaignsFromDb();
+      this.data = list;
       this.updateCount();
+      if(CRM.activeView==='campaigns') this.render();
+    },
+
+    async _migrateLocalToDb(){
+      if(!window.supa) return;
+      try{
+        const cache = loadCampaignsCache();
+        if(!cache.length) return;
+        const { data, error } = await supa.from('campaigns').select('id');
+        if(error){console.warn('[campaigns] migrate check', error.message); return}
+        const remoteIds = new Set((data||[]).map(r => r.id));
+        const toUpload = cache.filter(c => c.id && !remoteIds.has(c.id));
+        if(!toUpload.length) return;
+        console.log('[campaigns] migrate '+toUpload.length+' local → Supabase');
+        for(const c of toUpload){
+          const { error: e2 } = await supa.from('campaigns').upsert(_toDbRow(c));
+          if(e2) console.warn('[campaigns] migrate', c.id, e2.message);
+        }
+        if(CRM.ui) CRM.ui.toast('🔄 '+toUpload.length+' campagne(s) synchronisée(s) avec l\'équipe','ok');
+        // Re-sync depuis DB pour récupérer les updated_at officiels
+        this.refreshFromDb();
+      }catch(e){console.warn('[campaigns] migration', e)}
+    },
+
+    _subscribeRealtime(){
+      if(!window.supa || this._realtimeChannel) return;
+      this._realtimeChannel = supa.channel('crm-campaigns-'+Date.now())
+        .on('postgres_changes', {event:'*', schema:'public', table:'campaigns'}, payload => {
+          const ev = payload.eventType;
+          if(ev === 'INSERT' || ev === 'UPDATE'){
+            const row = _fromDbRow(payload.new);
+            const idx = this.data.findIndex(c => c.id === row.id);
+            if(idx >= 0) this.data[idx] = row;
+            else this.data.unshift(row);
+          } else if(ev === 'DELETE'){
+            this.data = this.data.filter(c => c.id !== payload.old.id);
+            if(this.selected === payload.old.id) this.selected = null;
+          }
+          saveCampaignsCache(this.data);
+          this.updateCount();
+          if(CRM.activeView==='campaigns') this.render();
+        })
+        .subscribe();
     },
 
     updateCount(){
@@ -9902,9 +10034,11 @@ document.addEventListener('visibilitychange',async()=>{
 
     deleteCurrent(){
       if(!this.selected)return;
-      if(!confirm('Supprimer définitivement cette campagne ?'))return;
-      this.data=this.data.filter(c=>c.id!==this.selected);
-      saveCampaigns(this.data);
+      if(!confirm('Supprimer définitivement cette campagne ?\n\n(suppression aussi pour Julie / Myriam — sync équipe)'))return;
+      const toDeleteId = this.selected;
+      this.data=this.data.filter(c=>c.id!==toDeleteId);
+      saveCampaignsCache(this.data);
+      deleteCampaignFromDb(toDeleteId); // sync DB
       this.selected=null;
       document.getElementById('camp-empty-state').style.display='';
       document.getElementById('camp-detail-content').style.display='none';
