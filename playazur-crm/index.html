@@ -2942,7 +2942,7 @@ function pushAction(p, action){
 <button class="btn-s" onclick="calNext()">▶</button>
 <button class="btn-s" onclick="calToday()">Aujourd'hui</button>
 <select id="cal-user-filter" onchange="renderCalendar()" style="width:160px"><option value="all">Tous les commerciaux</option></select>
-<a class="rdv-calendly-btn" id="cal-calendly-link" href="#" onclick="openCalendlyLink(event)" title="Ouvrir le Calendly de Clément">📅 Calendly</a>
+<a class="rdv-calendly-btn" id="cal-calendly-link" href="#" onclick="openCalendlyLink(event)" title="Prendre RDV avec Bastien — calendrier Google Appointments">📅 Calendly</a>
 <button class="btn" onclick="showAddRDV()">+ Nouveau RDV</button>
 </div>
 </div>
@@ -3474,7 +3474,8 @@ function pushAction(p, action){
 <div style="margin-top:16px;border-top:1px solid var(--brd);padding-top:14px">
 <h4 style="font-size:13px;font-weight:700;margin-bottom:8px">📅 Lien Calendly / RDV (global — toute l'équipe)</h4>
 <p style="font-size:11px;color:var(--t2);margin-bottom:8px">Ce lien apparaîtra dans la signature de tous les utilisateurs. Seul le propriétaire peut le modifier.</p>
-<div class="form-group"><label>URL Calendly</label><input id="set-calendly-global" value="" placeholder="https://calendly.com/ton-username/lost-chapter"></div>
+<div class="form-group"><label>URL Calendly / Google Appointments</label><input id="set-calendly-global" value="" placeholder="https://calendar.google.com/... ou https://calendly.com/..."></div>
+<p style="font-size:11px;color:var(--t3);margin:4px 0 0">Par défaut : calendrier Google Appointments de Bastien. Modifie ici pour utiliser un autre lien d'équipe.</p>
 <button class="btn-s" onclick="CRM.settings.saveCalendly()">💾 Sauver le lien Calendly</button>
 </div>
 </div>
@@ -6647,7 +6648,7 @@ window.CRM = {
       const phone = d.phone || '';
       const email = d.email || '';
       const linkedin = d.linkedin || '';
-      const calendly = localStorage.getItem('playazur_crm_calendly') || '';
+      const calendly = localStorage.getItem('playazur_crm_calendly') || (typeof DEFAULT_CALENDLY_URL!=='undefined'?DEFAULT_CALENDLY_URL:'');
       let sig = '\n\n';
       sig += '— — — — — — — — — — — — — — — — — —\n';
       sig += name + '\n';
@@ -6676,7 +6677,7 @@ window.CRM = {
       const phone = d.phone || (me && me.phone) || '';
       const email = d.email || (me && me.email) || (CRM.currentUser && CRM.currentUser._email) || '';
       const linkedin = d.linkedin || '';
-      const calendly = localStorage.getItem('playazur_crm_calendly') || '';
+      const calendly = localStorage.getItem('playazur_crm_calendly') || (typeof DEFAULT_CALENDLY_URL!=='undefined'?DEFAULT_CALENDLY_URL:'');
       // Logo : URL absolue du logo Play Azur déployé sur Vercel (visible chez le destinataire)
       const logoUrl = 'https://crm-play-azur.vercel.app/icons/icon-192.png';
       const brand   = '#1B6FFF';
@@ -7215,7 +7216,7 @@ window.CRM = {
     loadCalendly() {
       const saved = localStorage.getItem('playazur_crm_calendly');
       const el = document.getElementById('set-calendly-global');
-      if(el && saved) el.value = saved;
+      if(el) el.value = saved || (typeof DEFAULT_CALENDLY_URL!=='undefined'?DEFAULT_CALENDLY_URL:'');
     }
   },
 
@@ -9353,9 +9354,12 @@ document.addEventListener('click',function(e){
 });
 
 // === CALENDLY LINK ===
+// URL Google Calendar Appointments par défaut (Bastien) — peut être surchargée
+// par localStorage 'playazur_crm_calendly' via Paramètres → Intégrations.
+const DEFAULT_CALENDLY_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2U38Od7upIlfUW5ttFyg9LlF2vRBlYwhuE95NWFYcfRc_maISyzWuEYzLtkhk7T7_GxKdRpk9h';
 function openCalendlyLink(e){
   if(e)e.preventDefault();
-  const url=localStorage.getItem('playazur_crm_calendly')||'';
+  const url=localStorage.getItem('playazur_crm_calendly')||DEFAULT_CALENDLY_URL;
   if(url){window.open(url,'_blank');CRM.ui.toast('📅 Calendly ouvert','ok')}
   else CRM.ui.toast('⚠️ Aucun lien Calendly configuré (Paramètres → Intégrations)','warn');
 }
