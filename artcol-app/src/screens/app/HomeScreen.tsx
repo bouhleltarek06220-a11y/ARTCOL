@@ -10,8 +10,8 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Avatar } from '@/components/Avatar';
 import { PostCard } from '@/components/PostCard';
 import { useAuth } from '@/context/AuthContext';
@@ -20,10 +20,9 @@ import { colors, fonts, fontSize, shadows, spacing } from '@/lib/theme';
 import type { AppStackParamList } from '@/navigation/AppNavigator';
 import type { PostWithMeta } from '@/types/database';
 
-type Props = NativeStackScreenProps<AppStackParamList, 'Home'>;
-
-export function HomeScreen({ navigation }: Props) {
-  const { profile, user, signOut } = useAuth();
+export function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const { profile, user } = useAuth();
   const [posts, setPosts] = useState<PostWithMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -85,33 +84,23 @@ export function HomeScreen({ navigation }: Props) {
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View style={styles.headerTitleBlock}>
-          <Text style={styles.greeting}>Salut</Text>
+          <Text style={styles.greeting}>Feed</Text>
           <Text style={styles.name} numberOfLines={1}>
-            {profile?.display_name ?? 'Artiste'}
+            ARTCOL
           </Text>
         </View>
-        <View style={styles.headerActions}>
-          <Pressable
-            onPress={signOut}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel="Se déconnecter"
-          >
-            <Text style={styles.signOut}>Déco</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate('Profile')}
-            accessibilityRole="button"
-            accessibilityLabel="Voir mon profil"
-          >
-            <Avatar
-              uri={profile?.avatar_url}
-              displayName={profile?.display_name ?? 'A'}
-              size={44}
-              ring={false}
-            />
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={() => user && navigation.navigate('UserProfile', { userId: user.id })}
+          accessibilityRole="button"
+          accessibilityLabel="Voir mon profil"
+        >
+          <Avatar
+            uri={profile?.avatar_url}
+            displayName={profile?.display_name ?? 'A'}
+            size={44}
+            ring={false}
+          />
+        </Pressable>
       </View>
 
       {loading ? (
@@ -145,6 +134,9 @@ export function HomeScreen({ navigation }: Props) {
             <PostCard
               post={item}
               onPress={() => navigation.navigate('PostDetail', { postId: item.id })}
+              onPressAuthor={() =>
+                navigation.navigate('UserProfile', { userId: item.author_id })
+              }
               onPressComments={() =>
                 navigation.navigate('PostDetail', { postId: item.id, focusComment: true })
               }
@@ -194,17 +186,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: -0.5,
     marginTop: 2,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.lg,
-  },
-  signOut: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: fontSize.sm,
-    color: colors.textMuted,
-    letterSpacing: 0.4,
   },
   listContent: {
     paddingHorizontal: spacing['2xl'],

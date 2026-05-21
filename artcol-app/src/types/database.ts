@@ -1,5 +1,5 @@
 /**
- * Types Supabase (Phase 1 + 3 — manuels, à régénérer plus tard avec `supabase gen types`)
+ * Types Supabase (Phases 1 → 5 — manuels, à régénérer plus tard avec `supabase gen types`)
  * Reflète les schémas SQL dans supabase/schema.sql et supabase/migrations/.
  */
 
@@ -49,6 +49,26 @@ export interface PostComment {
   created_at: string;
 }
 
+export interface Follow {
+  follower_id: string;
+  followed_id: string;
+  created_at: string;
+}
+
+export type CollabStatus = 'pending' | 'accepted' | 'declined' | 'cancelled';
+
+export interface Collaboration {
+  id: string;
+  initiator_id: string;
+  recipient_id: string;
+  title: string;
+  description: string | null;
+  status: CollabStatus;
+  created_at: string;
+  updated_at: string;
+  responded_at: string | null;
+}
+
 /**
  * Vues enrichies côté client (assemblées via select embed + merge manuel).
  */
@@ -61,6 +81,18 @@ export interface PostWithMeta extends Post {
 
 export interface CommentWithAuthor extends PostComment {
   author: Profile;
+}
+
+export interface ProfileWithStats extends Profile {
+  followers_count: number;
+  following_count: number;
+  posts_count: number;
+  i_follow: boolean;
+}
+
+export interface CollaborationWithUsers extends Collaboration {
+  initiator: Profile;
+  recipient: Profile;
 }
 
 export interface Database {
@@ -95,6 +127,27 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Pick<PostComment, 'text'>>;
+      };
+      follows: {
+        Row: Follow;
+        Insert: Omit<Follow, 'created_at'> & { created_at?: string };
+        Update: never;
+      };
+      collaborations: {
+        Row: Collaboration;
+        Insert: Omit<
+          Collaboration,
+          'id' | 'status' | 'created_at' | 'updated_at' | 'responded_at'
+        > & {
+          id?: string;
+          status?: CollabStatus;
+          created_at?: string;
+          updated_at?: string;
+          responded_at?: string | null;
+        };
+        Update: Partial<
+          Pick<Collaboration, 'title' | 'description' | 'status'>
+        >;
       };
     };
   };

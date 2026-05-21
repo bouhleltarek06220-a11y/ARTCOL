@@ -1,42 +1,59 @@
-# 🌸 ARTCOL — App Mobile (Phases 1 + 2 + 3)
+# 🌸 ARTCOL — App Mobile (Phases 1 → 5)
 
 Réseau social cross-platform pour artistes en quête de visibilité.
 Stack : **React Native + Expo + Supabase + Cloudinary** · Design : **ARTCOL**
 
 ---
 
-## 📦 Ce qui est livré (Phases 1 + 2 + 3)
+## 📦 Ce qui est livré (Phases 1 → 5)
 
 **Phase 1** ✅
 - Setup complet React Native + Expo (TypeScript strict)
 - Auth Supabase (signup, signin, signout, persistance session)
 - Schéma DB Postgres avec **Row Level Security** (table `profiles`)
 - Trigger SQL : création auto de profil à l'inscription
-- Écrans : Welcome, SignUp, SignIn, Home, Profile, EditProfile
 - Design system ARTCOL (palette, fontes, composants)
 - Navigation conditionnelle (Auth vs App selon session)
 
 **Phase 2** ✅
-- Composant `Avatar` réutilisable (image ou fallback initiales, ring néon)
-- Picker photo via `expo-image-picker` (galerie, crop carré 1:1)
-- Compression locale via `expo-image-manipulator` (resize 512×512, JPEG 0.8)
-- Upload vers bucket Supabase `avatars` (path `{uid}/avatar.jpg`, cohérent RLS, upsert)
-- Cache-busting via query string `?v=timestamp`
-- Avatar visible dans Home (header tappable), Profile et EditProfile
+- Composant `Avatar` réutilisable
+- Picker photo + compression locale (512×512 JPEG 0.8)
+- Upload bucket Supabase `avatars` cohérent RLS, cache-busting
 
 **Phase 3** ✅
-- Tables `posts`, `post_likes`, `post_comments` + RLS + bucket Storage `posts`
-- Migration SQL dédiée : `supabase/migrations/002_phase3_feed.sql`
-- Composant `PostCard` : auteur, texte, photo (ratio 4:5), like (optimiste) + count, comment count
-- Composant `CommentItem` : avatar + auteur + texte + horodatage relatif
-- `HomeScreen` devient le feed global (FlatList, pull-to-refresh, refresh on focus, FAB +)
-- `CreatePostScreen` : compose texte (max 2000) + photo optionnelle (resize 1600px, JPEG 0.85)
-- `PostDetailScreen` : post complet + liste commentaires + composer ancré clavier
-- Helpers `src/lib/feed.ts` : fetchFeed, fetchPostWithComments, createPost, toggleLike, addComment
-- Util `src/lib/time.ts` : horodatage relatif FR (5s · 12min · 3h · 2j · 3 sept.)
+- Tables `posts`, `post_likes`, `post_comments` + bucket `posts` (`002_phase3_feed.sql`)
+- Composants `PostCard` (like optimiste), `CommentItem`
+- Feed global avec pull-to-refresh, refresh on focus
+- `CreatePostScreen` (texte + photo optionnelle resize 1600px)
+- `PostDetailScreen` avec composer ancré clavier
+- Util `src/lib/time.ts` (horodatage relatif FR)
 
-❌ **Pas encore** : amis/follow, collaborations, notifications push, vidéo/audio, Cloudinary CDN
-(arrivent en Phases 4-7)
+**Phase 4** ✅
+- Table `follows` + RLS (`003_phase4_follows.sql`)
+- Helpers `src/lib/follows.ts` : searchArtists, fetchProfileWithStats, follow/unfollow
+- Composants `FollowButton` (optimiste), `ArtistRow`
+- `SearchScreen` (recherche debounce 300ms par username / display_name)
+- `UserProfileScreen` (profil d'autres artistes + own profile en lecture)
+- Stats followers / following / posts intégrées au profil
+
+**Phase 5** ✅
+- Type enum `collab_status` + table `collaborations` (`004_phase5_collabs.sql`)
+- Trigger SQL garde-fou : transitions valides (initiator → cancelled, recipient → accepted/declined)
+- Helpers `src/lib/collabs.ts` : createCollab, fetchMyCollabs, respondToCollab, cancelCollab
+- Composant `CollabCard` (badge statut + parties)
+- `CollabsScreen` (filtres Toutes / En attente / Acceptées + notice invitations en attente)
+- `NewCollabScreen` (depuis profil d'un artiste → modal proposition)
+- `CollabDetailScreen` (accepter / refuser / annuler selon rôle)
+
+**Refacto navigation** ✅
+- Bottom tabs (`@react-navigation/bottom-tabs`) avec barre custom
+- 4 tabs : Feed · Découvrir · Collabs · Moi
+- Stack root contient les modaux et les détails (PostDetail, UserProfile, CreatePost, NewCollab, CollabDetail, EditProfile)
+
+❌ **Pas encore (Phases 6-7)** : notifications push (Expo Notifications), vidéo/audio dans les posts,
+Cloudinary CDN, soumission App Store, assets définitifs (icône + splash).
+
+Voir section « Roadmap » en bas pour le détail.
 
 ---
 
@@ -88,17 +105,14 @@ npm install
 
 ### 4️⃣ Exécuter le schéma SQL
 
-Dans Supabase → **SQL Editor** → **New query**.
+Dans Supabase → **SQL Editor** → **New query**. Exécuter dans l'ordre :
 
-1. Copie-colle d'abord l'intégralité du fichier `supabase/schema.sql` → **Run**.
-   - Table `profiles` créée
-   - Bucket `avatars` créé dans Storage
-   - 4 policies RLS actives sur `profiles`
-   - 4 policies RLS actives sur `storage.objects`
-2. Puis copie-colle `supabase/migrations/002_phase3_feed.sql` → **Run**.
-   - Tables `posts`, `post_likes`, `post_comments` créées
-   - Bucket `posts` créé
-   - Policies RLS pour les 3 tables + 4 policies storage sur `posts`
+1. `supabase/schema.sql` → table `profiles`, bucket `avatars`, RLS
+2. `supabase/migrations/002_phase3_feed.sql` → posts + likes + comments + bucket `posts`
+3. `supabase/migrations/003_phase4_follows.sql` → table `follows` + RLS
+4. `supabase/migrations/004_phase5_collabs.sql` → enum + table `collaborations` + trigger transitions
+
+Après chaque Run, vérifier les onglets **Table editor** et **Storage** que les objets ont bien été créés.
 
 ---
 
@@ -198,9 +212,13 @@ artcol-app/
 
 | Phase | Contenu | Statut |
 |-------|---------|--------|
-| **2** | Avatar upload (Supabase Storage), composant Avatar réutilisable | ✅ livrée |
-| **3** | Feed de performances : posts texte/photo, like, commentaire | ✅ livrée |
+| **2** | Avatar upload (Supabase Storage), composant Avatar | ✅ livrée |
+| **3** | Feed posts texte/photo, like, commentaire | ✅ livrée |
+| **4** | Follow + recherche + profil d'autres artistes + stats | ✅ livrée |
+| **5** | Collaborations entre artistes (invit / accepter / refuser / annuler) | ✅ livrée |
 | **3 bis** | Vidéo / audio dans les posts | À venir |
+| **6** | Notifications push (Expo Notifications) — **nécessite compte Apple Developer + token EAS Push** | À venir |
+| **7** | Build EAS + soumission App Store / Play Store — **nécessite comptes développeurs + assets définitifs** | À venir |
 | **4** | Système d'amis : follow, demande, liste, recherche d'artistes | 2-3 sessions |
 | **5** | Collaborations : invitations entre artistes, statuts (en cours / accepté / refusé) | 2-3 sessions |
 | **6** | Notifications push (Expo Notifications) + écran notifications | 1-2 sessions |

@@ -25,7 +25,7 @@ type Props = NativeStackScreenProps<AppStackParamList, 'PostDetail'>;
 
 const MAX_COMMENT = 500;
 
-export function PostDetailScreen({ route }: Props) {
+export function PostDetailScreen({ route, navigation }: Props) {
   const { postId, focusComment } = route.params;
   const { user } = useAuth();
   const [post, setPost] = useState<PostWithMeta | null>(null);
@@ -118,7 +118,13 @@ export function PostDetailScreen({ route }: Props) {
           keyboardShouldPersistTaps="handled"
           ListHeaderComponent={
             <View>
-              <PostCard post={post} onToggleLike={handleLikeToggle} />
+              <PostCard
+                post={post}
+                onToggleLike={handleLikeToggle}
+                onPressAuthor={() =>
+                  navigation.navigate('UserProfile', { userId: post.author_id })
+                }
+              />
               <Text style={styles.sectionLabel}>
                 {post.comments_count > 0
                   ? `${post.comments_count} COMMENTAIRE${post.comments_count > 1 ? 'S' : ''}`

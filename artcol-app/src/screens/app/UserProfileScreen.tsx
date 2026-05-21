@@ -5,17 +5,20 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Screen } from '@/components/Screen';
 import { Button } from '@/components/Button';
 import { Avatar } from '@/components/Avatar';
+import { FollowButton } from '@/components/FollowButton';
 import { useAuth } from '@/context/AuthContext';
 import { fetchProfileWithStats } from '@/lib/follows';
 import { colors, fonts, fontSize, radius, spacing } from '@/lib/theme';
+import type { ProfileWithStats, ArtDomain } from '@/types/database';
 import type { AppStackParamList } from '@/navigation/AppNavigator';
-import type { ArtDomain, ProfileWithStats } from '@/types/database';
+
+type Props = NativeStackScreenProps<AppStackParamList, 'UserProfile'>;
 
 const DOMAIN_LABELS: Record<ArtDomain, string> = {
   music: 'Musique',
@@ -29,91 +32,114 @@ const DOMAIN_LABELS: Record<ArtDomain, string> = {
   other: 'Autre',
 };
 
-export function ProfileScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
-  const { user, signOut } = useAuth();
+export function UserProfileScreen({ route, navigation }: Props) {
+  const { userId } = route.params;
+  const { user } = useAuth();
   const [profile, setProfile] = useState<ProfileWithStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     if (!user) return;
     try {
-      const data = await fetchProfileWithStats(user.id, user.id);
+      const data = await fetchProfileWithStats(userId, user.id);
       setProfile(data);
-    } catch {
-      // Fallback : pas grave, on affiche un placeholder
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Profil introuvable';
+      Alert.alert('Profil', msg);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, userId]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  useFocusEffect(
-    useCallback(() => {
-      load();
-    }, [load])
-  );
-
   if (loading || !profile) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <Screen>
         <View style={styles.center}>
           <ActivityIndicator color={colors.neonLime} size="large" />
         </View>
-      </SafeAreaView>
+      </Screen>
     );
   }
 
+  const isMe = user?.id === profile.id;
   const domains = profile.art_domains?.length
     ? profile.art_domains.map((d) => DOMAIN_LABELS[d]).join(' · ')
     : 'Aucun domaine renseigné';
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.header}>
-          <Avatar uri={profile.avatar_url} displayName={profile.display_name} size={96} />
-          <Text style={styles.name}>{profile.display_name}</Text>
-          <Text style={styles.handle}>@{profile.username}</Text>
-        </View>
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.header}>
+        <Avatar uri={profile.avatar_url} displayName={profile.display_name} size={96} />
+        <Text style={styles.name}>{profile.display_name}</Text>
+        <Text style={styles.handle}>@{profile.username}</Text>
+      </View>
 
-        <View style={styles.stats}>
-          <StatBlock label="Posts" value={profile.posts_count} />
-          <StatBlock label="Abonnés" value={profile.followers_count} />
-          <StatBlock label="Abonnements" value={profile.following_count} />
-        </View>
+      <View style={styles.stats}>
+        <StatBlock label="Posts" value={profile.posts_count} />
+        <StatBlock label="Abonnés" value={profile.followers_count} />
+        <StatBlock label="Abonnements" value={profile.following_count} />
+      </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardLabel}>BIO</Text>
-          <Text style={styles.cardValue}>
-            {profile.bio || 'Ajoute une bio pour te présenter aux autres artistes.'}
-          </Text>
-        </View>
+      <View style={styles.actions}>
+        {isMe ? (
+          <Button
+            title="Éditer mon profil"
+            onPress={() => navigation.navigate('EditProfile')}
+          />
+        ) : (
+          <>
+            <FollowButton
+              targetUserId={profile.id}
+              initialFollowed={profile.i_follow}
+              onChange={(followed) =>
+                setProfile((p) =>
+                  p
+                    ? {
+                        ...p,
+                        i_follow: followed,
+                        followers_count: p.followers_count + (followed ? 1 : -1),
+                      }
+                    : p
+                )
+              }
+            />
+            <Button
+              title="Propose une collab"
+              variant="secondary"
+              onPress={() =>
+                navigation.navigate('NewCollab', { recipientId: profile.id })
+              }
+              style={{ marginTop: spacing.md }}
+            />
+          </>
+        )}
+      </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardLabel}>DOMAINES ARTISTIQUES</Text>
-          <Text style={styles.cardValue}>{domains}</Text>
-        </View>
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>BIO</Text>
+        <Text style={styles.cardValue}>
+          {profile.bio || (isMe ? 'Ajoute une bio depuis ton profil.' : 'Aucune bio.')}
+        </Text>
+      </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardLabel}>VILLE</Text>
-          <Text style={styles.cardValue}>{profile.city || 'Non renseignée'}</Text>
-        </View>
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>DOMAINES ARTISTIQUES</Text>
+        <Text style={styles.cardValue}>{domains}</Text>
+      </View>
 
-        <Button
-          title="Éditer mon profil"
-          onPress={() => navigation.navigate('EditProfile')}
-          style={{ marginTop: spacing.xl }}
-        />
-        <Button title="Se déconnecter" variant="ghost" onPress={signOut} />
-      </ScrollView>
-    </SafeAreaView>
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>VILLE</Text>
+        <Text style={styles.cardValue}>{profile.city || 'Non renseignée'}</Text>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -127,7 +153,7 @@ function StatBlock({ label, value }: { label: string; value: number }) {
 }
 
 const styles = StyleSheet.create({
-  safe: {
+  scroll: {
     flex: 1,
     backgroundColor: colors.bgDeep,
   },
@@ -165,7 +191,6 @@ const styles = StyleSheet.create({
     borderColor: colors.borderDefault,
     padding: spacing.lg,
     marginTop: spacing['2xl'],
-    marginBottom: spacing.md,
   },
   statBlock: {
     alignItems: 'center',
@@ -182,6 +207,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     marginTop: 2,
     textTransform: 'uppercase',
+  },
+  actions: {
+    marginTop: spacing['2xl'],
+    marginBottom: spacing.md,
   },
   card: {
     backgroundColor: colors.bgElevated,

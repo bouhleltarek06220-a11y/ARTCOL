@@ -8,6 +8,7 @@ import type { PostWithMeta } from '@/types/database';
 interface PostCardProps {
   post: PostWithMeta;
   onPress?: () => void;
+  onPressAuthor?: () => void;
   onToggleLike?: () => void | Promise<void>;
   onPressComments?: () => void;
 }
@@ -15,6 +16,7 @@ interface PostCardProps {
 export function PostCard({
   post,
   onPress,
+  onPressAuthor,
   onToggleLike,
   onPressComments,
 }: PostCardProps) {
@@ -48,7 +50,14 @@ export function PostCard({
 
   return (
     <Pressable onPress={onPress} style={styles.card}>
-      <View style={styles.header}>
+      <Pressable
+        onPress={onPressAuthor}
+        style={styles.header}
+        accessibilityRole={onPressAuthor ? 'button' : undefined}
+        accessibilityLabel={
+          onPressAuthor ? `Voir le profil de ${post.author?.display_name}` : undefined
+        }
+      >
         <Avatar
           uri={post.author?.avatar_url}
           displayName={post.author?.display_name ?? '?'}
@@ -63,7 +72,7 @@ export function PostCard({
             @{post.author?.username ?? '...'} · {timeAgo(post.created_at)}
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {post.text ? <Text style={styles.body}>{post.text}</Text> : null}
 
