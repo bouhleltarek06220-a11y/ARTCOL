@@ -9699,6 +9699,10 @@ document.addEventListener('visibilitychange',async()=>{
     editingStep: null,
 
     init(){
+      // Guard idempotent : render() appelle init() — on ne veut pas relancer
+      // les async fetches à chaque clic sur l'onglet Campagnes.
+      if(this._initDone) return;
+      this._initDone = true;
       // Lecture cache instant pour ne pas avoir d'écran vide
       this.data = loadCampaignsCache();
       this.updateCount();
@@ -9714,10 +9718,20 @@ document.addEventListener('visibilitychange',async()=>{
     },
 
     async refreshFromDb(){
-      const list = await loadCampaignsFromDb();
-      this.data = list;
-      this.updateCount();
-      if(CRM.activeView==='campaigns') this.render();
+      try{
+        const list = await loadCampaignsFromDb();
+        // Anti-écrasement : si DB vide et qu'on a du cache, on garde le cache
+        // (migration en cours peut-être, on évite de flasher 'vide' à l'utilisateur)
+        if((!list || !list.length) && this.data && this.data.length){
+          console.log('[campaigns] DB vide, garde cache local');
+          return;
+        }
+        this.data = Array.isArray(list) ? list : [];
+        this.updateCount();
+        if(CRM.activeView==='campaigns') this.render();
+      }catch(e){
+        console.warn('[campaigns] refreshFromDb', e);
+      }
     },
 
     async _migrateLocalToDb(){
