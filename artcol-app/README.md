@@ -1,11 +1,11 @@
-# 🌸 ARTCOL — App Mobile (Phases 1 + 2)
+# 🌸 ARTCOL — App Mobile (Phases 1 + 2 + 3)
 
 Réseau social cross-platform pour artistes en quête de visibilité.
 Stack : **React Native + Expo + Supabase + Cloudinary** · Design : **ARTCOL**
 
 ---
 
-## 📦 Ce qui est livré (Phases 1 + 2)
+## 📦 Ce qui est livré (Phases 1 + 2 + 3)
 
 **Phase 1** ✅
 - Setup complet React Native + Expo (TypeScript strict)
@@ -24,8 +24,19 @@ Stack : **React Native + Expo + Supabase + Cloudinary** · Design : **ARTCOL**
 - Cache-busting via query string `?v=timestamp`
 - Avatar visible dans Home (header tappable), Profile et EditProfile
 
-❌ **Pas encore** : feed, amis, collaborations, notifications push, Cloudinary CDN
-(arrivent en Phases 3-7)
+**Phase 3** ✅
+- Tables `posts`, `post_likes`, `post_comments` + RLS + bucket Storage `posts`
+- Migration SQL dédiée : `supabase/migrations/002_phase3_feed.sql`
+- Composant `PostCard` : auteur, texte, photo (ratio 4:5), like (optimiste) + count, comment count
+- Composant `CommentItem` : avatar + auteur + texte + horodatage relatif
+- `HomeScreen` devient le feed global (FlatList, pull-to-refresh, refresh on focus, FAB +)
+- `CreatePostScreen` : compose texte (max 2000) + photo optionnelle (resize 1600px, JPEG 0.85)
+- `PostDetailScreen` : post complet + liste commentaires + composer ancré clavier
+- Helpers `src/lib/feed.ts` : fetchFeed, fetchPostWithComments, createPost, toggleLike, addComment
+- Util `src/lib/time.ts` : horodatage relatif FR (5s · 12min · 3h · 2j · 3 sept.)
+
+❌ **Pas encore** : amis/follow, collaborations, notifications push, vidéo/audio, Cloudinary CDN
+(arrivent en Phases 4-7)
 
 ---
 
@@ -78,13 +89,16 @@ npm install
 ### 4️⃣ Exécuter le schéma SQL
 
 Dans Supabase → **SQL Editor** → **New query**.
-Copie-colle l'intégralité du fichier `supabase/schema.sql`, puis clique **Run**.
 
-Tu dois voir :
-- Table `profiles` créée
-- Bucket `avatars` créé dans Storage
-- 4 policies RLS actives sur `profiles`
-- 4 policies RLS actives sur `storage.objects`
+1. Copie-colle d'abord l'intégralité du fichier `supabase/schema.sql` → **Run**.
+   - Table `profiles` créée
+   - Bucket `avatars` créé dans Storage
+   - 4 policies RLS actives sur `profiles`
+   - 4 policies RLS actives sur `storage.objects`
+2. Puis copie-colle `supabase/migrations/002_phase3_feed.sql` → **Run**.
+   - Tables `posts`, `post_likes`, `post_comments` créées
+   - Bucket `posts` créé
+   - Policies RLS pour les 3 tables + 4 policies storage sur `posts`
 
 ---
 
@@ -185,7 +199,8 @@ artcol-app/
 | Phase | Contenu | Statut |
 |-------|---------|--------|
 | **2** | Avatar upload (Supabase Storage), composant Avatar réutilisable | ✅ livrée |
-| **3** | Feed de performances : posts texte/photo/vidéo/audio, like, commentaire | À venir |
+| **3** | Feed de performances : posts texte/photo, like, commentaire | ✅ livrée |
+| **3 bis** | Vidéo / audio dans les posts | À venir |
 | **4** | Système d'amis : follow, demande, liste, recherche d'artistes | 2-3 sessions |
 | **5** | Collaborations : invitations entre artistes, statuts (en cours / accepté / refusé) | 2-3 sessions |
 | **6** | Notifications push (Expo Notifications) + écran notifications | 1-2 sessions |
