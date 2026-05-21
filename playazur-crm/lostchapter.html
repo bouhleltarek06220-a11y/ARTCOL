@@ -800,11 +800,71 @@ section{padding:90px 24px;position:relative}
   display:inline-block;
   margin-left:.1em;
   color:var(--gold-bright);
-  animation:dotsBlink 1.8s ease-in-out infinite;
 }
 @keyframes dotsBlink{
   0%,100%{opacity:.4}
   50%{opacity:1}
+}
+
+/* ---------- Effet apparition lettre par lettre (suspense) ---------- */
+.letter-reveal{
+  /* On override la transition de .reveal : on ne masque pas le titre entier,
+     ce sont les lettres individuelles qui apparaissent une par une */
+  opacity:1!important;
+  transform:none!important;
+}
+.letter-reveal .letter,
+.letter-reveal .teaser-dots{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(28px) scale(.92);
+  filter:blur(10px);
+  will-change:opacity,transform,filter,text-shadow;
+}
+.letter-reveal.in .letter,
+.letter-reveal.in .teaser-dots{
+  animation:letterAppear 1.05s cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay:calc(var(--i,0) * 110ms + 200ms);
+}
+/* Les '…' continuent à clignoter après leur apparition */
+.letter-reveal.in .teaser-dots{
+  animation:letterAppear 1.05s cubic-bezier(.2,.8,.2,1) forwards,
+            dotsBlink 1.8s ease-in-out infinite 1.7s;
+}
+@keyframes letterAppear{
+  0%{
+    opacity:0;
+    transform:translateY(28px) scale(.92);
+    filter:blur(10px);
+    text-shadow:0 0 0 rgba(229,199,136,0);
+  }
+  55%{
+    opacity:1;
+    transform:translateY(-3px) scale(1.08);
+    filter:blur(0);
+    text-shadow:
+      0 0 40px rgba(229,199,136,.95),
+      0 0 80px rgba(229,199,136,.5),
+      0 2px 0 rgba(26,15,8,.5);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    filter:blur(0);
+    text-shadow:
+      0 0 22px rgba(229,199,136,.45),
+      0 0 50px rgba(229,199,136,.2),
+      0 2px 0 rgba(26,15,8,.4);
+  }
+}
+.letter--space{width:.35em}
+/* Accessibilité : freeze l'animation si l'utilisateur prefere reduce motion */
+@media (prefers-reduced-motion:reduce){
+  .letter-reveal .letter,
+  .letter-reveal .teaser-dots{
+    opacity:1;transform:none;filter:none;
+    animation:none!important;
+  }
 }
 
 /* Frame cinema 16:9 avec ecrin dore */
@@ -1879,16 +1939,11 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   <div class="teaser-bg-overlay" aria-hidden="true"></div>
   <div class="wrap center">
     <div class="teaser-eyebrow reveal"><span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span></div>
-    <h2 class="teaser-title reveal d1">Coming Soon<span class="teaser-dots">…</span></h2>
+    <h2 class="teaser-title reveal letter-reveal d1" aria-label="Coming Soon…">
+      <span class="letter" style="--i:0">C</span><span class="letter" style="--i:1">o</span><span class="letter" style="--i:2">m</span><span class="letter" style="--i:3">i</span><span class="letter" style="--i:4">n</span><span class="letter" style="--i:5">g</span><span class="letter letter--space" style="--i:6">&nbsp;</span><span class="letter" style="--i:7">S</span><span class="letter" style="--i:8">o</span><span class="letter" style="--i:9">o</span><span class="letter" style="--i:10">n</span><span class="teaser-dots" style="--i:11">…</span>
+    </h2>
 
-    <div class="teaser-frame reveal d2">
-      <video class="teaser-video" controls preload="metadata" playsinline poster="">
-        <source src="assets/lostchapter-teaser.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas la lecture vidéo HTML5.
-      </video>
-    </div>
-
-    <button type="button" class="teaser-cta reveal d4" data-open-form data-form-context="public">Être prévenu en avant-première →</button>
+    <button type="button" class="teaser-cta reveal d2" data-open-form data-form-context="public">Être prévenu en avant-première →</button>
   </div>
 </section>
 
