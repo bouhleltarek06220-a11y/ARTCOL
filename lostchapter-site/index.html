@@ -1203,7 +1203,10 @@ section{padding:90px 24px;position:relative}
 .modal{
   position:relative;
   width:100%;max-width:680px;
-  background:linear-gradient(180deg, #241509 0%, #1A0F08 100%);
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.88) 0%, rgba(26,15,8,.78) 50%, rgba(26,15,8,.92) 100%),
+    url('/assets/form-bg.webp') center/cover no-repeat;
+  background-color:#1A0F08;
   border:1px solid rgba(201,155,92,.35);
   border-radius:18px;
   box-shadow:
@@ -1215,6 +1218,7 @@ section{padding:90px 24px;position:relative}
   transform:translateY(20px) scale(.98);
   opacity:0;
   transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
+  overflow:hidden;
 }
 .modal-backdrop.open .modal{transform:translateY(0) scale(1);opacity:1}
 .modal::before{
