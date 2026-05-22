@@ -274,6 +274,38 @@ body{
 }
 
 /* ---------- HERO secondary link (operational ICPs entry point) ---------- */
+/* ---------- HERO Imagine CTA (gamification) ---------- */
+.hero-imagine-link{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:24px;
+  font-family:'Cinzel',serif;
+  font-size:13.5px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;
+  color:var(--brown);
+  text-decoration:none;
+  padding:13px 28px;border-radius:10px;
+  background:linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
+  box-shadow:
+    0 8px 28px rgba(201,155,92,.45),
+    0 0 0 1px rgba(229,199,136,.6) inset,
+    0 0 30px rgba(229,199,136,.25);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+  opacity:0;animation:revealUp 1s ease-out 1.75s forwards;
+  position:relative;
+}
+.hero-imagine-link em{font-style:italic;font-weight:800;color:var(--brown)}
+.hero-imagine-arrow{
+  display:inline-block;
+  transition:transform .35s ease;
+}
+.hero-imagine-link:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 14px 38px rgba(201,155,92,.6),0 0 0 1px rgba(229,199,136,.8) inset,0 0 50px rgba(229,199,136,.4);
+}
+.hero-imagine-link:hover .hero-imagine-arrow{transform:translateX(4px)}
+@media (max-width:560px){
+  .hero-imagine-link{font-size:12px;padding:11px 22px;letter-spacing:2px}
+}
+
 .hero-secondary-link{
   display:inline-block;
   margin-top:20px;
@@ -1694,6 +1726,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         <span class="portal-desc">Particulier · Famille · Communauté</span>
       </a>
     </div>
+    <a href="lostchapter-imagine.html" class="hero-imagine-link">🎲 <em>Imagine</em> ton Lost Chapter <span class="hero-imagine-arrow">→</span></a>
     <a href="#participer" class="hero-secondary-link">Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em></a>
   </div>
   <div class="scroll-hint">
