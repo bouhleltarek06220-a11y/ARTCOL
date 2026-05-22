@@ -274,36 +274,80 @@ body{
 }
 
 /* ---------- HERO secondary link (operational ICPs entry point) ---------- */
-/* ---------- HERO Imagine CTA (gamification) ---------- */
-.hero-imagine-link{
-  display:inline-flex;align-items:center;gap:10px;
-  margin-top:24px;
+/* ---------- IMAGINE BANNER (avant footer, dernier coup de pousse) ---------- */
+.imagine-banner{
+  background:
+    linear-gradient(180deg, rgba(26,15,8,.78) 0%, rgba(26,15,8,.6) 50%, rgba(26,15,8,.88) 100%),
+    radial-gradient(ellipse at 50% 50%, rgba(229,199,136,.18) 0%, transparent 60%),
+    linear-gradient(180deg, #221408 0%, #1A0F08 100%);
+  background-color:#1A0F08;
+  position:relative;
+  text-align:center;
+  border-top:1px solid rgba(201,155,92,.2);
+  border-bottom:1px solid rgba(201,155,92,.2);
+}
+.imagine-banner::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(229,199,136,.06) 1px, transparent 1px);
+  background-size:30px 30px;opacity:.4;
+  pointer-events:none;
+}
+.imagine-banner .wrap{position:relative;z-index:2;max-width:760px}
+.imagine-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
   font-family:'Cinzel',serif;
-  font-size:13.5px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;
-  color:var(--brown);
-  text-decoration:none;
-  padding:13px 28px;border-radius:10px;
+  font-size:12px;letter-spacing:5px;text-transform:uppercase;font-weight:700;
+  color:var(--gold-bright);
+  margin-bottom:18px;
+  text-shadow:0 0 20px rgba(229,199,136,.45);
+}
+.imagine-eyebrow span{font-size:10px;opacity:.8;color:var(--gold)}
+.imagine-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(32px,5vw,52px);font-weight:500;line-height:1.1;
+  color:var(--cream);letter-spacing:-.5px;
+  margin-bottom:18px;
+}
+.imagine-title em{color:var(--gold-bright);font-style:italic}
+.imagine-sub{
+  font-family:'Fraunces',serif;
+  font-size:clamp(15px,1.7vw,18px);font-weight:300;
+  color:var(--cream-soft);
+  max-width:620px;margin:0 auto 36px;line-height:1.65;
+}
+.imagine-sub strong{color:var(--gold-bright);font-weight:500}
+.imagine-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Cinzel',serif;
+  font-size:14.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--brown);text-decoration:none;
+  padding:17px 38px;border-radius:10px;
   background:linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
   box-shadow:
-    0 8px 28px rgba(201,155,92,.45),
+    0 10px 32px rgba(201,155,92,.5),
     0 0 0 1px rgba(229,199,136,.6) inset,
-    0 0 30px rgba(229,199,136,.25);
+    0 0 40px rgba(229,199,136,.3);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
-  opacity:0;animation:revealUp 1s ease-out 1.75s forwards;
   position:relative;
 }
-.hero-imagine-link em{font-style:italic;font-weight:800;color:var(--brown)}
-.hero-imagine-arrow{
-  display:inline-block;
-  transition:transform .35s ease;
-}
-.hero-imagine-link:hover{
+.imagine-cta em{font-style:italic;font-weight:800}
+.imagine-arrow{display:inline-block;transition:transform .35s ease}
+.imagine-cta:hover{
   transform:translateY(-4px) scale(1.03);
-  box-shadow:0 14px 38px rgba(201,155,92,.6),0 0 0 1px rgba(229,199,136,.8) inset,0 0 50px rgba(229,199,136,.4);
+  box-shadow:
+    0 16px 44px rgba(201,155,92,.65),
+    0 0 0 1px rgba(229,199,136,.85) inset,
+    0 0 60px rgba(229,199,136,.45);
 }
-.hero-imagine-link:hover .hero-imagine-arrow{transform:translateX(4px)}
+.imagine-cta:hover .imagine-arrow{transform:translateX(5px)}
+.imagine-hint{
+  margin-top:16px;
+  font-family:'Lora',serif;font-size:12.5px;
+  color:rgba(242,230,208,.5);font-style:italic;
+}
 @media (max-width:560px){
-  .hero-imagine-link{font-size:12px;padding:11px 22px;letter-spacing:2px}
+  .imagine-cta{font-size:12.5px;padding:14px 28px;letter-spacing:1.8px}
+  .imagine-eyebrow{font-size:11px;letter-spacing:3.5px;gap:10px}
 }
 
 .hero-secondary-link{
@@ -1726,7 +1770,6 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
         <span class="portal-desc">Particulier · Famille · Communauté</span>
       </a>
     </div>
-    <a href="lostchapter-imagine.html" class="hero-imagine-link">🎲 <em>Imagine</em> ton Lost Chapter <span class="hero-imagine-arrow">→</span></a>
     <a href="#participer" class="hero-secondary-link">Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em></a>
   </div>
   <div class="scroll-hint">
@@ -2078,6 +2121,17 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       </a>
     </div>
 
+  </div>
+</section>
+
+<!-- ============ IMAGINE GAME (just before footer) ============ -->
+<section class="imagine-banner">
+  <div class="wrap center">
+    <div class="imagine-eyebrow reveal"><span>✦</span> Avant de partir <span>✦</span></div>
+    <h2 class="imagine-title reveal d1">Et si <em>vous</em> écriviez le prochain chapitre ?</h2>
+    <p class="imagine-sub reveal d2">5 étapes, 2 minutes. Choisissez le lieu, l'époque, les créateurs, les sponsors, le twist scénaristique — <strong>les meilleures idées inspireront un futur épisode</strong>.</p>
+    <a href="lostchapter-imagine.html" class="imagine-cta reveal d3">🎲 <em>Imagine</em> ton Lost Chapter <span class="imagine-arrow">→</span></a>
+    <p class="imagine-hint reveal d4">100% gratuit · sans pression · juste pour le plaisir d'imaginer</p>
   </div>
 </section>
 
