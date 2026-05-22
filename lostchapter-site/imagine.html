@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index,follow">
+<title>Imagine ton Lost Chapter · Play Azur Production</title>
+<meta name="description" content="Mini-jeu interactif : configure ton propre épisode Lost Chapter — choisis le lieu, l'époque, les créateurs, les sponsors et le twist narratif. Une expérience unique à imaginer pour Play Azur Production.">
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cinzel+Decorative:wght@400;700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --brown:#1A0F08;
+  --brown-soft:#241509;
+  --brown-warm:#3D2418;
+  --cream:#F2E6D0;
+  --cream-soft:#D9C7A3;
+  --gold:#C99B5C;
+  --gold-bright:#E5C788;
+  --gold-deep:#8C6B3A;
+  --danger:#D96A4E;
+  --ok:#7FB069;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Lora',Georgia,serif;
+  background:var(--brown);
+  color:var(--cream);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+/* Background cinématique ambient */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(229,199,136,.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(201,155,92,.06) 0%, transparent 60%),
+    linear-gradient(180deg, #1A0F08 0%, #241509 50%, #1A0F08 100%);
+  z-index:-2;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:radial-gradient(circle, rgba(229,199,136,.04) 1px, transparent 1px);
+  background-size:34px 34px;opacity:.5;
+  z-index:-1;pointer-events:none;
+}
+
+/* ═══════════ HEADER ═══════════ */
+.top{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:18px;
+  padding:18px 28px;
+  background:linear-gradient(180deg, rgba(26,15,8,.92) 0%, rgba(26,15,8,.78) 70%, transparent 100%);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;
+  color:var(--cream-soft);text-decoration:none;
+  padding:9px 16px;border-radius:8px;
+  border:1px solid rgba(201,155,92,.3);
+  background:rgba(26,15,8,.5);
+  transition:all .3s ease;
+}
+.back-btn:hover{color:var(--gold-bright);border-color:var(--gold-bright);background:rgba(201,155,92,.1)}
+.top-title{
+  flex:1;
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-size:14px;letter-spacing:4px;text-transform:uppercase;font-weight:700;
+  color:var(--gold-bright);
+  text-align:center;
+  text-shadow:0 0 20px rgba(229,199,136,.4);
+}
+@media (max-width:700px){
+  .top{padding:12px 14px;gap:10px}
+  .top-title{font-size:11px;letter-spacing:2.5px}
+  .back-btn{font-size:10px;padding:7px 12px;letter-spacing:1.5px}
+}
+
+/* Progress bar dorée */
+.progress{
+  height:3px;background:rgba(201,155,92,.15);
+  position:relative;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg, var(--gold-bright), var(--gold), var(--gold-bright));
+  width:0%;transition:width .6s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 12px rgba(229,199,136,.6);
+}
+
+/* ═══════════ MAIN ═══════════ */
+.wrap{max-width:1080px;margin:0 auto;padding:48px 28px 80px;text-align:center}
+@media (max-width:560px){.wrap{padding:32px 16px 64px}}
+
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* Eyebrow ✦ */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:5px;text-transform:uppercase;font-weight:600;
+  color:var(--gold-bright);
+  margin-bottom:14px;
+}
+.eyebrow .fleur{font-size:10px;opacity:.8}
+.step-counter{
+  display:inline-block;
+  font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;
+  color:rgba(242,230,208,.55);
+  margin-bottom:14px;
+  padding:6px 14px;border-radius:6px;
+  border:1px solid rgba(201,155,92,.25);
+}
+
+/* Titre principal */
+.h1{
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-size:clamp(34px,6vw,68px);
+  font-weight:700;line-height:1;letter-spacing:1px;
+  color:var(--cream);
+  margin-bottom:18px;
+  text-shadow:
+    0 2px 0 rgba(26,15,8,.5),
+    0 0 30px rgba(229,199,136,.35),
+    0 0 60px rgba(201,155,92,.18);
+}
+.h1 em{color:var(--gold-bright);font-style:italic}
+
+/* Sous-titre */
+.sub{
+  font-family:'Fraunces',serif;
+  font-size:clamp(15px,1.6vw,18px);font-weight:300;
+  color:var(--cream-soft);
+  max-width:680px;margin:0 auto 48px;
+  line-height:1.6;
+}
+.sub strong{color:var(--gold-bright);font-weight:500}
+
+/* ═══════════ CARDS GRID ═══════════ */
+.cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;margin-bottom:36px;
+}
+@media (max-width:560px){.cards{grid-template-columns:1fr;gap:12px}}
+
+.card{
+  background:linear-gradient(160deg,rgba(61,36,24,.72),rgba(26,15,8,.82));
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:2px solid rgba(201,155,92,.25);
+  border-radius:14px;padding:28px 20px;
+  cursor:pointer;text-align:center;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s,background .35s;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold-bright),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform .5s ease;
+}
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(229,199,136,.6);
+  box-shadow:0 18px 44px rgba(0,0,0,.45),0 0 0 1px rgba(229,199,136,.2);
+}
+.card:hover::before{transform:scaleX(1)}
+.card.selected{
+  border-color:var(--gold-bright);
+  background:linear-gradient(160deg,rgba(201,155,92,.18),rgba(61,36,24,.85));
+  box-shadow:0 18px 44px rgba(0,0,0,.45),0 0 0 2px var(--gold-bright),0 0 30px rgba(229,199,136,.3);
+}
+.card.selected::before{transform:scaleX(1)}
+.card.selected::after{
+  content:'✓';
+  position:absolute;top:10px;right:14px;
+  font-family:'Cinzel',serif;font-size:18px;font-weight:700;
+  color:var(--gold-bright);
+  text-shadow:0 0 10px rgba(229,199,136,.6);
+}
+.card-ico{font-size:42px;margin-bottom:14px;display:block;filter:drop-shadow(0 4px 14px rgba(201,155,92,.4))}
+.card-title{
+  font-family:'Fraunces',serif;font-size:19px;font-weight:600;
+  color:var(--cream);margin-bottom:6px;letter-spacing:-.2px;
+}
+.card.selected .card-title{color:var(--gold-bright)}
+.card-desc{font-size:13.5px;color:var(--cream-soft);font-weight:300;line-height:1.5;opacity:.85}
+
+/* ═══════════ NAV BUTTONS ═══════════ */
+.nav-row{
+  display:flex;justify-content:center;align-items:center;gap:14px;
+  margin-top:14px;flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Cinzel',serif;font-size:13px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px 28px;border-radius:8px;border:none;cursor:pointer;
+  transition:transform .3s ease,box-shadow .3s ease,background .3s ease;
+}
+.btn-primary{
+  color:var(--brown);
+  background:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 100%);
+  box-shadow:0 8px 24px rgba(201,155,92,.4);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 36px rgba(201,155,92,.55)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{
+  color:var(--cream-soft);
+  background:transparent;border:1px solid rgba(201,155,92,.3);
+}
+.btn-ghost:hover{color:var(--gold-bright);border-color:var(--gold-bright);background:rgba(201,155,92,.08)}
+
+.hint{
+  font-family:'Lora',serif;
+  font-size:12px;color:rgba(242,230,208,.5);
+  margin-top:8px;font-style:italic;
+}
+
+/* ═══════════ FINAL SCREEN ═══════════ */
+.final-card{
+  background:linear-gradient(180deg, rgba(61,36,24,.85), rgba(26,15,8,.92));
+  border:2px solid var(--gold);
+  border-radius:18px;padding:40px 32px;
+  margin:0 auto 32px;max-width:760px;
+  position:relative;
+  box-shadow:
+    0 0 0 6px rgba(26,15,8,.9),
+    0 0 0 7px rgba(229,199,136,.55),
+    0 30px 80px rgba(0,0,0,.6);
+}
+.final-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold-bright),var(--gold),var(--gold-bright),transparent);
+}
+.final-eyebrow{
+  font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:5px;text-transform:uppercase;font-weight:700;
+  color:var(--gold-bright);margin-bottom:16px;
+  text-shadow:0 0 18px rgba(229,199,136,.4);
+}
+.final-title{
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-size:clamp(28px,4.5vw,44px);font-weight:700;line-height:1.1;
+  color:var(--cream);margin-bottom:24px;
+}
+.final-title em{color:var(--gold-bright);font-style:italic}
+.scenario{
+  font-family:'Fraunces',serif;
+  font-size:clamp(16px,1.9vw,21px);font-weight:400;line-height:1.7;
+  color:var(--cream);
+  padding:24px;
+  background:rgba(26,15,8,.5);
+  border-radius:12px;
+  border-left:3px solid var(--gold-bright);
+  margin-bottom:18px;text-align:left;
+}
+.scenario strong{color:var(--gold-bright);font-weight:600}
+.scenario em{color:var(--cream-soft);font-style:italic}
+
+/* Form de soumission */
+.share-block{
+  margin-top:32px;padding:28px 24px;
+  background:rgba(26,15,8,.6);
+  border:1px solid rgba(201,155,92,.3);
+  border-radius:14px;
+}
+.share-title{
+  font-family:'Cinzel',serif;
+  font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;
+  color:var(--gold-bright);margin-bottom:18px;
+}
+.share-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media (max-width:560px){.share-form{grid-template-columns:1fr}}
+.share-input{
+  padding:13px 15px;border-radius:8px;
+  background:rgba(26,15,8,.7);
+  border:1px solid rgba(201,155,92,.3);
+  color:var(--cream);font-family:'Lora',serif;font-size:14.5px;
+  transition:border-color .25s ease,background .25s ease;
+}
+.share-input::placeholder{color:rgba(242,230,208,.45)}
+.share-input:focus{outline:none;border-color:var(--gold);background:rgba(26,15,8,.85)}
+.share-cta{width:100%}
+
+.success-block{
+  display:none;text-align:center;padding:32px 24px;
+  background:linear-gradient(180deg, rgba(127,176,105,.18), rgba(26,15,8,.6));
+  border:1px solid rgba(127,176,105,.5);
+  border-radius:14px;margin-top:24px;
+}
+.success-block.show{display:block;animation:fadeUp .6s ease}
+.success-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg, var(--ok), #5C8E48);
+  color:#fff;font-size:28px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+  box-shadow:0 8px 22px rgba(127,176,105,.4);
+}
+.success-text{
+  font-family:'Fraunces',serif;font-size:17px;color:var(--cream);
+  margin-bottom:8px;
+}
+.success-text strong{color:var(--gold-bright)}
+.success-sub{font-size:13.5px;color:var(--cream-soft);font-weight:300}
+
+.feedback{margin-top:10px;font-size:13.5px;color:var(--danger);min-height:18px;font-family:'Lora',serif}
+
+/* Restart button */
+.restart{
+  margin-top:24px;text-align:center;
+}
+
+/* ═══════════ INTRO SCREEN ═══════════ */
+.intro-hero{
+  text-align:center;padding:40px 0 24px;
+}
+.intro-h1{
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-size:clamp(42px,7.5vw,90px);
+  font-weight:900;line-height:.95;
+  letter-spacing:clamp(3px,.6vw,8px);
+  color:var(--cream);
+  margin-bottom:18px;
+  text-shadow:
+    0 1px 0 rgba(229,199,136,.4),
+    0 2px 0 rgba(26,15,8,.5),
+    0 4px 0 rgba(26,15,8,.4),
+    0 6px 24px rgba(0,0,0,.6),
+    0 0 30px rgba(229,199,136,.45),
+    0 0 60px rgba(229,199,136,.25);
+  animation:titleGlow 5s ease-in-out infinite;
+}
+@keyframes titleGlow{
+  0%,100%{text-shadow:0 1px 0 rgba(229,199,136,.4),0 2px 0 rgba(26,15,8,.5),0 4px 0 rgba(26,15,8,.4),0 6px 24px rgba(0,0,0,.6),0 0 30px rgba(229,199,136,.45),0 0 60px rgba(229,199,136,.25)}
+  50%{text-shadow:0 1px 0 rgba(229,199,136,.5),0 2px 0 rgba(26,15,8,.5),0 4px 0 rgba(26,15,8,.4),0 6px 24px rgba(0,0,0,.6),0 0 48px rgba(229,199,136,.75),0 0 90px rgba(229,199,136,.45)}
+}
+.intro-hook{
+  font-family:'Fraunces',serif;
+  font-size:clamp(18px,2.2vw,24px);font-weight:300;font-style:italic;
+  color:var(--cream-soft);
+  max-width:720px;margin:0 auto 36px;line-height:1.55;
+}
+.intro-hook em{color:var(--gold-bright);font-weight:500}
+.intro-pitch{
+  max-width:620px;margin:0 auto 40px;
+  font-size:15.5px;color:var(--cream-soft);font-weight:300;line-height:1.7;
+}
+.intro-pitch strong{color:var(--gold-bright);font-weight:500}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a href="/" class="back-btn">← Retour Lost Chapter</a>
+  <div class="top-title">✦ Imagine ton Lost Chapter ✦</div>
+  <div style="width:170px"></div>
+</header>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+<main class="wrap">
+
+  <!-- ═══ ÉCRAN 0 : INTRO ═══ -->
+  <section class="screen active" data-screen="intro">
+    <div class="intro-hero">
+      <h1 class="intro-h1">IMAGINE</h1>
+      <p class="intro-hook">Et si <em>vous</em> écriviez le prochain chapitre ?</p>
+    </div>
+    <p class="intro-pitch">
+      En 5 étapes, configurez votre <strong>Lost Chapter idéal</strong> — choisissez le lieu, l'époque, les créateurs, les sponsors, et le twist scénaristique.
+      À la fin, envoyez votre scénario à Tarek. Les meilleures idées <strong>inspireront un futur épisode</strong>.
+    </p>
+    <button class="btn btn-primary" onclick="GAME.next()">Commencer →</button>
+    <p class="hint">5 étapes · 2 minutes · 100% gratuit</p>
+  </section>
+
+  <!-- ═══ ÉCRAN 1 : LE LIEU ═══ -->
+  <section class="screen" data-screen="step1">
+    <div class="step-counter">Étape 1 / 5</div>
+    <h1 class="h1">Le <em>lieu</em></h1>
+    <p class="sub">Où votre épisode va-t-il se dérouler ? <strong>Un seul choix</strong> — le lieu donne le ton.</p>
+    <div class="cards" id="cards-lieu"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="GAME.prev()">← Retour</button>
+      <button class="btn btn-primary" id="btn-next-1" disabled onclick="GAME.next()">Continuer →</button>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 2 : L'ÉPOQUE ═══ -->
+  <section class="screen" data-screen="step2">
+    <div class="step-counter">Étape 2 / 5</div>
+    <h1 class="h1">L'<em>époque</em></h1>
+    <p class="sub">Quelle période de l'Histoire va revivre ? <strong>Un seul choix</strong>.</p>
+    <div class="cards" id="cards-epoque"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="GAME.prev()">← Retour</button>
+      <button class="btn btn-primary" id="btn-next-2" disabled onclick="GAME.next()">Continuer →</button>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 3 : LES CRÉATEURS ═══ -->
+  <section class="screen" data-screen="step3">
+    <div class="step-counter">Étape 3 / 5</div>
+    <h1 class="h1">Les <em>créateurs</em></h1>
+    <p class="sub">Qui va incarner et raconter votre épisode en direct ? <strong>1 à 3 choix possibles</strong>.</p>
+    <div class="cards" id="cards-createurs"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="GAME.prev()">← Retour</button>
+      <button class="btn btn-primary" id="btn-next-3" disabled onclick="GAME.next()">Continuer →</button>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 4 : LES SPONSORS ═══ -->
+  <section class="screen" data-screen="step4">
+    <div class="step-counter">Étape 4 / 5</div>
+    <h1 class="h1">Les <em>sponsors</em></h1>
+    <p class="sub">Qui pourrait être associé à votre épisode ? <strong>1 à 3 choix possibles</strong>.</p>
+    <div class="cards" id="cards-sponsors"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="GAME.prev()">← Retour</button>
+      <button class="btn btn-primary" id="btn-next-4" disabled onclick="GAME.next()">Continuer →</button>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 5 : LE TWIST ═══ -->
+  <section class="screen" data-screen="step5">
+    <div class="step-counter">Étape 5 / 5</div>
+    <h1 class="h1">Le <em>twist</em></h1>
+    <p class="sub">Quel rebondissement va bouleverser le scénario en plein direct ? <strong>Un seul choix</strong> — c'est le moment cinéma.</p>
+    <div class="cards" id="cards-twist"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="GAME.prev()">← Retour</button>
+      <button class="btn btn-primary" id="btn-next-5" disabled onclick="GAME.next()">Révéler mon scénario →</button>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN FINAL ═══ -->
+  <section class="screen" data-screen="final">
+    <div class="eyebrow"><span class="fleur">✦</span> Votre Lost Chapter <span class="fleur">✦</span></div>
+    <h1 class="h1">Voici <em>votre</em> scénario</h1>
+
+    <div class="final-card">
+      <div class="final-eyebrow">✦ Édition imaginée ✦</div>
+      <h2 class="final-title">Un <em>chapitre oublié</em> à réveiller</h2>
+      <p class="scenario" id="scenarioText"></p>
+    </div>
+
+    <div class="share-block">
+      <div class="share-title">✉️ Soumettre cette idée à Tarek</div>
+      <p style="font-size:14.5px;color:var(--cream-soft);font-weight:300;margin-bottom:18px;line-height:1.6">
+        Les meilleures idées seront étudiées pour de futurs épisodes. Tarek vous recontacte personnellement sous 48 h.
+      </p>
+      <div class="share-form">
+        <input class="share-input" id="userName" type="text" placeholder="Votre prénom" maxlength="60" autocomplete="given-name">
+        <input class="share-input" id="userEmail" type="email" placeholder="Votre email" maxlength="180" autocomplete="email">
+      </div>
+      <button class="btn btn-primary share-cta" id="submitBtn" onclick="GAME.submit()">✉️ Envoyer mon scénario →</button>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="success-block" id="successBlock">
+      <div class="success-icon">✓</div>
+      <p class="success-text">Merci <strong id="successName">!</strong> — votre scénario est entre les mains de Tarek.</p>
+      <p class="success-sub">Réponse personnelle sous 48 h ouvrées.</p>
+    </div>
+
+    <div class="restart">
+      <button class="btn btn-ghost" onclick="GAME.restart()">↺ Imaginer un autre scénario</button>
+      <span style="margin:0 8px;color:var(--cream-soft);opacity:.5">·</span>
+      <a class="btn btn-ghost" href="/" style="text-decoration:none">← Retour Lost Chapter</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// IMAGINE TON LOST CHAPTER — Mini-jeu interactif
+// ═══════════════════════════════════════════════════════════════════
+const SUPA_URL  = 'https://dmztalsmreugfwojsaar.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw';
+
+// ═══ DATA ═══
+const DATA = {
+  lieu: [
+    {id:'chateau',  ico:'🏰', title:'Un château fortifié',   desc:'Tours, douves, salles d\'apparat, donjon'},
+    {id:'abbaye',   ico:'🏛️', title:'Une abbaye en ruines',  desc:'Cloîtres, crypte, chapelle silencieuse'},
+    {id:'citadelle',ico:'🗼', title:'Une citadelle perchée', desc:'Remparts, vue panoramique, dédale étroit'},
+    {id:'fort_mer', ico:'⚓', title:'Un fort maritime',      desc:'Embruns, bastions, canons face à la mer'},
+    {id:'cite',     ico:'🏯', title:'Une cité médiévale',    desc:'Ruelles pavées, échoppes, place du marché'},
+    {id:'crypte',   ico:'⛪', title:'Une crypte oubliée',    desc:'Tombes, gisants, écho des voûtes'},
+  ],
+  epoque: [
+    {id:'croisades',     ico:'🛡️', title:'Croisades (XIe-XIIIe)',    desc:'Templiers, chevaliers, Terre sainte'},
+    {id:'francois1',     ico:'👑', title:'Cour de François Ier (XVIe)', desc:'Renaissance française, intrigues de cour'},
+    {id:'templiers',     ico:'🦅', title:'Procès des Templiers (XIVe)', desc:'Trahison royale, secrets perdus'},
+    {id:'religion',      ico:'⚔️', title:'Guerres de religion (XVIe)', desc:'Catholiques vs Protestants, sièges, alliances'},
+    {id:'centans',       ico:'🏹', title:'Guerre de Cent Ans (XIVe-XVe)', desc:'France vs Angleterre, Jeanne d\'Arc, archers'},
+    {id:'renaissance',   ico:'🌹', title:'Renaissance italienne (XVe-XVIe)', desc:'Médicis, intrigues, art, poison'},
+    {id:'siege_nice',    ico:'⚔️', title:'Siège de Nice (1543)',      desc:'Catherine Ségurane, Comté vs ottomans-français'},
+  ],
+  createurs: [ // multi (1-3)
+    {id:'streamer_jdr',  ico:'🎲', title:'Streamer JDR D&D',         desc:'Maîtrise les règles, sait improviser des combats'},
+    {id:'vulgarisateur', ico:'🎙️', title:'Vulgarisateur histoire',  desc:'Style Nota Bene, c\'est qui ces gens'},
+    {id:'irl',           ico:'📸', title:'IRL adventurer',           desc:'Style Inoxtag — caméra, immersion totale'},
+    {id:'cosplayer',     ico:'🎨', title:'Cosplayer reconnu',        desc:'Costumes époustouflants, gros engagement réseaux'},
+    {id:'comedien',      ico:'🎭', title:'Comédien doubleur',        desc:'Voix puissante, jeu théâtral, présence scénique'},
+    {id:'videaste',      ico:'🎬', title:'Vidéaste cinéma',          desc:'Style Le Joueur du Grenier — narration léchée'},
+  ],
+  sponsors: [ // multi (1-3)
+    {id:'armurerie',     ico:'⚔️', title:'Armurerie de spectacle',   desc:'Épées, armures, équipement scénique'},
+    {id:'brasserie',     ico:'🍺', title:'Brasserie médiévale',      desc:'Bières artisanales façon "hydromel moderne"'},
+    {id:'editeur',       ico:'📚', title:'Éditeur de JDR',           desc:'Livre-cahier de l\'épisode, goodies'},
+    {id:'ot_region',     ico:'🏰', title:'Office tourisme régional', desc:'Promotion territoire, hébergement équipe'},
+    {id:'boutique_jdr',  ico:'🎲', title:'Boutique de JDR',          desc:'Stand sur place, dés gravés, badges'},
+    {id:'vetements',     ico:'👕', title:'Marque vêtements historiques', desc:'Tuniques, capes, costumes d\'époque'},
+    {id:'gaming',        ico:'🪑', title:'Marque gaming',            desc:'Sièges, micros, équipement streaming'},
+  ],
+  twist: [
+    {id:'cle',           ico:'🗝️', title:'Une clé mystérieuse',     desc:'Trouvée dans un coffre, elle ouvre quoi ?'},
+    {id:'duel',          ico:'⚔️', title:'Un duel inattendu',        desc:'Au cœur du banquet, deux personnages s\'affrontent'},
+    {id:'incendie',      ico:'🔥', title:'Incendie dans les archives', desc:'Quelqu\'un veut détruire un secret'},
+    {id:'mort',          ico:'💀', title:'Mort d\'un personnage clé', desc:'En plein direct, tout bascule'},
+    {id:'declaration',   ico:'💍', title:'Une déclaration d\'amour',  desc:'Bouleverse les alliances politiques'},
+    {id:'fantome',       ico:'👻', title:'Un fantôme du passé',       desc:'Révèle un secret enfoui depuis 100 ans'},
+    {id:'trahison',      ico:'🗡️', title:'Une trahison démasquée',   desc:'Quelqu\'un de l\'équipe joue double jeu'},
+    {id:'messager',      ico:'🏇', title:'Un messager arrive',        desc:'Une nouvelle qui change toute la donne'},
+  ],
+};
+
+const SCREENS = ['intro','step1','step2','step3','step4','step5','final'];
+const FIELDS  = {step1:'lieu', step2:'epoque', step3:'createurs', step4:'sponsors', step5:'twist'};
+const MULTI   = {createurs:[1,3], sponsors:[1,3]};
+
+const GAME = {
+  current: 0,
+  state: {lieu:null, epoque:null, createurs:[], sponsors:[], twist:null},
+
+  init(){
+    this.renderCards('lieu');
+    this.renderCards('epoque');
+    this.renderCards('createurs');
+    this.renderCards('sponsors');
+    this.renderCards('twist');
+    this.updateProgress();
+  },
+
+  renderCards(field){
+    const el = document.getElementById('cards-' + field);
+    if(!el) return;
+    el.innerHTML = DATA[field].map(opt => `
+      <div class="card" data-field="${field}" data-id="${opt.id}" onclick="GAME.pick('${field}','${opt.id}')">
+        <span class="card-ico">${opt.ico}</span>
+        <div class="card-title">${opt.title}</div>
+        <p class="card-desc">${opt.desc}</p>
+      </div>
+    `).join('');
+  },
+
+  pick(field, id){
+    const isMulti = MULTI[field];
+    if(isMulti){
+      const cur = this.state[field] || [];
+      const idx = cur.indexOf(id);
+      if(idx >= 0) cur.splice(idx, 1);
+      else if(cur.length < isMulti[1]) cur.push(id);
+      this.state[field] = cur;
+    } else {
+      this.state[field] = id;
+    }
+    this.refreshCards(field);
+    this.updateNextButton();
+  },
+
+  refreshCards(field){
+    const cards = document.querySelectorAll(`[data-field="${field}"]`);
+    const isMulti = MULTI[field];
+    const val = this.state[field];
+    cards.forEach(c => {
+      const id = c.dataset.id;
+      const selected = isMulti ? (val||[]).indexOf(id) >= 0 : val === id;
+      c.classList.toggle('selected', selected);
+    });
+  },
+
+  updateNextButton(){
+    const screen = SCREENS[this.current];
+    if(!screen.startsWith('step')) return;
+    const field = FIELDS[screen];
+    const val = this.state[field];
+    const isMulti = MULTI[field];
+    const ok = isMulti ? (val && val.length >= isMulti[0]) : !!val;
+    const stepNum = screen.replace('step','');
+    const btn = document.getElementById('btn-next-' + stepNum);
+    if(btn) btn.disabled = !ok;
+  },
+
+  updateProgress(){
+    const pct = this.current === 0 ? 0 : (this.current / (SCREENS.length - 1)) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+  },
+
+  show(idx){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const name = SCREENS[idx];
+    const el = document.querySelector(`[data-screen="${name}"]`);
+    if(el) el.classList.add('active');
+    this.current = idx;
+    this.updateProgress();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    if(name === 'final') this.renderFinal();
+    else this.updateNextButton();
+  },
+
+  next(){ if(this.current < SCREENS.length - 1) this.show(this.current + 1) },
+  prev(){ if(this.current > 0) this.show(this.current - 1) },
+
+  _label(field, id){
+    const opt = (DATA[field] || []).find(x => x.id === id);
+    return opt ? opt.title.toLowerCase() : id;
+  },
+  _labels(field, ids){
+    if(!ids || !ids.length) return '';
+    return ids.map(i => this._label(field, i)).join(' et ');
+  },
+
+  buildScenario(){
+    const s = this.state;
+    const lieu     = this._label('lieu', s.lieu);
+    const epoque   = this._label('epoque', s.epoque);
+    const createurs= this._labels('createurs', s.createurs);
+    const sponsors = this._labels('sponsors', s.sponsors);
+    const twist    = this._label('twist', s.twist);
+    return `Un épisode tourné dans <strong>${lieu}</strong>, plongé dans <strong>${epoque}</strong>.<br><br>` +
+           `Porté en live par <strong>${createurs}</strong>, en partenariat avec <strong>${sponsors}</strong>.<br><br>` +
+           `Au cœur de l'intrigue : <em>${twist}</em>.<br><br>` +
+           `Une expérience patrimoniale, scénarisée avec une chercheuse du CNRS, diffusée en direct devant des milliers de spectateurs.`;
+  },
+
+  renderFinal(){
+    document.getElementById('scenarioText').innerHTML = this.buildScenario();
+  },
+
+  scenarioPlainText(){
+    const s = this.state;
+    return [
+      '═══ MON LOST CHAPTER IMAGINÉ ═══',
+      '',
+      '📍 Lieu : '        + this._label('lieu', s.lieu),
+      '📜 Époque : '      + this._label('epoque', s.epoque),
+      '🎬 Créateurs : '   + this._labels('createurs', s.createurs),
+      '🤝 Sponsors : '    + this._labels('sponsors', s.sponsors),
+      '✨ Twist : '       + this._label('twist', s.twist),
+      '',
+      '═══ Soumis depuis https://lostchapter.vercel.app/imagine ═══'
+    ].join('\n');
+  },
+
+  async submit(){
+    const name  = document.getElementById('userName').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const fb    = document.getElementById('feedback');
+    const btn   = document.getElementById('submitBtn');
+    fb.textContent = '';
+
+    if(!name || name.length < 2){ fb.textContent = 'Merci d\'indiquer votre prénom.'; return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ fb.textContent = 'Email invalide.'; return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Envoi en cours…';
+
+    const payload = {
+      full_name: name,
+      structure: 'Particulier · Imagine Game',
+      role: '',
+      email: email,
+      phone: '',
+      postal_code: '',
+      city: '',
+      monument: '',
+      support_type: 'public',
+      amount_range: '',
+      twitch_handle:'',youtube_url:'',tiktok_handle:'',instagram_handle:'',x_handle:'',
+      audience_range:'',content_type:'',
+      activity_type:'',skills_experience:'',availability:'',portfolio_url:'',
+      media_type:'',media_name:'',audience_size:'',coverage_type:'',
+      message: this.scenarioPlainText(),
+      honeypot_filled: false,
+      user_agent: navigator.userAgent.slice(0,500),
+      page_url: location.href.slice(0,500),
+      referrer: document.referrer.slice(0,500)
+    };
+
+    try{
+      const res = await fetch(SUPA_URL + '/rest/v1/partner_leads', {
+        method: 'POST',
+        headers: {
+          'apikey':        SUPA_ANON,
+          'Authorization': 'Bearer ' + SUPA_ANON,
+          'Content-Type':  'application/json',
+          'Prefer':        'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok){
+        const txt = await res.text().catch(()=> '');
+        console.error('[Imagine] submit failed', res.status, txt);
+        throw new Error('HTTP ' + res.status);
+      }
+      // Succès
+      document.getElementById('successName').textContent = name;
+      document.getElementById('successBlock').classList.add('show');
+      document.querySelector('.share-block').style.display = 'none';
+      // Persist that this user already submitted to avoid double posts
+      try{localStorage.setItem('imagine_submitted', '1')}catch(e){}
+    }catch(err){
+      console.error('[Imagine] submit error', err);
+      fb.textContent = 'Erreur d\'envoi. Réessayez dans un instant ou écrivez à contact@playazur.fr.';
+      btn.disabled = false;
+      btn.innerHTML = '✉️ Envoyer mon scénario →';
+    }
+  },
+
+  restart(){
+    this.state = {lieu:null, epoque:null, createurs:[], sponsors:[], twist:null};
+    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.btn[id^=btn-next-]').forEach(b => b.disabled = true);
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('userName').value = '';
+    document.getElementById('userEmail').value = '';
+    document.getElementById('successBlock').classList.remove('show');
+    const sb = document.querySelector('.share-block');
+    if(sb) sb.style.display = '';
+    const submitBtn = document.getElementById('submitBtn');
+    if(submitBtn){submitBtn.disabled = false; submitBtn.innerHTML = '✉️ Envoyer mon scénario →'}
+    this.show(0);
+  }
+};
+
+GAME.init();
+</script>
+
+</body>
+</html>
