@@ -79,10 +79,11 @@ Puis ouvre `http://localhost:5500/` dans Chrome ou Safari.
 > et les service workers fonctionnent. En `file://` direct, les ponts entre Brain
 > et Shrine peuvent être bloqués par le navigateur.
 
-### Option 2 — Déploiement Vercel (Phase 3)
+### Option 2 — Déploiement Vercel (Phase 3 ✅ disponible)
 
-Sera ajouté en Phase 3. Pour anticiper : `vercel.json` + edge function
-`/api/claude` pour proxifier l'API Anthropic (la clé ne touchera jamais ton navigateur).
+Voir le guide complet **[DEPLOY.md](./DEPLOY.md)** — déploiement en 8 étapes claires, ~10 minutes.
+
+Une fois déployé, tu obtiens une URL HTTPS accessible depuis n'importe quel appareil + un edge proxy qui garde ta clé Anthropic côté serveur.
 
 ---
 
@@ -109,8 +110,8 @@ Puis ouvre `~/Documents/XIAOMI_OS/index.html` dans ton navigateur ou ton PWA.
 | Phase | Statut | Contenu |
 |---|---|---|
 | **P1** | ✅ livré | Fusion Brain + Shrine sous topbar unifiée |
-| **P2** | ✅ **livré** | Module Compta SASU (écritures, factures, TVA, IS, FEC) |
-| **P3** | 🔜 à venir | Déploiement Vercel + edge function proxy Claude |
+| **P2** | ✅ livré | Module Compta SASU (écritures, factures, TVA, IS, FEC) |
+| **P3** | ✅ **livré** | Déploiement Vercel + edge function proxy Claude (voir DEPLOY.md) |
 | **P4** | 🔜 à venir | Intelligence A+B+C (auto-enrichissement, briefing, tool-use) |
 
 ---
