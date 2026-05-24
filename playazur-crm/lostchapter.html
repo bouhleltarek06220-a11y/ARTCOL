@@ -38,6 +38,42 @@ body{
   overflow-x:hidden;
 }
 
+/* ═══════ LANGUAGE SWITCHER ═══════ */
+.lang-switcher{
+  position:fixed;top:18px;right:18px;z-index:9999;
+  display:flex;gap:6px;
+  padding:6px;border-radius:30px;
+  background:rgba(26,15,8,.82);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(201,155,92,.4);
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+}
+.lang-btn{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(201,155,92,.25);
+  background:rgba(26,15,8,.5);
+  font-size:18px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease;
+  filter:grayscale(.5);opacity:.7;
+}
+.lang-btn:hover{
+  transform:scale(1.12);
+  border-color:rgba(229,199,136,.7);
+  filter:grayscale(0);opacity:1;
+}
+.lang-btn.active{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  border-color:var(--gold-bright);
+  filter:grayscale(0);opacity:1;
+  box-shadow:0 0 14px rgba(229,199,136,.55);
+}
+@media (max-width:560px){
+  .lang-switcher{top:12px;right:12px;gap:4px;padding:4px}
+  .lang-btn{width:30px;height:30px;font-size:16px}
+}
+
 /* ---------- HERO ---------- */
 .hero{
   min-height:100vh;
@@ -1734,46 +1770,54 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 </head>
 <body>
 
+<!-- ═══════════ LANGUAGE SWITCHER ═══════════ -->
+<div class="lang-switcher" role="group" aria-label="Langue">
+  <button class="lang-btn" data-lang="fr" title="Français" aria-label="Français">🇫🇷</button>
+  <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇬🇧</button>
+  <button class="lang-btn" data-lang="es" title="Español" aria-label="Español">🇪🇸</button>
+  <button class="lang-btn" data-lang="it" title="Italiano" aria-label="Italiano">🇮🇹</button>
+</div>
+
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="dust" id="dust"></div>
   <div class="hero-inner">
     <h1 class="hero-title"><span class="word">L<img src="assets/lostchapter-logo.svg" alt="O" class="title-o">ST</span> <span class="word">CHAPTER</span></h1>
-    <div class="hero-sub">RÉVEILLEZ L'HISTOIRE</div>
-    <p class="hero-line">Et si un <em>monument oublié</em> redevenait, le temps d'une journée, le théâtre vivant de sa propre légende ?</p>
+    <div class="hero-sub" data-i18n="hero.sub">RÉVEILLEZ L'HISTOIRE</div>
+    <p class="hero-line" data-i18n="hero.line">Et si un <em>monument oublié</em> redevenait, le temps d'une journée, le théâtre vivant de sa propre légende ?</p>
     <div class="hero-deco">⚜</div>
 
-    <div class="portals-label">Choisissez votre porte d'entrée</div>
+    <div class="portals-label" data-i18n="hero.portalsLabel">Choisissez votre porte d'entrée</div>
     <div class="portals">
       <a href="#communes" class="portal portal--communes">
         <span class="portal-ico" aria-hidden="true">🏛️</span>
-        <span class="portal-eye">Je gère</span>
-        <span class="portal-title">Un patrimoine</span>
-        <span class="portal-desc">Mairie · OT · Monument · Conservation</span>
+        <span class="portal-eye" data-i18n="portal.communes.eye">Je gère</span>
+        <span class="portal-title" data-i18n="portal.communes.title">Un patrimoine</span>
+        <span class="portal-desc" data-i18n="portal.communes.desc">Mairie · OT · Monument · Conservation</span>
       </a>
       <a href="#sponsors" class="portal portal--sponsors">
         <span class="portal-ico" aria-hidden="true">💎</span>
-        <span class="portal-eye">Je soutiens</span>
-        <span class="portal-title">Le projet</span>
-        <span class="portal-desc">Entreprise · Fondation · Mécénat</span>
+        <span class="portal-eye" data-i18n="portal.sponsors.eye">Je soutiens</span>
+        <span class="portal-title" data-i18n="portal.sponsors.title">Le projet</span>
+        <span class="portal-desc" data-i18n="portal.sponsors.desc">Entreprise · Fondation · Mécénat</span>
       </a>
       <a href="#createurs" class="portal portal--createurs">
         <span class="portal-ico" aria-hidden="true">🎥</span>
-        <span class="portal-eye">Je crée</span>
-        <span class="portal-title">Du contenu</span>
-        <span class="portal-desc">Twitch · YouTube · TikTok · Insta</span>
+        <span class="portal-eye" data-i18n="portal.createurs.eye">Je crée</span>
+        <span class="portal-title" data-i18n="portal.createurs.title">Du contenu</span>
+        <span class="portal-desc" data-i18n="portal.createurs.desc">Twitch · YouTube · TikTok · Insta</span>
       </a>
       <a href="#public" class="portal portal--public">
         <span class="portal-ico" aria-hidden="true">🎭</span>
-        <span class="portal-eye">Je veux</span>
-        <span class="portal-title">Vivre l'aventure</span>
-        <span class="portal-desc">Particulier · Famille · Communauté</span>
+        <span class="portal-eye" data-i18n="portal.public.eye">Je veux</span>
+        <span class="portal-title" data-i18n="portal.public.title">Vivre l'aventure</span>
+        <span class="portal-desc" data-i18n="portal.public.desc">Particulier · Famille · Communauté</span>
       </a>
     </div>
-    <a href="#participer" class="hero-secondary-link">Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em></a>
+    <a href="#participer" class="hero-secondary-link" data-i18n="hero.secondaryLink">Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em></a>
   </div>
   <div class="scroll-hint">
-    <span>Faites défiler</span>
+    <span data-i18n="hero.scrollHint">Faites défiler</span>
     <span class="arrow"></span>
   </div>
 </header>
@@ -1781,38 +1825,34 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ CONCEPT ============ -->
 <section class="concept">
   <div class="wrap center">
-    <p class="concept-phrase reveal">
-      Lost Chapter, c'est <span class="hl">l'histoire vraie d'un lieu patrimonial</span>, jouée en direct,
-      écrite avec <span class="hl">une chercheuse du CNRS</span>,
-      diffusée devant le public sur place et <span class="hl">des milliers de spectateurs</span> connectés.
-    </p>
+    <p class="concept-phrase reveal" data-i18n="concept.phrase">Lost Chapter, c'est <span class="hl">l'histoire vraie d'un lieu patrimonial</span>, jouée en direct, écrite avec <span class="hl">une chercheuse du CNRS</span>, diffusée devant le public sur place et <span class="hl">des milliers de spectateurs</span> connectés.</p>
   </div>
 </section>
 
 <!-- ============ STATS ============ -->
 <section class="stats">
   <div class="wrap center">
-    <div class="kicker reveal">Le projet en chiffres</div>
-    <h2 class="h2 reveal d1">Une journée. <em>Un impact national.</em></h2>
+    <div class="kicker reveal" data-i18n="stats.kicker">Le projet en chiffres</div>
+    <h2 class="h2 reveal d1" data-i18n="stats.h2">Une journée. <em>Un impact national.</em></h2>
     <div class="stats-grid">
       <div class="stat reveal d1">
         <div class="stat-num"><span data-count="5000">0</span><span class="suffix">+</span></div>
-        <div class="stat-label">Spectateurs en direct</div>
+        <div class="stat-label" data-i18n="stats.s1">Spectateurs en direct</div>
         <div class="stat-desc">Audience Twitch concurrente visée</div>
       </div>
       <div class="stat reveal d2">
         <div class="stat-num"><span data-count="100">0</span><span class="suffix">k+</span></div>
-        <div class="stat-label">Audience cumulée</div>
+        <div class="stat-label" data-i18n="stats.s2">Audience cumulée</div>
         <div class="stat-desc">Communautés des créateurs invités</div>
       </div>
       <div class="stat reveal d3">
         <div class="stat-num"><span data-count="1">0</span></div>
-        <div class="stat-label">Seule journée</div>
+        <div class="stat-label" data-i18n="stats.s3">Seule journée</div>
         <div class="stat-desc">Montage, live et démontage le jour même</div>
       </div>
       <div class="stat reveal d4">
         <div class="stat-num"><span data-count="60">0</span><span class="suffix">%</span></div>
-        <div class="stat-label">Déductible</div>
+        <div class="stat-label" data-i18n="stats.s4">Déductible</div>
         <div class="stat-desc">Réduction fiscale sur votre soutien</div>
       </div>
     </div>
@@ -1824,8 +1864,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ POUR LES COMMUNES &amp; LE PATRIMOINE ============ -->
 <section class="why icp icp--communes" id="communes">
   <div class="wrap center">
-    <div class="icp-badge reveal">Pour les communes &amp; le patrimoine</div>
-    <h2 class="h2 reveal d1">Vous gérez un site <em>chargé d'histoire</em></h2>
+    <div class="icp-badge reveal" data-i18n="communes.badge">Pour les communes &amp; le patrimoine</div>
+    <h2 class="h2 reveal d1" data-i18n="communes.h2">Vous gérez un site <em>chargé d'histoire</em></h2>
     <p class="lead dropcap reveal d2">Lost Chapter transforme votre lieu en théâtre vivant de sa propre légende — sans le toucher. <strong>Caution scientifique CNRS, retombées économiques locales, engagement de votre territoire.</strong></p>
 
     <div class="why-grid">
@@ -1851,7 +1891,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       </div>
     </div>
 
-    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="commune">Proposer mon site →</button>
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="commune" data-i18n="communes.cta">Proposer mon site →</button>
   </div>
 </section>
 
@@ -1860,8 +1900,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ POUR LES SPONSORS &amp; INVESTISSEURS ============ -->
 <section class="gain icp icp--sponsors" id="sponsors">
   <div class="wrap center">
-    <div class="icp-badge reveal">Pour les sponsors &amp; investisseurs</div>
-    <h2 class="h2 reveal d1">Un partenariat <em>qui vous revient</em></h2>
+    <div class="icp-badge reveal" data-i18n="sponsors.badge">Pour les sponsors &amp; investisseurs</div>
+    <h2 class="h2 reveal d1" data-i18n="sponsors.h2">Un partenariat <em>qui vous revient</em></h2>
     <p class="lead dropcap reveal d2">Soutenir Lost Chapter n'est pas un don à fonds perdu. C'est un partenariat à <strong>retour concret</strong>, sur une cible que personne d'autre ne vous offre — fiscalement avantageux, validé scientifiquement, exposé en direct.</p>
 
     <div class="gain-grid">
@@ -1889,11 +1929,11 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 
     <div class="fiscal reveal d1">
       <div class="fiscal-big">60<span style="font-size:.5em">%</span></div>
-      <div class="fiscal-label">de votre soutien, déductible des impôts</div>
+      <div class="fiscal-label" data-i18n="sponsors.fiscalLabel">de votre soutien, déductible des impôts</div>
       <p class="fiscal-note">Un don de 5 000 € ne vous coûte réellement que 2 000 €. Le reste, c'est l'État qui le porte — et vous, vous portez l'histoire.</p>
     </div>
 
-    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="sponsor">Participer au projet →</button>
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="sponsor" data-i18n="sponsors.cta">Participer au projet →</button>
   </div>
 </section>
 
@@ -1902,8 +1942,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ POUR LES CRÉATEURS &amp; STREAMERS ============ -->
 <section class="creators-section icp icp--createurs" id="createurs">
   <div class="wrap center">
-    <div class="icp-badge reveal">Pour les créateurs &amp; streamers</div>
-    <h2 class="h2 reveal d1">Vous créez <em>du contenu</em></h2>
+    <div class="icp-badge reveal" data-i18n="createurs.badge">Pour les créateurs &amp; streamers</div>
+    <h2 class="h2 reveal d1" data-i18n="createurs.h2">Vous créez <em>du contenu</em></h2>
     <p class="lead dropcap reveal d2">Twitch, YouTube, TikTok, Instagram — vous avez une audience et vous cherchez des formats qui sortent du flot. Lost Chapter, c'est <strong>un terrain de jeu unique</strong> : un monument réel, une histoire vraie validée CNRS, une production pro qui vous porte. Pas un sponsoring déguisé : une vraie expérience à raconter.</p>
 
     <div class="creators-grid">
@@ -1929,7 +1969,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       </div>
     </div>
 
-    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="createur">Je veux rejoindre l'aventure créateur →</button>
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="createur" data-i18n="createurs.cta">Je veux rejoindre l'aventure créateur →</button>
   </div>
 </section>
 
@@ -1938,8 +1978,8 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ POUR LE PUBLIC &amp; LA COMMUNAUTÉ ============ -->
 <section class="public-section icp icp--public" id="public">
   <div class="wrap center">
-    <div class="icp-badge reveal">Pour le public &amp; la communauté</div>
-    <h2 class="h2 reveal d1">Vivre <em>l'aventure</em></h2>
+    <div class="icp-badge reveal" data-i18n="public.badge">Pour le public &amp; la communauté</div>
+    <h2 class="h2 reveal d1" data-i18n="public.h2">Vivre <em>l'aventure</em></h2>
     <p class="lead dropcap reveal d2">Pour les passionnés d'Histoire, les amateurs de live Twitch, les familles, les communautés de créateurs — Lost Chapter, c'est l'expérience d'un événement où l'Histoire prend vie sous vos yeux. <strong>Vraie, immersive, partagée.</strong></p>
 
     <div class="public-grid">
@@ -1965,7 +2005,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
       </div>
     </div>
 
-    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="public">Je veux être prévenu de la prochaine aventure →</button>
+    <button type="button" class="section-cta reveal d2" data-open-form data-form-context="public" data-i18n="public.cta">Je veux être prévenu de la prochaine aventure →</button>
   </div>
 </section>
 
@@ -1974,16 +2014,16 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ PARTICIPER À L'AVENTURE (Équipe + Presse) ============ -->
 <section class="participer-section icp icp--participer" id="participer">
   <div class="wrap center">
-    <div class="icp-badge reveal">Participer à l'aventure</div>
-    <h2 class="h2 reveal d1">Construire <em>l'événement</em></h2>
+    <div class="icp-badge reveal" data-i18n="participer.badge">Participer à l'aventure</div>
+    <h2 class="h2 reveal d1" data-i18n="participer.h2">Construire <em>l'événement</em></h2>
     <p class="lead dropcap reveal d2">Lost Chapter, c'est aussi <strong>une équipe à construire</strong> et <strong>des médias à embarquer</strong>. Artistes, bénévoles, presse — toutes les bonnes volontés et tous les regards extérieurs sont les bienvenus.</p>
 
     <div class="participer-blocks">
 
       <!-- Bloc 1 : Talents & équipe -->
       <div class="participer-block reveal d1">
-        <div class="participer-block-title">🎭 Talents &amp; équipe</div>
-        <div class="participer-block-h3">Rejoindre les <em>coulisses</em></div>
+        <div class="participer-block-title" data-i18n="participer.team.title">🎭 Talents &amp; équipe</div>
+        <div class="participer-block-h3" data-i18n="participer.team.h3">Rejoindre les <em>coulisses</em></div>
         <div class="participer-cards">
           <div class="participer-card">
             <span class="participer-card-ico">🎨</span>
@@ -2006,13 +2046,13 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
             <p class="participer-card-text">Exposer vos créations le jour J — stands artisans, démonstrations, mini-marché médiéval.</p>
           </div>
         </div>
-        <button type="button" class="participer-cta" data-open-form data-form-context="equipe">Rejoindre l'équipe →</button>
+        <button type="button" class="participer-cta" data-open-form data-form-context="equipe" data-i18n="participer.team.cta">Rejoindre l'équipe →</button>
       </div>
 
       <!-- Bloc 2 : Presse & médias -->
       <div class="participer-block reveal d2">
-        <div class="participer-block-title">📰 Presse &amp; médias</div>
-        <div class="participer-block-h3">Couvrir <em>l'événement</em></div>
+        <div class="participer-block-title" data-i18n="participer.media.title">📰 Presse &amp; médias</div>
+        <div class="participer-block-h3" data-i18n="participer.media.h3">Couvrir <em>l'événement</em></div>
         <div class="participer-cards">
           <div class="participer-card">
             <span class="participer-card-ico">📻</span>
@@ -2035,7 +2075,7 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
             <p class="participer-card-text">Webzines, blogs spécialisés, podcasts patrimoine / gaming / culture, plateformes vidéo.</p>
           </div>
         </div>
-        <button type="button" class="participer-cta" data-open-form data-form-context="presse">Demander une accréditation →</button>
+        <button type="button" class="participer-cta" data-open-form data-form-context="presse" data-i18n="participer.media.cta">Demander une accréditation →</button>
       </div>
 
     </div>
@@ -2051,12 +2091,12 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
   </video>
   <div class="teaser-bg-overlay" aria-hidden="true"></div>
   <div class="wrap center">
-    <div class="teaser-eyebrow reveal"><span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span></div>
+    <div class="teaser-eyebrow reveal" data-i18n="teaser.eyebrow"><span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span></div>
     <h2 class="teaser-title reveal letter-reveal d1" aria-label="Coming Soon…">
       <span class="letter" style="--i:0">C</span><span class="letter" style="--i:1">o</span><span class="letter" style="--i:2">m</span><span class="letter" style="--i:3">i</span><span class="letter" style="--i:4">n</span><span class="letter" style="--i:5">g</span><span class="letter letter--space" style="--i:6">&nbsp;</span><span class="letter" style="--i:7">S</span><span class="letter" style="--i:8">o</span><span class="letter" style="--i:9">o</span><span class="letter" style="--i:10">n</span><span class="teaser-dots" style="--i:11">…</span>
     </h2>
 
-    <button type="button" class="teaser-cta reveal d2" data-open-form data-form-context="public">Être prévenu en avant-première →</button>
+    <button type="button" class="teaser-cta reveal d2" data-open-form data-form-context="public" data-i18n="teaser.cta">Être prévenu en avant-première →</button>
   </div>
 </section>
 
@@ -2065,12 +2105,12 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ FINAL CTA ============ -->
 <section class="final" id="soutenir">
   <div class="final-inner">
-    <div class="kicker reveal" style="color:var(--gold)">Rejoignez l'aventure</div>
-    <h2 class="final-title reveal d1">Écrivons ensemble<br>le <em>prochain chapitre</em></h2>
-    <p class="final-text reveal d2">Une ville. Un monument. Une histoire à réveiller.<br><strong>Et votre nom au générique de quelque chose de neuf.</strong></p>
-    <button type="button" class="final-cta reveal d3" data-open-form>Participer au projet →</button>
+    <div class="kicker reveal" style="color:var(--gold)" data-i18n="final.kicker">Rejoignez l'aventure</div>
+    <h2 class="final-title reveal d1" data-i18n="final.title">Écrivons ensemble<br>le <em>prochain chapitre</em></h2>
+    <p class="final-text reveal d2" data-i18n="final.text">Une ville. Un monument. Une histoire à réveiller.<br><strong>Et votre nom au générique de quelque chose de neuf.</strong></p>
+    <button type="button" class="final-cta reveal d3" data-open-form data-i18n="final.cta">Participer au projet →</button>
 
-    <div class="social-divider reveal d4"><span>Contactez-nous</span></div>
+    <div class="social-divider reveal d4" data-i18n="final.contactDivider"><span>Contactez-nous</span></div>
 
     <div class="social-links reveal d4">
       <a href="https://playazur-prod.fr/" target="_blank" rel="noopener noreferrer" class="social-link social-link--web" aria-label="Site Play Azur Production — playazur-prod.fr">
@@ -2089,13 +2129,13 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ QR CODE ============ -->
 <section class="qr">
   <div class="wrap center">
-    <div class="kicker reveal" style="color:var(--gold)">Partager le projet</div>
-    <h2 class="reveal d1" style="font-family:'Fraunces',serif;font-size:clamp(22px,3.5vw,32px);color:var(--cream);margin-bottom:28px;font-weight:500">Scannez, partagez, <em style="color:var(--gold-bright);font-style:italic">soutenez</em></h2>
+    <div class="kicker reveal" style="color:var(--gold)" data-i18n="qr.kicker">Partager le projet</div>
+    <h2 class="reveal d1" style="font-family:'Fraunces',serif;font-size:clamp(22px,3.5vw,32px);color:var(--cream);margin-bottom:28px;font-weight:500" data-i18n="qr.h2">Scannez, partagez, <em style="color:var(--gold-bright);font-style:italic">soutenez</em></h2>
     <div class="qr-frame reveal d2">
       <svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" style="display:block" aria-label="QR code vers https://lostchapter.vercel.app" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#F2E6D0" d="M0 0h41v41H0z"/><path stroke="#3D2418" d="M4 4.5h7m4 0h3m1 0h1m1 0h6m1 0h1m1 0h7M4 5.5h1m5 0h1m2 0h1m3 0h2m3 0h3m3 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h2m3 0h1m1 0h7m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m1 0h3m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h3m1 0h4m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m3 0h2m2 0h3m1 0h6m2 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M14 11.5h2m1 0h1m1 0h1m1 0h1m4 0h1m1 0h1M7 12.5h2m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h2m3 0h1m4 0h2M4 13.5h3m1 0h2m2 0h2m3 0h1m1 0h1m1 0h7m1 0h1m1 0h4M6 14.5h1m2 0h3m2 0h5m1 0h1m1 0h2m2 0h6m2 0h3M5 15.5h1m2 0h1m3 0h1m1 0h2m2 0h5m2 0h2m1 0h1m2 0h2m1 0h1M7 16.5h5m2 0h2m2 0h1m2 0h1m2 0h2m1 0h2m1 0h1M6 17.5h3m4 0h1m2 0h1m1 0h1m2 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m2 0h2m2 0h3m1 0h4m7 0h1m2 0h2M4 19.5h1m2 0h2m3 0h2m1 0h2m3 0h1m3 0h1m3 0h1m3 0h3M5 20.5h3m2 0h1m3 0h1m1 0h3m1 0h3m6 0h2m1 0h2m1 0h1M4 21.5h1m3 0h1m7 0h2m2 0h3m1 0h1m1 0h1m1 0h1m1 0h4m2 0h1M4 22.5h5m1 0h2m1 0h2m1 0h2m2 0h8m1 0h3m1 0h4M4 23.5h3m4 0h3m1 0h2m7 0h1m2 0h10M4 24.5h1m1 0h1m1 0h3m3 0h2m1 0h2m4 0h2m3 0h2m3 0h1m2 0h1M4 25.5h2m3 0h1m1 0h1m2 0h2m3 0h1m1 0h1m2 0h1m5 0h4M4 26.5h1m1 0h3m1 0h1m2 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h1m1 0h1m2 0h2M4 27.5h1m3 0h2m1 0h1m2 0h1m3 0h7m7 0h1m1 0h1M4 28.5h3m1 0h1m1 0h1m2 0h8m1 0h1m1 0h1m3 0h5m3 0h1M12 29.5h4m2 0h1m1 0h2m2 0h1m2 0h2m3 0h1m1 0h2M4 30.5h7m1 0h1m1 0h2m2 0h6m1 0h4m1 0h1m1 0h1M4 31.5h1m5 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h1m2 0h2m3 0h1m1 0h2M4 32.5h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h1m1 0h2m3 0h1m1 0h7m1 0h1M4 33.5h1m1 0h3m1 0h1m1 0h1m2 0h6m1 0h2m1 0h1m2 0h2m1 0h1m1 0h3M4 34.5h1m1 0h3m1 0h1m4 0h1m3 0h2m2 0h1m1 0h2m1 0h1m3 0h1m1 0h3M4 35.5h1m5 0h1m2 0h6m1 0h2m2 0h1m4 0h2m2 0h4M4 36.5h7m3 0h3m4 0h1m3 0h4m1 0h1m1 0h2"/></svg>
     </div>
 
-    <div class="social-divider reveal d3"><span>Ou suivez Play Azur sur</span></div>
+    <div class="social-divider reveal d3" data-i18n="qr.socialDivider"><span>Ou suivez Play Azur sur</span></div>
 
     <div class="social-links reveal d3">
       <a href="https://www.instagram.com/playazur/" target="_blank" rel="noopener noreferrer" class="social-link social-link--instagram" aria-label="Instagram Play Azur — @playazur">
@@ -2127,11 +2167,11 @@ form.lead-form{display:flex;flex-direction:column;gap:18px}
 <!-- ============ IMAGINE GAME (just before footer) ============ -->
 <section class="imagine-banner">
   <div class="wrap center">
-    <div class="imagine-eyebrow reveal"><span>✦</span> Avant de partir <span>✦</span></div>
-    <h2 class="imagine-title reveal d1">Et si <em>vous</em> écriviez le prochain chapitre ?</h2>
-    <p class="imagine-sub reveal d2">5 étapes, 2 minutes. Choisissez le lieu, l'époque, les créateurs, les sponsors, le twist scénaristique — <strong>les meilleures idées inspireront un futur épisode</strong>.</p>
-    <a href="lostchapter-imagine.html" class="imagine-cta reveal d3">🎲 <em>Imagine</em> ton Lost Chapter <span class="imagine-arrow">→</span></a>
-    <p class="imagine-hint reveal d4">100% gratuit · sans pression · juste pour le plaisir d'imaginer</p>
+    <div class="imagine-eyebrow reveal" data-i18n="imagine.eyebrow"><span>✦</span> Avant de partir <span>✦</span></div>
+    <h2 class="imagine-title reveal d1" data-i18n="imagine.h2">Et si <em>vous</em> écriviez le prochain chapitre ?</h2>
+    <p class="imagine-sub reveal d2" data-i18n="imagine.sub">5 étapes, 2 minutes. Choisissez le lieu, l'époque, les créateurs, les sponsors, le twist scénaristique — <strong>les meilleures idées inspireront un futur épisode</strong>.</p>
+    <a href="lostchapter-imagine.html" class="imagine-cta reveal d3" data-i18n="imagine.cta">🎲 <em>Imagine</em> ton Lost Chapter <span class="imagine-arrow">→</span></a>
+    <p class="imagine-hint reveal d4" data-i18n="imagine.hint">100% gratuit · sans pression · juste pour le plaisir d'imaginer</p>
   </div>
 </section>
 
@@ -3046,6 +3086,173 @@ form.addEventListener('submit', async (e) => {
 if(location.hash === '#soutenir-form') {
   setTimeout(openModal, 600);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   I18N — Sélecteur de langue (FR / EN / ES / IT)
+   ═══════════════════════════════════════════════════════════════════ */
+const I18N = {
+  fr: {
+    'hero.sub': "RÉVEILLEZ L'HISTOIRE",
+    'hero.line': "Et si un <em>monument oublié</em> redevenait, le temps d'une journée, le théâtre vivant de sa propre légende ?",
+    'hero.portalsLabel': "Choisissez votre porte d'entrée",
+    'hero.secondaryLink': "Artiste · Bénévole · Journaliste · Presse → <em>Participer à l'aventure</em>",
+    'hero.scrollHint': "Faites défiler",
+    'portal.communes.eye': "Je gère", 'portal.communes.title': "Un patrimoine", 'portal.communes.desc': "Mairie · OT · Monument · Conservation",
+    'portal.sponsors.eye': "Je soutiens", 'portal.sponsors.title': "Le projet", 'portal.sponsors.desc': "Entreprise · Fondation · Mécénat",
+    'portal.createurs.eye': "Je crée", 'portal.createurs.title': "Du contenu", 'portal.createurs.desc': "Twitch · YouTube · TikTok · Insta",
+    'portal.public.eye': "Je veux", 'portal.public.title': "Vivre l'aventure", 'portal.public.desc': "Particulier · Famille · Communauté",
+    'concept.phrase': "Lost Chapter, c'est <span class=\"hl\">l'histoire vraie d'un lieu patrimonial</span>, jouée en direct, écrite avec <span class=\"hl\">une chercheuse du CNRS</span>, diffusée devant le public sur place et <span class=\"hl\">des milliers de spectateurs</span> connectés.",
+    'stats.kicker': "Le projet en chiffres", 'stats.h2': "Une journée. <em>Un impact national.</em>",
+    'stats.s1': "Spectateurs en direct", 'stats.s1sub': "Audience Twitch concurrente visée",
+    'stats.s2': "Audience cumulée", 'stats.s2sub': "Communautés des créateurs invités",
+    'stats.s3': "Seule journée", 'stats.s3sub': "Montage, live et démontage le jour même",
+    'stats.s4': "Déductible", 'stats.s4sub': "Réduction fiscale sur votre soutien",
+    'communes.badge': "Pour les communes &amp; le patrimoine", 'communes.h2': "Vous gérez un site <em>chargé d'histoire</em>", 'communes.cta': "Proposer mon site →",
+    'sponsors.badge': "Pour les sponsors &amp; investisseurs", 'sponsors.h2': "Un partenariat <em>qui vous revient</em>", 'sponsors.cta': "Participer au projet →", 'sponsors.fiscalLabel': "de votre soutien, déductible des impôts",
+    'createurs.badge': "Pour les créateurs &amp; streamers", 'createurs.h2': "Vous créez <em>du contenu</em>", 'createurs.cta': "Je veux rejoindre l'aventure créateur →",
+    'public.badge': "Pour le public &amp; la communauté", 'public.h2': "Vivre <em>l'aventure</em>", 'public.cta': "Je veux être prévenu de la prochaine aventure →",
+    'participer.badge': "Participer à l'aventure", 'participer.h2': "Construire <em>l'événement</em>",
+    'participer.team.title': "🎭 Talents &amp; équipe", 'participer.team.h3': "Rejoindre les <em>coulisses</em>", 'participer.team.cta': "Rejoindre l'équipe →",
+    'participer.media.title': "📰 Presse &amp; médias", 'participer.media.h3': "Couvrir <em>l'événement</em>", 'participer.media.cta': "Demander une accréditation →",
+    'teaser.eyebrow': '<span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span>', 'teaser.cta': "Être prévenu en avant-première →",
+    'imagine.eyebrow': '<span>✦</span> Avant de partir <span>✦</span>',
+    'imagine.h2': "Et si <em>vous</em> écriviez le prochain chapitre ?",
+    'imagine.sub': "5 étapes, 2 minutes. Choisissez le lieu, l'époque, les créateurs, les sponsors, le twist scénaristique — <strong>les meilleures idées inspireront un futur épisode</strong>.",
+    'imagine.cta': '🎲 <em>Imagine</em> ton Lost Chapter <span class="imagine-arrow">→</span>',
+    'imagine.hint': "100% gratuit · sans pression · juste pour le plaisir d'imaginer",
+    'final.kicker': "Rejoignez l'aventure", 'final.title': "Écrivons ensemble<br>le <em>prochain chapitre</em>", 'final.text': "Une ville. Un monument. Une histoire à réveiller.<br><strong>Et votre nom au générique de quelque chose de neuf.</strong>", 'final.cta': "Participer au projet →", 'final.contactDivider': "<span>Contactez-nous</span>",
+    'qr.kicker': "Partager le projet", 'qr.h2': 'Scannez, partagez, <em style="color:var(--gold-bright);font-style:italic">soutenez</em>', 'qr.socialDivider': "<span>Ou suivez Play Azur sur</span>",
+  },
+  en: {
+    'hero.sub': "AWAKEN HISTORY",
+    'hero.line': "What if a <em>forgotten monument</em> became, for a single day, the living theater of its own legend?",
+    'hero.portalsLabel': "Choose your entry point",
+    'hero.secondaryLink': "Artist · Volunteer · Journalist · Press → <em>Join the adventure</em>",
+    'hero.scrollHint': "Scroll down",
+    'portal.communes.eye': "I manage", 'portal.communes.title': "A heritage site", 'portal.communes.desc': "Town · Tourism · Monument · Conservation",
+    'portal.sponsors.eye': "I support", 'portal.sponsors.title': "The project", 'portal.sponsors.desc': "Company · Foundation · Patronage",
+    'portal.createurs.eye': "I create", 'portal.createurs.title': "Content", 'portal.createurs.desc': "Twitch · YouTube · TikTok · Insta",
+    'portal.public.eye': "I want to", 'portal.public.title': "Live the adventure", 'portal.public.desc': "Individual · Family · Community",
+    'concept.phrase': "Lost Chapter is <span class=\"hl\">the true history of a heritage site</span>, played live, written with <span class=\"hl\">a CNRS researcher</span>, broadcast in front of the audience on-site and <span class=\"hl\">thousands of online viewers</span>.",
+    'stats.kicker': "The project in numbers", 'stats.h2': "One day. <em>One national impact.</em>",
+    'stats.s1': "Live viewers", 'stats.s1sub': "Concurrent Twitch audience target",
+    'stats.s2': "Cumulative reach", 'stats.s2sub': "Combined creator communities",
+    'stats.s3': "Single day", 'stats.s3sub': "Setup, live and teardown the same day",
+    'stats.s4': "Tax-deductible", 'stats.s4sub': "Fiscal reduction on your support",
+    'communes.badge': "For towns &amp; heritage sites", 'communes.h2': "You manage a site <em>steeped in history</em>", 'communes.cta': "Propose my site →",
+    'sponsors.badge': "For sponsors &amp; investors", 'sponsors.h2': "A partnership <em>that pays off</em>", 'sponsors.cta': "Join the project →", 'sponsors.fiscalLabel': "of your support, tax-deductible",
+    'createurs.badge': "For creators &amp; streamers", 'createurs.h2': "You create <em>content</em>", 'createurs.cta': "I want to join the creator adventure →",
+    'public.badge': "For the public &amp; community", 'public.h2': "Live <em>the adventure</em>", 'public.cta': "Notify me of the next adventure →",
+    'participer.badge': "Join the adventure", 'participer.h2': "Build <em>the event</em>",
+    'participer.team.title': "🎭 Talents &amp; crew", 'participer.team.h3': "Join the <em>backstage</em>", 'participer.team.cta': "Join the team →",
+    'participer.media.title': "📰 Press &amp; media", 'participer.media.h3': "Cover <em>the event</em>", 'participer.media.cta': "Request press accreditation →",
+    'teaser.eyebrow': '<span class="teaser-fleur">✦</span> Edition 1 <span class="teaser-fleur">✦</span>', 'teaser.cta': "Get early-bird notification →",
+    'imagine.eyebrow': '<span>✦</span> Before you leave <span>✦</span>',
+    'imagine.h2': "What if <em>you</em> wrote the next chapter?",
+    'imagine.sub': "5 steps, 2 minutes. Choose the location, era, creators, sponsors, narrative twist — <strong>the best ideas will inspire a future episode</strong>.",
+    'imagine.cta': '🎲 <em>Imagine</em> your Lost Chapter <span class="imagine-arrow">→</span>',
+    'imagine.hint': "100% free · no pressure · just for the pleasure of imagining",
+    'final.kicker': "Join the adventure", 'final.title': "Let's write together<br>the <em>next chapter</em>", 'final.text': "A town. A monument. A story to awaken.<br><strong>And your name in the credits of something new.</strong>", 'final.cta': "Join the project →", 'final.contactDivider': "<span>Contact us</span>",
+    'qr.kicker': "Share the project", 'qr.h2': 'Scan, share, <em style="color:var(--gold-bright);font-style:italic">support</em>', 'qr.socialDivider': "<span>Or follow Play Azur on</span>",
+  },
+  es: {
+    'hero.sub': "DESPIERTA LA HISTORIA",
+    'hero.line': "¿Y si un <em>monumento olvidado</em> se convirtiera, por un día, en el teatro vivo de su propia leyenda?",
+    'hero.portalsLabel': "Elige tu puerta de entrada",
+    'hero.secondaryLink': "Artista · Voluntario · Periodista · Prensa → <em>Participar en la aventura</em>",
+    'hero.scrollHint': "Desplázate",
+    'portal.communes.eye': "Gestiono", 'portal.communes.title': "Un patrimonio", 'portal.communes.desc': "Ayuntamiento · Turismo · Monumento · Conservación",
+    'portal.sponsors.eye': "Apoyo", 'portal.sponsors.title': "El proyecto", 'portal.sponsors.desc': "Empresa · Fundación · Mecenazgo",
+    'portal.createurs.eye': "Creo", 'portal.createurs.title': "Contenido", 'portal.createurs.desc': "Twitch · YouTube · TikTok · Insta",
+    'portal.public.eye': "Quiero", 'portal.public.title': "Vivir la aventura", 'portal.public.desc': "Particular · Familia · Comunidad",
+    'concept.phrase': "Lost Chapter es <span class=\"hl\">la historia real de un lugar patrimonial</span>, interpretada en directo, escrita con <span class=\"hl\">una investigadora del CNRS</span>, difundida ante el público presente y <span class=\"hl\">miles de espectadores</span> conectados.",
+    'stats.kicker': "El proyecto en cifras", 'stats.h2': "Un día. <em>Un impacto nacional.</em>",
+    'stats.s1': "Espectadores en directo", 'stats.s1sub': "Audiencia Twitch simultánea objetivo",
+    'stats.s2': "Audiencia acumulada", 'stats.s2sub': "Comunidades de los creadores invitados",
+    'stats.s3': "Un solo día", 'stats.s3sub': "Montaje, directo y desmontaje el mismo día",
+    'stats.s4': "Desgravable", 'stats.s4sub': "Reducción fiscal sobre tu apoyo",
+    'communes.badge': "Para municipios y patrimonio", 'communes.h2': "Gestionas un sitio <em>cargado de historia</em>", 'communes.cta': "Proponer mi lugar →",
+    'sponsors.badge': "Para patrocinadores e inversores", 'sponsors.h2': "Una colaboración <em>que te recompensa</em>", 'sponsors.cta': "Unirse al proyecto →", 'sponsors.fiscalLabel': "de tu apoyo, deducible de impuestos",
+    'createurs.badge': "Para creadores y streamers", 'createurs.h2': "Creas <em>contenido</em>", 'createurs.cta': "Quiero unirme a la aventura creador →",
+    'public.badge': "Para el público y la comunidad", 'public.h2': "Vivir <em>la aventura</em>", 'public.cta': "Quiero estar al tanto de la próxima aventura →",
+    'participer.badge': "Participar en la aventura", 'participer.h2': "Construir <em>el evento</em>",
+    'participer.team.title': "🎭 Talentos y equipo", 'participer.team.h3': "Unirse al <em>backstage</em>", 'participer.team.cta': "Unirse al equipo →",
+    'participer.media.title': "📰 Prensa y medios", 'participer.media.h3': "Cubrir <em>el evento</em>", 'participer.media.cta': "Solicitar acreditación de prensa →",
+    'teaser.eyebrow': '<span class="teaser-fleur">✦</span> Edición 1 <span class="teaser-fleur">✦</span>', 'teaser.cta': "Avisarme en primicia →",
+    'imagine.eyebrow': '<span>✦</span> Antes de irte <span>✦</span>',
+    'imagine.h2': "¿Y si <em>tú</em> escribieras el próximo capítulo?",
+    'imagine.sub': "5 pasos, 2 minutos. Elige el lugar, la época, los creadores, los patrocinadores, el giro narrativo — <strong>las mejores ideas inspirarán un episodio futuro</strong>.",
+    'imagine.cta': '🎲 <em>Imagina</em> tu Lost Chapter <span class="imagine-arrow">→</span>',
+    'imagine.hint': "100% gratis · sin presión · solo por el placer de imaginar",
+    'final.kicker': "Únete a la aventura", 'final.title': "Escribamos juntos<br>el <em>próximo capítulo</em>", 'final.text': "Una ciudad. Un monumento. Una historia que despertar.<br><strong>Y tu nombre en los créditos de algo nuevo.</strong>", 'final.cta': "Unirse al proyecto →", 'final.contactDivider': "<span>Contáctanos</span>",
+    'qr.kicker': "Compartir el proyecto", 'qr.h2': 'Escanea, comparte, <em style="color:var(--gold-bright);font-style:italic">apoya</em>', 'qr.socialDivider': "<span>O sigue a Play Azur en</span>",
+  },
+  it: {
+    'hero.sub': "RISVEGLIA LA STORIA",
+    'hero.line': "E se un <em>monumento dimenticato</em> diventasse, per un giorno, il teatro vivente della propria leggenda?",
+    'hero.portalsLabel': "Scegli la tua porta d'ingresso",
+    'hero.secondaryLink': "Artista · Volontario · Giornalista · Stampa → <em>Partecipa all'avventura</em>",
+    'hero.scrollHint': "Scorri",
+    'portal.communes.eye': "Gestisco", 'portal.communes.title': "Un patrimonio", 'portal.communes.desc': "Comune · Turismo · Monumento · Conservazione",
+    'portal.sponsors.eye': "Sostengo", 'portal.sponsors.title': "Il progetto", 'portal.sponsors.desc': "Azienda · Fondazione · Mecenatismo",
+    'portal.createurs.eye': "Creo", 'portal.createurs.title': "Contenuti", 'portal.createurs.desc': "Twitch · YouTube · TikTok · Insta",
+    'portal.public.eye': "Voglio", 'portal.public.title': "Vivere l'avventura", 'portal.public.desc': "Privato · Famiglia · Comunità",
+    'concept.phrase': "Lost Chapter è <span class=\"hl\">la storia vera di un luogo patrimoniale</span>, recitata dal vivo, scritta con <span class=\"hl\">una ricercatrice del CNRS</span>, trasmessa davanti al pubblico presente e <span class=\"hl\">migliaia di spettatori</span> connessi.",
+    'stats.kicker': "Il progetto in cifre", 'stats.h2': "Un giorno. <em>Un impatto nazionale.</em>",
+    'stats.s1': "Spettatori in diretta", 'stats.s1sub': "Audience Twitch simultanea prevista",
+    'stats.s2': "Audience cumulativa", 'stats.s2sub': "Community dei creator ospiti",
+    'stats.s3': "Un solo giorno", 'stats.s3sub': "Allestimento, live e smontaggio lo stesso giorno",
+    'stats.s4': "Deducibile", 'stats.s4sub': "Riduzione fiscale sul tuo sostegno",
+    'communes.badge': "Per i comuni e il patrimonio", 'communes.h2': "Gestisci un sito <em>carico di storia</em>", 'communes.cta': "Proporre il mio sito →",
+    'sponsors.badge': "Per sponsor e investitori", 'sponsors.h2': "Una partnership <em>che ti torna utile</em>", 'sponsors.cta': "Partecipare al progetto →", 'sponsors.fiscalLabel': "del tuo sostegno, deducibile dalle tasse",
+    'createurs.badge': "Per creator e streamer", 'createurs.h2': "Crei <em>contenuti</em>", 'createurs.cta': "Voglio unirmi all'avventura creator →",
+    'public.badge': "Per il pubblico e la community", 'public.h2': "Vivere <em>l'avventura</em>", 'public.cta': "Voglio essere avvisato della prossima avventura →",
+    'participer.badge': "Partecipare all'avventura", 'participer.h2': "Costruire <em>l'evento</em>",
+    'participer.team.title': "🎭 Talenti e team", 'participer.team.h3': "Unirsi al <em>backstage</em>", 'participer.team.cta': "Unirsi al team →",
+    'participer.media.title': "📰 Stampa e media", 'participer.media.h3': "Coprire <em>l'evento</em>", 'participer.media.cta': "Richiedere accredito stampa →",
+    'teaser.eyebrow': '<span class="teaser-fleur">✦</span> Edizione 1 <span class="teaser-fleur">✦</span>', 'teaser.cta': "Avvisami in anteprima →",
+    'imagine.eyebrow': '<span>✦</span> Prima di andare <span>✦</span>',
+    'imagine.h2': "E se <em>tu</em> scrivessi il prossimo capitolo?",
+    'imagine.sub': "5 passi, 2 minuti. Scegli il luogo, l'epoca, i creator, gli sponsor, il colpo di scena — <strong>le idee migliori ispireranno un episodio futuro</strong>.",
+    'imagine.cta': '🎲 <em>Immagina</em> il tuo Lost Chapter <span class="imagine-arrow">→</span>',
+    'imagine.hint': "100% gratis · senza pressione · solo per il piacere di immaginare",
+    'final.kicker': "Unisciti all'avventura", 'final.title': "Scriviamo insieme<br>il <em>prossimo capitolo</em>", 'final.text': "Una città. Un monumento. Una storia da risvegliare.<br><strong>E il tuo nome nei titoli di coda di qualcosa di nuovo.</strong>", 'final.cta': "Partecipare al progetto →", 'final.contactDivider': "<span>Contattaci</span>",
+    'qr.kicker': "Condividi il progetto", 'qr.h2': 'Scansiona, condividi, <em style="color:var(--gold-bright);font-style:italic">sostieni</em>', 'qr.socialDivider': "<span>Oppure segui Play Azur su</span>",
+  }
+};
+
+const SUPPORTED_LANGS = ['fr','en','es','it'];
+const LANG_STORAGE_KEY = 'lostchapter_lang';
+
+function setLang(lang){
+  if(!SUPPORTED_LANGS.includes(lang)) lang = 'fr';
+  document.documentElement.lang = lang;
+  const dict = I18N[lang] || {};
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+  try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+}
+
+// Bind clicks
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', () => setLang(b.getAttribute('data-lang')));
+});
+
+// Initial language: localStorage → browser → fr
+(function initLang(){
+  let initial = null;
+  try{ initial = localStorage.getItem(LANG_STORAGE_KEY); }catch(e){}
+  if(!initial || !SUPPORTED_LANGS.includes(initial)){
+    const browser = (navigator.language || 'fr').slice(0,2).toLowerCase();
+    initial = SUPPORTED_LANGS.includes(browser) ? browser : 'fr';
+  }
+  setLang(initial);
+})();
 </script>
 
 </body>
