@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+/* ============================================================
+   AMAVYA — Design System
+   Palette : noir profond · bleu électrique · violet néon · blanc
+   ============================================================ */
+
+@theme {
+  /* Couleurs de marque */
+  --color-ink: #05060c;
+  --color-ink-900: #080a14;
+  --color-ink-800: #0c0f1d;
+  --color-ink-700: #11152a;
+
+  --color-electric: #2b6bff;
+  --color-electric-bright: #4f8bff;
+  --color-violet: #8b5cff;
+  --color-violet-bright: #a978ff;
+  --color-cyan: #3fe0ff;
+
+  --color-paper: #f5f7ff;
+  --color-muted: #9aa3c7;
+  --color-muted-soft: #6b738f;
+
+  /* Rayons & ombres */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  /* Typo */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  /* Easing premium */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Base ---------- */
+* {
+  border-color: color-mix(in oklab, var(--color-electric) 12%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-violet) 45%, transparent);
+  color: #fff;
+}
+
+/* Scrollbar discrète */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-electric), var(--color-violet));
+  border-radius: 99px;
+  border: 2px solid var(--color-ink);
+}
+
+/* ============================================================
+   Utilitaires de marque
+   ============================================================ */
+
+/* Texte en dégradé électrique → violet */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    var(--color-electric-bright) 45%,
+    var(--color-violet-bright) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Surface glassmorphism */
+.glass {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, white 7%, transparent),
+    color-mix(in oklab, white 2%, transparent)
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in oklab, white 10%, transparent);
+}
+
+.glass-strong {
+  background: color-mix(in oklab, var(--color-ink-800) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid color-mix(in oklab, white 9%, transparent);
+}
+
+/* Halo lumineux derrière un élément */
+.glow-ring {
+  position: relative;
+}
+.glow-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    color-mix(in oklab, var(--color-electric) 70%, transparent),
+    transparent 40%,
+    color-mix(in oklab, var(--color-violet) 70%, transparent)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  transition: opacity 0.4s var(--ease-smooth);
+}
+.glow-ring:hover::before {
+  opacity: 1;
+}
+
+/* Lueur de fond radiale réutilisable */
+.aurora {
+  background:
+    radial-gradient(
+      40rem 40rem at 15% 10%,
+      color-mix(in oklab, var(--color-electric) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      36rem 36rem at 85% 0%,
+      color-mix(in oklab, var(--color-violet) 20%, transparent),
+      transparent 60%
+    );
+}
+
+/* Grain / grille subtile */
+.grid-mask {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, white 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, white 4%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-26px) translateX(12px);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes ticker {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 9s var(--ease-smooth) infinite;
+}
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+.animate-ticker {
+  animation: ticker 2.4s ease-in-out infinite;
+}
+
+.shimmer-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-cyan) 60%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Respect des préférences de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
