@@ -7,7 +7,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const SITE_URL = "https://amavya.com";
+const SITE_URL = "https://amavya.cloud";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),

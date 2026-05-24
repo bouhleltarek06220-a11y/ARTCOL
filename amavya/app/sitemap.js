@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const base = "https://amavya.com";
+  const base = "https://amavya.cloud";
   return [
     {
       url: base,
