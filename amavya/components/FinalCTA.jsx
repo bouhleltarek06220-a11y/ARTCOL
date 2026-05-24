@@ -7,10 +7,19 @@ export default function FinalCTA() {
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-5">
-        <div className="glow-ring relative overflow-hidden rounded-[2rem] border border-gold/15 bg-[linear-gradient(140deg,rgba(212,175,55,0.16),rgba(168,127,46,0.1))] p-10 text-center sm:p-16">
-          {/* Aurora intérieure */}
-          <div className="pointer-events-none absolute inset-0 aurora opacity-70" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(247,233,200,0.16),transparent_70%)] blur-2xl" />
+        <div className="glow-ring relative overflow-hidden rounded-[2rem] border border-gold/25 bg-[#0a0a0b] p-10 text-center sm:p-16">
+          {/* Photo de fond */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/cta-bg.webp"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+          />
+          {/* Voile sombre pour garder le texte lisible */}
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.74),rgba(5,5,5,0.58))]" />
+          {/* Halo doré central */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(247,233,200,0.14),transparent_70%)] blur-2xl" />
 
           <div className="relative flex flex-col items-center gap-6">
             <Reveal>
