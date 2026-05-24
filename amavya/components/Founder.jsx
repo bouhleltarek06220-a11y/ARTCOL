@@ -1,12 +1,10 @@
 "use client";
 
 import Reveal from "./Reveal";
-import { LogoMark } from "./Logo";
 
 const FACETS = [
   "20 ans de terrain · courant fort/faible",
-  "Ancien entrepreneur",
-  "Développeur Apple / iOS · WordPress",
+  "Dev & architecture app & web",
   "Business developer orienté IA",
 ];
 
@@ -30,9 +28,6 @@ export default function Founder() {
                     alt="Tarek Bouhlel, fondateur d'AMAVYA"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/80 to-transparent py-2 text-center text-[10px] uppercase tracking-widest text-muted">
-                    Fondateur
-                  </div>
                 </div>
               </div>
             </Reveal>
@@ -70,24 +65,6 @@ export default function Founder() {
                       {f}
                     </span>
                   ))}
-                </div>
-              </Reveal>
-
-              {/* Signature digitale */}
-              <Reveal delay={0.2}>
-                <div className="mt-2 flex items-center gap-3 border-t border-white/10 pt-5">
-                  <LogoMark size={28} />
-                  <div className="leading-tight">
-                    <p
-                      className="text-xl text-paper"
-                      style={{ fontFamily: "var(--font-inter)", fontStyle: "italic", letterSpacing: "0.02em" }}
-                    >
-                      T. Bouhlel
-                    </p>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-muted-soft">
-                      Fondateur · AMAVYA
-                    </p>
-                  </div>
                 </div>
               </Reveal>
             </div>
