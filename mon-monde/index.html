@@ -121,6 +121,11 @@
     border-color: var(--mm-violet);
     box-shadow: 0 0 12px rgba(123, 97, 255, 0.15);
   }
+  .mm-tab[data-view="compta"].active {
+    color: var(--mm-cyan);
+    border-color: var(--mm-cyan);
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.15);
+  }
 
   .mm-meta {
     font-family: var(--mm-mono);
@@ -222,6 +227,7 @@
   <nav class="mm-tabs">
     <button class="mm-tab active" data-view="brain" type="button">🌌 BRAIN</button>
     <button class="mm-tab" data-view="shrine" type="button">🌸 SHRINE</button>
+    <button class="mm-tab" data-view="compta" type="button">⊞ COMPTA</button>
   </nav>
   <div class="mm-meta">
     <div class="mm-meta-1">v1.0 · PHASE 1</div>
@@ -244,6 +250,14 @@
     src="shrine.html"
     title="Xiaomi Shrine"
     allow="microphone; geolocation; clipboard-read; clipboard-write; storage-access"
+    loading="lazy"
+  ></iframe>
+  <iframe
+    id="mm-view-compta"
+    class="mm-view"
+    src="compta.html"
+    title="Xiaomi Compta · SASU"
+    allow="clipboard-read; clipboard-write; storage-access"
     loading="lazy"
   ></iframe>
 </main>
@@ -272,7 +286,8 @@
       if (frame && frame.contentWindow && frame.contentWindow.focus) {
         try { frame.contentWindow.focus(); } catch(e) {}
       }
-      document.title = target === 'brain' ? 'Brain · Mon Monde' : 'Shrine · Mon Monde';
+      const titles = { brain: 'Brain · Mon Monde', shrine: 'Shrine · Mon Monde', compta: 'Compta · Mon Monde' };
+      document.title = titles[target] || 'Mon Monde';
     });
   });
 
@@ -322,6 +337,7 @@
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
       if (e.key === '1') { $('.mm-tab[data-view="brain"]').click(); e.preventDefault(); }
       else if (e.key === '2') { $('.mm-tab[data-view="shrine"]').click(); e.preventDefault(); }
+      else if (e.key === '3') { $('.mm-tab[data-view="compta"]').click(); e.preventDefault(); }
     }
   });
 

@@ -7,18 +7,18 @@ une fois déployée sur Vercel (Phase 3).
 
 ---
 
-## Phase 1 — état actuel
+## État actuel — Phase 2
 
-Cette phase **fusionne Brain v0.8.8 et Shrine v3.8 dans un seul univers** sans
-modifier une seule ligne des deux applications d'origine.
+L'univers réunit désormais **Brain + Shrine + Compta SASU** sous une seule topbar.
 
 ### Architecture
 
 ```
 mon-monde/
-├── index.html        ← Shell : topbar unifiée + 2 iframes (Brain/Shrine)
+├── index.html        ← Shell : topbar unifiée BRAIN / SHRINE / COMPTA + 3 iframes
 ├── brain.html        ← Xiaomi Brain v0.8.8 BRIDGED (identique à l'original)
 ├── shrine.html       ← Xiaomi Shrine v3.8 GARDIENNE DU SEUIL (identique à l'original)
+├── compta.html       ← Xiaomi Compta v1.0 SASU (nouveau - Phase 2)
 ├── sw.js             ← Service worker minimal (PWA installable, pas de cache)
 ├── manifest.json     ← Manifeste PWA "Mon Monde"
 └── src/
@@ -48,6 +48,19 @@ mon-monde/
 |---|---|
 | `Ctrl/Cmd + 1` | Aller à BRAIN |
 | `Ctrl/Cmd + 2` | Aller à SHRINE |
+| `Ctrl/Cmd + 3` | Aller à COMPTA |
+
+### Module Compta SASU — fonctionnalités
+
+| Vue | Description |
+|---|---|
+| **◈ Tableau de bord** | 8 KPI live : CA HT, charges, résultat, IS prévisionnel, TVA collectée/déductible/à décaisser, trésorerie 512. Échéances + dernières écritures. |
+| **◆ Écritures** | Saisie en partie double sur le PCG (60+ comptes pré-chargés). Validation auto débit=crédit. Filtres par journal, date, libellé. Détail dépliable. Grand-livre par compte. |
+| **⬢ Factures** | Création avec mentions légales 2026 (pénalités L441-10, indemnité 40 €, art. 293 B si franchise). Génération auto de l'écriture VTE 411/706/44571. Marquage payée → écriture BQ auto. Impression HTML. |
+| **▼ Déclarations** | TVA CA3 mensuelle/trimestrielle, IS 15%/25%, échéancier fiscal complet (TVA + IS + greffe + CFE), simulateur salaire vs dividendes. |
+| **⚙ Réglages** | Config SASU (raison sociale, SIRET, RCS, capital, APE, TVA intra, IBAN, date clôture, régime TVA). Export FEC officiel (18 colonnes, format `SIRETfecCLOTURE.txt`). Backup/restore JSON. Démo. |
+
+**Bus xiaomi-os** : Compta écoute le bus → reçoit la clé API si Shrine est déverrouillée, émet `compta:ecriture:new` et `compta:facture:new` que Brain pourra capter (Phase 4).
 
 ---
 
@@ -95,8 +108,8 @@ Puis ouvre `~/Documents/XIAOMI_OS/index.html` dans ton navigateur ou ton PWA.
 
 | Phase | Statut | Contenu |
 |---|---|---|
-| **P1** | ✅ **livré** | Fusion Brain + Shrine sous topbar unifiée |
-| **P2** | 🔜 à venir | Module Compta SASU (écritures, factures, TVA, IS, FEC) |
+| **P1** | ✅ livré | Fusion Brain + Shrine sous topbar unifiée |
+| **P2** | ✅ **livré** | Module Compta SASU (écritures, factures, TVA, IS, FEC) |
 | **P3** | 🔜 à venir | Déploiement Vercel + edge function proxy Claude |
 | **P4** | 🔜 à venir | Intelligence A+B+C (auto-enrichissement, briefing, tool-use) |
 
