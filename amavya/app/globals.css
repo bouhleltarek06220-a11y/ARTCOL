@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ============================================================
+   AMAVYA — Design System
+   Palette : noir profond · or · argent · blanc
+   Identité luxe, premium et futuriste.
+   ============================================================ */
+
+@theme {
+  /* Noirs profonds */
+  --color-ink: #050505;
+  --color-ink-900: #0a0a0b;
+  --color-ink-800: #101012;
+  --color-ink-700: #17171b;
+
+  /* Or */
+  --color-gold-deep: #a87f2e;
+  --color-gold: #d4af37;
+  --color-gold-bright: #f0d27a;
+  --color-champagne: #f7e9c8;
+
+  /* Argent */
+  --color-silver: #c2c7d0;
+  --color-silver-bright: #e6e9f0;
+  --color-silver-deep: #8a909c;
+
+  /* Neutres */
+  --color-paper: #f6f4ee;
+  --color-muted: #a7a294;
+  --color-muted-soft: #76726a;
+
+  /* Rayons */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  /* Typo */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  /* Easing premium */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Base ---------- */
+* {
+  border-color: color-mix(in oklab, var(--color-gold) 12%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-gold) 40%, transparent);
+  color: #fff;
+}
+
+/* Scrollbar discrète */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-gold), var(--color-silver));
+  border-radius: 99px;
+  border: 2px solid var(--color-ink);
+}
+
+/* ============================================================
+   Utilitaires de marque
+   ============================================================ */
+
+/* Texte en dégradé doré métallique (argent → or → champagne) */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-silver-bright) 0%,
+    var(--color-gold-bright) 40%,
+    var(--color-gold) 70%,
+    var(--color-champagne) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Surface glassmorphism */
+.glass {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, white 6%, transparent),
+    color-mix(in oklab, white 2%, transparent)
+  );
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border: 1px solid color-mix(in oklab, var(--color-gold) 14%, transparent);
+}
+
+.glass-strong {
+  background: color-mix(in oklab, var(--color-ink-800) 74%, transparent);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  border: 1px solid color-mix(in oklab, var(--color-gold) 16%, transparent);
+}
+
+/* Halo / liseré doré autour d'un élément */
+.glow-ring {
+  position: relative;
+}
+.glow-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    color-mix(in oklab, var(--color-gold) 80%, transparent),
+    transparent 40%,
+    color-mix(in oklab, var(--color-silver) 70%, transparent)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease-smooth);
+}
+.glow-ring:hover::before {
+  opacity: 1;
+}
+
+/* Lueur de fond radiale réutilisable */
+.aurora {
+  background:
+    radial-gradient(
+      40rem 40rem at 15% 10%,
+      color-mix(in oklab, var(--color-gold) 20%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      36rem 36rem at 85% 0%,
+      color-mix(in oklab, var(--color-silver) 14%, transparent),
+      transparent 60%
+    );
+}
+
+/* Grille technique subtile */
+.grid-mask {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-gold) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-gold) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-26px) translateX(12px);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes ticker {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 9s var(--ease-smooth) infinite;
+}
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+.animate-ticker {
+  animation: ticker 2.4s ease-in-out infinite;
+}
+
+.shimmer-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-champagne) 70%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Respect des préférences de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
