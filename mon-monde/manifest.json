@@ -1,0 +1,27 @@
+{
+  "name": "Mon Monde · Tarek Bouhlel",
+  "short_name": "Mon Monde",
+  "description": "L'univers personnel de Tarek : Brain + Shrine + Compta SASU, chiffré localement.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080b10",
+  "theme_color": "#080b10",
+  "lang": "fr",
+  "categories": ["productivity", "lifestyle", "business"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA4MGIxMCIvPjxjaXJjbGUgY3g9IjEyOCIgY3k9IjEyOCIgcj0iNzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M4ZjUzYSIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMiIgZmlsbD0iI2M4ZjUzYSIvPjxjaXJjbGUgY3g9IjEyOCIgY3k9IjQ0IiByPSI2IiBmaWxsPSIjN2I2MWZmIi8+PGNpcmNsZSBjeD0iMTI4IiBjeT0iMjEyIiByPSI2IiBmaWxsPSIjN2I2MWZmIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSIxMjgiIHI9IjYiIGZpbGw9IiM3YjYxZmYiLz48Y2lyY2xlIGN4PSIyMTIiIGN5PSIxMjgiIHI9IjYiIGZpbGw9IiM3YjYxZmYiLz48L3N2Zz4=",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzA4MGIxMCIvPjxjaXJjbGUgY3g9IjEyOCIgY3k9IjEyOCIgcj0iNzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M4ZjUzYSIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMiIgZmlsbD0iI2M4ZjUzYSIvPjxjaXJjbGUgY3g9IjEyOCIgY3k9IjQ0IiByPSI2IiBmaWxsPSIjN2I2MWZmIi8+PGNpcmNsZSBjeD0iMTI4IiBjeT0iMjEyIiByPSI2IiBmaWxsPSIjN2I2MWZmIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSIxMjgiIHI9IjYiIGZpbGw9IiM3YjYxZmYiLz48Y2lyY2xlIGN4PSIyMTIiIGN5PSIxMjgiIHI9IjYiIGZpbGw9IiM3YjYxZmYiLz48L3N2Zz4=",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

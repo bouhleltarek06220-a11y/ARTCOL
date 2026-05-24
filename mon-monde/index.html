@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080b10">
+<meta name="description" content="Mon Monde · l'univers personnel de Tarek Bouhlel (Brain + Shrine + Compta)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mon Monde">
+<title>Mon Monde · Tarek Bouhlel</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --mm-void: #050814;
+    --mm-bg: #080b10;
+    --mm-bg-2: #0d1218;
+    --mm-bg-3: #141a22;
+    --mm-line: #1f2937;
+    --mm-line-2: #2a3342;
+    --mm-lime: #c8f53a;
+    --mm-violet: #7b61ff;
+    --mm-cyan: #00d9ff;
+    --mm-text: #e6edf3;
+    --mm-text-dim: #8b95a7;
+    --mm-text-faint: #4a5568;
+    --mm-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --mm-sans: 'Space Grotesk', system-ui, sans-serif;
+    --mm-display: 'Orbitron', var(--mm-sans);
+    --mm-topbar-h: 52px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--mm-bg);
+    color: var(--mm-text);
+    font-family: var(--mm-sans);
+    overflow: hidden;
+  }
+
+  #mm-topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--mm-topbar-h);
+    background: linear-gradient(180deg, var(--mm-bg-2) 0%, var(--mm-bg) 100%);
+    border-bottom: 1px solid var(--mm-line);
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 18px;
+    z-index: 1000;
+    padding-top: env(safe-area-inset-top, 0);
+    height: calc(var(--mm-topbar-h) + env(safe-area-inset-top, 0));
+  }
+
+  .mm-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mm-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    color: var(--mm-lime);
+    text-shadow: 0 0 12px rgba(200, 245, 58, 0.4);
+    user-select: none;
+  }
+  .mm-logo .mm-glyph {
+    font-size: 18px;
+    animation: mmPulse 3s ease-in-out infinite;
+  }
+  @keyframes mmPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .mm-tabs {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .mm-tab {
+    background: transparent;
+    border: 1px solid var(--mm-line);
+    color: var(--mm-text-dim);
+    padding: 8px 18px;
+    cursor: pointer;
+    font-family: var(--mm-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mm-tab:hover {
+    border-color: var(--mm-line-2);
+    color: var(--mm-text);
+    background: var(--mm-bg-3);
+  }
+  .mm-tab.active {
+    background: var(--mm-bg-3);
+    color: var(--mm-lime);
+    border-color: var(--mm-lime);
+    box-shadow: 0 0 12px rgba(200, 245, 58, 0.15);
+  }
+  .mm-tab[data-view="shrine"].active {
+    color: var(--mm-violet);
+    border-color: var(--mm-violet);
+    box-shadow: 0 0 12px rgba(123, 97, 255, 0.15);
+  }
+
+  .mm-meta {
+    font-family: var(--mm-mono);
+    font-size: 10px;
+    color: var(--mm-text-faint);
+    letter-spacing: 0.1em;
+    text-align: right;
+    line-height: 1.3;
+  }
+  .mm-meta .mm-meta-1 { color: var(--mm-text-dim); }
+
+  main {
+    position: fixed;
+    top: calc(var(--mm-topbar-h) + env(safe-area-inset-top, 0));
+    left: 0; right: 0; bottom: 0;
+    background: var(--mm-void);
+  }
+
+  .mm-view {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--mm-bg);
+    display: none;
+  }
+  .mm-view.active {
+    display: block;
+  }
+
+  #mm-boot {
+    position: fixed;
+    inset: 0;
+    background: var(--mm-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+    gap: 18px;
+  }
+  #mm-boot.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .mm-boot-logo {
+    font-family: var(--mm-display);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--mm-lime);
+    text-shadow: 0 0 24px rgba(200, 245, 58, 0.6);
+  }
+  .mm-boot-sub {
+    font-family: var(--mm-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--mm-text-faint);
+    text-transform: uppercase;
+  }
+  .mm-boot-bar {
+    width: 220px;
+    height: 2px;
+    background: var(--mm-line);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .mm-boot-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, var(--mm-lime), transparent);
+    animation: mmBoot 1.4s ease-in-out infinite;
+  }
+  @keyframes mmBoot {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Responsive: on small screens, hide meta, shrink tabs */
+  @media (max-width: 640px) {
+    .mm-meta { display: none; }
+    .mm-tabs { justify-content: flex-start; }
+    .mm-tab { padding: 6px 12px; font-size: 10px; letter-spacing: 0.1em; }
+    .mm-logo { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header id="mm-topbar">
+  <div class="mm-logo">
+    <span class="mm-glyph">⊙</span>
+    <span>MON MONDE</span>
+  </div>
+  <nav class="mm-tabs">
+    <button class="mm-tab active" data-view="brain" type="button">🌌 BRAIN</button>
+    <button class="mm-tab" data-view="shrine" type="button">🌸 SHRINE</button>
+  </nav>
+  <div class="mm-meta">
+    <div class="mm-meta-1">v1.0 · PHASE 1</div>
+    <div>Tarek Bouhlel</div>
+  </div>
+</header>
+
+<main>
+  <iframe
+    id="mm-view-brain"
+    class="mm-view active"
+    src="brain.html"
+    title="Xiaomi Brain"
+    allow="microphone; clipboard-read; clipboard-write; storage-access"
+    loading="eager"
+  ></iframe>
+  <iframe
+    id="mm-view-shrine"
+    class="mm-view"
+    src="shrine.html"
+    title="Xiaomi Shrine"
+    allow="microphone; geolocation; clipboard-read; clipboard-write; storage-access"
+    loading="lazy"
+  ></iframe>
+</main>
+
+<div id="mm-boot">
+  <div class="mm-boot-logo">⊙ MON MONDE</div>
+  <div class="mm-boot-sub">Initialisation de l'univers…</div>
+  <div class="mm-boot-bar"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  // ─── Tab switching (Brain ⇄ Shrine) ───
+  $$('.mm-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.view;
+      $$('.mm-tab').forEach(t => t.classList.toggle('active', t === tab));
+      $$('.mm-view').forEach(v => v.classList.toggle('active', v.id === 'mm-view-' + target));
+      // Lazy-load Shrine the first time it's opened (already has src but iframe loading=lazy)
+      const frame = $('#mm-view-' + target);
+      if (frame && frame.contentWindow && frame.contentWindow.focus) {
+        try { frame.contentWindow.focus(); } catch(e) {}
+      }
+      document.title = target === 'brain' ? 'Brain · Mon Monde' : 'Shrine · Mon Monde';
+    });
+  });
+
+  // ─── Boot screen: fade out when Brain iframe loads (Brain is the default view) ───
+  const brainFrame = $('#mm-view-brain');
+  const boot = $('#mm-boot');
+  const dismissBoot = () => {
+    boot.classList.add('hidden');
+    setTimeout(() => { boot.style.display = 'none'; }, 600);
+  };
+  if (brainFrame.contentDocument && brainFrame.contentDocument.readyState === 'complete') {
+    dismissBoot();
+  } else {
+    brainFrame.addEventListener('load', dismissBoot, { once: true });
+    // Safety: never block more than 3s
+    setTimeout(dismissBoot, 3000);
+  }
+
+  // ─── Service Worker (PWA install) ───
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => {
+        console.warn('[Mon Monde] SW registration failed:', err);
+      });
+    });
+  }
+
+  // ─── Bus xiaomi-os : the parent forwards messages between iframes ───
+  // Brain and Shrine already speak BroadcastChannel('xiaomi-os'). Same-origin
+  // iframes share BroadcastChannel automatically, so this is a no-op safety net.
+  // We just monitor for debugging during Phase 1.
+  if ('BroadcastChannel' in window) {
+    try {
+      const bus = new BroadcastChannel('xiaomi-os');
+      bus.onmessage = (e) => {
+        // Optional: log bus traffic during dev. Remove in production.
+        if (window.MM_DEBUG_BUS) console.log('[Mon Monde · bus]', e.data);
+      };
+      window.MM_BUS = bus;
+    } catch (e) {
+      console.warn('[Mon Monde] BroadcastChannel unavailable:', e);
+    }
+  }
+
+  // ─── Keyboard shortcut: Ctrl/Cmd + 1/2 switch views ───
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
+      if (e.key === '1') { $('.mm-tab[data-view="brain"]').click(); e.preventDefault(); }
+      else if (e.key === '2') { $('.mm-tab[data-view="shrine"]').click(); e.preventDefault(); }
+    }
+  });
+
+  // ─── Expose minimal API on window for future Compta integration (Phase 2) ───
+  window.MonMonde = {
+    version: '1.0.0-phase1',
+    switchView: (name) => { const tab = $('.mm-tab[data-view="' + name + '"]'); if (tab) tab.click(); },
+    bus: window.MM_BUS,
+  };
+
+  console.log('%c⊙ MON MONDE v1.0 PHASE 1 · ready', 'color:#c8f53a; font-weight:700; letter-spacing:0.1em;');
+})();
+</script>
+</body>
+</html>
