@@ -33,7 +33,7 @@ const COLUMNS = [
 const SOCIALS = [
   {
     label: "LinkedIn",
-    href: "#",
+    href: "https://www.linkedin.com/in/tarek-bouhlel",
     path: "M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3V21h-3zM10 8.5h2.9v1.7h.04c.4-.76 1.4-1.56 2.9-1.56 3.1 0 3.66 2 3.66 4.7V21h-3v-5.2c0-1.24-.02-2.84-1.74-2.84-1.74 0-2 1.36-2 2.76V21h-3z",
   },
   {
@@ -67,6 +67,8 @@ export default function Footer() {
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
+                  target={s.href !== "#" ? "_blank" : undefined}
+                  rel={s.href !== "#" ? "noopener noreferrer" : undefined}
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-muted transition-all hover:-translate-y-0.5 hover:border-gold/40 hover:text-paper"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -100,11 +102,17 @@ export default function Footer() {
         {/* Bas de footer */}
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 py-7 text-xs text-muted-soft sm:flex-row">
           <p>© {year} AMAVYA · Tous droits réservés.</p>
-          <p className="flex items-center gap-2">
-            Conçu avec
-            <span className="text-gold-bright">l'intelligence artificielle</span>
-            · Fait en France 🇫🇷
-          </p>
+          <a
+            href="https://www.linkedin.com/in/tarek-bouhlel"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 transition-colors hover:text-paper"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3V21h-3zM10 8.5h2.9v1.7h.04c.4-.76 1.4-1.56 2.9-1.56 3.1 0 3.66 2 3.66 4.7V21h-3v-5.2c0-1.24-.02-2.84-1.74-2.84-1.74 0-2 1.36-2 2.76V21h-3z" />
+            </svg>
+            Tarek Bouhlel sur LinkedIn
+          </a>
         </div>
       </div>
     </footer>
