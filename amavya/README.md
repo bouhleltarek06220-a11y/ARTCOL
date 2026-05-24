@@ -66,7 +66,7 @@ amavya/
   est affiché à la place — aucune image cassée.
 - **Photo du fondateur** : placeholder « TB » dans `components/Founder.jsx`.
 - **Liens** : réseaux sociaux, mentions légales et contact dans `Footer.jsx`
-  et `FinalCTA.jsx` (email `contact@amavya.com`).
-- **Domaine** : `https://amavya.com` est utilisé dans le SEO
+  et `FinalCTA.jsx` (email `contact@amavya.cloud`).
+- **Domaine** : `https://amavya.cloud` est utilisé dans le SEO
   (`app/layout.jsx`, `sitemap.js`, `robots.js`).
 ```
