@@ -42,6 +42,14 @@ export const metadata = {
     title: "AMAVYA — L'intelligence artificielle au service des entreprises modernes",
     description:
       "Solutions IA, SaaS et automatisations intelligentes pour transformer la prospection, la gestion et la productivité.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "AMAVYA — IA, SaaS & automatisations intelligentes",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -49,6 +57,7 @@ export const metadata = {
     description:
       "Agents IA autonomes, CRM intelligents et automatisations métiers pour les entreprises modernes.",
     creator: "@amavya",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,

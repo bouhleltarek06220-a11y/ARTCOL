@@ -58,31 +58,38 @@ export function LogoMark({ size = 36, className = "" }) {
 }
 
 /**
- * Logo de marque. Affiche /logo.png dès qu'il existe dans public/,
- * sinon bascule sur l'emblème vectoriel doré + wordmark.
+ * Logo de marque : emblème AMAVYA (poignée de main robot/humain) + wordmark.
+ * Utilise /logo-mark.png (emblème carré détouré du logo officiel) afin que le
+ * nom reste net et lisible à petite taille. Repli sur l'emblème vectoriel doré
+ * si l'image est absente.
  */
-export default function Logo({ size = 40, className = "" }) {
+export default function Logo({ size = 40, showWordmark = true, className = "" }) {
   const [failed, setFailed] = useState(false);
-
-  if (!failed) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src="/logo.png"
-        alt="AMAVYA"
-        onError={() => setFailed(true)}
-        style={{ height: size, width: "auto" }}
-        className={`select-none ${className}`}
-      />
-    );
-  }
 
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark size={size * 0.85} />
-      <span className="text-[1.15rem] font-semibold tracking-[0.28em] text-gradient">
-        AMAVYA
-      </span>
+      {failed ? (
+        <LogoMark size={size} />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src="/logo-mark.png"
+          alt="AMAVYA"
+          onError={() => setFailed(true)}
+          width={size}
+          height={size}
+          style={{ height: size, width: size }}
+          className="select-none object-contain"
+        />
+      )}
+      {showWordmark && (
+        <span
+          className="font-semibold leading-none tracking-[0.28em] text-gradient"
+          style={{ fontSize: Math.round(size * 0.42) }}
+        >
+          AMAVYA
+        </span>
+      )}
     </span>
   );
 }
