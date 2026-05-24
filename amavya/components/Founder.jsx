@@ -24,10 +24,12 @@ export default function Founder() {
               <div className="relative mx-auto">
                 <div className="absolute -inset-3 rounded-3xl bg-[linear-gradient(135deg,#a87f2e,#d4af37)] opacity-40 blur-xl" />
                 <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-3xl border border-gold/20 bg-[linear-gradient(160deg,#17171b,#0a0a0b)] sm:h-52 sm:w-52">
-                  {/* Initiales en attendant la photo */}
-                  <span className="text-5xl font-semibold tracking-tight text-gradient">
-                    TB
-                  </span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/founder.webp"
+                    alt="Tarek Bouhlel, fondateur d'AMAVYA"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/80 to-transparent py-2 text-center text-[10px] uppercase tracking-widest text-muted">
                     Fondateur
                   </div>
