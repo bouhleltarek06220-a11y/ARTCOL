@@ -13,7 +13,7 @@ export default function SectionHeading({
       {eyebrow && (
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-ticker" />
+            <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
             {eyebrow}
           </span>
         </Reveal>

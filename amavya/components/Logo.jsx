@@ -1,8 +1,12 @@
+"use client";
+
+import { useState } from "react";
+
 /**
- * Logo AMAVYA — marque vectorielle (logomark "A" + wordmark).
- * Remplaçable par le fichier de marque définitif.
+ * Emblème vectoriel doré (repli) — un "A" métallique or/argent.
+ * Sert de fallback tant que /logo.png n'est pas présent, et de signature.
  */
-export function LogoMark({ size = 34, className = "" }) {
+export function LogoMark({ size = 36, className = "" }) {
   return (
     <svg
       width={size}
@@ -13,57 +17,72 @@ export function LogoMark({ size = 34, className = "" }) {
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="amavya-mark" x1="6" y1="44" x2="42" y2="6" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2b6bff" />
-          <stop offset="0.55" stopColor="#4f8bff" />
-          <stop offset="1" stopColor="#a978ff" />
+        <linearGradient id="amavya-gold" x1="8" y1="42" x2="40" y2="8" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#a87f2e" />
+          <stop offset="0.5" stopColor="#f0d27a" />
+          <stop offset="1" stopColor="#d4af37" />
         </linearGradient>
-        <linearGradient id="amavya-spark" x1="24" y1="14" x2="24" y2="34" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#3fe0ff" />
-          <stop offset="1" stopColor="#8b5cff" />
+        <linearGradient id="amavya-silver" x1="14" y1="34" x2="34" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#8a909c" />
+          <stop offset="1" stopColor="#e6e9f0" />
         </linearGradient>
       </defs>
-      <rect x="1" y="1" width="46" height="46" rx="13" fill="#080a14" />
+      <rect x="1" y="1" width="46" height="46" rx="13" fill="#0a0a0b" />
       <rect
         x="1"
         y="1"
         width="46"
         height="46"
         rx="13"
-        stroke="url(#amavya-mark)"
+        stroke="url(#amavya-gold)"
         strokeWidth="1.5"
         opacity="0.6"
       />
       {/* Le "A" stylisé */}
       <path
         d="M16 34 L24 13 L32 34"
-        stroke="url(#amavya-mark)"
+        stroke="url(#amavya-gold)"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M19.5 27 L28.5 27"
-        stroke="url(#amavya-spark)"
+        stroke="url(#amavya-silver)"
         strokeWidth="3"
         strokeLinecap="round"
       />
-      <circle cx="24" cy="13" r="2.4" fill="#3fe0ff" />
+      <circle cx="24" cy="13" r="2.4" fill="#f0d27a" />
     </svg>
   );
 }
 
-export function Logo({ withWordmark = true, size = 34, className = "" }) {
+/**
+ * Logo de marque. Affiche /logo.png dès qu'il existe dans public/,
+ * sinon bascule sur l'emblème vectoriel doré + wordmark.
+ */
+export default function Logo({ size = 40, className = "" }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!failed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src="/logo.png"
+        alt="AMAVYA"
+        onError={() => setFailed(true)}
+        style={{ height: size, width: "auto" }}
+        className={`select-none ${className}`}
+      />
+    );
+  }
+
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark size={size} />
-      {withWordmark && (
-        <span className="text-[1.15rem] font-semibold tracking-[0.2em] text-paper">
-          AMAVYA
-        </span>
-      )}
+      <LogoMark size={size * 0.85} />
+      <span className="text-[1.15rem] font-semibold tracking-[0.28em] text-gradient">
+        AMAVYA
+      </span>
     </span>
   );
 }
-
-export default Logo;

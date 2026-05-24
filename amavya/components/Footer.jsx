@@ -56,7 +56,7 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           {/* Marque */}
           <div className="flex flex-col gap-5">
-            <Logo />
+            <Logo size={60} />
             <p className="max-w-xs text-sm leading-relaxed text-muted">
               Solutions IA, SaaS et automatisations intelligentes pour les
               entreprises modernes. SASU française.
@@ -67,7 +67,7 @@ export default function Footer() {
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-muted transition-all hover:-translate-y-0.5 hover:border-electric/40 hover:text-paper"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-muted transition-all hover:-translate-y-0.5 hover:border-gold/40 hover:text-paper"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d={s.path} />
@@ -102,7 +102,7 @@ export default function Footer() {
           <p>© {year} AMAVYA · Tous droits réservés.</p>
           <p className="flex items-center gap-2">
             Conçu avec
-            <span className="text-electric-bright">l'intelligence artificielle</span>
+            <span className="text-gold-bright">l'intelligence artificielle</span>
             · Fait en France 🇫🇷
           </p>
         </div>

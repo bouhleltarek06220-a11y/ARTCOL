@@ -32,7 +32,7 @@ export default function Navbar() {
     >
       <nav
         className={`flex w-full max-w-6xl items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 sm:px-6 ${
-          scrolled ? "glass-strong shadow-[0_8px_40px_-20px_rgba(43,107,255,0.6)]" : "bg-transparent"
+          scrolled ? "glass-strong shadow-[0_8px_40px_-20px_rgba(212,175,55,0.5)]" : "bg-transparent"
         }`}
       >
         <a href="#top" aria-label="AMAVYA — accueil">

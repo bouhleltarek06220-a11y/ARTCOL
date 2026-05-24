@@ -7,10 +7,10 @@ export default function FinalCTA() {
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-5">
-        <div className="glow-ring relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(140deg,rgba(43,107,255,0.18),rgba(139,92,255,0.12))] p-10 text-center sm:p-16">
+        <div className="glow-ring relative overflow-hidden rounded-[2rem] border border-gold/15 bg-[linear-gradient(140deg,rgba(212,175,55,0.16),rgba(168,127,46,0.1))] p-10 text-center sm:p-16">
           {/* Aurora intérieure */}
           <div className="pointer-events-none absolute inset-0 aurora opacity-70" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(63,224,255,0.18),transparent_70%)] blur-2xl" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(247,233,200,0.16),transparent_70%)] blur-2xl" />
 
           <div className="relative flex flex-col items-center gap-6">
             <Reveal>

@@ -11,7 +11,7 @@ export default function Vision() {
         <div className="flex flex-col gap-6">
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-bright animate-ticker" />
+              <span className="h-1.5 w-1.5 rounded-full bg-silver-bright animate-ticker" />
               Notre vision
             </span>
           </Reveal>
@@ -40,9 +40,9 @@ export default function Vision() {
                 "Une technologie élégante, fiable et maîtrisée",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-paper/90">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#2b6bff,#8b5cff)]">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#a87f2e,#d4af37)]">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                      <path d="m5 12 5 5 9-9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="m5 12 5 5 9-9" stroke="#0a0a0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
                   {item}
@@ -56,7 +56,7 @@ export default function Vision() {
         <Reveal delay={0.1}>
           <div className="relative mx-auto aspect-square w-full max-w-md">
             {/* Halo */}
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(79,139,255,0.25),transparent_65%)] blur-2xl" />
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.22),transparent_65%)] blur-2xl" />
 
             {/* Anneaux orbitaux */}
             {[0, 1, 2].map((ring) => (
@@ -68,28 +68,28 @@ export default function Vision() {
                 transition={{ duration: 30 + ring * 12, repeat: Infinity, ease: "linear" }}
               >
                 <span
-                  className="absolute h-2.5 w-2.5 rounded-full bg-cyan shadow-[0_0_18px_4px_rgba(63,224,255,0.7)]"
+                  className="absolute h-2.5 w-2.5 rounded-full bg-gold-bright shadow-[0_0_18px_4px_rgba(240,210,122,0.6)]"
                   style={{ top: "-5px", left: "50%" }}
                 />
               </motion.div>
             ))}
 
-            {/* Noyau : deux mains / connexion humain-IA stylisée */}
+            {/* Noyau : connexion humain-IA stylisée (neurone) */}
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 className="glass-strong relative flex h-40 w-40 items-center justify-center rounded-full"
               >
-                <div className="absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#2b6bff,#8b5cff,#3fe0ff,#2b6bff)] opacity-30 blur-md animate-pulse-glow" />
+                <div className="absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#a87f2e,#d4af37,#e6e9f0,#a87f2e)] opacity-30 blur-md animate-pulse-glow" />
                 <svg width="84" height="84" viewBox="0 0 96 96" fill="none">
                   <defs>
                     <linearGradient id="vision-grad" x1="0" y1="0" x2="96" y2="96">
-                      <stop stopColor="#3fe0ff" />
-                      <stop offset="1" stopColor="#a978ff" />
+                      <stop stopColor="#f7e9c8" />
+                      <stop offset="1" stopColor="#d4af37" />
                     </linearGradient>
                   </defs>
-                  {/* Nœud central + connexions (neurone) */}
+                  {/* Nœud central + connexions */}
                   <circle cx="48" cy="48" r="9" fill="url(#vision-grad)" />
                   {[
                     [20, 24],
@@ -109,8 +109,8 @@ export default function Vision() {
             </div>
 
             {/* Particules flottantes */}
-            <span className="animate-float-slow absolute left-2 top-10 h-2 w-2 rounded-full bg-violet-bright/70 blur-[1px]" />
-            <span className="animate-float-slow absolute bottom-8 right-6 h-1.5 w-1.5 rounded-full bg-cyan/70 blur-[1px]" style={{ animationDelay: "-3s" }} />
+            <span className="animate-float-slow absolute left-2 top-10 h-2 w-2 rounded-full bg-gold/70 blur-[1px]" />
+            <span className="animate-float-slow absolute bottom-8 right-6 h-1.5 w-1.5 rounded-full bg-silver-bright/70 blur-[1px]" style={{ animationDelay: "-3s" }} />
           </div>
         </Reveal>
       </div>

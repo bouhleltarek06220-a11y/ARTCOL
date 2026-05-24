@@ -54,14 +54,16 @@ amavya/
 
 ## Identité visuelle
 
-- Palette : noir profond, bleu électrique, violet néon, blanc
-- Glassmorphism subtil, halos lumineux dérivants, grille technique masquée
+- Palette : noir profond, or, argent, blanc (identité luxe)
+- Glassmorphism subtil, halos dorés/argentés dérivants, grille technique masquée
 - Accessibilité : respect de `prefers-reduced-motion`
 
 ## À personnaliser
 
-- **Logo** : `components/Logo.jsx` contient un logo vectoriel provisoire.
-  Remplacez-le par le fichier de marque définitif.
+- **Logo** : déposez le logo officiel dans **`amavya/public/logo.png`**.
+  Il s'affiche automatiquement dans la navbar et le footer. Tant que le
+  fichier est absent, un emblème vectoriel doré de repli (`components/Logo.jsx`)
+  est affiché à la place — aucune image cassée.
 - **Photo du fondateur** : placeholder « TB » dans `components/Founder.jsx`.
 - **Liens** : réseaux sociaux, mentions légales et contact dans `Footer.jsx`
   et `FinalCTA.jsx` (email `contact@amavya.com`).

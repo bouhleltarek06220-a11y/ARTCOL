@@ -16,14 +16,14 @@ export default function Founder() {
       <div className="mx-auto max-w-6xl px-5">
         <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-8 sm:p-12">
           {/* Lueur d'ambiance */}
-          <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(139,92,255,0.3),transparent_70%)] blur-3xl" />
+          <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(168,127,46,0.3),transparent_70%)] blur-3xl" />
 
           <div className="relative grid items-center gap-10 lg:grid-cols-[auto_1fr]">
             {/* Portrait placeholder premium */}
             <Reveal>
               <div className="relative mx-auto">
-                <div className="absolute -inset-3 rounded-3xl bg-[linear-gradient(135deg,#2b6bff,#8b5cff)] opacity-40 blur-xl" />
-                <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(160deg,#11152a,#080a14)] sm:h-52 sm:w-52">
+                <div className="absolute -inset-3 rounded-3xl bg-[linear-gradient(135deg,#a87f2e,#d4af37)] opacity-40 blur-xl" />
+                <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-3xl border border-gold/20 bg-[linear-gradient(160deg,#17171b,#0a0a0b)] sm:h-52 sm:w-52">
                   {/* Initiales en attendant la photo */}
                   <span className="text-5xl font-semibold tracking-tight text-gradient">
                     TB
@@ -39,7 +39,7 @@ export default function Founder() {
             <div className="flex flex-col gap-5">
               <Reveal>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-ticker" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
                   Le fondateur
                 </span>
               </Reveal>

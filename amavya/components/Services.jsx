@@ -55,16 +55,16 @@ function Card({ icon: Icon, title, desc, index }) {
       className="glow-ring group glass relative flex flex-col gap-4 overflow-hidden rounded-2xl p-6"
     >
       {/* Lueur au hover */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(139,92,255,0.4),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.35),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-[linear-gradient(135deg,rgba(43,107,255,0.25),rgba(139,92,255,0.2))] text-electric-bright transition-transform duration-500 group-hover:scale-110 group-hover:text-cyan">
+      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/20 bg-[linear-gradient(135deg,rgba(168,127,46,0.28),rgba(212,175,55,0.18))] text-gold-bright transition-transform duration-500 group-hover:scale-110 group-hover:text-champagne">
         <Icon width={24} height={24} />
       </div>
 
       <h3 className="text-lg font-semibold text-paper">{title}</h3>
       <p className="text-sm leading-relaxed text-muted">{desc}</p>
 
-      <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-electric-bright opacity-0 transition-all duration-300 group-hover:opacity-100">
+      <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-gold-bright opacity-0 transition-all duration-300 group-hover:opacity-100">
         En savoir plus
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
           <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

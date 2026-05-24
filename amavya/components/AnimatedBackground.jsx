@@ -1,5 +1,5 @@
 /**
- * Fond global : dégradé profond + blobs lumineux dérivants + grille masquée.
+ * Fond global : noir profond + lueurs dorées/argentées dérivantes + grille masquée.
  * Purement décoratif et non interactif (pointer-events: none).
  */
 export default function AnimatedBackground() {
@@ -11,17 +11,17 @@ export default function AnimatedBackground() {
       {/* Base */}
       <div className="absolute inset-0 bg-ink" />
 
-      {/* Halo central */}
-      <div className="absolute left-1/2 top-[-10%] h-[60rem] w-[60rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(43,107,255,0.18),transparent_60%)] blur-2xl" />
+      {/* Halo central doré */}
+      <div className="absolute left-1/2 top-[-10%] h-[60rem] w-[60rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.14),transparent_60%)] blur-2xl" />
 
-      {/* Blobs dérivants */}
-      <div className="animate-drift absolute -left-32 top-1/4 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(139,92,255,0.22),transparent_65%)] blur-3xl" />
+      {/* Lueurs dérivantes */}
+      <div className="animate-drift absolute -left-32 top-1/4 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(168,127,46,0.16),transparent_65%)] blur-3xl" />
       <div
-        className="animate-drift absolute -right-24 top-1/3 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(63,224,255,0.14),transparent_65%)] blur-3xl"
+        className="animate-drift absolute -right-24 top-1/3 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(194,199,208,0.08),transparent_65%)] blur-3xl"
         style={{ animationDelay: "-6s" }}
       />
       <div
-        className="animate-drift absolute bottom-0 left-1/3 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(43,107,255,0.16),transparent_65%)] blur-3xl"
+        className="animate-drift absolute bottom-0 left-1/3 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.12),transparent_65%)] blur-3xl"
         style={{ animationDelay: "-11s" }}
       />
 

@@ -9,13 +9,13 @@ export default function Button({
   ...props
 }) {
   const base =
-    "group relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-bright";
+    "group relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold";
 
   const variants = {
     primary:
-      "text-white shadow-[0_8px_40px_-12px_rgba(79,139,255,0.7)] bg-[linear-gradient(110deg,#2b6bff,#8b5cff)] hover:shadow-[0_12px_50px_-10px_rgba(139,92,255,0.85)] hover:-translate-y-0.5",
+      "text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] hover:shadow-[0_12px_50px_-10px_rgba(240,210,122,0.85)] hover:-translate-y-0.5",
     secondary:
-      "glass text-paper hover:bg-white/10 hover:-translate-y-0.5",
+      "glass text-paper hover:bg-white/8 hover:-translate-y-0.5",
     ghost: "text-muted hover:text-paper",
   };
 
