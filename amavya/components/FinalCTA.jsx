@@ -2,8 +2,11 @@
 
 import Reveal from "./Reveal";
 import Button from "./Button";
+import { useLang } from "./LangProvider";
 
 export default function FinalCTA() {
+  const { t } = useLang();
+  const c = t.cta;
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-5">
@@ -24,27 +27,26 @@ export default function FinalCTA() {
           <div className="relative flex flex-col items-center gap-6">
             <Reveal>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-paper/80">
-                Passez à l'action
+                {c.eyebrow}
               </span>
             </Reveal>
 
             <Reveal delay={0.05}>
               <h2 className="text-balance text-3xl font-semibold leading-tight sm:text-5xl">
-                Prêt à transformer votre entreprise avec l'<span className="text-gradient">IA</span> ?
+                {c.titleLead}<span className="text-gradient">{c.titleHighlight}</span>{c.titleTail}
               </h2>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="max-w-xl text-pretty text-base text-muted sm:text-lg">
-                Discutons de vos enjeux et identifions ensemble les
-                automatisations à plus fort impact pour votre activité.
+                {c.paragraph}
               </p>
             </Reveal>
 
             <Reveal delay={0.15}>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button href="#contact" variant="primary">
-                  Commencer maintenant
+                  {c.button}
                 </Button>
               </div>
             </Reveal>

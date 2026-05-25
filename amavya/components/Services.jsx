@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
+import { useLang } from "./LangProvider";
 import {
   IconAgent,
   IconCRM,
@@ -11,40 +12,16 @@ import {
   IconFormation,
 } from "./Icons";
 
-const SERVICES = [
-  {
-    icon: IconAgent,
-    title: "Agents IA",
-    desc: "Des agents autonomes qui exécutent vos tâches métiers, raisonnent et agissent 24/7.",
-  },
-  {
-    icon: IconCRM,
-    title: "CRM intelligent",
-    desc: "Un CRM augmenté par l'IA qui qualifie, priorise et enrichit vos contacts en continu.",
-  },
-  {
-    icon: IconAutomation,
-    title: "Automatisation métier",
-    desc: "Connectez vos outils et automatisez vos workflows répétitifs sans friction.",
-  },
-  {
-    icon: IconProspection,
-    title: "Prospection automatisée",
-    desc: "Identification, séquençage et relance de prospects pilotés par l'intelligence artificielle.",
-  },
-  {
-    icon: IconSaaS,
-    title: "SaaS sur mesure",
-    desc: "Des plateformes web et mobiles conçues pour votre activité, scalables et élégantes.",
-  },
-  {
-    icon: IconFormation,
-    title: "Formation IA & Business",
-    desc: "Accompagnement et montée en compétences pour intégrer l'IA dans vos équipes.",
-  },
+const ICONS = [
+  IconAgent,
+  IconCRM,
+  IconAutomation,
+  IconProspection,
+  IconSaaS,
+  IconFormation,
 ];
 
-function Card({ icon: Icon, title, desc, index }) {
+function Card({ icon: Icon, title, desc, learnMore, index }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 28 }}
@@ -65,7 +42,7 @@ function Card({ icon: Icon, title, desc, index }) {
       <p className="text-sm leading-relaxed text-muted">{desc}</p>
 
       <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-gold-bright opacity-0 transition-all duration-300 group-hover:opacity-100">
-        En savoir plus
+        {learnMore}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
           <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -75,18 +52,27 @@ function Card({ icon: Icon, title, desc, index }) {
 }
 
 export default function Services() {
+  const { t } = useLang();
+  const s = t.services;
   return (
     <section id="services" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          eyebrow="Nos solutions"
-          title="Des outils IA conçus pour passer à l'échelle"
-          description="Une suite complète pour automatiser, prospecter et piloter votre activité avec l'intelligence artificielle."
+          eyebrow={s.eyebrow}
+          title={s.title}
+          description={s.description}
         />
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <Card key={s.title} index={i} {...s} />
+          {s.cards.map((card, i) => (
+            <Card
+              key={card.title}
+              index={i}
+              icon={ICONS[i]}
+              title={card.title}
+              desc={card.desc}
+              learnMore={s.learnMore}
+            />
           ))}
         </div>
       </div>

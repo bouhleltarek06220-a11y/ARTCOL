@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "./LangProvider";
 
 const bars = [42, 68, 55, 88, 73, 95, 61];
 
 export default function DashboardMockup() {
+  const { t } = useLang();
+  const d = t.dashboard;
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, rotateX: 12 }}
@@ -32,7 +35,7 @@ export default function DashboardMockup() {
         <div className="grid grid-cols-12 gap-4 p-5">
           {/* Sidebar */}
           <div className="col-span-3 hidden flex-col gap-2 sm:flex">
-            {["Vue d'ensemble", "Agents IA", "Pipeline", "Prospection", "Analytics"].map(
+            {d.sidebar.map(
               (item, i) => (
                 <div
                   key={item}
@@ -52,11 +55,7 @@ export default function DashboardMockup() {
           <div className="col-span-12 flex flex-col gap-4 sm:col-span-9">
             {/* KPIs */}
             <div className="grid grid-cols-3 gap-3">
-              {[
-                { k: "Leads traités", v: "12 480", d: "+24%" },
-                { k: "Taux réponse", v: "38,5 %", d: "+11%" },
-                { k: "Tâches auto.", v: "1 932", d: "+57%" },
-              ].map((kpi) => (
+              {d.kpis.map((kpi) => (
                 <div key={kpi.k} className="glass rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-wide text-muted">{kpi.k}</p>
                   <p className="mt-1 text-base font-semibold text-paper sm:text-lg">{kpi.v}</p>
@@ -68,8 +67,8 @@ export default function DashboardMockup() {
             {/* Graphe */}
             <div className="glass rounded-xl p-4">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-[11px] font-medium text-paper">Performance des agents</p>
-                <p className="text-[10px] text-muted">7 derniers jours</p>
+                <p className="text-[11px] font-medium text-paper">{d.chartTitle}</p>
+                <p className="text-[10px] text-muted">{d.chartRange}</p>
               </div>
               <div className="flex h-28 items-end justify-between gap-2">
                 {bars.map((h, i) => (
@@ -98,7 +97,7 @@ export default function DashboardMockup() {
                 <div className="mt-2 h-2 w-5/6 rounded-full bg-white/10" />
               </div>
               <span className="shrink-0 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[10px] font-medium text-emerald-400">
-                Actif
+                {d.activeBadge}
               </span>
             </div>
           </div>
@@ -116,8 +115,8 @@ export default function DashboardMockup() {
           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold-bright" />
         </span>
         <div>
-          <p className="text-[11px] font-semibold text-paper">3 agents en ligne</p>
-          <p className="text-[10px] text-muted">Automatisation 24/7</p>
+          <p className="text-[11px] font-semibold text-paper">{d.floatTitle}</p>
+          <p className="text-[10px] text-muted">{d.floatSubtitle}</p>
         </div>
       </motion.div>
     </motion.div>

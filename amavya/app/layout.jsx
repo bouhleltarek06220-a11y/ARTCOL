@@ -1,5 +1,6 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import LangProvider from "@/components/LangProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -118,7 +119,7 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
-        {children}
+        <LangProvider>{children}</LangProvider>
       </body>
     </html>
   );

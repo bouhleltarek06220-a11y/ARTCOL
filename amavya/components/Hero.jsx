@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import DashboardMockup from "./DashboardMockup";
+import { useLang } from "./LangProvider";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -13,6 +14,8 @@ const fadeUp = {
 };
 
 export default function Hero() {
+  const { t } = useLang();
+  const h = t.hero;
   return (
     <section
       id="top"
@@ -28,7 +31,7 @@ export default function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-muted backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
-            SASU française · IA · Automatisation · SaaS
+            {h.badge}
           </motion.span>
 
           <motion.h1
@@ -38,8 +41,8 @@ export default function Hero() {
             custom={1}
             className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
           >
-            L'intelligence artificielle au service des{" "}
-            <span className="text-gradient">entreprises modernes.</span>
+            {h.titleLead}{" "}
+            <span className="text-gradient">{h.titleHighlight}</span>
           </motion.h1>
 
           <motion.p
@@ -49,9 +52,7 @@ export default function Hero() {
             custom={2}
             className="max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
           >
-            AMAVYA développe des solutions IA, SaaS et automatisations
-            intelligentes pour transformer la prospection, la gestion et la
-            productivité.
+            {h.paragraph}
           </motion.p>
 
           {/* Mini preuve sociale */}
@@ -63,18 +64,18 @@ export default function Hero() {
             className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-4 text-sm text-muted-soft"
           >
             <div>
-              <p className="text-xl font-semibold text-paper">24/7</p>
-              <p className="text-xs">Agents autonomes</p>
+              <p className="text-xl font-semibold text-paper">{h.stats[0].value}</p>
+              <p className="text-xs">{h.stats[0].label}</p>
             </div>
             <div className="hidden h-8 w-px bg-white/10 sm:block" />
             <div>
-              <p className="text-xl font-semibold text-paper">+50 %</p>
-              <p className="text-xs">Productivité visée</p>
+              <p className="text-xl font-semibold text-paper">{h.stats[1].value}</p>
+              <p className="text-xs">{h.stats[1].label}</p>
             </div>
             <div className="hidden h-8 w-px bg-white/10 sm:block" />
             <div>
-              <p className="text-xl font-semibold text-paper">100 %</p>
-              <p className="text-xs">Sur mesure</p>
+              <p className="text-xl font-semibold text-paper">{h.stats[2].value}</p>
+              <p className="text-xs">{h.stats[2].label}</p>
             </div>
           </motion.div>
         </div>

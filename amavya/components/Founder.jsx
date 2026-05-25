@@ -1,14 +1,11 @@
 "use client";
 
 import Reveal from "./Reveal";
-
-const FACETS = [
-  "20 ans de terrain · courant fort/faible",
-  "Dev & architecture app & web",
-  "Business developer orienté IA",
-];
+import { useLang } from "./LangProvider";
 
 export default function Founder() {
+  const { t } = useLang();
+  const f = t.founder;
   return (
     <section id="fondateur" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
@@ -37,32 +34,31 @@ export default function Founder() {
               <Reveal>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted">
                   <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
-                  Le fondateur
+                  {f.eyebrow}
                 </span>
               </Reveal>
 
               <Reveal delay={0.05}>
                 <h2 className="text-3xl font-semibold sm:text-4xl">
-                  Tarek Bouhlel
+                  {f.name}
                 </h2>
               </Reveal>
 
               <Reveal delay={0.1}>
                 <p className="text-pretty text-lg leading-relaxed text-muted">
-                  Entre expérience terrain, développement technologique et
-                  vision business, AMAVYA est née d'une volonté simple :{" "}
-                  <span className="text-paper">créer des outils IA réellement utiles.</span>
+                  {f.paragraphLead}{" "}
+                  <span className="text-paper">{f.paragraphHighlight}</span>
                 </p>
               </Reveal>
 
               <Reveal delay={0.15}>
                 <div className="flex flex-wrap gap-2.5">
-                  {FACETS.map((f) => (
+                  {f.facets.map((facet) => (
                     <span
-                      key={f}
+                      key={facet}
                       className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-paper/80"
                     >
-                      {f}
+                      {facet}
                     </span>
                   ))}
                 </div>
@@ -71,7 +67,7 @@ export default function Founder() {
               <Reveal delay={0.2}>
                 <div className="mt-1 flex flex-col gap-3">
                   <span className="text-xs uppercase tracking-[0.2em] text-muted-soft">
-                    Me contacter directement
+                    {f.contactLabel}
                   </span>
                   <div className="flex items-center gap-3">
                     <a

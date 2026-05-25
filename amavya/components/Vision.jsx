@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
+import { useLang } from "./LangProvider";
 
 export default function Vision() {
+  const { t } = useLang();
+  const v = t.vision;
   return (
     <section id="vision" className="relative py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
@@ -12,33 +15,25 @@ export default function Vision() {
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-silver-bright animate-ticker" />
-              Notre vision
+              {v.eyebrow}
             </span>
           </Reveal>
 
           <Reveal delay={0.05}>
             <h2 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl">
-              L'IA pour <span className="text-gradient">renforcer l'humain</span>, pas
-              le remplacer.
+              {v.titleLead} <span className="text-gradient">{v.titleHighlight}</span>{v.titleTail}
             </h2>
           </Reveal>
 
           <Reveal delay={0.1}>
             <p className="text-pretty text-lg leading-relaxed text-muted">
-              Nous croyons que l'intelligence artificielle doit renforcer
-              l'humain, et non le remplacer. AMAVYA construit des outils
-              intelligents conçus pour aider les entreprises à travailler plus
-              vite, mieux et avec plus d'impact.
+              {v.paragraph}
             </p>
           </Reveal>
 
           <Reveal delay={0.15}>
             <ul className="flex flex-col gap-3 pt-2">
-              {[
-                "Une IA au service de décisions humaines éclairées",
-                "Des automatisations qui libèrent du temps à forte valeur",
-                "Une technologie élégante, fiable et maîtrisée",
-              ].map((item) => (
+              {v.points.map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-paper/90">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#a87f2e,#d4af37)]">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
