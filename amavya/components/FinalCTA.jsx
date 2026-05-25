@@ -46,9 +46,6 @@ export default function FinalCTA() {
                 <Button href="#contact" variant="primary">
                   Commencer maintenant
                 </Button>
-                <Button href="#contact" variant="secondary">
-                  Contacter AMAVYA
-                </Button>
               </div>
             </Reveal>
           </div>
