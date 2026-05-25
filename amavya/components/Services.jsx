@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import Button from "./Button";
+import AgentDemo from "./AgentDemo";
 import { useLang } from "./LangProvider";
 import {
   IconAgent,
@@ -63,7 +64,7 @@ function Card({ icon: Icon, title, desc, learnMore, index, onOpen }) {
   );
 }
 
-function ServiceModal({ service, Icon, labels, onClose }) {
+function ServiceModal({ service, Icon, labels, demo, onClose }) {
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4"
@@ -105,16 +106,22 @@ function ServiceModal({ service, Icon, labels, onClose }) {
 
         <p className="mt-5 text-sm leading-relaxed text-muted">{service.long}</p>
 
-        {/* Emplacement réservé à la future vidéo démo */}
-        <div className="mt-6 flex aspect-video w-full flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-gold/30 bg-white/[0.04] text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold-bright">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </div>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-soft">
-            {labels.videoSoon}
-          </p>
+        {/* Démo animée (si disponible) ou emplacement réservé à la future vidéo */}
+        <div className="mt-6">
+          {demo ? (
+            demo
+          ) : (
+            <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-gold/30 bg-white/[0.04] text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold-bright">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-soft">
+                {labels.videoSoon}
+              </p>
+            </div>
+          )}
         </div>
 
         <h4 className="mt-6 text-sm font-semibold text-paper">{labels.featuresTitle}</h4>
@@ -184,6 +191,7 @@ export default function Services() {
             service={service}
             Icon={ICONS[active]}
             labels={s}
+            demo={active === 0 ? <AgentDemo /> : null}
             onClose={() => setActive(null)}
           />
         )}
