@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import Button from "./Button";
-import AgentDemo from "./AgentDemo";
+import ServiceDemo from "./ServiceDemos";
 import { useLang } from "./LangProvider";
 import {
   IconAgent,
@@ -191,7 +191,7 @@ export default function Services() {
             service={service}
             Icon={ICONS[active]}
             labels={s}
-            demo={active === 0 ? <AgentDemo /> : null}
+            demo={<ServiceDemo index={active} />}
             onClose={() => setActive(null)}
           />
         )}
