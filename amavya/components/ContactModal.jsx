@@ -52,9 +52,9 @@ export default function ContactModal() {
 
   const validate = () => {
     const er = {};
-    if (data.full_name.trim().length < 2) er.full_name = true;
-    if (!EMAIL_RX.test(data.email.trim())) er.email = true;
-    if (data.message.trim().length < 5) er.message = true;
+    if (data.full_name.trim().length < 2) er.full_name = "Indiquez votre nom.";
+    if (!EMAIL_RX.test(data.email.trim())) er.email = "Email invalide.";
+    if (data.message.trim().length < 2) er.message = "Décrivez brièvement votre besoin.";
     setErrors(er);
     return Object.keys(er).length === 0;
   };
@@ -176,6 +176,9 @@ export default function ContactModal() {
                         placeholder="Votre nom"
                         className={`${field} ${errors.full_name ? "border-red-500/60" : "border-white/10"}`}
                       />
+                      {errors.full_name && (
+                        <span className="text-xs text-red-400">{errors.full_name}</span>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs text-muted">Entreprise</label>
@@ -198,6 +201,9 @@ export default function ContactModal() {
                         placeholder="vous@exemple.com"
                         className={`${field} ${errors.email ? "border-red-500/60" : "border-white/10"}`}
                       />
+                      {errors.email && (
+                        <span className="text-xs text-red-400">{errors.email}</span>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs text-muted">Téléphone</label>
@@ -219,6 +225,9 @@ export default function ContactModal() {
                       placeholder="Parlez-nous de votre projet, vos enjeux, vos automatisations cibles…"
                       className={`${field} resize-none ${errors.message ? "border-red-500/60" : "border-white/10"}`}
                     />
+                    {errors.message && (
+                      <span className="text-xs text-red-400">{errors.message}</span>
+                    )}
                   </div>
 
                   {/* Honeypot anti-bot */}
