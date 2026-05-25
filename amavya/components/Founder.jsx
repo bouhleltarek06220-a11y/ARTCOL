@@ -16,9 +16,9 @@ export default function Founder() {
             src="/founder-bg.webp"
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-95 brightness-110 contrast-110 saturate-150"
           />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,rgba(8,8,11,0.88),rgba(8,8,11,0.7)_55%,rgba(8,8,11,0.62))]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(105deg,rgba(8,8,11,0.3),rgba(8,8,11,0.45)_50%,rgba(8,8,11,0.72))]" />
 
           {/* Lueur d'ambiance */}
           <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(168,127,46,0.3),transparent_70%)] blur-3xl" />
