@@ -8,12 +8,14 @@ import Founder from "@/components/Founder";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
+import MusicToggle from "@/components/MusicToggle";
 
 export default function Home() {
   return (
     <>
       <AnimatedBackground />
       <ContactModal />
+      <MusicToggle />
       <Navbar />
       <main>
         <Hero />

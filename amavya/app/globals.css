@@ -36,6 +36,8 @@
   /* Typo */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
 
   /* Easing premium */
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -57,6 +59,15 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Titres : police d'affichage futuriste */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.012em;
 }
 
 ::selection {
