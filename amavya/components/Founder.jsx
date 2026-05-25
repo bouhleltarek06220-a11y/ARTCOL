@@ -10,6 +10,16 @@ export default function Founder() {
     <section id="fondateur" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-8 sm:p-12">
+          {/* Fond : réseau mondial doré */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/founder-bg.webp"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,rgba(8,8,11,0.88),rgba(8,8,11,0.7)_55%,rgba(8,8,11,0.62))]" />
+
           {/* Lueur d'ambiance */}
           <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(168,127,46,0.3),transparent_70%)] blur-3xl" />
 
