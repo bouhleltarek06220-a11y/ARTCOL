@@ -1,7 +1,10 @@
 /**
- * Fond global : noir profond + lueurs dorées/argentées dérivantes + grille masquée.
+ * Fond global : noir profond + lueurs dorées/argentées dérivantes + réseau de
+ * villes connectées animé + grille masquée.
  * Purement décoratif et non interactif (pointer-events: none).
  */
+import CityNetwork from "./CityNetwork";
+
 export default function AnimatedBackground() {
   return (
     <div
@@ -24,6 +27,9 @@ export default function AnimatedBackground() {
         className="animate-drift absolute bottom-0 left-1/3 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.12),transparent_65%)] blur-3xl"
         style={{ animationDelay: "-11s" }}
       />
+
+      {/* Réseau de villes connectées animé (flux de données) */}
+      <CityNetwork />
 
       {/* Grille technique masquée */}
       <div className="grid-mask absolute inset-0 opacity-60" />
