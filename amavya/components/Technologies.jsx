@@ -1,6 +1,7 @@
 "use client";
 
 import SectionHeading from "./SectionHeading";
+import { useLang } from "./LangProvider";
 
 /* Wordmarks monochromes simples (texte stylisé) pour rester légal et léger. */
 const TECHS = [
@@ -26,14 +27,16 @@ function TechPill({ name }) {
 }
 
 export default function Technologies() {
+  const { t } = useLang();
+  const tech = t.technologies;
   const loop = [...TECHS, ...TECHS];
   return (
     <section id="technologies" className="relative py-24 sm:py-28">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          eyebrow="Stack technologique"
-          title="Construit sur les meilleures technologies du marché"
-          description="AMAVYA s'appuie sur un socle moderne, performant et éprouvé pour livrer des produits fiables."
+          eyebrow={tech.eyebrow}
+          title={tech.title}
+          description={tech.description}
         />
       </div>
 

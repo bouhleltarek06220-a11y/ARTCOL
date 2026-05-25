@@ -4,15 +4,12 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import Button from "./Button";
-
-const LINKS = [
-  { label: "Solutions", href: "#services" },
-  { label: "Vision", href: "#vision" },
-  { label: "Technologies", href: "#technologies" },
-  { label: "Fondateur", href: "#fondateur" },
-];
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLang } from "./LangProvider";
 
 export default function Navbar() {
+  const { t } = useLang();
+  const LINKS = t.nav.links;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -51,16 +48,17 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-4 md:flex">
+          <LanguageSwitcher />
           <Button href="#contact" variant="primary" className="px-5 py-2.5">
-            Réserver une démo
+            {t.nav.cta}
           </Button>
         </div>
 
         {/* Burger mobile */}
         <button
           type="button"
-          aria-label="Ouvrir le menu"
+          aria-label={t.nav.openMenu}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
           className="flex h-10 w-10 items-center justify-center rounded-xl glass md:hidden"
@@ -96,8 +94,11 @@ export default function Navbar() {
               </a>
             ))}
             <Button href="#contact" variant="primary" className="mt-2 w-full">
-              Réserver une démo
+              {t.nav.cta}
             </Button>
+            <div className="mt-3 flex justify-center">
+              <LanguageSwitcher />
+            </div>
           </div>
         </motion.div>
       )}

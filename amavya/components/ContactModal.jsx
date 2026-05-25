@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLang } from "./LangProvider";
 
 /**
  * Formulaire de contact AMAVYA. S'ouvre quand l'URL passe à #contact
@@ -17,6 +18,8 @@ const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMPTY = { full_name: "", email: "", phone: "", company: "", message: "" };
 
 export default function ContactModal() {
+  const { t } = useLang();
+  const c = t.contact;
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -52,9 +55,9 @@ export default function ContactModal() {
 
   const validate = () => {
     const er = {};
-    if (data.full_name.trim().length < 2) er.full_name = "Indiquez votre nom.";
-    if (!EMAIL_RX.test(data.email.trim())) er.email = "Email invalide.";
-    if (data.message.trim().length < 2) er.message = "Décrivez brièvement votre besoin.";
+    if (data.full_name.trim().length < 2) er.full_name = c.errors.fullName;
+    if (!EMAIL_RX.test(data.email.trim())) er.email = c.errors.email;
+    if (data.message.trim().length < 2) er.message = c.errors.message;
     setErrors(er);
     return Object.keys(er).length === 0;
   };
@@ -111,7 +114,7 @@ export default function ContactModal() {
           exit={{ opacity: 0 }}
           role="dialog"
           aria-modal="true"
-          aria-label="Contacter AMAVYA"
+          aria-label={c.dialogAria}
         >
           <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -136,7 +139,7 @@ export default function ContactModal() {
 
             <button
               type="button"
-              aria-label="Fermer"
+              aria-label={c.closeAria}
               onClick={close}
               className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:text-paper"
             >
@@ -153,38 +156,36 @@ export default function ContactModal() {
                     <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#f0d27a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold text-gradient">Message bien reçu</h3>
+                <h3 className="text-2xl font-semibold text-gradient">{c.success.title}</h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Merci ! Votre demande nous est parvenue. Nous revenons vers vous
-                  très rapidement.
+                  {c.success.text}
                 </p>
                 <button
                   type="button"
                   onClick={close}
                   className="mt-2 rounded-full border border-white/10 px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-white/5"
                 >
-                  Fermer
+                  {c.success.close}
                 </button>
               </div>
             ) : (
               <>
                 <p className="text-xs font-medium uppercase tracking-[0.22em] text-gold-bright">
-                  Passez à l'action
+                  {c.eyebrow}
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold sm:text-3xl">Contacter AMAVYA</h3>
+                <h3 className="mt-2 text-2xl font-semibold sm:text-3xl">{c.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
-                  Décrivez votre besoin — on revient vers vous rapidement pour en
-                  discuter.
+                  {c.subtitle}
                 </p>
 
                 <form onSubmit={submit} className="mt-6 flex flex-col gap-4" noValidate>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-muted">Nom complet *</label>
+                      <label className="text-xs text-muted">{c.labels.fullName}</label>
                       <input
                         value={data.full_name}
                         onChange={set("full_name")}
-                        placeholder="Votre nom"
+                        placeholder={c.placeholders.fullName}
                         className={`${field} ${errors.full_name ? "border-red-500/60" : "border-white/10"}`}
                       />
                       {errors.full_name && (
@@ -192,11 +193,11 @@ export default function ContactModal() {
                       )}
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-muted">Entreprise</label>
+                      <label className="text-xs text-muted">{c.labels.company}</label>
                       <input
                         value={data.company}
                         onChange={set("company")}
-                        placeholder="Votre société"
+                        placeholder={c.placeholders.company}
                         className={`${field} border-white/10`}
                       />
                     </div>
@@ -204,12 +205,12 @@ export default function ContactModal() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-muted">Email *</label>
+                      <label className="text-xs text-muted">{c.labels.email}</label>
                       <input
                         type="email"
                         value={data.email}
                         onChange={set("email")}
-                        placeholder="vous@exemple.com"
+                        placeholder={c.placeholders.email}
                         className={`${field} ${errors.email ? "border-red-500/60" : "border-white/10"}`}
                       />
                       {errors.email && (
@@ -217,23 +218,23 @@ export default function ContactModal() {
                       )}
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-muted">Téléphone</label>
+                      <label className="text-xs text-muted">{c.labels.phone}</label>
                       <input
                         value={data.phone}
                         onChange={set("phone")}
-                        placeholder="06 12 34 56 78"
+                        placeholder={c.placeholders.phone}
                         className={`${field} border-white/10`}
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-muted">Votre besoin *</label>
+                    <label className="text-xs text-muted">{c.labels.message}</label>
                     <textarea
                       value={data.message}
                       onChange={set("message")}
                       rows={4}
-                      placeholder="Parlez-nous de votre projet, vos enjeux, vos automatisations cibles…"
+                      placeholder={c.placeholders.message}
                       className={`${field} resize-none ${errors.message ? "border-red-500/60" : "border-white/10"}`}
                     />
                     {errors.message && (
@@ -254,11 +255,11 @@ export default function ContactModal() {
 
                   {status === "error" && (
                     <p className="text-sm text-red-400">
-                      Une erreur est survenue. Réessayez, ou écrivez-nous à{" "}
+                      {c.submitError.lead}{" "}
                       <a href="mailto:contact@amavya.cloud" className="underline">
                         contact@amavya.cloud
                       </a>
-                      .
+                      {c.submitError.after}
                     </p>
                   )}
 
@@ -267,7 +268,7 @@ export default function ContactModal() {
                     disabled={status === "loading"}
                     className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-all hover:-translate-y-0.5 disabled:opacity-60"
                   >
-                    {status === "loading" ? "Envoi…" : "Envoyer ma demande"}
+                    {status === "loading" ? c.submitting : c.submit}
                   </button>
                 </form>
               </>

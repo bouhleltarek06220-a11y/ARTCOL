@@ -1,34 +1,7 @@
-import Logo from "./Logo";
+"use client";
 
-const COLUMNS = [
-  {
-    title: "Solutions",
-    links: [
-      { label: "Agents IA", href: "#services" },
-      { label: "CRM intelligent", href: "#services" },
-      { label: "Automatisation", href: "#services" },
-      { label: "Prospection", href: "#services" },
-    ],
-  },
-  {
-    title: "Entreprise",
-    links: [
-      { label: "Vision", href: "#vision" },
-      { label: "Fondateur", href: "#fondateur" },
-      { label: "Technologies", href: "#technologies" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    title: "Légal",
-    links: [
-      { label: "Mentions légales", href: "/mentions-legales" },
-      { label: "Confidentialité", href: "/confidentialite" },
-      { label: "CGU / CGV", href: "/cgu-cgv" },
-      { label: "Cookies", href: "/cookies" },
-    ],
-  },
-];
+import Logo from "./Logo";
+import { useLang } from "./LangProvider";
 
 const SOCIALS = [
   {
@@ -49,6 +22,8 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
+  const { t } = useLang();
+  const f = t.footer;
   const year = new Date().getFullYear();
   return (
     <footer className="relative border-t border-white/10 pt-16">
@@ -58,8 +33,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <Logo size={60} />
             <p className="max-w-xs text-sm leading-relaxed text-muted">
-              Solutions IA, SaaS et automatisations intelligentes pour les
-              entreprises modernes. SASU française.
+              {f.description}
             </p>
             <div className="flex gap-3">
               {SOCIALS.map((s) => (
@@ -80,7 +54,7 @@ export default function Footer() {
           </div>
 
           {/* Colonnes de liens */}
-          {COLUMNS.map((col) => (
+          {f.columns.map((col) => (
             <div key={col.title} className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold text-paper">{col.title}</h3>
               <ul className="flex flex-col gap-2.5">
@@ -101,7 +75,7 @@ export default function Footer() {
 
         {/* Bas de footer */}
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 py-7 text-xs text-muted-soft sm:flex-row">
-          <p>© {year} AMAVYA · Tous droits réservés.</p>
+          <p>© {year} AMAVYA · {f.rights}</p>
           <a
             href="https://www.linkedin.com/in/tarek-bouhlel"
             target="_blank"
@@ -111,7 +85,7 @@ export default function Footer() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3V21h-3zM10 8.5h2.9v1.7h.04c.4-.76 1.4-1.56 2.9-1.56 3.1 0 3.66 2 3.66 4.7V21h-3v-5.2c0-1.24-.02-2.84-1.74-2.84-1.74 0-2 1.36-2 2.76V21h-3z" />
             </svg>
-            Développé par Tarek Bouhlel
+            {f.developedBy}
           </a>
         </div>
       </div>
