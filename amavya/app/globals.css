@@ -282,3 +282,41 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Pages légales */
+.legal-prose h2 {
+  color: var(--color-paper);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+}
+.legal-prose h3 {
+  color: var(--color-paper);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+.legal-prose p {
+  margin-top: 0.5rem;
+}
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.legal-prose a {
+  color: var(--color-gold-bright);
+  text-decoration: underline;
+}
+.legal-prose strong {
+  color: var(--color-paper);
+}
+.legal-prose .todo {
+  color: var(--color-gold-bright);
+  background: color-mix(in oklab, var(--color-gold) 14%, transparent);
+  border-radius: 0.3rem;
+  padding: 0 0.3rem;
+}

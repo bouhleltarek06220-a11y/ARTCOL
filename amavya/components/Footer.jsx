@@ -22,10 +22,10 @@ const COLUMNS = [
   {
     title: "Légal",
     links: [
-      { label: "Mentions légales", href: "#" },
-      { label: "Confidentialité", href: "#" },
-      { label: "CGU / CGV", href: "#" },
-      { label: "Cookies", href: "#" },
+      { label: "Mentions légales", href: "/mentions-legales" },
+      { label: "Confidentialité", href: "/confidentialite" },
+      { label: "CGU / CGV", href: "/cgu-cgv" },
+      { label: "Cookies", href: "/cookies" },
     ],
   },
 ];
