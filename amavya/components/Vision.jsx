@@ -74,7 +74,7 @@ export default function Vision() {
               </motion.div>
             ))}
 
-            {/* Noyau : connexion humain-IA stylisée (neurone) */}
+            {/* Noyau : logo AMAVYA dans l'orbe */}
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 animate={{ scale: [1, 1.05, 1] }}
@@ -82,29 +82,12 @@ export default function Vision() {
                 className="glass-strong relative flex h-40 w-40 items-center justify-center rounded-full"
               >
                 <div className="absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#a87f2e,#d4af37,#e6e9f0,#a87f2e)] opacity-30 blur-md animate-pulse-glow" />
-                <svg width="84" height="84" viewBox="0 0 96 96" fill="none">
-                  <defs>
-                    <linearGradient id="vision-grad" x1="0" y1="0" x2="96" y2="96">
-                      <stop stopColor="#f7e9c8" />
-                      <stop offset="1" stopColor="#d4af37" />
-                    </linearGradient>
-                  </defs>
-                  {/* Nœud central + connexions */}
-                  <circle cx="48" cy="48" r="9" fill="url(#vision-grad)" />
-                  {[
-                    [20, 24],
-                    [76, 22],
-                    [18, 70],
-                    [78, 72],
-                    [48, 14],
-                    [48, 82],
-                  ].map(([x, y], i) => (
-                    <g key={i}>
-                      <line x1="48" y1="48" x2={x} y2={y} stroke="url(#vision-grad)" strokeWidth="1.5" opacity="0.5" />
-                      <circle cx={x} cy={y} r="4" fill="#fff" opacity="0.85" />
-                    </g>
-                  ))}
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo-mark.png"
+                  alt="AMAVYA"
+                  className="relative z-10 h-28 w-28 rounded-full border border-white/10 object-cover shadow-[0_0_30px_-6px_rgba(240,210,122,0.5)]"
+                />
               </motion.div>
             </div>
 
