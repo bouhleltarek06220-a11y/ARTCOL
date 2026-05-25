@@ -122,19 +122,30 @@ export default function ContactModal() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-strong relative z-10 w-full max-w-lg rounded-3xl border border-gold/20 p-7 sm:p-9"
+            className="glass-strong relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-gold/20 p-7 sm:p-9"
           >
+            {/* Fond : continents connectés */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/form-bg.webp"
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(6,9,18,0.86),rgba(6,9,18,0.78))]" />
+
             <button
               type="button"
               aria-label="Fermer"
               onClick={close}
-              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:text-paper"
+              className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:text-paper"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
 
+            <div className="relative z-10">
             {status === "success" ? (
               <div className="flex flex-col items-center gap-4 py-6 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/40 bg-gold/10">
@@ -261,6 +272,7 @@ export default function ContactModal() {
                 </form>
               </>
             )}
+            </div>
           </motion.div>
         </motion.div>
       )}
