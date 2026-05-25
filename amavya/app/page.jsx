@@ -7,11 +7,13 @@ import Technologies from "@/components/Technologies";
 import Founder from "@/components/Founder";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
+import ContactModal from "@/components/ContactModal";
 
 export default function Home() {
   return (
     <>
       <AnimatedBackground />
+      <ContactModal />
       <Navbar />
       <main>
         <Hero />
