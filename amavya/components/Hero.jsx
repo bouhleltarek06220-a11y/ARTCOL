@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Button from "./Button";
 import DashboardMockup from "./DashboardMockup";
 
 const fadeUp = {
@@ -54,24 +53,6 @@ export default function Hero() {
             intelligentes pour transformer la prospection, la gestion et la
             productivité.
           </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={3}
-            className="flex flex-col gap-3 sm:flex-row"
-          >
-            <Button href="#services" variant="primary">
-              Découvrir nos solutions
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Button>
-            <Button href="#contact" variant="secondary">
-              Réserver une démo
-            </Button>
-          </motion.div>
 
           {/* Mini preuve sociale */}
           <motion.div
