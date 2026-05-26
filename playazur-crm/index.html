@@ -5165,7 +5165,7 @@ window.CRM = {
               jobTitle: 'Business Developer',
               birthDate: '',
               address: '',
-              role: r.role === 'owner' ? 'owner' : 'editor',
+              role: (r.role === 'owner' || r.role === 'viewer') ? r.role : 'editor',
               color: r.avatar_color || '#6b7280',
               departments: r.departments || [],
               deptNames: r.dept_names || '',
@@ -8497,7 +8497,7 @@ function loadTeam(){
     teamMembers = (CRM_CONFIG.users || []).map(u=>({
       id:u.id, firstName:u.name, lastName:'', initials:u.initials, email:u._email||'',
       phone:'', jobTitle:'Business Developer', birthDate:'', address:'',
-      role:u.role==='owner'?'owner':'editor', color:u.color,
+      role:(u.role==='owner'||u.role==='viewer')?u.role:'editor', color:u.color,
       departments:u.departments, deptNames:u.deptNames,
       bio:'', photo:'', createdAt:new Date().toISOString()
     }));
