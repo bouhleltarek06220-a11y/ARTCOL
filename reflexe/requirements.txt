@@ -1,0 +1,30 @@
+# --- HTTP / réseau ---
+httpx>=0.27,<1.0
+
+# --- LLM ---
+anthropic>=0.40,<1.0
+
+# --- Modèles & config ---
+pydantic>=2.7,<3.0
+PyYAML>=6.0,<7.0
+python-dotenv>=1.0,<2.0
+
+# --- Robustesse ---
+tenacity>=8.4,<10.0
+
+# --- CLI / console ---
+typer>=0.12,<1.0
+rich>=13.7,<15.0
+loguru>=0.7,<1.0
+
+# --- Parsing HTML (scraping pages publiques) ---
+selectolax>=0.3,<1.0
+beautifulsoup4>=4.12,<5.0
+
+# --- Vérification d'email ---
+email-validator>=2.1,<3.0
+dnspython>=2.6,<3.0
+
+# --- Tests ---
+pytest>=8.2,<9.0
+pytest-asyncio>=0.23,<1.0
