@@ -172,7 +172,7 @@ camera.position.set(20, 2, 0);
 // ---- Post-processing : bloom cinématographique ----
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.55, 0.6, 0.85);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.32, 0.55, 0.9);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -200,13 +200,13 @@ function buildStaging(box){
   const nearX = box.max.x, farX = box.min.x, cz = ctr.z;
   const doorX = nearX - size.x*0.05;
   const bookS = 1.6;
-  const bookX = farX + size.x*0.22, bookY = floorY + 1.05, bookZ = cz;
+  const bookX = ctr.x + size.x*0.04, bookY = floorY + 1.05, bookZ = cz;   // centre de l'atrium = zone dégagée, jamais masquée
   const bookFocusY = floorY + 1.55*bookS;
   layout = { size, ctr, floorY, eyeY, nearX, farX, cz, doorX, bookX, bookY, bookZ, bookS, bookFocusY,
              camStart:new THREE.Vector3(nearX+2.6, eyeY+0.6, cz),
-             camEnd:new THREE.Vector3(bookX+2.8, bookFocusY+0.2, cz),   // gros plan, à hauteur du grimoire
+             camEnd:new THREE.Vector3(bookX+3.6, bookFocusY+0.5, cz),   // recul + légère plongée pour bien voir le grimoire
              lookStart:new THREE.Vector3(doorX-1, eyeY+0.2, cz),
-             lookEnd:new THREE.Vector3(bookX, bookFocusY, bookZ) };
+             lookEnd:new THREE.Vector3(bookX, bookFocusY-0.15, bookZ) };
 
   // ---- Portes monumentales (devant l'entrée) ----
   const doorH = Math.min(size.y*0.62, 8.5), doorW = Math.min(size.z*0.30, 3.4);
@@ -244,10 +244,10 @@ function buildStaging(box){
   const desk = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.12,1.0), standMat);
   desk.position.y=1.02; desk.rotation.x=-0.5; desk.castShadow=true; grp.add(desk);
   book = new THREE.Group(); book.position.set(0,1.55,0); grp.add(book);
-  const pages = new THREE.Mesh(new THREE.BoxGeometry(1.25,0.18,0.9), new THREE.MeshStandardMaterial({color:0xF2E6D0,emissive:0xE5C788,emissiveIntensity:.5,roughness:.6}));
+  const pages = new THREE.Mesh(new THREE.BoxGeometry(1.25,0.18,0.9), new THREE.MeshStandardMaterial({color:0xF2E6D0,emissive:0xE5C788,emissiveIntensity:.22,roughness:.6}));
   book.add(pages);
   for(const s of [-1,1]){
-    const cover = new THREE.Mesh(new THREE.BoxGeometry(0.72,0.05,0.94), new THREE.MeshStandardMaterial({color:0x6b3a1e,emissive:0xC99B5C,emissiveIntensity:.4,roughness:.5,metalness:.3}));
+    const cover = new THREE.Mesh(new THREE.BoxGeometry(0.72,0.05,0.94), new THREE.MeshStandardMaterial({color:0x6b3a1e,emissive:0xC99B5C,emissiveIntensity:.22,roughness:.5,metalness:.3}));
     cover.position.set(s*0.34,0.12,0); cover.rotation.x = s*0.18; book.add(cover);
   }
   const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95,0.03,12,48), goldMat);
@@ -324,13 +324,13 @@ function tick(){
     }
   } else if(state==='entering'){
     tE+=1/60;
-    const op=Math.min(Math.max((tE-0.8)/2.2,0),1);          // ouverture portes 0.8–3.0s
-    const j =Math.min(Math.max((tE-1.6)/8.0,0),1);          // voyage lent et solennel 1.6–9.6s
+    const op=Math.min(Math.max((tE-0.8)/2.4,0),1);          // ouverture portes 0.8–3.2s
+    const j =Math.min(Math.max((tE-2.0)/11.0,0),1);         // voyage très lent : le temps d'admirer le couloir (2.0–13s)
     doorL.rotation.y =  easeInOut(op)*1.85;
     doorR.rotation.y = -easeInOut(op)*1.85;
     const lit = op;
-    bookLight.intensity = lit*170; bookLight.userData.spot.intensity = lit*1200;
-    beam.material.opacity = lit*0.13; renderer.toneMappingExposure = 0.95 + j*0.06;
+    bookLight.intensity = lit*32; bookLight.userData.spot.intensity = lit*180;   // éclairage doux : le grimoire n'est plus cramé
+    beam.material.opacity = lit*0.05; renderer.toneMappingExposure = 0.95 + j*0.05;
     const e=easeInOut(j);
     v.lerpVectors(layout.camStart, layout.camEnd, e);
     if(!reduce) v.y += Math.sin(j*Math.PI*2)*0.08;
