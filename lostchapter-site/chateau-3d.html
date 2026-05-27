@@ -199,14 +199,14 @@ function buildStaging(box){
   const floorY = box.min.y, eyeY = floorY + 1.7;
   const nearX = box.max.x, farX = box.min.x, cz = ctr.z;
   const doorX = nearX - size.x*0.05;
-  const bookS = 1.6;
-  const bookX = ctr.x + size.x*0.04, bookY = floorY + 1.05, bookZ = cz;   // centre de l'atrium = zone dégagée, jamais masquée
-  const bookFocusY = floorY + 1.55*bookS;
+  const bookS = 1.0;
+  const bookX = ctr.x + size.x*0.04, bookY = floorY + 1.05, bookZ = cz;   // centre de l'atrium = zone dégagée
+  const bookFocusY = floorY + 1.2;
   layout = { size, ctr, floorY, eyeY, nearX, farX, cz, doorX, bookX, bookY, bookZ, bookS, bookFocusY,
              camStart:new THREE.Vector3(nearX+2.6, eyeY+0.6, cz),
-             camEnd:new THREE.Vector3(bookX+3.6, bookFocusY+0.5, cz),   // recul + légère plongée pour bien voir le grimoire
+             camEnd:new THREE.Vector3(bookX+1.9, bookFocusY+0.42, cz),   // gros plan sur le grimoire à échelle humaine
              lookStart:new THREE.Vector3(doorX-1, eyeY+0.2, cz),
-             lookEnd:new THREE.Vector3(bookX, bookFocusY-0.15, bookZ) };
+             lookEnd:new THREE.Vector3(bookX, bookFocusY-0.05, bookZ) };
 
   // ---- Portes monumentales (devant l'entrée) ----
   const doorH = Math.min(size.y*0.62, 8.5), doorW = Math.min(size.z*0.30, 3.4);
@@ -237,22 +237,23 @@ function buildStaging(box){
   }
 
   // ---- Le Grimoire (Chapitre perdu) sur lutrin ----
-  const grp = new THREE.Group(); grp.position.set(bookX, floorY, bookZ); grp.scale.setScalar(bookS); scene.add(grp);
-  const standMat = new THREE.MeshStandardMaterial({ color:0x1c1109, roughness:.7, metalness:.2 });
-  const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.28,1.0,16), standMat);
-  stand.position.y=0.5; stand.castShadow=true; grp.add(stand);
-  const desk = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.12,1.0), standMat);
-  desk.position.y=1.02; desk.rotation.x=-0.5; desk.castShadow=true; grp.add(desk);
-  book = new THREE.Group(); book.position.set(0,1.55,0); grp.add(book);
-  const pages = new THREE.Mesh(new THREE.BoxGeometry(1.25,0.18,0.9), new THREE.MeshStandardMaterial({color:0xF2E6D0,emissive:0xE5C788,emissiveIntensity:.22,roughness:.6}));
-  book.add(pages);
+  const grp = new THREE.Group(); grp.position.set(bookX, floorY, bookZ); grp.scale.setScalar(bookS); grp.rotation.y = -Math.PI/2; scene.add(grp); // lutrin face caméra
+  const standMat = new THREE.MeshStandardMaterial({ color:0x2a1a0e, roughness:.7, metalness:.15 });
+  const goldTrim = new THREE.MeshStandardMaterial({ color:0x6b4a22, roughness:.5, metalness:.5 });
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.26,0.34,0.12,20), standMat); base.position.y=0.06; base.castShadow=true; grp.add(base);
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.09,0.95,16), standMat); post.position.y=0.6; post.castShadow=true; grp.add(post);
+  const desk = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.05,0.5), standMat); desk.position.set(0,1.08,0.02); desk.rotation.x=-0.58; desk.castShadow=true; grp.add(desk);
+  const lip = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.05,0.05), goldTrim); lip.position.set(0,0.94,0.2); grp.add(lip);
+  book = new THREE.Group(); book.position.set(0,1.18,0.04); book.rotation.x=-0.58; grp.add(book);
+  const pageMat = new THREE.MeshStandardMaterial({color:0xF2E6D0,emissive:0xE5C788,emissiveIntensity:.13,roughness:.85});
+  const leather = new THREE.MeshStandardMaterial({color:0x5a3018,roughness:.6,metalness:.15,emissive:0x1a0d05,emissiveIntensity:.2});
   for(const s of [-1,1]){
-    const cover = new THREE.Mesh(new THREE.BoxGeometry(0.72,0.05,0.94), new THREE.MeshStandardMaterial({color:0x6b3a1e,emissive:0xC99B5C,emissiveIntensity:.22,roughness:.5,metalness:.3}));
-    cover.position.set(s*0.34,0.12,0); cover.rotation.x = s*0.18; book.add(cover);
+    const cover = new THREE.Mesh(new THREE.BoxGeometry(0.3,0.03,0.44), leather); cover.position.set(s*0.16,-0.02,0); cover.rotation.z=s*0.1; cover.castShadow=true; book.add(cover);
+    const page = new THREE.Mesh(new THREE.BoxGeometry(0.27,0.02,0.4), pageMat); page.position.set(s*0.155,0.0,0); page.rotation.z=s*0.1; book.add(page);
   }
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95,0.03,12,48), goldMat);
-  ring.rotation.x=Math.PI/2; ring.position.y=0.0; book.add(ring);
-  bookLight = new THREE.PointLight(0xE5C788, 0, 14, 2); bookLight.position.set(0,1.7,0); grp.add(bookLight);
+  const spine = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.05,0.44), leather); book.add(spine);
+  const mark = new THREE.Mesh(new THREE.BoxGeometry(0.025,0.006,0.28), goldMat); mark.position.set(0.04,0.03,0.08); book.add(mark);
+  bookLight = new THREE.PointLight(0xE5C788, 0, 8, 2); bookLight.position.set(0,1.5,0.1); grp.add(bookLight);
 
   // faisceau de lumière (god ray simplifié)
   const spot = new THREE.SpotLight(0xfff0d0, 0, 40, 0.5, 0.6, 1.2);
@@ -329,7 +330,7 @@ function tick(){
     doorL.rotation.y =  easeInOut(op)*1.85;
     doorR.rotation.y = -easeInOut(op)*1.85;
     const lit = op;
-    bookLight.intensity = lit*32; bookLight.userData.spot.intensity = lit*180;   // éclairage doux : le grimoire n'est plus cramé
+    bookLight.intensity = lit*8; bookLight.userData.spot.intensity = lit*120;   // éclairage doux : le grimoire n'est plus cramé
     beam.material.opacity = lit*0.05; renderer.toneMappingExposure = 0.95 + j*0.05;
     const e=easeInOut(j);
     v.lerpVectors(layout.camStart, layout.camEnd, e);
