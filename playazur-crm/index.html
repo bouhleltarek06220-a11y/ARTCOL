@@ -3037,6 +3037,7 @@ function pushAction(p, action){
 <input type="text" id="camp-prospect-search" placeholder="🔍 Rechercher un prospect (nom, entreprise, ville, email)..." oninput="CRM.campaigns.showPicker()">
 </div>
 <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+<select id="camp-filter-axe" onchange="CRM.campaigns.showPicker()" style="width:180px;font-size:11px"><option value="">🎯 Tous les axes</option><option value="lieu">🏛️ Lieux</option><option value="financeur">💼 Donateurs Pro</option><option value="influenceur">🎤 Influenceurs</option><option value="donateur">👤 Donateurs Particuliers</option><option value="benevole_presse">🎭 Équipe & Médias</option></select>
 <select id="camp-filter-dept" onchange="CRM.campaigns.showPicker()" style="width:140px;font-size:11px"><option value="">Tous dép.</option></select>
 <select id="camp-filter-status" onchange="CRM.campaigns.showPicker()" style="width:140px;font-size:11px"><option value="">Tous statuts</option></select>
 <select id="camp-filter-assigned" onchange="CRM.campaigns.showPicker()" style="width:140px;font-size:11px"><option value="">Tous commerciaux</option></select>
@@ -10229,6 +10230,7 @@ document.addEventListener('visibilitychange',async()=>{
       // Search
       const search=((document.getElementById('camp-prospect-search')||{}).value||'').toLowerCase().trim();
       // Filters
+      const fAxe=(document.getElementById('camp-filter-axe')||{}).value||'';
       const fDept=(document.getElementById('camp-filter-dept')||{}).value||'';
       const fStatus=(document.getElementById('camp-filter-status')||{}).value||'';
       const fAssigned=(document.getElementById('camp-filter-assigned')||{}).value||'';
@@ -10247,6 +10249,7 @@ document.addEventListener('visibilitychange',async()=>{
       }
       // ALL prospects (not just email)
       let prospects=CRM.prospects.slice();
+      if(fAxe)prospects=prospects.filter(p=>(p.axe||'lieu')===fAxe);
       if(fDept)prospects=prospects.filter(p=>p.dept===fDept);
       if(fStatus)prospects=prospects.filter(p=>p.status===fStatus);
       if(fAssigned)prospects=prospects.filter(p=>p.assignedTo===fAssigned);
@@ -10276,7 +10279,7 @@ document.addEventListener('visibilitychange',async()=>{
           +'<input type="checkbox" '+checked+' onchange="CRM.campaigns.toggleProspect(\''+p.id+'\',this.checked)">'
           +'<div class="pi-info">'
           +'<div class="pi-name">'+esc(p.company||p.raisonSociale||((p.firstName||'')+' '+(p.lastName||'')).trim()||'—')+'</div>'
-          +'<div class="pi-meta">'+esc(p.city||'?')+' ('+esc(p.dept||'?')+') · '+emailBadge+'</div>'
+          +'<div class="pi-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'+axeBadgeHtml(p.axe)+'<span>'+esc(p.city||'?')+' ('+esc(p.dept||'?')+')</span> · '+emailBadge+'</div>'
           +'</div></label>';
       }).join('')+'</div>';
     },
@@ -10285,10 +10288,12 @@ document.addEventListener('visibilitychange',async()=>{
       const c=this.data.find(x=>x.id===this.selected);
       if(!c)return;
       const search=((document.getElementById('camp-prospect-search')||{}).value||'').toLowerCase().trim();
+      const fAxe=(document.getElementById('camp-filter-axe')||{}).value||'';
       const fDept=(document.getElementById('camp-filter-dept')||{}).value||'';
       const fStatus=(document.getElementById('camp-filter-status')||{}).value||'';
       const fAssigned=(document.getElementById('camp-filter-assigned')||{}).value||'';
       let prospects=CRM.prospects.slice();
+      if(fAxe)prospects=prospects.filter(p=>(p.axe||'lieu')===fAxe);
       if(fDept)prospects=prospects.filter(p=>p.dept===fDept);
       if(fStatus)prospects=prospects.filter(p=>p.status===fStatus);
       if(fAssigned)prospects=prospects.filter(p=>p.assignedTo===fAssigned);
