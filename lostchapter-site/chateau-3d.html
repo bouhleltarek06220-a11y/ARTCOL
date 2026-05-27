@@ -172,7 +172,7 @@ camera.position.set(20, 2, 0);
 // ---- Post-processing : bloom cinématographique ----
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.9, 0.7, 0.82);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.55, 0.6, 0.85);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -199,12 +199,14 @@ function buildStaging(box){
   const floorY = box.min.y, eyeY = floorY + 1.7;
   const nearX = box.max.x, farX = box.min.x, cz = ctr.z;
   const doorX = nearX - size.x*0.05;
-  const bookX = farX + size.x*0.15, bookY = floorY + 1.05, bookZ = cz;
-  layout = { size, ctr, floorY, eyeY, nearX, farX, cz, doorX, bookX, bookY, bookZ,
+  const bookS = 1.6;
+  const bookX = farX + size.x*0.22, bookY = floorY + 1.05, bookZ = cz;
+  const bookFocusY = floorY + 1.55*bookS;
+  layout = { size, ctr, floorY, eyeY, nearX, farX, cz, doorX, bookX, bookY, bookZ, bookS, bookFocusY,
              camStart:new THREE.Vector3(nearX+2.6, eyeY+0.6, cz),
-             camEnd:new THREE.Vector3(bookX+4.2, bookY+1.1, cz),
+             camEnd:new THREE.Vector3(bookX+2.8, bookFocusY+0.2, cz),   // gros plan, à hauteur du grimoire
              lookStart:new THREE.Vector3(doorX-1, eyeY+0.2, cz),
-             lookEnd:new THREE.Vector3(bookX, bookY+0.5, bookZ) };
+             lookEnd:new THREE.Vector3(bookX, bookFocusY, bookZ) };
 
   // ---- Portes monumentales (devant l'entrée) ----
   const doorH = Math.min(size.y*0.62, 8.5), doorW = Math.min(size.z*0.30, 3.4);
@@ -235,7 +237,7 @@ function buildStaging(box){
   }
 
   // ---- Le Grimoire (Chapitre perdu) sur lutrin ----
-  const grp = new THREE.Group(); grp.position.set(bookX, floorY, bookZ); scene.add(grp);
+  const grp = new THREE.Group(); grp.position.set(bookX, floorY, bookZ); grp.scale.setScalar(bookS); scene.add(grp);
   const standMat = new THREE.MeshStandardMaterial({ color:0x1c1109, roughness:.7, metalness:.2 });
   const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.28,1.0,16), standMat);
   stand.position.y=0.5; stand.castShadow=true; grp.add(stand);
@@ -255,7 +257,7 @@ function buildStaging(box){
   // faisceau de lumière (god ray simplifié)
   const spot = new THREE.SpotLight(0xfff0d0, 0, 40, 0.5, 0.6, 1.2);
   spot.position.set(bookX, floorY+Math.min(size.y*0.85,11), bookZ);
-  spot.target.position.set(bookX, floorY+1.5, bookZ); spot.castShadow=true;
+  spot.target.position.set(bookX, bookFocusY, bookZ); spot.castShadow=true;
   scene.add(spot); scene.add(spot.target); bookLight.userData.spot = spot;
   beam = new THREE.Mesh(new THREE.ConeGeometry(2.0, Math.min(size.y*0.8,10), 32, 1, true),
     new THREE.MeshBasicMaterial({color:0xffe9b8, transparent:true, opacity:0, side:THREE.DoubleSide, blending:THREE.AdditiveBlending, depthWrite:false}));
@@ -322,20 +324,20 @@ function tick(){
     }
   } else if(state==='entering'){
     tE+=1/60;
-    const op=Math.min(Math.max((tE-0.7)/1.9,0),1);          // ouverture portes 0.7–2.6s
-    const j =Math.min(Math.max((tE-1.2)/4.0,0),1);          // voyage 1.2–5.2s
+    const op=Math.min(Math.max((tE-0.8)/2.2,0),1);          // ouverture portes 0.8–3.0s
+    const j =Math.min(Math.max((tE-1.6)/8.0,0),1);          // voyage lent et solennel 1.6–9.6s
     doorL.rotation.y =  easeInOut(op)*1.85;
     doorR.rotation.y = -easeInOut(op)*1.85;
     const lit = op;
-    bookLight.intensity = lit*120; bookLight.userData.spot.intensity = lit*900;
-    beam.material.opacity = lit*0.16; renderer.toneMappingExposure = 0.95 + j*0.35;
+    bookLight.intensity = lit*170; bookLight.userData.spot.intensity = lit*1200;
+    beam.material.opacity = lit*0.13; renderer.toneMappingExposure = 0.95 + j*0.06;
     const e=easeInOut(j);
     v.lerpVectors(layout.camStart, layout.camEnd, e);
-    if(!reduce) v.y += Math.sin(j*Math.PI*2)*0.12;
+    if(!reduce) v.y += Math.sin(j*Math.PI*2)*0.08;
     camera.position.copy(v);
-    look.lerpVectors(layout.lookStart, layout.lookEnd, easeOut(j));
+    look.lerpVectors(layout.lookStart, layout.lookEnd, easeInOut(j));
     camera.lookAt(look);
-    if(j>0.6) flash.style.opacity=String((j-0.6)/0.4*0.85);
+    if(j>0.9) flash.style.opacity=String((j-0.9)/0.1*0.14);  // simple voile chaud, plus d'aveuglement
     if(j>=1){ state='done'; reveal(); requestAnimationFrame(()=>{ flash.style.transition='opacity .8s ease-out'; flash.style.opacity='0'; }); }
   }
   composer.render();
