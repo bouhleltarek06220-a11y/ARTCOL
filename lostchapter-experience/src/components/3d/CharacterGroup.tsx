@@ -100,68 +100,57 @@ export function CharacterGroup() {
   return (
     <>
       {/* ─── REZ-DE-CHAUSSÉE ────────────────────────────── */}
-      {/* Garde médiéval — patrouille le CÔTÉ GAUCHE uniquement */}
+      {/* Garde médiéval — patrouille le CÔTÉ GAUCHE sur le tapis royal */}
       <CharacterNPC
         character={KNIGHT_PATROL}
-        path={[[-2.6, -12], [-2.6, -22], [-2.0, -27], [-2.0, -14]]}
+        path={[[-1.4, -10], [-1.4, -22], [-1.0, -30], [-1.0, -12]]}
         speed={0.45}
         offset={0}
         meshColors={PALETTE_KNIGHT}
       />
 
-      {/* Rôdeur — patrouille le CÔTÉ DROIT uniquement (pas de croisement) */}
+      {/* Rôdeur — patrouille le CÔTÉ DROIT sur le tapis */}
       <CharacterNPC
         character={ROGUE_WALK}
-        path={[[2.6, -12], [2.6, -22], [2.0, -27], [2.0, -14]]}
+        path={[[1.4, -10], [1.4, -22], [1.0, -30], [1.0, -12]]}
         speed={0.42}
         offset={2.0}
         meshColors={PALETTE_ROGUE}
       />
 
-      {/* Mage érudit — idle face aux portes du fond, axe central gauche */}
+      {/* Mage érudit — idle face aux portes du fond */}
       <CharacterNPC
         character={MAGE_IDLE}
-        position={[-1.0, 0, -20]}
-        rotationY={Math.PI * 0.05}
+        position={[-2.6, 0, -22]}
+        rotationY={Math.PI * 0.06}
         meshColors={PALETTE_MAGE}
       />
 
       {/* Barbarian — idle côté droit, regarde la nef */}
       <CharacterNPC
         character={BARBARIAN_IDLE}
-        position={[1.2, 0, -19]}
+        position={[2.8, 0, -22]}
         rotationY={-Math.PI * 0.18}
         offset={1.0}
         meshColors={PALETTE_BARBARIAN}
       />
 
-      {/* Ranger — traverse devant les portes (z=-23, derrière les autres) */}
-      <CharacterNPC
-        character={RANGER_WALK}
-        path={[[-2.5, -23], [2.5, -23], [2.5, -23.5], [-2.5, -23.5]]}
-        speed={0.4}
-        offset={3.2}
-        meshColors={PALETTE_RANGER}
-      />
-
-      {/* ─── ÉTAGE SUPÉRIEUR (galerie balcon Sponza, y ≈ 5.5) ─── */}
-      {/* Silhouette mystérieuse en haut, marche lente sur le balcon */}
+      {/* Silhouette mystérieuse encapuchonnée — déambule le long du mur d'entrée */}
       <CharacterNPC
         character={ROGUE_HOODED}
-        path={[[-3.0, -16], [3.0, -16], [3.0, -16.5], [-3.0, -16.5]]}
-        speed={0.28}
-        offset={0}
-        position={[0, 5.3, 0]}
+        path={[[-4, -6], [4, -6], [4, -8], [-4, -8]]}
+        speed={0.3}
+        offset={3.0}
         meshColors={PALETTE_HOODED}
       />
 
-      {/* Second Knight en faction sur le balcon (idle) */}
+      {/* Ranger — traverse devant les portes (z=-33) */}
       <CharacterNPC
-        character={KNIGHT_IDLE}
-        position={[2.9, 5.3, -22]}
-        rotationY={-Math.PI * 0.35}
-        offset={4.0}
-        meshColors={PALETTE_KNIGHT}
+        character={RANGER_WALK}
+        path={[[-3, -33], [3, -33], [3, -33.5], [-3, -33.5]]}
+        speed={0.4}
+        offset={4.2}
+        meshColors={PALETTE_RANGER}
       />
     </>
   );

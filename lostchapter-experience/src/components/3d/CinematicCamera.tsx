@@ -9,10 +9,11 @@ const W_OUTSIDE = new THREE.Vector3(0, 3, 18);
 const L_OUTSIDE = new THREE.Vector3(0, 3.2, 0);
 const W_GATE = new THREE.Vector3(0, 2.85, -4);
 const L_GATE = new THREE.Vector3(0, 3.2, -14);
-// Position d'arrivée plus haute et plus reculée pour passer AU-DESSUS des arcades latérales
-// et révéler toute la grandeur de la nef + tous les portails en un seul cadre.
-const W_HALL = new THREE.Vector3(0, 4.4, -10);
-const L_HALL = new THREE.Vector3(0, 2.6, -26);
+// Position d'arrivée surélevée et reculée pour révéler toute la salle de château :
+// le tapis royal au sol, le lustre suspendu, les armures alignées entre les portes,
+// et le mur du fond avec les 9 portes en un seul cadre.
+const W_HALL = new THREE.Vector3(0, 4.2, -8);
+const L_HALL = new THREE.Vector3(0, 2.6, -32);
 
 const T1 = 3.6; // extérieur → franchir le seuil
 const T2 = 9.0; // seuil → installation dans le hall
