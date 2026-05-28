@@ -192,15 +192,19 @@ export function CastleScene() {
       }}
     >
       {/* ─── Environnement HDRI : ciel + terre visibles PARTOUT ─────────────
-          - landscape (Plains Sunset) en background visible toutes les phases :
-            le château se découpe sur le coucher de soleil, et même depuis
-            l'intérieur du hall (atrium open-air) on aperçoit le ciel par les
-            ouvertures et au-dessus.
-          - Sert aussi de source d'éclairage (IBL) : la lumière chaude du
-            coucher baigne pierre et armures. */}
-      <Environment files="/assets/hdr/landscape.exr" background blur={0.05} />
+          environmentIntensity : pour le donjon (pierre sombre/crypte) on réduit
+          fortement l'éclairage indirect du HDR plein-jour, sinon l'intérieur est
+          surexposé et lavé. Le ciel reste lumineux (background) mais ce sont les
+          torches qui éclairent la salle. Pour Sponza (atrium ouvert) on garde
+          un éclairage plus généreux. */}
+      <Environment
+        files="/assets/hdr/landscape.exr"
+        background
+        blur={0.05}
+        environmentIntensity={USE_DUNGEON ? 0.18 : 0.85}
+      />
       {/* Fog atmosphérique chaud, très lointain, pour ne pas masquer le HDR */}
-      <fog attach="fog" args={['#d99868', 90, 320]} />
+      <fog attach="fog" args={['#080604', USE_DUNGEON ? 26 : 90, USE_DUNGEON ? 130 : 320]} />
       <ambientLight intensity={0.22} color="#5a4632" />
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight

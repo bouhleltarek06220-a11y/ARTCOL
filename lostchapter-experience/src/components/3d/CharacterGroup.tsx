@@ -16,6 +16,11 @@ const ROGUE_HOODED:  CharacterDef = { url: `${BASE}/Rogue_Hooded.glb`, scale: SC
 const BARBARIAN_IDLE:CharacterDef = { url: `${BASE}/Barbarian.glb`, scale: SCALE, animationsUrl: ANIM_GENERAL, animationName: 'Idle_A', timeScale: 0.9 };
 const RANGER_WALK:   CharacterDef = { url: `${BASE}/Ranger.glb`, scale: SCALE, animationsUrl: ANIM_MOVE, animationName: 'Walking_A', timeScale: 1.05 };
 
+// Personnages custom uploadés (animations embarquées, textures propres) :
+const HOODED_CUSTOM: CharacterDef = { url: '/assets/characters/custom/Hooded_Adventurer.glb', scale: 0.62, animationName: 'CharacterArmature|Walk', timeScale: 1.0 };
+const HOODED_IDLE:   CharacterDef = { url: '/assets/characters/custom/Hooded_Adventurer.glb', scale: 0.62, animationName: 'CharacterArmature|Idle', timeScale: 0.9 };
+const KNIGHT_STATIC: CharacterDef = { url: '/assets/characters/custom/Knight.glb', scale: 0.62 };
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Palettes thématiques par archétype — coloration partie par partie
 // ─────────────────────────────────────────────────────────────────────────────
@@ -135,13 +140,30 @@ export function CharacterGroup() {
         meshColors={PALETTE_BARBARIAN}
       />
 
-      {/* Silhouette mystérieuse encapuchonnée — près de l'entrée */}
+      {/* Silhouette mystérieuse encapuchonnée — VRAI perso custom animé, près de l'entrée */}
       <CharacterNPC
-        character={ROGUE_HOODED}
+        character={HOODED_CUSTOM}
         path={[[-2.5, -10], [2.5, -10], [2.5, -11], [-2.5, -11]]}
-        speed={0.3}
+        speed={0.5}
         offset={3.0}
-        meshColors={PALETTE_HOODED}
+        preserveTextures
+      />
+
+      {/* Chevalier custom (statique) en faction au centre, regarde l'entrée */}
+      <CharacterNPC
+        character={KNIGHT_STATIC}
+        position={[0.8, 0, -16]}
+        rotationY={Math.PI}
+        preserveTextures
+      />
+
+      {/* Aventurier encapuchonné en méditation (idle) face aux portes */}
+      <CharacterNPC
+        character={HOODED_IDLE}
+        position={[-1.2, 0, -28]}
+        rotationY={0}
+        offset={1.0}
+        preserveTextures
       />
 
       {/* Ranger — traverse devant les portes (z=-34) */}
