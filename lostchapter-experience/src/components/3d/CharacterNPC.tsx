@@ -11,6 +11,12 @@ export interface CharacterDef {
   rotationOffset?: number; // si le modèle ne pointe pas vers +Z par défaut
   animationName?: string;
   timeScale?: number;
+  /**
+   * URL d'un GLB de rig partagé contenant les clips d'animation. Si présent, les
+   * clips sont chargés depuis là (KayKit v2). Sinon, on utilise les animations
+   * embedded du fichier principal (CesiumMan, KayKit v1...).
+   */
+  animationsUrl?: string;
 }
 
 export interface CharacterNPCProps {
@@ -25,12 +31,15 @@ export interface CharacterNPCProps {
   emissive?: string;
 }
 
-// Préchargement des modèles humanoïdes au chargement du module
-useGLTF.preload('/assets/characters/kaykit/Knight.glb');
-useGLTF.preload('/assets/characters/kaykit/Mage.glb');
-useGLTF.preload('/assets/characters/kaykit/Rogue.glb');
-useGLTF.preload('/assets/characters/kaykit/Rogue_Hooded.glb');
-useGLTF.preload('/assets/characters/kaykit/Barbarian.glb');
+// Préchargement des modèles humanoïdes (KayKit Adventurers 2.0)
+useGLTF.preload('/assets/characters/kaykit-v2/Knight.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/Mage.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/Rogue.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/Rogue_Hooded.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/Barbarian.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/Ranger.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/animations/Rig_Medium_MovementBasic.glb');
+useGLTF.preload('/assets/characters/kaykit-v2/animations/Rig_Medium_General.glb');
 
 export function CharacterNPC({
   character,
@@ -47,6 +56,13 @@ export function CharacterNPC({
     scene: THREE.Group;
     animations: THREE.AnimationClip[];
   };
+  // Quand un rig partagé est fourni (KayKit v2 → animations dans un autre GLB),
+  // on charge ses clips ; sinon on retombe sur ceux du fichier principal.
+  // useGLTF est mis en cache par drei : appeler 2x la même URL ne fetch qu'une fois.
+  const animSrc = useGLTF(character.animationsUrl ?? character.url) as unknown as {
+    animations: THREE.AnimationClip[];
+  };
+  const animations = animSrc?.animations?.length ? animSrc.animations : gltf.animations;
 
   // Clone du SkinnedMesh : chaque NPC a son propre squelette et état d'animation
   const cloned = useMemo(() => skeletonClone(gltf.scene) as THREE.Group, [gltf.scene]);
@@ -84,7 +100,7 @@ export function CharacterNPC({
     });
   }, [cloned, preserveTextures, darkenColor, emissive]);
 
-  useCharacterAnimation(gltf.animations, cloned, character.animationName, character.timeScale ?? 1);
+  useCharacterAnimation(animations, cloned, character.animationName, character.timeScale ?? 1);
 
   // Déplacement le long du chemin (le walk-cycle des bones tourne sur place,
   // c'est nous qui translatons le groupe). Si pas de chemin, idle stationnaire.
