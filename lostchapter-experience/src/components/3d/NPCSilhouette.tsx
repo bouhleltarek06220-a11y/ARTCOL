@@ -2,7 +2,16 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Silhouette sombre qui glisse le long d'un chemin — "les figures qui passent" du château vivant.
+// Humanoïde sombre articulé qui marche le long d'un chemin — vraies silhouettes vivantes.
+const darkMat = new THREE.MeshStandardMaterial({ color: '#0c0906', roughness: 0.95, metalness: 0.05 });
+const rimMat = new THREE.MeshBasicMaterial({
+  color: '#c99b5c',
+  transparent: true,
+  opacity: 0.05,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+});
+
 export function NPCSilhouette({
   path,
   speed = 0.6,
@@ -14,6 +23,10 @@ export function NPCSilhouette({
 }) {
   const group = useRef<THREE.Group>(null);
   const body = useRef<THREE.Group>(null);
+  const legL = useRef<THREE.Group>(null);
+  const legR = useRef<THREE.Group>(null);
+  const armL = useRef<THREE.Group>(null);
+  const armR = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     const segs = path.length;
@@ -32,29 +45,56 @@ export function NPCSilhouette({
       const dz = p1[1] - p0[1];
       group.current.rotation.y = Math.atan2(dx, dz);
     }
+    // Cycle de marche : ~2 cycles/s
+    const gait = clock.elapsedTime * speed * 6 + offset * 4;
+    const swing = Math.sin(gait) * 0.55;
+    const armSwing = Math.sin(gait + Math.PI) * 0.4;
+    if (legL.current) legL.current.rotation.x = swing;
+    if (legR.current) legR.current.rotation.x = -swing;
+    if (armL.current) armL.current.rotation.x = -swing * 0.7;
+    if (armR.current) armR.current.rotation.x = swing * 0.7;
     if (body.current) {
-      const phase = clock.elapsedTime * 4 + offset * 3;
-      body.current.position.y = 0.05 + Math.abs(Math.sin(phase)) * 0.06;
+      body.current.position.y = 1.0 + Math.abs(Math.sin(gait)) * 0.04;
+      body.current.rotation.z = Math.sin(gait) * 0.02;
     }
   });
 
   return (
     <group ref={group}>
       <group ref={body}>
-        {/* corps : capsule sombre */}
-        <mesh position={[0, 0.65, 0]} castShadow>
-          <capsuleGeometry args={[0.18, 0.9, 4, 12]} />
-          <meshStandardMaterial color="#0a0805" roughness={0.95} metalness={0.05} />
+        {/* torse (cape) */}
+        <mesh material={darkMat} position={[0, 0, 0]} castShadow>
+          <boxGeometry args={[0.42, 0.7, 0.26]} />
         </mesh>
-        {/* tête */}
-        <mesh position={[0, 1.32, 0]} castShadow>
-          <sphereGeometry args={[0.15, 14, 14]} />
-          <meshStandardMaterial color="#0a0805" roughness={0.95} metalness={0.05} />
+        {/* capuche / tête */}
+        <mesh material={darkMat} position={[0, 0.5, 0]} castShadow>
+          <sphereGeometry args={[0.17, 14, 14]} />
         </mesh>
-        {/* léger rim doré sur la cape (additif faible) */}
-        <mesh position={[0, 0.65, 0]}>
-          <capsuleGeometry args={[0.21, 0.95, 4, 12]} />
-          <meshBasicMaterial color="#c99b5c" transparent opacity={0.06} blending={THREE.AdditiveBlending} depthWrite={false} />
+        {/* épaules (pivot des bras) */}
+        <group ref={armL} position={[-0.26, 0.18, 0]}>
+          <mesh material={darkMat} position={[0, -0.27, 0]} castShadow>
+            <cylinderGeometry args={[0.06, 0.055, 0.55, 8]} />
+          </mesh>
+        </group>
+        <group ref={armR} position={[0.26, 0.18, 0]}>
+          <mesh material={darkMat} position={[0, -0.27, 0]} castShadow>
+            <cylinderGeometry args={[0.06, 0.055, 0.55, 8]} />
+          </mesh>
+        </group>
+        {/* rim doré (capture la lumière chaude des torches) */}
+        <mesh material={rimMat} position={[0, 0, 0]}>
+          <boxGeometry args={[0.5, 0.8, 0.34]} />
+        </mesh>
+      </group>
+      {/* hanches (pivot des jambes) */}
+      <group ref={legL} position={[-0.1, 0.55, 0]}>
+        <mesh material={darkMat} position={[0, -0.275, 0]} castShadow>
+          <cylinderGeometry args={[0.07, 0.06, 0.55, 8]} />
+        </mesh>
+      </group>
+      <group ref={legR} position={[0.1, 0.55, 0]}>
+        <mesh material={darkMat} position={[0, -0.275, 0]} castShadow>
+          <cylinderGeometry args={[0.07, 0.06, 0.55, 8]} />
         </mesh>
       </group>
     </group>

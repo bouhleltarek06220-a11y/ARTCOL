@@ -13,11 +13,11 @@ useGLTF.preload('/assets/sponza/glTF/Sponza.gltf');
 const SPONZA_ROT_Y = Math.PI / 2;
 const SPONZA_POS: [number, number, number] = [0, 0, -21.37];
 
-// Trois trajets de patrouille pour les silhouettes vivantes (coords mondiales x,z dans le hall).
+// Trois trajets de patrouille dans la NEF CENTRALE (x ±2.5 max pour rester sous l'arc, loin des colonnes).
 const PATHS_NPC: { path: [number, number][]; speed: number; offset: number }[] = [
-  { path: [[-3.5, -14], [3.5, -18], [-2.5, -23], [2.5, -16]], speed: 0.55, offset: 0 },
-  { path: [[3, -12], [4.5, -22], [-2, -26], [-4, -14]], speed: 0.45, offset: 1.4 },
-  { path: [[0, -27], [-3.5, -22], [3.5, -22], [0, -27]], speed: 0.4, offset: 2.8 },
+  { path: [[-2, -14], [2, -19], [-1.5, -24], [1.5, -16]], speed: 0.5, offset: 0 },
+  { path: [[2, -13], [2.5, -22], [-1, -25], [-2, -15]], speed: 0.4, offset: 1.4 },
+  { path: [[0, -25], [-2, -21], [2, -21], [0, -25]], speed: 0.35, offset: 2.8 },
 ];
 
 export function HallScene() {
@@ -44,41 +44,45 @@ export function HallScene() {
       </group>
 
       {/* éclairage chaud d'ambiance dans la nef */}
-      <ambientLight intensity={0.42} color="#5a4632" />
-      {[-6, 0, 6].map((zx) => (
-        <pointLight key={zx} position={[zx, 6.5, -22]} color="#ffb066" intensity={28} distance={28} decay={2} />
+      <ambientLight intensity={0.55} color="#6a5238" />
+      {[-8, -2, 4].map((zx) => (
+        <pointLight key={zx} position={[0, 6.5, zx - 18]} color="#ffb066" intensity={32} distance={26} decay={2} />
       ))}
       {/* faisceau focal sur l'arc de portails */}
       <spotLight
-        position={[0, 11, -28]}
-        target-position={[0, 1.5, -29]}
+        position={[0, 10, -28]}
+        target-position={[0, 2.6, -30]}
         color="#fff0d0"
-        intensity={320}
+        intensity={380}
         distance={50}
-        angle={0.55}
+        angle={0.6}
         penumbra={0.7}
       />
 
-      {/* Bannières médiévales le long de la nef */}
-      {[-7, -3.5, 3.5, 7].map((x, i) => (
-        <AnimatedBanner key={i} position={[x, 6.5, -16 - i * 1.8]} phase={i * 0.7} />
+      {/* Bannières le long de la nef, repoussées profond pour ne pas écraser la caméra */}
+      {[
+        [-3.5, -22],
+        [3.5, -22],
+        [-3.5, -26],
+        [3.5, -26],
+      ].map(([x, z], i) => (
+        <AnimatedBanner key={i} position={[x, 6.4, z]} phase={i * 0.7} />
       ))}
 
-      {/* Silhouettes vivantes */}
+      {/* Silhouettes vivantes — vrais humanoïdes articulés qui marchent */}
       {PATHS_NPC.map((p, i) => (
         <NPCSilhouette key={i} path={p.path} speed={p.speed} offset={p.offset} />
       ))}
 
-      {/* Arc de portails au fond du hall, regardant vers la caméra */}
+      {/* Arc serré au fond du hall, rayon réduit pour rester dans la nef centrale */}
       {zones.map((zone, i) => {
-        // angle réparti sur ~150° face à la caméra
         const t = zones.length === 1 ? 0.5 : i / (zones.length - 1);
-        const angle = THREE.MathUtils.lerp(-Math.PI * 0.42, Math.PI * 0.42, t);
-        const radius = 4.8;
+        // arc 120° au lieu de 150°, plus visible et moins masqué par les colonnes
+        const angle = THREE.MathUtils.lerp(-Math.PI * 0.34, Math.PI * 0.34, t);
+        const radius = 3.0;                                  // nef centrale dégagée
         const x = Math.sin(angle) * radius;
-        const zPos = -27 + Math.cos(angle) * 1.4;
-        // chaque portail s'incline légèrement vers la caméra
-        return <InteractivePortal key={zone.id} zone={zone} position={[x, 2.6, zPos]} yaw={-angle * 0.4} />;
+        const zPos = -30 + Math.cos(angle) * 1.0;            // au fond du hall
+        return <InteractivePortal key={zone.id} zone={zone} position={[x, 2.6, zPos]} yaw={-angle * 0.5} />;
       })}
     </group>
   );

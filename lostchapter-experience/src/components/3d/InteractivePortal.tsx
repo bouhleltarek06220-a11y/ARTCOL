@@ -80,7 +80,7 @@ export function InteractivePortal({
       {/* lumière qui éclaire les pierres autour */}
       <pointLight ref={light} color={color} intensity={6} distance={6} decay={2} />
       {/* étiquette flottante (3D-HTML, repointe vers la caméra) */}
-      <Html position={[0, 1.55, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }} occlude={false}>
+      <Html position={[0, 1.55, 0]} center distanceFactor={8} style={{ pointerEvents: 'none' }} occlude>
         <div
           className="font-medieval whitespace-nowrap text-[14px] uppercase tracking-[0.32em] text-parchment"
           style={{ textShadow: '0 0 10px rgba(0,0,0,0.75), 0 0 18px rgba(229,199,136,0.35)' }}
