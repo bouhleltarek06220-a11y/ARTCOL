@@ -198,7 +198,14 @@ export function CastleScene() {
       ) : (
         <Environment files="/assets/hdr/landscape.exr" background blur={0.05} />
       )}
-      <fog attach="fog" args={['#080604', 18, 70]} />
+      {/* Fog : sombre à l'intérieur pour la profondeur ; chaud + très lointain à
+          l'extérieur pour ne pas masquer le HDR du coucher de soleil (sinon le
+          ciel devient noir uniforme). */}
+      {phase === 'inside' ? (
+        <fog attach="fog" args={['#080604', 18, 70]} />
+      ) : (
+        <fog attach="fog" args={['#d99868', 90, 320]} />
+      )}
       <ambientLight intensity={0.22} color="#5a4632" />
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight
