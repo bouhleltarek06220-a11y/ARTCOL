@@ -97,6 +97,80 @@ function CastleExterior({ mobile }: { mobile: boolean }) {
   );
 }
 
+// Corridor d'arches gothiques en pierre qui prolonge la porte vers le hall Sponza.
+// Évite que la caméra traverse du vide / des murs entre l'extérieur et l'intérieur.
+function EntranceCorridor({ mobile }: { mobile: boolean }) {
+  const stoneCorridor = { color: '#4a3828', roughness: 0.92, metalness: 0.04 };
+  const stoneArch = { color: '#3a2a1c', roughness: 0.92 };
+
+  // 4 arches gothiques alignées entre z=-1.2 et z=-5.4 (juste avant Sponza)
+  const zs = [-1.2, -2.6, -4.0, -5.4];
+
+  return (
+    <group>
+      {/* Sol en pierre du corridor — couvre la zone z=0 à z=-6 */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, -3]} receiveShadow>
+        <planeGeometry args={[5.2, 7]} />
+        <meshStandardMaterial color="#3d2e20" roughness={0.92} metalness={0.04} />
+      </mesh>
+      {/* Tapis royal rouge qui mène à l'intérieur (continuité visuelle) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, -3]} receiveShadow>
+        <planeGeometry args={[2.8, 6.6]} />
+        <meshStandardMaterial color="#5a1a1a" roughness={0.92} metalness={0.06} />
+      </mesh>
+      {[-1.5, 1.5].map((s) => (
+        <mesh key={`c-edge-${s}`} rotation={[-Math.PI / 2, 0, 0]} position={[s, 0.014, -3]}>
+          <planeGeometry args={[0.1, 6.6]} />
+          <meshStandardMaterial color="#c99b5c" metalness={0.9} roughness={0.45} />
+        </mesh>
+      ))}
+
+      {/* Plafond voûté entre les arches (cache le ciel HDR vu d'en-dessous) */}
+      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 8.5, -3]}>
+        <planeGeometry args={[5.2, 7]} />
+        <meshStandardMaterial color="#1f160f" roughness={1} />
+      </mesh>
+
+      {/* Murs latéraux du corridor (à l'extérieur des arches) — cachent le décor à travers */}
+      {[-1, 1].map((s) => (
+        <mesh key={`c-wall-${s}`} rotation={[0, s * Math.PI / 2, 0]} position={[s * 2.6, 4.25, -3]}>
+          <planeGeometry args={[7, 8.5]} />
+          <meshStandardMaterial color="#3a2a1c" roughness={0.95} />
+        </mesh>
+      ))}
+
+      {/* 4 arches gothiques en plein cintre alignées */}
+      {zs.map((z) => (
+        <group key={z} position={[0, 0, z]}>
+          {/* Jambage gauche */}
+          <mesh position={[-2.45, 3.5, 0]} castShadow={!mobile} receiveShadow>
+            <boxGeometry args={[0.45, 7, 0.55]} />
+            <meshStandardMaterial {...stoneCorridor} />
+          </mesh>
+          {/* Jambage droit */}
+          <mesh position={[2.45, 3.5, 0]} castShadow={!mobile} receiveShadow>
+            <boxGeometry args={[0.45, 7, 0.55]} />
+            <meshStandardMaterial {...stoneCorridor} />
+          </mesh>
+          {/* Arc en plein cintre */}
+          <mesh position={[0, 7, 0]}>
+            <ringGeometry args={[2.25, 2.75, 32, 1, 0, Math.PI]} />
+            <meshStandardMaterial {...stoneArch} side={THREE.DoubleSide} />
+          </mesh>
+          {/* Clé de voûte centrale */}
+          <mesh position={[0, 9.2, 0]} castShadow={!mobile}>
+            <boxGeometry args={[0.6, 0.4, 0.5]} />
+            <meshStandardMaterial {...stoneArch} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Petite lumière chaude qui se promène dans le corridor */}
+      <pointLight position={[0, 5, -3]} color="#ffb066" intensity={18} distance={10} decay={2} />
+    </group>
+  );
+}
+
 export function CastleScene() {
   const mobile = useIsMobile();
   const phase = useExperience((s) => s.phase);
@@ -143,6 +217,9 @@ export function CastleScene() {
 
       <CastleExterior mobile={mobile} />
       <CastleGate />
+      {/* Corridor d'arches gothiques entre la porte et le hall : fait le passage
+          architectural réaliste et empêche la caméra de traverser du vide. */}
+      <EntranceCorridor mobile={mobile} />
       <Torch position={[-3.0, 4.0, 1.0]} />
       <Torch position={[3.0, 4.0, 1.0]} />
       {!mobile && <FloatingEmbers count={360} />}
