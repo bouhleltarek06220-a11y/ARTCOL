@@ -31,9 +31,10 @@ export function HallScene() {
         m.castShadow = true;
         m.receiveShadow = true;
         const mat = m.material as THREE.MeshStandardMaterial | undefined;
-        // Avec le HDRI Georgentor en envMap, on booste l'intensité des reflets pour
-        // que Sponza capture bien la lumière du portail médiéval.
-        if (mat && 'envMapIntensity' in mat) mat.envMapIntensity = 1.2;
+        // Avec le HDRI Georgentor en envMap, on calibre les reflets : assez pour
+        // sentir le matériau (highlights spéculaires sur l'armure, douceur diffuse
+        // sur la pierre) mais pas tellement que la scène devienne grise/lavée.
+        if (mat && 'envMapIntensity' in mat) mat.envMapIntensity = 0.85;
       }
     });
   }, [gltf]);
