@@ -19,14 +19,18 @@ export interface CharacterNPCProps {
   speed?: number;
   offset?: number;
   position?: [number, number, number];
-  darkenColor?: string; // teinte sombre médiévale pour matcher l'ambiance
+  rotationY?: number;        // orientation fixe quand sans chemin
+  preserveTextures?: boolean; // garde la texture KayKit (armure, robe…)
+  darkenColor?: string;      // teinte sombre médiévale pour matcher l'ambiance
   emissive?: string;
 }
 
 // Préchargement des modèles humanoïdes au chargement du module
-useGLTF.preload('/assets/characters/CesiumMan.glb');
-useGLTF.preload('/assets/characters/BrainStem.glb');
-useGLTF.preload('/assets/characters/RiggedFigure.glb');
+useGLTF.preload('/assets/characters/kaykit/Knight.glb');
+useGLTF.preload('/assets/characters/kaykit/Mage.glb');
+useGLTF.preload('/assets/characters/kaykit/Rogue.glb');
+useGLTF.preload('/assets/characters/kaykit/Rogue_Hooded.glb');
+useGLTF.preload('/assets/characters/kaykit/Barbarian.glb');
 
 export function CharacterNPC({
   character,
@@ -34,6 +38,8 @@ export function CharacterNPC({
   speed = 0.5,
   offset = 0,
   position = [0, 0, 0],
+  rotationY = 0,
+  preserveTextures = false,
   darkenColor = '#1a1208',
   emissive = '#2a1a0a',
 }: CharacterNPCProps) {
@@ -47,31 +53,41 @@ export function CharacterNPC({
 
   const groupRef = useRef<THREE.Group>(null);
 
-  // Teinte sombre médiévale (silhouettes crédibles dans le hall)
+  // Matériaux : soit on garde les textures KayKit (médiéval crédible),
+  // soit on les retire pour une silhouette unifiée brun-noir.
   useEffect(() => {
     cloned.traverse((o: THREE.Object3D) => {
       const m = o as THREE.Mesh;
       if (m.isMesh && m.material) {
         const original = m.material as THREE.MeshStandardMaterial;
-        const dark = (original.isMeshStandardMaterial ? original.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
-        dark.color = new THREE.Color(darkenColor);
-        dark.map = null; // on enlève la texture d'origine pour rester en silhouette unifiée
-        dark.metalness = 0.12;
-        dark.roughness = 0.85;
-        dark.emissive = new THREE.Color(emissive);
-        dark.emissiveIntensity = 0.06;
-        m.material = dark;
+        const mat = (original.isMeshStandardMaterial ? original.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
+        if (preserveTextures) {
+          // assombrir légèrement pour matcher l'ambiance nef éclairée aux torches
+          mat.color.multiplyScalar(0.82);
+          mat.metalness = (mat.metalness ?? 0.1) * 0.6;
+          mat.roughness = 0.85;
+          mat.emissive = new THREE.Color(emissive);
+          mat.emissiveIntensity = 0.03;
+        } else {
+          mat.color = new THREE.Color(darkenColor);
+          mat.map = null;
+          mat.metalness = 0.12;
+          mat.roughness = 0.85;
+          mat.emissive = new THREE.Color(emissive);
+          mat.emissiveIntensity = 0.06;
+        }
+        m.material = mat;
         m.castShadow = true;
         m.receiveShadow = true;
-        m.frustumCulled = false; // évite que la silhouette disparaisse en bord d'écran avec une grosse anim
+        m.frustumCulled = false;
       }
     });
-  }, [cloned, darkenColor, emissive]);
+  }, [cloned, preserveTextures, darkenColor, emissive]);
 
   useCharacterAnimation(gltf.animations, cloned, character.animationName, character.timeScale ?? 1);
 
   // Déplacement le long du chemin (le walk-cycle des bones tourne sur place,
-  // c'est nous qui translatons le groupe).
+  // c'est nous qui translatons le groupe). Si pas de chemin, idle stationnaire.
   useFrame(({ clock }) => {
     const g = groupRef.current;
     if (!g) return;
@@ -89,6 +105,10 @@ export function CharacterNPC({
       const dx = p1[0] - p0[0];
       const dz = p1[1] - p0[1];
       g.rotation.y = Math.atan2(dx, dz) + (character.rotationOffset ?? 0);
+    } else {
+      // Idle stationnaire : légère respiration en y + micro sway
+      g.position.set(position[0], (position[1] ?? 0) + Math.sin(clock.elapsedTime * 1.4 + offset) * 0.012, position[2]);
+      g.rotation.y = rotationY + Math.sin(clock.elapsedTime * 0.5 + offset) * 0.03;
     }
   });
 

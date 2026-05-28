@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { EffectComposer, Bloom, ToneMapping } from '@react-three/postprocessing';
-import { ToneMappingMode } from 'postprocessing';
+import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
+import { ToneMappingMode, BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 import { CastleGate } from './CastleGate';
 import { CinematicCamera } from './CinematicCamera';
@@ -108,7 +108,15 @@ export function CastleScene() {
       <CinematicCamera />
 
       <EffectComposer>
-        <Bloom intensity={0.95} luminanceThreshold={0.22} luminanceSmoothing={0.32} mipmapBlur />
+        {/* Halo des flammes et portails — douceur cinéma */}
+        <Bloom intensity={1.05} luminanceThreshold={0.2} luminanceSmoothing={0.35} mipmapBlur />
+        {/* Étalonnage couleur léger (un cran de contraste + chaleur) */}
+        <BrightnessContrast brightness={-0.02} contrast={0.08} />
+        {/* Grain de pellicule subtil */}
+        <Noise opacity={0.06} blendFunction={BlendFunction.OVERLAY} premultiply />
+        {/* Vignette cinéma : assombrit les bords pour focaliser le regard */}
+        <Vignette eskil={false} offset={0.18} darkness={0.95} />
+        {/* Tone mapping ACES filmique en sortie */}
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       </EffectComposer>
     </Canvas>
