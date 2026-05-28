@@ -9,11 +9,8 @@ const W_OUTSIDE = new THREE.Vector3(0, 3, 18);
 const L_OUTSIDE = new THREE.Vector3(0, 3.2, 0);
 const W_GATE = new THREE.Vector3(0, 2.85, -4);
 const L_GATE = new THREE.Vector3(0, 3.2, -14);
-// Arrivée dans l'atrium Sponza : caméra surélevée pour passer au-dessus des
-// arcades latérales et révéler le tapis royal + les armures + les 9 portes
-// du fond en un seul cadre.
 const W_HALL = new THREE.Vector3(0, 4.4, -10);
-const L_HALL = new THREE.Vector3(0, 2.6, -32);
+const L_HALL = new THREE.Vector3(0, 2.8, -38);
 
 const T1 = 3.6; // extérieur → franchir le seuil
 const T2 = 9.0; // seuil → installation dans le hall

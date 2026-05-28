@@ -11,13 +11,15 @@ import { zones } from '../../data/zones';
 // Préchargement de Sponza (décor architectural photoréaliste, CC BY Crytek)
 useGLTF.preload('/assets/sponza/glTF/Sponza.gltf');
 
-// Sponza est orienté axe long sur X. On le rote -π/2 pour aligner la nef sur
-// Z ET exposer la GRANDE ARCHE D'ENTRÉE (et non l'apse fermée) vers la caméra,
-// sinon la caméra rentre dans un mur en franchissant la porte.
+// Sponza × 1.4 pour plus de monumentalité. Compensations :
+//   - position.y = +1.4 pour que le sol (intrinsic min.y * 1.4 = -1.41) reste à y=0
+//   - position.z = -26.16 pour que l'arche d'entrée (originale x=+14.40, scalée)
+//     reste à world z=-6 (juste après le corridor de la porte).
 const SPONZA_ROT_Y = -Math.PI / 2;
-const SPONZA_POS: [number, number, number] = [0, 0, -20.4];
-// Sponza s'étend maintenant : entrée z≈-6 (arche), apse z≈-35.8 (niche)
-const Z_BACK = -32;  // les portes sont placées avant l'apse, dans la nef visible
+const SPONZA_SCALE = 1.4;
+const SPONZA_POS: [number, number, number] = [0, 1.4, -26.16];
+// Sponza s'étend maintenant : entrée z≈-6 (arche), apse z≈-48 (niche)
+const Z_BACK = -44;  // les portes sont placées avant l'apse, dans la nef visible
 
 export function HallScene() {
   const gltf = useGLTF('/assets/sponza/glTF/Sponza.gltf') as unknown as { scene: THREE.Group };
@@ -65,8 +67,8 @@ export function HallScene() {
 
   return (
     <group>
-      {/* ─── DÉCOR : atrium de palais Sponza (photoréaliste) ─────────────── */}
-      <group rotation={[0, SPONZA_ROT_Y, 0]} position={SPONZA_POS}>
+      {/* ─── DÉCOR : atrium de palais Sponza (×1.4 monumental) ──────── */}
+      <group rotation={[0, SPONZA_ROT_Y, 0]} position={SPONZA_POS} scale={SPONZA_SCALE}>
         <primitive object={gltf.scene} dispose={null} />
       </group>
 
@@ -95,11 +97,11 @@ export function HallScene() {
       ))}
       {/* Faisceau focal sur le mur du fond et les portes */}
       <spotLight
-        position={[0, 10, Z_BACK + 6]}
+        position={[0, 12, Z_BACK + 8]}
         target-position={[0, 2.6, Z_BACK + 0.5]}
         color="#fff0d0"
-        intensity={500}
-        distance={32}
+        intensity={650}
+        distance={40}
         angle={0.75}
         penumbra={0.7}
       />
@@ -107,8 +109,8 @@ export function HallScene() {
       {/* ─── 4 grands braseros allumés (entrée + fond) ──────────── */}
       <Brazier position={[-5, 0, -8]} />
       <Brazier position={[5, 0, -8]} />
-      <Brazier position={[-5, 0, -32]} />
-      <Brazier position={[5, 0, -32]} />
+      <Brazier position={[-5, 0, Z_BACK + 2]} />
+      <Brazier position={[5, 0, Z_BACK + 2]} />
 
       {/* ─── Bannières héraldiques sur les côtés de la nef ─────── */}
       {[[-6.5, -12], [6.5, -12], [-6.5, -18], [6.5, -18], [-6.5, -24], [6.5, -24]].map(
