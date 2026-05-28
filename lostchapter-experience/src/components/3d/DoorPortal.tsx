@@ -12,9 +12,9 @@ const accent: Record<Zone['accent'], string> = {
   gold: '#e5c788',
 };
 
-const W = 1.4;   // largeur du vantail
-const H = 3.0;   // hauteur du vantail
-const D = 0.18;  // profondeur
+const W = 1.6;   // largeur du vantail
+const H = 3.5;   // hauteur du vantail
+const D = 0.2;   // profondeur
 
 // Vraie porte de château : cadre en pierre + arche en plein cintre + double vantail
 // en bois à planches + ferrures + anneau de tirage. Cliquable, halo coloré sur hover.
@@ -49,14 +49,16 @@ export function DoorPortal({ zone, position }: { zone: Zone; position: [number, 
     setHover(false);
     document.body.style.cursor = 'default';
   };
-  const onClick = (e: ThreeEvent<MouseEvent>) => {
+  // L'activation passe par un bouton DOM (Html) qui s'affiche au hover : ainsi
+  // un clic-glisser pour pivoter la caméra n'ouvre plus accidentellement une porte.
+  const onActivate = (e: React.MouseEvent) => {
     e.stopPropagation();
     activationChord();
     select(zone.id);
   };
 
   return (
-    <group position={position} onPointerOver={onOver} onPointerOut={onOut} onClick={onClick}>
+    <group position={position} onPointerOver={onOver} onPointerOut={onOut}>
       {/* ─── Cadre en pierre ──────────────────────────────── */}
       <mesh position={[-W / 2 - 0.14, H / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[0.28, H + 0.3, D + 0.25]} />
@@ -115,19 +117,37 @@ export function DoorPortal({ zone, position }: { zone: Zone; position: [number, 
 
       {/* ─── Plaque au-dessus de l'arche ───────────────── */}
       <Html
-        position={[0, H + 0.95, 0]}
+        position={[0, H + 1.0, 0]}
         center
-        distanceFactor={10}
+        distanceFactor={9}
         occlude
         style={{ pointerEvents: 'none' }}
       >
         <div
-          className="font-medieval whitespace-nowrap text-[12px] uppercase tracking-[0.32em] text-parchment"
-          style={{ textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 18px rgba(229,199,136,0.4)' }}
+          className="font-medieval whitespace-nowrap text-[13px] uppercase tracking-[0.32em] text-parchment"
+          style={{ textShadow: '0 0 10px rgba(0,0,0,0.85), 0 0 18px rgba(229,199,136,0.4)' }}
         >
           {zone.title}
         </div>
       </Html>
+
+      {/* ─── Bouton d'entrée DOM (apparaît au survol, n'est PAS un click 3D) ─── */}
+      {hover && (
+        <Html
+          position={[0, H * 0.5, D / 2 + 0.25]}
+          center
+          distanceFactor={6}
+          style={{ pointerEvents: 'auto' }}
+        >
+          <button
+            onClick={onActivate}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="font-display rounded-md border border-goldbright bg-gradient-to-br from-goldbright to-gold px-4 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-stone shadow-[0_8px_24px_rgba(229,199,136,0.5)] transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Entrer
+          </button>
+        </Html>
+      )}
     </group>
   );
 }

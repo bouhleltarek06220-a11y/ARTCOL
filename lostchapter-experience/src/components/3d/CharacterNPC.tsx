@@ -78,6 +78,8 @@ export function CharacterNPC({
 
   // Matériaux : coloration PAR sous-mesh quand meshColors fourni (style stylisé
   // KayKit, chaque partie a sa couleur thématique). Sinon fallback textures/silhouette.
+  // On ajoute aussi des yeux + bouche sur le bone head pour donner des traits aux visages
+  // (les atlas KayKit ne dessinent pas les yeux).
   useEffect(() => {
     cloned.traverse((o: THREE.Object3D) => {
       const m = o as THREE.Mesh;
@@ -127,6 +129,31 @@ export function CharacterNPC({
         m.frustumCulled = false;
       }
     });
+
+    // Ajout des traits du visage (yeux + bouche) sur le bone "head" du squelette KayKit.
+    // Comme c'est un enfant du bone, ça suit l'animation de la tête.
+    const head = cloned.getObjectByName('head');
+    if (head && !head.userData.faceAdded) {
+      const eyeMat = new THREE.MeshStandardMaterial({ color: '#070504', roughness: 0.4, metalness: 0 });
+      const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: '#f4ead8', roughness: 0.4, metalness: 0 });
+      const mouthMat = new THREE.MeshStandardMaterial({ color: '#3a1410', roughness: 0.6 });
+
+      const eyeR = new THREE.Vector3(0.075, 0.08, 0.18);
+      [-1, 1].forEach((side) => {
+        const white = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), eyeWhiteMat);
+        white.position.set(side * eyeR.x, eyeR.y, eyeR.z - 0.005);
+        head.add(white);
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), eyeMat);
+        pupil.position.set(side * eyeR.x, eyeR.y, eyeR.z + 0.025);
+        head.add(pupil);
+      });
+
+      const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.018, 0.02), mouthMat);
+      mouth.position.set(0, -0.04, 0.2);
+      head.add(mouth);
+
+      head.userData.faceAdded = true;
+    }
   }, [cloned, preserveTextures, darkenColor, emissive, meshColors]);
 
   useCharacterAnimation(animations, cloned, character.animationName, character.timeScale ?? 1);

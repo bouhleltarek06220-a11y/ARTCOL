@@ -99,66 +99,69 @@ const PALETTE_RANGER: Record<string, string> = {
 export function CharacterGroup() {
   return (
     <>
-      {/* GARDE MÉDIÉVAL — patrouille la nef (chemins recentrés ±1.7 pour éviter les colonnes) */}
+      {/* ─── REZ-DE-CHAUSSÉE ────────────────────────────── */}
+      {/* Garde médiéval — patrouille le CÔTÉ GAUCHE uniquement */}
       <CharacterNPC
         character={KNIGHT_PATROL}
-        path={[[-1.6, -14], [1.6, -19], [-1.4, -24], [1.4, -16]]}
-        speed={0.5}
+        path={[[-2.6, -12], [-2.6, -22], [-2.0, -27], [-2.0, -14]]}
+        speed={0.45}
         offset={0}
         meshColors={PALETTE_KNIGHT}
       />
 
-      {/* ÉRUDIT / CHERCHEUR — Mage idle face à un portail (recentré) */}
-      <CharacterNPC
-        character={MAGE_IDLE}
-        position={[-1.9, 0, -21]}
-        rotationY={Math.PI * 0.15}
-        meshColors={PALETTE_MAGE}
-      />
-
-      {/* RÔDEUR / VISITEUR — Rogue qui déambule */}
+      {/* Rôdeur — patrouille le CÔTÉ DROIT uniquement (pas de croisement) */}
       <CharacterNPC
         character={ROGUE_WALK}
-        path={[[1.6, -13], [1.8, -22], [-1, -25], [-1.6, -15]]}
+        path={[[2.6, -12], [2.6, -22], [2.0, -27], [2.0, -14]]}
         speed={0.42}
-        offset={1.4}
+        offset={2.0}
         meshColors={PALETTE_ROGUE}
       />
 
-      {/* SILHOUETTE MYSTÉRIEUSE — Rogue encapuchonné, lente, ombré */}
+      {/* Mage érudit — idle face aux portes du fond, axe central gauche */}
       <CharacterNPC
-        character={ROGUE_HOODED}
-        path={[[0, -26], [-1.7, -22], [1.7, -22], [0, -26]]}
-        speed={0.32}
-        offset={2.8}
-        meshColors={PALETTE_HOODED}
+        character={MAGE_IDLE}
+        position={[-1.0, 0, -20]}
+        rotationY={Math.PI * 0.05}
+        meshColors={PALETTE_MAGE}
       />
 
-      {/* BÉNÉVOLE / GARDIEN DU SEUIL — Barbarian idle */}
+      {/* Barbarian — idle côté droit, regarde la nef */}
       <CharacterNPC
         character={BARBARIAN_IDLE}
-        position={[2.2, 0, -20]}
-        rotationY={-Math.PI * 0.2}
-        offset={2.3}
+        position={[1.2, 0, -19]}
+        rotationY={-Math.PI * 0.18}
+        offset={1.0}
         meshColors={PALETTE_BARBARIAN}
       />
 
-      {/* SECOND GARDE en faction (idle) */}
-      <CharacterNPC
-        character={KNIGHT_IDLE}
-        position={[-2.0, 0, -28]}
-        rotationY={Math.PI * 0.18}
-        offset={3.5}
-        meshColors={PALETTE_KNIGHT}
-      />
-
-      {/* RANGER — éclaireur curieux qui traverse */}
+      {/* Ranger — traverse devant les portes (z=-23, derrière les autres) */}
       <CharacterNPC
         character={RANGER_WALK}
-        path={[[-1.8, -28], [1.8, -28], [1.8, -29], [-1.8, -29]]}
-        speed={0.36}
-        offset={4.7}
+        path={[[-2.5, -23], [2.5, -23], [2.5, -23.5], [-2.5, -23.5]]}
+        speed={0.4}
+        offset={3.2}
         meshColors={PALETTE_RANGER}
+      />
+
+      {/* ─── ÉTAGE SUPÉRIEUR (galerie balcon Sponza, y ≈ 5.5) ─── */}
+      {/* Silhouette mystérieuse en haut, marche lente sur le balcon */}
+      <CharacterNPC
+        character={ROGUE_HOODED}
+        path={[[-3.0, -16], [3.0, -16], [3.0, -16.5], [-3.0, -16.5]]}
+        speed={0.28}
+        offset={0}
+        position={[0, 5.3, 0]}
+        meshColors={PALETTE_HOODED}
+      />
+
+      {/* Second Knight en faction sur le balcon (idle) */}
+      <CharacterNPC
+        character={KNIGHT_IDLE}
+        position={[2.9, 5.3, -22]}
+        rotationY={-Math.PI * 0.35}
+        offset={4.0}
+        meshColors={PALETTE_KNIGHT}
       />
     </>
   );

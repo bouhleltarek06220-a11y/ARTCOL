@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
 import { ToneMappingMode, BlendFunction } from 'postprocessing';
@@ -11,6 +11,40 @@ import { FloatingEmbers } from './FloatingEmbers';
 import { HallScene } from './HallScene';
 import { useIsMobile } from '../../lib/useIsMobile';
 import { useExperience } from '../../store';
+
+// OrbitControls verrouillés dans la boîte du hall Sponza :
+// target.x [-4, 4], target.y [1.2, 6], target.z [-30, -6]
+// pour empêcher de pan à travers les murs ou sous le sol.
+function ClampedOrbitControls() {
+  const ref = useRef<any>(null);
+  useFrame(() => {
+    const c = ref.current;
+    if (!c?.target) return;
+    const t = c.target as THREE.Vector3;
+    t.x = Math.max(-4, Math.min(4, t.x));
+    t.y = Math.max(1.2, Math.min(6, t.y));
+    t.z = Math.max(-30, Math.min(-6, t.z));
+  });
+  return (
+    <OrbitControls
+      ref={ref}
+      makeDefault
+      target={[0, 2.2, -20]}
+      enablePan
+      enableRotate
+      enableZoom
+      enableDamping
+      dampingFactor={0.08}
+      minDistance={4}
+      maxDistance={18}
+      minPolarAngle={Math.PI * 0.12}
+      maxPolarAngle={Math.PI * 0.55}
+      rotateSpeed={0.55}
+      panSpeed={0.6}
+      zoomSpeed={0.7}
+    />
+  );
+}
 
 const stone = { color: '#3a2a1d', roughness: 0.95, metalness: 0.05 };
 const darkStone = { color: '#271a11', roughness: 1 };
@@ -110,27 +144,8 @@ export function CastleScene() {
 
       <CinematicCamera />
 
-      {/* Navigation libre dans le hall : rotation (clic-gauche), pan (clic-droit/maj),
-          zoom (molette). Permet d'explorer la pièce et de monter à l'étage Sponza.
-          Activé uniquement après l'arrivée pour ne pas casser la cinématique. */}
-      {phase === 'inside' && (
-        <OrbitControls
-          makeDefault
-          target={[0, 2.6, -28]}
-          enablePan
-          enableRotate
-          enableZoom
-          enableDamping
-          dampingFactor={0.08}
-          minDistance={3}
-          maxDistance={55}
-          minPolarAngle={Math.PI * 0.08}
-          maxPolarAngle={Math.PI * 0.58}
-          rotateSpeed={0.55}
-          panSpeed={0.8}
-          zoomSpeed={0.7}
-        />
-      )}
+      {/* Navigation libre clampée dans la boîte du hall (target box-bound). */}
+      {phase === 'inside' && <ClampedOrbitControls />}
 
       <EffectComposer>
         {/* Halo des flammes et portails — douceur cinéma */}

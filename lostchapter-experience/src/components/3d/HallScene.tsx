@@ -67,12 +67,12 @@ export function HallScene() {
         <CharacterGroup />
       </Suspense>
 
-      {/* Neuf vraies portes médiévales alignées côte à côte sur le mur du fond.
-          Plus de superposition : chacune a son espace propre, parchemin au-dessus de l'arche. */}
+      {/* Neuf vraies portes médiévales alignées côte à côte, rapprochées (z=-25)
+          et agrandies (3.5m de haut) pour être lisibles depuis l'arrivée caméra. */}
       {zones.map((zone, i) => {
         const t = zones.length === 1 ? 0.5 : i / (zones.length - 1);
-        const x = THREE.MathUtils.lerp(-7.2, 7.2, t);
-        const zPos = -32;
+        const x = THREE.MathUtils.lerp(-7.6, 7.6, t);
+        const zPos = -25;
         return <DoorPortal key={zone.id} zone={zone} position={[x, 0, zPos]} />;
       })}
     </group>
