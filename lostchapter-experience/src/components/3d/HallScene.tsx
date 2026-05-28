@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { InteractivePortal } from './InteractivePortal';
+import { DoorPortal } from './DoorPortal';
 import { CharacterGroup } from './CharacterGroup';
 import { AnimatedBanner } from './AnimatedBanner';
 import { zones } from '../../data/zones';
@@ -67,15 +67,13 @@ export function HallScene() {
         <CharacterGroup />
       </Suspense>
 
-      {/* Arc serré au centre du hall, AVANT les arcades latérales, pour rester bien visible */}
+      {/* Neuf vraies portes médiévales alignées côte à côte sur le mur du fond.
+          Plus de superposition : chacune a son espace propre, parchemin au-dessus de l'arche. */}
       {zones.map((zone, i) => {
         const t = zones.length === 1 ? 0.5 : i / (zones.length - 1);
-        // arc 90° (serré) pour que les 9 portails tiennent dans la nef dégagée
-        const angle = THREE.MathUtils.lerp(-Math.PI * 0.26, Math.PI * 0.26, t);
-        const radius = 2.4;                                  // bien dans la nef centrale
-        const x = Math.sin(angle) * radius;
-        const zPos = -25 + Math.cos(angle) * 1.0;            // avancés (25 vs 30) pour plus de présence
-        return <InteractivePortal key={zone.id} zone={zone} position={[x, 2.8, zPos]} yaw={-angle * 0.5} />;
+        const x = THREE.MathUtils.lerp(-7.2, 7.2, t);
+        const zPos = -32;
+        return <DoorPortal key={zone.id} zone={zone} position={[x, 0, zPos]} />;
       })}
     </group>
   );

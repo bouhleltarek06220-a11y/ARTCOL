@@ -5,8 +5,9 @@ const BASE = '/assets/characters/kaykit-v2';
 const ANIM_MOVE = `${BASE}/animations/Rig_Medium_MovementBasic.glb`;
 const ANIM_GENERAL = `${BASE}/animations/Rig_Medium_General.glb`;
 
-// Définitions par archétype + animation (scale réduit pour proportions humaines crédibles)
-const SCALE = 1.0;
+// Définitions par archétype + animation (scale 0.5 pour proportions humaines correctes
+// par rapport aux arcades monumentales de Sponza et à la grandeur du château)
+const SCALE = 0.5;
 const KNIGHT_PATROL: CharacterDef = { url: `${BASE}/Knight.glb`, scale: SCALE, animationsUrl: ANIM_MOVE, animationName: 'Walking_A', timeScale: 0.9 };
 const KNIGHT_IDLE:   CharacterDef = { url: `${BASE}/Knight.glb`, scale: SCALE, animationsUrl: ANIM_GENERAL, animationName: 'Idle_A', timeScale: 0.85 };
 const MAGE_IDLE:     CharacterDef = { url: `${BASE}/Mage.glb`, scale: SCALE, animationsUrl: ANIM_GENERAL, animationName: 'Idle_B', timeScale: 0.8 };

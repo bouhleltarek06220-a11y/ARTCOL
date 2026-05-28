@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
 import { ToneMappingMode, BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
@@ -9,6 +10,7 @@ import { Torch } from './Torch';
 import { FloatingEmbers } from './FloatingEmbers';
 import { HallScene } from './HallScene';
 import { useIsMobile } from '../../lib/useIsMobile';
+import { useExperience } from '../../store';
 
 const stone = { color: '#3a2a1d', roughness: 0.95, metalness: 0.05 };
 const darkStone = { color: '#271a11', roughness: 1 };
@@ -62,6 +64,7 @@ function CastleExterior({ mobile }: { mobile: boolean }) {
 
 export function CastleScene() {
   const mobile = useIsMobile();
+  const phase = useExperience((s) => s.phase);
   return (
     <Canvas
       shadows={!mobile}
@@ -106,6 +109,28 @@ export function CastleScene() {
       )}
 
       <CinematicCamera />
+
+      {/* Navigation libre dans le hall : rotation (clic-gauche), pan (clic-droit/maj),
+          zoom (molette). Permet d'explorer la pièce et de monter à l'étage Sponza.
+          Activé uniquement après l'arrivée pour ne pas casser la cinématique. */}
+      {phase === 'inside' && (
+        <OrbitControls
+          makeDefault
+          target={[0, 2.6, -28]}
+          enablePan
+          enableRotate
+          enableZoom
+          enableDamping
+          dampingFactor={0.08}
+          minDistance={3}
+          maxDistance={55}
+          minPolarAngle={Math.PI * 0.08}
+          maxPolarAngle={Math.PI * 0.58}
+          rotateSpeed={0.55}
+          panSpeed={0.8}
+          zoomSpeed={0.7}
+        />
+      )}
 
       <EffectComposer>
         {/* Halo des flammes et portails — douceur cinéma */}

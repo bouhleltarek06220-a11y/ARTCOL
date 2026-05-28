@@ -45,17 +45,30 @@ export function CinematicOverlay() {
         )}
 
         {phase === 'inside' && (
-          <motion.div
-            key="inside-hint"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="pointer-events-none absolute inset-x-0 top-24 flex justify-center"
-          >
-            <p className="font-display rounded-full border border-gold/30 bg-stone/55 px-5 py-2 text-[10px] uppercase tracking-[0.4em] text-parchment/75 backdrop-blur-sm">
-              Survolez un portail pour révéler son chapitre
-            </p>
-          </motion.div>
+          <>
+            <motion.div
+              key="inside-hint-top"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="pointer-events-none absolute inset-x-0 top-24 flex justify-center"
+            >
+              <p className="font-display rounded-full border border-gold/30 bg-stone/55 px-5 py-2 text-[10px] uppercase tracking-[0.4em] text-parchment/75 backdrop-blur-sm">
+                Avancez vers les portes au fond — chacune ouvre un chapitre
+              </p>
+            </motion.div>
+            <motion.div
+              key="inside-hint-bottom"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 0.85, y: 0 }}
+              transition={{ duration: 1.1, delay: 1.6 }}
+              className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center"
+            >
+              <p className="font-ui rounded-md bg-stone/55 px-4 py-1.5 text-[10px] tracking-[0.25em] text-parchment/55 backdrop-blur-sm">
+                clic-gauche : pivoter · clic-droit / ⇧+drag : déplacer · molette : zoomer
+              </p>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
