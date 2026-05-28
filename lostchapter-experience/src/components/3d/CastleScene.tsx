@@ -9,8 +9,14 @@ import { CinematicCamera } from './CinematicCamera';
 import { Torch } from './Torch';
 import { FloatingEmbers } from './FloatingEmbers';
 import { HallScene } from './HallScene';
+import { DungeonHall } from './DungeonHall';
 import { useIsMobile } from '../../lib/useIsMobile';
 import { useExperience } from '../../store';
+
+// Choix de l'environnement selon l'URL de déploiement :
+//   /experience-v3 → salle de donjon modulaire KayKit
+//   sinon          → atrium Sponza
+const USE_DUNGEON = import.meta.env.BASE_URL.includes('v3');
 
 // OrbitControls verrouillés dans la boîte de l'atrium Sponza ×1.4 :
 // target.x [-7, 7], target.y [1.2, 11], target.z [-46, -6]
@@ -225,9 +231,7 @@ export function CastleScene() {
       {/* Le hall (Sponza + portails + NPC + bannières) est rendu derrière la porte,
           il commence à se charger immédiatement et useProgress reflète son téléchargement. */}
       {!mobile && (
-        <Suspense fallback={null}>
-          <HallScene />
-        </Suspense>
+        <Suspense fallback={null}>{USE_DUNGEON ? <DungeonHall /> : <HallScene />}</Suspense>
       )}
 
       <CinematicCamera />
