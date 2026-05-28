@@ -121,25 +121,13 @@ export function HallScene() {
         ),
       )}
 
-      {/* ─── 9 portes médiévales contre le mur du fond Sponza ──── */}
-      {zones.map((zone, i) => (
-        <DoorPortal key={zone.id} zone={zone} position={[doorXs[i], 0, Z_BACK + 1.5]} />
-      ))}
-
-      {/* ─── 8 armures de chevalier entre les portes ───────────── */}
-      {armorXs.map((x, i) => (
-        <KnightArmor
-          key={i}
-          position={[x, 0, Z_BACK + 3.5]}
-          rotationY={Math.PI}
-          plumeColor={i % 2 === 0 ? '#7a1a1a' : '#3a1a4a'}
-        />
-      ))}
-
-      {/* ─── Personnages 3D animés (au sol uniquement) ─────────── */}
+      {/* Personnages 3D animés (au sol uniquement) */}
       <Suspense fallback={null}>
         <CharacterGroup />
       </Suspense>
+
+      {/* ⚠️ Portes (DoorPortal) et armures (KnightArmor) retirées le temps
+          de les re-dimensionner pour l'échelle ×1.4. Bannières gardées. */}
     </group>
   );
 }
