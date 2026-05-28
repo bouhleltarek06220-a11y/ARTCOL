@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ToneMapping } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
@@ -6,13 +7,14 @@ import { CastleGate } from './CastleGate';
 import { CinematicCamera } from './CinematicCamera';
 import { Torch } from './Torch';
 import { FloatingEmbers } from './FloatingEmbers';
+import { HallScene } from './HallScene';
 import { useIsMobile } from '../../lib/useIsMobile';
 
 const stone = { color: '#3a2a1d', roughness: 0.95, metalness: 0.05 };
 const darkStone = { color: '#271a11', roughness: 1 };
 
-// Massing blockout du château (remplacé par un modèle détaillé en phase ultérieure).
-function Castle({ mobile }: { mobile: boolean }) {
+// Massing extérieur du château (façade), remplacé par un modèle photoréaliste en phase ultérieure si besoin.
+function CastleExterior({ mobile }: { mobile: boolean }) {
   const merlons = [];
   for (let x = -8; x <= 8; x += 1.7) {
     merlons.push(
@@ -25,7 +27,7 @@ function Castle({ mobile }: { mobile: boolean }) {
   return (
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[200, 200]} />
+        <planeGeometry args={[260, 260]} />
         <meshStandardMaterial color="#130b05" roughness={1} />
       </mesh>
       <mesh position={[-5.1, 4.5, 0]} castShadow={!mobile} receiveShadow>
@@ -53,12 +55,7 @@ function Castle({ mobile }: { mobile: boolean }) {
           </mesh>
         </group>
       ))}
-      {/* lueur chaude derrière le porche (jaillit quand les portes s'ouvrent) */}
       <pointLight position={[0, 3, -4]} color="#ffcf8a" intensity={45} distance={26} decay={2} />
-      <mesh position={[0, 3, -1.6]}>
-        <planeGeometry args={[3.4, 6]} />
-        <meshBasicMaterial color="#ffcf8a" transparent opacity={0.1} />
-      </mesh>
     </group>
   );
 }
@@ -72,16 +69,16 @@ export function CastleScene() {
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       camera={{ fov: 58, near: 0.1, far: 400, position: [0, 3, 18] }}
       onCreated={({ gl }) => {
-        gl.setClearColor('#0a0705');
+        gl.setClearColor('#080604');
       }}
     >
-      <fog attach="fog" args={['#0a0705', 16, 64]} />
-      <ambientLight intensity={0.28} color="#5a4632" />
-      <hemisphereLight args={['#33415e', '#2a1a0d', 0.28]} />
+      <fog attach="fog" args={['#080604', 18, 70]} />
+      <ambientLight intensity={0.22} color="#5a4632" />
+      <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight
         castShadow={!mobile}
         position={[16, 26, 10]}
-        intensity={0.9}
+        intensity={0.85}
         color="#aec4ff"
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -93,15 +90,25 @@ export function CastleScene() {
         shadow-camera-bottom={-30}
         shadow-bias={-0.0005}
       />
-      <Castle mobile={mobile} />
+
+      <CastleExterior mobile={mobile} />
       <CastleGate />
       <Torch position={[-3.0, 4.0, 1.0]} />
       <Torch position={[3.0, 4.0, 1.0]} />
       {!mobile && <FloatingEmbers count={360} />}
+
+      {/* Le hall (Sponza + portails + NPC + bannières) est rendu derrière la porte,
+          il commence à se charger immédiatement et useProgress reflète son téléchargement. */}
+      {!mobile && (
+        <Suspense fallback={null}>
+          <HallScene />
+        </Suspense>
+      )}
+
       <CinematicCamera />
 
       <EffectComposer>
-        <Bloom intensity={0.9} luminanceThreshold={0.25} luminanceSmoothing={0.3} mipmapBlur />
+        <Bloom intensity={0.95} luminanceThreshold={0.22} luminanceSmoothing={0.32} mipmapBlur />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       </EffectComposer>
     </Canvas>

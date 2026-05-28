@@ -4,15 +4,18 @@ export type Phase = 'loading' | 'gate' | 'entering' | 'inside';
 
 interface ExperienceState {
   phase: Phase;
-  progress: number;        // 0..1 chargement
+  progress: number;
   muted: boolean;
   reducedMotion: boolean;
+  selectedZone: string | null;
   setProgress: (p: number) => void;
-  ready: () => void;       // chargement terminé -> écran porte
-  enter: () => void;       // clic "Entrer" -> animation cinématique
-  arrived: () => void;     // fin de l'animation -> hall
-  skip: () => void;        // "Passer l'intro"
+  ready: () => void;
+  enter: () => void;
+  arrived: () => void;
+  skip: () => void;
   toggleMute: () => void;
+  selectZone: (id: string) => void;
+  closeZone: () => void;
 }
 
 const prefersReduced =
@@ -24,10 +27,14 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   progress: 0,
   muted: true,
   reducedMotion: prefersReduced,
+  selectedZone: null,
   setProgress: (p) => set({ progress: Math.max(get().progress, p) }),
   ready: () => set((s) => (s.phase === 'loading' ? { phase: 'gate' } : {})),
-  enter: () => set((s) => (s.phase === 'gate' ? { phase: get().reducedMotion ? 'inside' : 'entering' } : {})),
+  enter: () =>
+    set((s) => (s.phase === 'gate' ? { phase: get().reducedMotion ? 'inside' : 'entering' } : {})),
   arrived: () => set((s) => (s.phase === 'entering' ? { phase: 'inside' } : {})),
   skip: () => set({ phase: 'inside' }),
   toggleMute: () => set((s) => ({ muted: !s.muted })),
+  selectZone: (id) => set({ selectedZone: id }),
+  closeZone: () => set({ selectedZone: null }),
 }));
