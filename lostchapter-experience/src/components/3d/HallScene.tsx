@@ -11,14 +11,13 @@ import { zones } from '../../data/zones';
 // Préchargement de Sponza (décor architectural photoréaliste, CC BY Crytek)
 useGLTF.preload('/assets/sponza/glTF/Sponza.gltf');
 
-// Sponza est orienté axe long sur X. On le rote pour aligner la nef sur Z.
-const SPONZA_ROT_Y = Math.PI / 2;
-const SPONZA_POS: [number, number, number] = [0, 0, -21.37];
-// Bbox utile de Sponza après transform (calculé une fois pour toutes) :
-//   nef Z : -6 (entrée) à -36 (mur du fond)
-//   nef X : -9 à +9 (centre dégagé ±5)
-//   nef Y :  0 à +11 (hauteur)
-const Z_BACK = -36;
+// Sponza est orienté axe long sur X. On le rote -π/2 pour aligner la nef sur
+// Z ET exposer la GRANDE ARCHE D'ENTRÉE (et non l'apse fermée) vers la caméra,
+// sinon la caméra rentre dans un mur en franchissant la porte.
+const SPONZA_ROT_Y = -Math.PI / 2;
+const SPONZA_POS: [number, number, number] = [0, 0, -20.4];
+// Sponza s'étend maintenant : entrée z≈-6 (arche), apse z≈-35.8 (niche)
+const Z_BACK = -32;  // les portes sont placées avant l'apse, dans la nef visible
 
 export function HallScene() {
   const gltf = useGLTF('/assets/sponza/glTF/Sponza.gltf') as unknown as { scene: THREE.Group };
