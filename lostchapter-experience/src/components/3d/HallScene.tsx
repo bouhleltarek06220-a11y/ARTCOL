@@ -67,15 +67,15 @@ export function HallScene() {
         <CharacterGroup />
       </Suspense>
 
-      {/* Arc serré au fond du hall, rayon réduit pour rester dans la nef centrale */}
+      {/* Arc serré au centre du hall, AVANT les arcades latérales, pour rester bien visible */}
       {zones.map((zone, i) => {
         const t = zones.length === 1 ? 0.5 : i / (zones.length - 1);
-        // arc 120° au lieu de 150°, plus visible et moins masqué par les colonnes
-        const angle = THREE.MathUtils.lerp(-Math.PI * 0.34, Math.PI * 0.34, t);
-        const radius = 3.0;                                  // nef centrale dégagée
+        // arc 90° (serré) pour que les 9 portails tiennent dans la nef dégagée
+        const angle = THREE.MathUtils.lerp(-Math.PI * 0.26, Math.PI * 0.26, t);
+        const radius = 2.4;                                  // bien dans la nef centrale
         const x = Math.sin(angle) * radius;
-        const zPos = -30 + Math.cos(angle) * 1.0;            // au fond du hall
-        return <InteractivePortal key={zone.id} zone={zone} position={[x, 2.6, zPos]} yaw={-angle * 0.5} />;
+        const zPos = -25 + Math.cos(angle) * 1.0;            // avancés (25 vs 30) pour plus de présence
+        return <InteractivePortal key={zone.id} zone={zone} position={[x, 2.8, zPos]} yaw={-angle * 0.5} />;
       })}
     </group>
   );

@@ -86,17 +86,27 @@ export function CharacterNPC({
         const mat = (original.isMeshStandardMaterial ? original.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
 
         if (meshColors) {
-          // Coloration par nom de mesh (ex: "Knight_Helmet", "Mage_Cape")
-          const partColor = meshColors[m.name] ?? meshColors.default ?? '#888888';
-          mat.color = new THREE.Color(partColor);
-          mat.map = null; // pas de texture atlas, couleur unie
-          // Métal pour les casques / visières, tissu pour le reste
-          const isMetal = /helmet|visor|sword|axe|shield|armor|plate/i.test(m.name);
-          const isSkin = /head|face|hand|skin/i.test(m.name);
-          mat.metalness = isMetal ? 0.75 : isSkin ? 0.0 : 0.08;
-          mat.roughness = isMetal ? 0.35 : 0.85;
-          mat.emissive = new THREE.Color(emissive);
-          mat.emissiveIntensity = 0.04;
+          // La tête garde la texture atlas KayKit (yeux/bouche dessinés) — visage crédible.
+          // Les autres parties reçoivent la couleur thématique unie de la palette.
+          if (/head/i.test(m.name)) {
+            mat.color.set('#ffffff');
+            // map est conservée par clone() — on ne la met PAS à null
+            mat.metalness = 0;
+            mat.roughness = 0.85;
+            mat.emissive = new THREE.Color(emissive);
+            mat.emissiveIntensity = 0.03;
+          } else {
+            // Coloration par nom de mesh (ex: "Knight_Helmet", "Mage_Cape")
+            const partColor = meshColors[m.name] ?? meshColors.default ?? '#888888';
+            mat.color = new THREE.Color(partColor);
+            mat.map = null; // pas de texture atlas, couleur unie
+            // Métal pour les casques / visières, tissu pour le reste
+            const isMetal = /helmet|visor|sword|axe|shield|armor|plate/i.test(m.name);
+            mat.metalness = isMetal ? 0.75 : 0.08;
+            mat.roughness = isMetal ? 0.35 : 0.85;
+            mat.emissive = new THREE.Color(emissive);
+            mat.emissiveIntensity = 0.04;
+          }
         } else if (preserveTextures) {
           mat.color.multiplyScalar(0.82);
           mat.metalness = (mat.metalness ?? 0.1) * 0.6;

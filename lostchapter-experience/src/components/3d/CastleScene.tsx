@@ -67,7 +67,7 @@ export function CastleScene() {
       shadows={!mobile}
       dpr={[1, mobile ? 1.4 : 2]}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 58, near: 0.1, far: 400, position: [0, 3, 18] }}
+      camera={{ fov: 65, near: 0.1, far: 400, position: [0, 3, 18] }}
       onCreated={({ gl }) => {
         gl.setClearColor('#080604');
       }}

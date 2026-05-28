@@ -98,19 +98,19 @@ const PALETTE_RANGER: Record<string, string> = {
 export function CharacterGroup() {
   return (
     <>
-      {/* GARDE MÉDIÉVAL — patrouille la nef */}
+      {/* GARDE MÉDIÉVAL — patrouille la nef (chemins recentrés ±1.7 pour éviter les colonnes) */}
       <CharacterNPC
         character={KNIGHT_PATROL}
-        path={[[-2.4, -14], [2.4, -19], [-1.8, -24], [1.8, -16]]}
+        path={[[-1.6, -14], [1.6, -19], [-1.4, -24], [1.4, -16]]}
         speed={0.5}
         offset={0}
         meshColors={PALETTE_KNIGHT}
       />
 
-      {/* ÉRUDIT / CHERCHEUR — Mage idle face à un portail */}
+      {/* ÉRUDIT / CHERCHEUR — Mage idle face à un portail (recentré) */}
       <CharacterNPC
         character={MAGE_IDLE}
-        position={[-3.0, 0, -20]}
+        position={[-1.9, 0, -21]}
         rotationY={Math.PI * 0.15}
         meshColors={PALETTE_MAGE}
       />
@@ -118,7 +118,7 @@ export function CharacterGroup() {
       {/* RÔDEUR / VISITEUR — Rogue qui déambule */}
       <CharacterNPC
         character={ROGUE_WALK}
-        path={[[2.4, -13], [2.6, -22], [-1, -25], [-2.4, -15]]}
+        path={[[1.6, -13], [1.8, -22], [-1, -25], [-1.6, -15]]}
         speed={0.42}
         offset={1.4}
         meshColors={PALETTE_ROGUE}
@@ -127,7 +127,7 @@ export function CharacterGroup() {
       {/* SILHOUETTE MYSTÉRIEUSE — Rogue encapuchonné, lente, ombré */}
       <CharacterNPC
         character={ROGUE_HOODED}
-        path={[[0, -26], [-2.5, -22], [2.5, -22], [0, -26]]}
+        path={[[0, -26], [-1.7, -22], [1.7, -22], [0, -26]]}
         speed={0.32}
         offset={2.8}
         meshColors={PALETTE_HOODED}
@@ -136,7 +136,7 @@ export function CharacterGroup() {
       {/* BÉNÉVOLE / GARDIEN DU SEUIL — Barbarian idle */}
       <CharacterNPC
         character={BARBARIAN_IDLE}
-        position={[3.2, 0, -19]}
+        position={[2.2, 0, -20]}
         rotationY={-Math.PI * 0.2}
         offset={2.3}
         meshColors={PALETTE_BARBARIAN}
@@ -145,7 +145,7 @@ export function CharacterGroup() {
       {/* SECOND GARDE en faction (idle) */}
       <CharacterNPC
         character={KNIGHT_IDLE}
-        position={[-3.4, 0, -29]}
+        position={[-2.0, 0, -28]}
         rotationY={Math.PI * 0.18}
         offset={3.5}
         meshColors={PALETTE_KNIGHT}
@@ -154,7 +154,7 @@ export function CharacterGroup() {
       {/* RANGER — éclaireur curieux qui traverse */}
       <CharacterNPC
         character={RANGER_WALK}
-        path={[[-3.2, -28], [3.2, -28], [3.2, -29], [-3.2, -29]]}
+        path={[[-1.8, -28], [1.8, -28], [1.8, -29], [-1.8, -29]]}
         speed={0.36}
         offset={4.7}
         meshColors={PALETTE_RANGER}

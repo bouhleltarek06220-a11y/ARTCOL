@@ -8,9 +8,11 @@ import { easeInOut, clamp01 } from '../../lib/easing';
 const W_OUTSIDE = new THREE.Vector3(0, 3, 18);
 const L_OUTSIDE = new THREE.Vector3(0, 3.2, 0);
 const W_GATE = new THREE.Vector3(0, 2.85, -4);
-const L_GATE = new THREE.Vector3(0, 3.0, -14);
-const W_HALL = new THREE.Vector3(0, 3.0, -16);
-const L_HALL = new THREE.Vector3(0, 2.7, -27);
+const L_GATE = new THREE.Vector3(0, 3.2, -14);
+// Position d'arrivée plus haute et plus reculée pour passer AU-DESSUS des arcades latérales
+// et révéler toute la grandeur de la nef + tous les portails en un seul cadre.
+const W_HALL = new THREE.Vector3(0, 4.4, -10);
+const L_HALL = new THREE.Vector3(0, 2.6, -26);
 
 const T1 = 3.6; // extérieur → franchir le seuil
 const T2 = 9.0; // seuil → installation dans le hall
