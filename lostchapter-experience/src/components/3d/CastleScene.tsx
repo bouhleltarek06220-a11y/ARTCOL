@@ -182,6 +182,9 @@ export function CastleScene() {
       camera={{ fov: 65, near: 0.1, far: 400, position: [0, 3, 18] }}
       onCreated={({ gl }) => {
         gl.setClearColor('#080604');
+        // Active le clipping LOCAL (par-matériau) : utilisé par HallScene pour
+        // cacher le mur court de Sponza qui ferme l'atrium côté entrée.
+        gl.localClippingEnabled = true;
       }}
     >
       {/* ─── Environnement HDRI (IBL) ──────────────────────────────────────

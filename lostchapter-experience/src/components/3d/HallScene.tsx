@@ -24,16 +24,24 @@ export function HallScene() {
 
   useEffect(() => {
     if (!gltf?.scene) return;
+    // Sponza est un atrium fermé : ses deux courts murs bloquent la vue.
+    // On rend invisible tout ce qui est devant z=-6.5 (= le court mur d'entrée),
+    // pour que la caméra voit directement l'intérieur de l'atrium quand elle
+    // franchit le seuil. Les colonnes des arcades latérales (z<-7) restent
+    // intactes.
+    const entranceCutoff = new THREE.Plane(new THREE.Vector3(0, 0, -1), -6.5);
     gltf.scene.traverse((o) => {
       const m = o as THREE.Mesh;
       if (m.isMesh) {
         m.castShadow = true;
         m.receiveShadow = true;
         const mat = m.material as THREE.MeshStandardMaterial | undefined;
-        // Avec le HDRI Georgentor en envMap, on calibre les reflets : assez pour
-        // sentir le matériau (highlights spéculaires sur l'armure, douceur diffuse
-        // sur la pierre) mais pas tellement que la scène devienne grise/lavée.
-        if (mat && 'envMapIntensity' in mat) mat.envMapIntensity = 0.85;
+        if (mat) {
+          if ('envMapIntensity' in mat) mat.envMapIntensity = 0.85;
+          mat.clippingPlanes = [entranceCutoff];
+          mat.clipShadows = true;
+          mat.needsUpdate = true;
+        }
       }
     });
   }, [gltf]);
