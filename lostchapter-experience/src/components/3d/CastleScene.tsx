@@ -1,6 +1,6 @@
 import { Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
 import { ToneMappingMode, BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
@@ -110,6 +110,16 @@ export function CastleScene() {
         gl.setClearColor('#080604');
       }}
     >
+      {/* ─── Environnement HDRI (IBL) ──────────────────────────────────────
+          - bell_tower : ambiance beffroi médiéval extérieur, utilisé en phase
+            gate/entering quand la caméra est devant le château
+          - cathedral  : ambiance Georgentor (portail médiéval), utilisé en
+            phase inside pour le hall (reflets sur les armures, ombres douces) */}
+      {phase === 'inside' ? (
+        <Environment files="/assets/hdr/cathedral.exr" background blur={0.6} />
+      ) : (
+        <Environment files="/assets/hdr/bell_tower.exr" background blur={0.35} />
+      )}
       <fog attach="fog" args={['#080604', 18, 70]} />
       <ambientLight intensity={0.22} color="#5a4632" />
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />

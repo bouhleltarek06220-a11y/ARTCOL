@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Déployé sous /experience sur le site lostchapter (assets relatifs à ce préfixe).
+// Déployé sous /experience-v2 sur le site lostchapter pour pouvoir comparer
+// avec l'ancienne version qui reste accessible à /experience.
 export default defineConfig({
-  base: '/experience/',
+  base: '/experience-v2/',
   plugins: [react()],
   build: { outDir: 'dist', target: 'es2020', sourcemap: false },
 });
