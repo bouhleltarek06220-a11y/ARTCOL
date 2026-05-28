@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { InteractivePortal } from './InteractivePortal';
-import { NPCSilhouette } from './NPCSilhouette';
+import { CharacterGroup } from './CharacterGroup';
 import { AnimatedBanner } from './AnimatedBanner';
 import { zones } from '../../data/zones';
 
@@ -12,13 +12,6 @@ useGLTF.preload('/assets/sponza/glTF/Sponza.gltf');
 // Sponza est orienté par défaut avec son axe long sur X. On le rote pour aligner la nef sur Z.
 const SPONZA_ROT_Y = Math.PI / 2;
 const SPONZA_POS: [number, number, number] = [0, 0, -21.37];
-
-// Trois trajets de patrouille dans la NEF CENTRALE (x ±2.5 max pour rester sous l'arc, loin des colonnes).
-const PATHS_NPC: { path: [number, number][]; speed: number; offset: number }[] = [
-  { path: [[-2, -14], [2, -19], [-1.5, -24], [1.5, -16]], speed: 0.5, offset: 0 },
-  { path: [[2, -13], [2.5, -22], [-1, -25], [-2, -15]], speed: 0.4, offset: 1.4 },
-  { path: [[0, -25], [-2, -21], [2, -21], [0, -25]], speed: 0.35, offset: 2.8 },
-];
 
 export function HallScene() {
   const gltf = useGLTF('/assets/sponza/glTF/Sponza.gltf') as unknown as { scene: THREE.Group };
@@ -69,10 +62,10 @@ export function HallScene() {
         <AnimatedBanner key={i} position={[x, 6.4, z]} phase={i * 0.7} />
       ))}
 
-      {/* Silhouettes vivantes — vrais humanoïdes articulés qui marchent */}
-      {PATHS_NPC.map((p, i) => (
-        <NPCSilhouette key={i} path={p.path} speed={p.speed} offset={p.offset} />
-      ))}
+      {/* Personnages 3D animés (GLB rigged + walk-cycle) */}
+      <Suspense fallback={null}>
+        <CharacterGroup />
+      </Suspense>
 
       {/* Arc serré au fond du hall, rayon réduit pour rester dans la nef centrale */}
       {zones.map((zone, i) => {
