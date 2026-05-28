@@ -187,25 +187,16 @@ export function CastleScene() {
         gl.localClippingEnabled = true;
       }}
     >
-      {/* ─── Environnement HDRI (IBL + ciel) ────────────────────────────────
-          - landscape : coucher de soleil sur les plaines, visible comme ciel +
-            terre derrière le château pendant les phases extérieures (gate,
-            entering). Donne le décor naturel.
-          - cathedral : Georgentor médiéval, utilisé UNIQUEMENT pour l'éclairage
-            indirect du hall (IBL invisible — pas de ciel à l'intérieur). */}
-      {phase === 'inside' ? (
-        <Environment files="/assets/hdr/cathedral.exr" />
-      ) : (
-        <Environment files="/assets/hdr/landscape.exr" background blur={0.05} />
-      )}
-      {/* Fog : sombre à l'intérieur pour la profondeur ; chaud + très lointain à
-          l'extérieur pour ne pas masquer le HDR du coucher de soleil (sinon le
-          ciel devient noir uniforme). */}
-      {phase === 'inside' ? (
-        <fog attach="fog" args={['#080604', 18, 70]} />
-      ) : (
-        <fog attach="fog" args={['#d99868', 90, 320]} />
-      )}
+      {/* ─── Environnement HDRI : ciel + terre visibles PARTOUT ─────────────
+          - landscape (Plains Sunset) en background visible toutes les phases :
+            le château se découpe sur le coucher de soleil, et même depuis
+            l'intérieur du hall (atrium open-air) on aperçoit le ciel par les
+            ouvertures et au-dessus.
+          - Sert aussi de source d'éclairage (IBL) : la lumière chaude du
+            coucher baigne pierre et armures. */}
+      <Environment files="/assets/hdr/landscape.exr" background blur={0.05} />
+      {/* Fog atmosphérique chaud, très lointain, pour ne pas masquer le HDR */}
+      <fog attach="fog" args={['#d99868', 90, 320]} />
       <ambientLight intensity={0.22} color="#5a4632" />
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight
