@@ -187,17 +187,16 @@ export function CastleScene() {
         gl.localClippingEnabled = true;
       }}
     >
-      {/* ─── Environnement HDRI (IBL) ──────────────────────────────────────
-          - bell_tower : ambiance beffroi médiéval EXTÉRIEUR, visible comme ciel
-            quand la caméra est devant le château (phase gate/entering).
-          - cathedral  : ambiance Georgentor utilisée UNIQUEMENT pour l'éclairage
-            indirect du hall (reflets sur les armures, lumière diffuse sur la
-            pierre). Pas de background visible — on est à l'intérieur, donc on
-            ne doit jamais voir le ciel HDR. */}
+      {/* ─── Environnement HDRI (IBL + ciel) ────────────────────────────────
+          - landscape : coucher de soleil sur les plaines, visible comme ciel +
+            terre derrière le château pendant les phases extérieures (gate,
+            entering). Donne le décor naturel.
+          - cathedral : Georgentor médiéval, utilisé UNIQUEMENT pour l'éclairage
+            indirect du hall (IBL invisible — pas de ciel à l'intérieur). */}
       {phase === 'inside' ? (
         <Environment files="/assets/hdr/cathedral.exr" />
       ) : (
-        <Environment files="/assets/hdr/bell_tower.exr" background blur={0.35} />
+        <Environment files="/assets/hdr/landscape.exr" background blur={0.05} />
       )}
       <fog attach="fog" args={['#080604', 18, 70]} />
       <ambientLight intensity={0.22} color="#5a4632" />
