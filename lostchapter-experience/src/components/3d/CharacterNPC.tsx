@@ -29,6 +29,12 @@ export interface CharacterNPCProps {
   preserveTextures?: boolean; // garde la texture KayKit (armure, robe…)
   darkenColor?: string;      // teinte sombre médiévale pour matcher l'ambiance
   emissive?: string;
+  /**
+   * Palette de couleurs PAR sous-mesh (Knight_Head, Mage_Cape, etc.). Permet de
+   * colorier chaque partie du corps avec une logique thématique. La clé `default`
+   * est utilisée pour tout mesh non listé. Prioritaire sur preserveTextures/darkenColor.
+   */
+  meshColors?: Record<string, string>;
 }
 
 // Préchargement des modèles humanoïdes (KayKit Adventurers 2.0)
@@ -51,6 +57,7 @@ export function CharacterNPC({
   preserveTextures = false,
   darkenColor = '#1a1208',
   emissive = '#2a1a0a',
+  meshColors,
 }: CharacterNPCProps) {
   const gltf = useGLTF(character.url) as unknown as {
     scene: THREE.Group;
@@ -69,16 +76,28 @@ export function CharacterNPC({
 
   const groupRef = useRef<THREE.Group>(null);
 
-  // Matériaux : soit on garde les textures KayKit (médiéval crédible),
-  // soit on les retire pour une silhouette unifiée brun-noir.
+  // Matériaux : coloration PAR sous-mesh quand meshColors fourni (style stylisé
+  // KayKit, chaque partie a sa couleur thématique). Sinon fallback textures/silhouette.
   useEffect(() => {
     cloned.traverse((o: THREE.Object3D) => {
       const m = o as THREE.Mesh;
       if (m.isMesh && m.material) {
         const original = m.material as THREE.MeshStandardMaterial;
         const mat = (original.isMeshStandardMaterial ? original.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
-        if (preserveTextures) {
-          // assombrir légèrement pour matcher l'ambiance nef éclairée aux torches
+
+        if (meshColors) {
+          // Coloration par nom de mesh (ex: "Knight_Helmet", "Mage_Cape")
+          const partColor = meshColors[m.name] ?? meshColors.default ?? '#888888';
+          mat.color = new THREE.Color(partColor);
+          mat.map = null; // pas de texture atlas, couleur unie
+          // Métal pour les casques / visières, tissu pour le reste
+          const isMetal = /helmet|visor|sword|axe|shield|armor|plate/i.test(m.name);
+          const isSkin = /head|face|hand|skin/i.test(m.name);
+          mat.metalness = isMetal ? 0.75 : isSkin ? 0.0 : 0.08;
+          mat.roughness = isMetal ? 0.35 : 0.85;
+          mat.emissive = new THREE.Color(emissive);
+          mat.emissiveIntensity = 0.04;
+        } else if (preserveTextures) {
           mat.color.multiplyScalar(0.82);
           mat.metalness = (mat.metalness ?? 0.1) * 0.6;
           mat.roughness = 0.85;
@@ -98,7 +117,7 @@ export function CharacterNPC({
         m.frustumCulled = false;
       }
     });
-  }, [cloned, preserveTextures, darkenColor, emissive]);
+  }, [cloned, preserveTextures, darkenColor, emissive, meshColors]);
 
   useCharacterAnimation(animations, cloned, character.animationName, character.timeScale ?? 1);
 

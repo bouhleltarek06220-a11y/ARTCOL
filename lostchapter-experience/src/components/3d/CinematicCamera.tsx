@@ -25,6 +25,7 @@ export function CinematicCamera() {
   const reduced = useExperience((s) => s.reducedMotion);
   const tRef = useRef(0);
   const pointer = useRef({ x: 0, y: 0 });
+  const zoom = useRef(1.0);       // 1 = position d'arrivée, <1 = près des portails, >1 = recul
 
   useEffect(() => {
     const h = (e: PointerEvent) => {
@@ -35,6 +36,17 @@ export function CinematicCamera() {
     };
     window.addEventListener('pointermove', h);
     return () => window.removeEventListener('pointermove', h);
+  }, []);
+
+  // Zoom à la molette uniquement en mode hall (n'interfère pas avec la cinématique)
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      const cur = useExperience.getState().phase;
+      if (cur !== 'inside') return;
+      zoom.current = Math.max(0.35, Math.min(2.4, zoom.current + e.deltaY * 0.0012));
+    };
+    window.addEventListener('wheel', onWheel, { passive: true });
+    return () => window.removeEventListener('wheel', onWheel);
   }, []);
 
   // reset timer quand on commence l'entrée
@@ -69,11 +81,17 @@ export function CinematicCamera() {
       camera.lookAt(tmpLook);
       if (t >= T2) arrived();
     } else {
-      // inside : parallaxe douce + dérive
+      // inside : parallaxe douce + dérive + zoom molette
       const drift = Math.sin(performance.now() * 0.00025) * 0.3;
-      camera.position.x += (W_HALL.x + px * 1.6 + drift - camera.position.x) * 0.025;
-      camera.position.y += (W_HALL.y - py * 0.5 - camera.position.y) * 0.025;
-      camera.position.z += (W_HALL.z - camera.position.z) * 0.025;
+      // On interpole entre L_HALL (cible portails) et W_HALL (vue large) selon zoom :
+      //   zoom < 1 → caméra plus proche des portails (zoom in)
+      //   zoom > 1 → caméra plus reculée (vue d'ensemble du hall)
+      const dir = tmpPos.subVectors(W_HALL, L_HALL).normalize();
+      const dist = W_HALL.distanceTo(L_HALL);
+      const target = tmpLook.copy(L_HALL).addScaledVector(dir, dist * zoom.current);
+      camera.position.x += (target.x + px * 1.6 + drift - camera.position.x) * 0.05;
+      camera.position.y += (target.y - py * 0.5 - camera.position.y) * 0.05;
+      camera.position.z += (target.z - camera.position.z) * 0.05;
       camera.lookAt(L_HALL.x, L_HALL.y, L_HALL.z);
     }
   });
