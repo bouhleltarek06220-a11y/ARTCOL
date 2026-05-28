@@ -11,15 +11,17 @@ import { zones } from '../../data/zones';
 // Préchargement de Sponza (décor architectural photoréaliste, CC BY Crytek)
 useGLTF.preload('/assets/sponza/glTF/Sponza.gltf');
 
-// Sponza × 1.4 pour plus de monumentalité. Compensations :
-//   - position.y = +1.4 pour que le sol (intrinsic min.y * 1.4 = -1.41) reste à y=0
-//   - position.z = -26.16 pour que l'arche d'entrée (originale x=+14.40, scalée)
+// Sponza × 1.4 pour plus de monumentalité.
+//   - position.y = 0 → sol RDC à y=0 (les NPCs marchent bien dessus).
+//     La base/podium intrinsèque (~ -1.4 m sous le sol après scale) reste
+//     invisible sous le sol marcheable, c'est normal.
+//   - position.z = -26.16 pour que l'arche d'entrée (originale x=+14.40 × scale 1.4)
 //     reste à world z=-6 (juste après le corridor de la porte).
 const SPONZA_ROT_Y = -Math.PI / 2;
 const SPONZA_SCALE = 1.4;
-const SPONZA_POS: [number, number, number] = [0, 1.4, -26.16];
+const SPONZA_POS: [number, number, number] = [0, 0, -26.16];
 // Sponza s'étend maintenant : entrée z≈-6 (arche), apse z≈-48 (niche)
-const Z_BACK = -44;  // les portes sont placées avant l'apse, dans la nef visible
+const Z_BACK = -44;
 
 export function HallScene() {
   const gltf = useGLTF('/assets/sponza/glTF/Sponza.gltf') as unknown as { scene: THREE.Group };
