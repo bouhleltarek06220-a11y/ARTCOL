@@ -99,20 +99,20 @@ const PALETTE_RANGER: Record<string, string> = {
 export function CharacterGroup() {
   return (
     <>
-      {/* ─── REZ-DE-CHAUSSÉE ────────────────────────────── */}
-      {/* Garde médiéval — patrouille le CÔTÉ GAUCHE sur le tapis royal */}
+      {/* ─── REZ-DE-CHAUSSÉE de l'atrium Sponza (nef centrale dégagée) ─── */}
+      {/* Garde médiéval — patrouille le CÔTÉ GAUCHE le long du tapis */}
       <CharacterNPC
         character={KNIGHT_PATROL}
-        path={[[-1.4, -10], [-1.4, -22], [-1.0, -30], [-1.0, -12]]}
+        path={[[-1.4, -12], [-1.4, -22], [-1.0, -30], [-1.0, -14]]}
         speed={0.45}
         offset={0}
         meshColors={PALETTE_KNIGHT}
       />
 
-      {/* Rôdeur — patrouille le CÔTÉ DROIT sur le tapis */}
+      {/* Rôdeur — patrouille le CÔTÉ DROIT */}
       <CharacterNPC
         character={ROGUE_WALK}
-        path={[[1.4, -10], [1.4, -22], [1.0, -30], [1.0, -12]]}
+        path={[[1.4, -12], [1.4, -22], [1.0, -30], [1.0, -14]]}
         speed={0.42}
         offset={2.0}
         meshColors={PALETTE_ROGUE}
@@ -135,19 +135,19 @@ export function CharacterGroup() {
         meshColors={PALETTE_BARBARIAN}
       />
 
-      {/* Silhouette mystérieuse encapuchonnée — déambule le long du mur d'entrée */}
+      {/* Silhouette mystérieuse encapuchonnée — près de l'entrée */}
       <CharacterNPC
         character={ROGUE_HOODED}
-        path={[[-4, -6], [4, -6], [4, -8], [-4, -8]]}
+        path={[[-2.5, -10], [2.5, -10], [2.5, -11], [-2.5, -11]]}
         speed={0.3}
         offset={3.0}
         meshColors={PALETTE_HOODED}
       />
 
-      {/* Ranger — traverse devant les portes (z=-33) */}
+      {/* Ranger — traverse devant les portes (z=-34) */}
       <CharacterNPC
         character={RANGER_WALK}
-        path={[[-3, -33], [3, -33], [3, -33.5], [-3, -33.5]]}
+        path={[[-2.5, -34], [2.5, -34], [2.5, -34.5], [-2.5, -34.5]]}
         speed={0.4}
         offset={4.2}
         meshColors={PALETTE_RANGER}

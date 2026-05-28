@@ -12,31 +12,32 @@ import { HallScene } from './HallScene';
 import { useIsMobile } from '../../lib/useIsMobile';
 import { useExperience } from '../../store';
 
-// OrbitControls verrouillés dans la boîte de la salle de château :
-// target.x [-7, 7], target.y [1.2, 8], target.z [-34, -4]
-// pour empêcher de pan à travers les murs ou sous le sol.
+// OrbitControls verrouillés dans la boîte de l'atrium Sponza :
+// target.x [-5, 5] (nef centrale dégagée),
+// target.y [1.2, 8] (du sol au-dessous du plafond voûté),
+// target.z [-34, -6] (de l'entrée au mur du fond)
 function ClampedOrbitControls() {
   const ref = useRef<any>(null);
   useFrame(() => {
     const c = ref.current;
     if (!c?.target) return;
     const t = c.target as THREE.Vector3;
-    t.x = Math.max(-7, Math.min(7, t.x));
+    t.x = Math.max(-5, Math.min(5, t.x));
     t.y = Math.max(1.2, Math.min(8, t.y));
-    t.z = Math.max(-34, Math.min(-4, t.z));
+    t.z = Math.max(-34, Math.min(-6, t.z));
   });
   return (
     <OrbitControls
       ref={ref}
       makeDefault
-      target={[0, 2.4, -24]}
+      target={[0, 2.5, -24]}
       enablePan
       enableRotate
       enableZoom
       enableDamping
       dampingFactor={0.08}
       minDistance={4}
-      maxDistance={22}
+      maxDistance={24}
       minPolarAngle={Math.PI * 0.12}
       maxPolarAngle={Math.PI * 0.55}
       rotateSpeed={0.55}
