@@ -12,7 +12,7 @@ import { JOURNEY_DURATION } from "@/components/matrix/data";
 // Scène Spline : humanoïde 3D qui suit le curseur
 const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
 
-export default function MatrixClient() {
+export default function MatrixClient({ onEnter }) {
   const { lang, setLang } = useLang();
 
   const progressRef = useRef(0);
@@ -148,7 +148,7 @@ export default function MatrixClient() {
         <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
       </div>
 
-      <Hud progress={progress} />
+      <Hud progress={progress} onEnter={onEnter} />
 
       {/* Bouton son discret (icône seule) */}
       <button
