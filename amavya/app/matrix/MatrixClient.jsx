@@ -96,6 +96,47 @@ export default function MatrixClient() {
 
   const [ready, setReady] = useState(false);
 
+  // Musique de fond : démarrage au premier geste (autoplay sonore bloqué),
+  // + bouton son on/off discret.
+  const audioRef = useRef(null);
+  const [soundOn, setSoundOn] = useState(true);
+
+  useEffect(() => {
+    const audio = new Audio("/matrix-music.mp3");
+    audio.loop = true;
+    audio.volume = 0.45;
+    audioRef.current = audio;
+
+    const start = () => {
+      audio.play().catch(() => {});
+      window.removeEventListener("pointerdown", start);
+      window.removeEventListener("keydown", start);
+      window.removeEventListener("touchstart", start);
+    };
+    window.addEventListener("pointerdown", start);
+    window.addEventListener("keydown", start);
+    window.addEventListener("touchstart", start);
+
+    return () => {
+      window.removeEventListener("pointerdown", start);
+      window.removeEventListener("keydown", start);
+      window.removeEventListener("touchstart", start);
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const toggleSound = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setSoundOn((on) => {
+      const next = !on;
+      audio.muted = !next;
+      if (next && audio.paused) audio.play().catch(() => {});
+      return next;
+    });
+  }, []);
+
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
       <Scene progressRef={progressRef} mobile={mobile} lang={lang} onReady={() => setReady(true)} />
@@ -108,6 +149,27 @@ export default function MatrixClient() {
       </div>
 
       <Hud progress={progress} />
+
+      {/* Bouton son discret (icône seule) */}
+      <button
+        onClick={toggleSound}
+        aria-label={soundOn ? "Couper le son" : "Activer le son"}
+        className="absolute right-5 top-5 z-30 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/30 text-white/70 backdrop-blur-md transition-all hover:scale-110 hover:text-white"
+      >
+        {soundOn ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z" />
+            <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+            <path d="M19 5a9 9 0 0 1 0 14" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+          </svg>
+        )}
+      </button>
 
       {/* Loader (sans texte) */}
       <motion.div
