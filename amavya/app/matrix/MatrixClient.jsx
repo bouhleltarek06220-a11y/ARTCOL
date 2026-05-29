@@ -5,7 +5,12 @@ import { motion } from "framer-motion";
 import { useLang } from "@/components/LangProvider";
 import Scene from "@/components/matrix/Scene";
 import Hud from "@/components/matrix/Hud";
+import { SplineScene } from "@/components/ui/splite";
+import { Spotlight } from "@/components/ui/spotlight";
 import { JOURNEY_DURATION, UI } from "@/components/matrix/data";
+
+// Scène Spline : humanoïde 3D qui suit le curseur
+const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
 
 export default function MatrixClient() {
   const { lang, setLang } = useLang();
@@ -95,6 +100,14 @@ export default function MatrixClient() {
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
       <Scene progressRef={progressRef} mobile={mobile} lang={lang} onReady={() => setReady(true)} />
+
+      {/* Humanoïde Spline (suit le curseur) — calque transparent par-dessus
+          la scène Matrix, le code reste visible derrière. */}
+      <div className="absolute inset-0 z-[5]">
+        <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill="#f0d27a" />
+        <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
+      </div>
+
       <Hud
         progress={progress}
         playing={playing}

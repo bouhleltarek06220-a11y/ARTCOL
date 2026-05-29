@@ -14,11 +14,15 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@react-three/postprocessing": "^3.0.4",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.95",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "next": "^15.1.6",
     "postprocessing": "^6.39.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.6.0",
     "three": "^0.184.0"
   },
   "devDependencies": {

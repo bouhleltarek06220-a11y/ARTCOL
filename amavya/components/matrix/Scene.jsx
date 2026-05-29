@@ -8,7 +8,6 @@ import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 import CodeWorld from "./CodeWorld";
 import CodeCarpet from "./CodeCarpet";
-import AmavyaLogo from "./AmavyaLogo";
 import Message3D from "./Message3D";
 import { lerpColor } from "./data";
 
@@ -54,22 +53,18 @@ export default function Scene({ progressRef, mobile, lang = "fr", onReady }) {
         <Ambience progressRef={progressRef} />
         <CodeWorld progressRef={progressRef} />
         <CodeCarpet />
-        <AmavyaLogo progressRef={progressRef} />
         <Message3D progressRef={progressRef} lang={lang} />
       </Suspense>
 
+      {/* L'humanoïde Spline (calque au-dessus) capte la souris : on laisse
+          juste le fond tourner en automatique. */}
       <OrbitControls
         makeDefault
         enablePan={false}
-        enableZoom
-        enableDamping
-        dampingFactor={0.08}
-        rotateSpeed={0.7}
-        zoomSpeed={0.8}
-        minDistance={2.5}
-        maxDistance={24}
+        enableZoom={false}
+        enableRotate={false}
         autoRotate
-        autoRotateSpeed={0.45}
+        autoRotateSpeed={0.4}
         target={[0, 0, 0]}
       />
 
