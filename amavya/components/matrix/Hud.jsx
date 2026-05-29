@@ -108,31 +108,22 @@ export default function Hud({
         </Link>
       </div>
 
-      {/* Rail vertical des dimensions (gauche, centré) */}
-      <div className="absolute left-6 top-1/2 hidden -translate-y-1/2 flex-col gap-5 sm:flex">
+      {/* Rail vertical de progression (gauche, centré) — points seuls */}
+      <div className="absolute left-7 top-1/2 hidden -translate-y-1/2 flex-col gap-4 sm:flex">
         {dims.map((d, i) => {
           const on = i === activeIdx;
           const passed = i < activeIdx;
           return (
-            <div key={d.id} className="flex items-center gap-3">
-              <span
-                className="block h-2.5 w-2.5 rounded-full border transition-all duration-500"
-                style={{
-                  borderColor: on || passed ? col : "rgba(255,255,255,0.25)",
-                  background: on ? col : passed ? `${col}66` : "transparent",
-                  boxShadow: on ? `0 0 12px ${col}` : "none",
-                  transform: on ? "scale(1.4)" : "scale(1)",
-                }}
-              />
-              <div className="leading-tight transition-opacity duration-500" style={{ opacity: on ? 1 : 0.4 }}>
-                <div className="text-[11px] font-bold tracking-[0.18em]" style={{ color: on ? col : "#cdcdcd" }}>
-                  {d.name}
-                </div>
-                <div className="text-[8px] uppercase tracking-[0.22em] text-white/40">
-                  {d.id} · {d.sub}
-                </div>
-              </div>
-            </div>
+            <span
+              key={d.id}
+              className="block h-2.5 w-2.5 rounded-full border transition-all duration-500"
+              style={{
+                borderColor: on || passed ? col : "rgba(255,255,255,0.25)",
+                background: on ? col : passed ? `${col}66` : "transparent",
+                boxShadow: on ? `0 0 12px ${col}` : "none",
+                transform: on ? "scale(1.5)" : "scale(1)",
+              }}
+            />
           );
         })}
       </div>

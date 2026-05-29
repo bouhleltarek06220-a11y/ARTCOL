@@ -32,32 +32,14 @@ export const DIMENSIONS = {
 };
 
 // Mots-clés affichés en 3D (lettres extrudées qui tournent)
+// On ne garde plus que AMAVYA.
 export const KEYWORDS = {
-  fr: [
-    { at: 0.3, word: "CHOIX" },
-    { at: 0.57, word: "VOIR" },
-    { at: 0.82, word: "AMAVYA", final: true },
-  ],
-  en: [
-    { at: 0.3, word: "CHOICE" },
-    { at: 0.57, word: "SEE" },
-    { at: 0.82, word: "AMAVYA", final: true },
-  ],
+  fr: [{ at: 0.42, word: "AMAVYA", final: true }],
+  en: [{ at: 0.42, word: "AMAVYA", final: true }],
 };
 
-// Phrases complètes affichées en sous-titre (effet decode dans le HUD)
-export const PHRASES = {
-  fr: [
-    { at: 0.3, text: "VOUS AVEZ FAIT UN CHOIX" },
-    { at: 0.57, text: "VOUS AVEZ CHOISI DE VOIR" },
-    { at: 0.82, text: "BIENVENUE DANS LE FUTUR" },
-  ],
-  en: [
-    { at: 0.3, text: "YOU MADE A CHOICE" },
-    { at: 0.57, text: "YOU CHOSE TO SEE" },
-    { at: 0.82, text: "WELCOME TO THE FUTURE" },
-  ],
-};
+// Plus de phrases narratives avant AMAVYA.
+export const PHRASES = { fr: [], en: [] };
 
 export const UI = {
   fr: {

@@ -1,23 +1,21 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { lerpColor } from "./data";
 
 /**
- * "Tapis de code" : des lignes de code HTML défilent au sol en perspective
- * et ouvrent le chemin vers le cœur AMAVYA (l'univers IA). Réalisé avec un
- * canvas 2D (lignes HTML lisibles) plaqué sur une longue piste, + deux rails
- * lumineux sur les côtés. Couleur vert → or selon le voyage.
+ * "Tapis de code" : des lignes de code HTML en COULEUR (coloration
+ * syntaxique multicolore) défilent au sol en perspective et ouvrent le
+ * chemin vers le logo AMAVYA. Plus de rails ni de bords : la piste s'étend
+ * et se fond dans le noir / le fog.
  */
 
-const CW = 1024; // largeur canvas (= largeur du tapis)
-const CH = 2048; // hauteur canvas (= longueur du tapis / profondeur)
+const CW = 1024;
+const CH = 2048;
 const LINE_H = 46;
 const ROWS = Math.floor(CH / LINE_H);
 
-// Lignes de code HTML / univers IA (bilingue-neutre)
 const CODE = [
   "<!DOCTYPE amavya>",
   '<html lang="future">',
@@ -28,7 +26,7 @@ const CODE = [
   '  <body class="augmented-human">',
   '    <section id="universe">',
   '      <ai-core model="amavya" mode="augment">',
-  '        <neural layers="∞" connect="true" />',
+  '        <neural layers="9999" connect="true" />',
   '        <intelligence type="augmented" />',
   "      </ai-core>",
   '      <path class="road" d="M0 0 L0 -100" open />',
@@ -40,17 +38,51 @@ const CODE = [
   "      export default () => <Amavya />;",
   "      while (true) amavya.augment(human);",
   "    </script>",
-  '    <amavya:welcome>entrez dans le futur</amavya:welcome>',
+  "    <amavya:welcome>entrez dans le futur</amavya:welcome>",
   "  </body>",
   "</html>",
 ];
 
-export default function CodeCarpet({ progressRef }) {
-  const railRefs = useRef([]);
-  const carpetMat = useRef();
-  const colorObj = useMemo(() => new THREE.Color(), []);
-  const lastStep = useRef(-1);
+// Palette coloration syntaxique (style éditeur, néon)
+const COL = {
+  punct: "#7fdbff",
+  tag: "#56b6ff",
+  attr: "#ffcb6b",
+  str: "#c3e88d",
+  kw: "#c792ea",
+  num: "#f78c6c",
+  text: "#d6e9ff",
+  eq: "#7fdbff",
+};
+const KW = new Set([
+  "const", "await", "export", "default", "while", "return", "new",
+  "function", "class", "import", "from", "async", "true", "false",
+]);
 
+function tokenize(line) {
+  const tokens = [];
+  const re = /(\s+)|("(?:[^"\\]|\\.)*")|(<\/?|\/?>|=)|([A-Za-z_][\w\-:.]*)|(\d+)|(.)/g;
+  let m, inTag = false, expectTag = false;
+  while ((m = re.exec(line))) {
+    const t = m[0];
+    if (m[1]) tokens.push({ t, c: COL.text });
+    else if (m[2]) tokens.push({ t, c: COL.str });
+    else if (m[3]) {
+      if (t === "<" || t === "</") { inTag = true; expectTag = true; tokens.push({ t, c: COL.punct }); }
+      else if (t === ">" || t === "/>") { inTag = false; tokens.push({ t, c: COL.punct }); }
+      else tokens.push({ t, c: COL.eq });
+    } else if (m[4]) {
+      if (inTag && expectTag) { expectTag = false; tokens.push({ t, c: COL.tag }); }
+      else if (inTag) tokens.push({ t, c: COL.attr });
+      else if (KW.has(t)) tokens.push({ t, c: COL.kw });
+      else tokens.push({ t, c: COL.text });
+    } else if (m[5]) tokens.push({ t, c: COL.num });
+    else tokens.push({ t, c: COL.text });
+  }
+  return tokens;
+}
+
+export default function CodeCarpet() {
   const { canvas, ctx, texture } = useMemo(() => {
     const c = document.createElement("canvas");
     c.width = CW;
@@ -58,94 +90,49 @@ export default function CodeCarpet({ progressRef }) {
     const x = c.getContext("2d");
     const t = new THREE.CanvasTexture(c);
     t.wrapS = t.wrapT = THREE.RepeatWrapping;
-    t.repeat.set(1, 4);
+    t.repeat.set(1, 3);
     t.minFilter = THREE.LinearFilter;
     t.magFilter = THREE.LinearFilter;
+    t.colorSpace = THREE.SRGBColorSpace;
     return { canvas: c, ctx: x, texture: t };
   }, []);
 
-  // (Re)dessine les lignes de code dans la couleur courante
-  const draw = (p) => {
+  // Dessin unique (coloration syntaxique + glow néon)
+  useEffect(() => {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, CW, CH);
-    const base = lerpColor(p);
-    const hi = lerpColor(Math.min(1, p + 0.18));
-    ctx.font = `600 ${Math.round(LINE_H * 0.62)}px "JetBrains Mono", "Courier New", monospace`;
+    ctx.font = `600 ${Math.round(LINE_H * 0.6)}px "JetBrains Mono", "Courier New", monospace`;
     ctx.textBaseline = "middle";
     for (let r = 0; r < ROWS; r++) {
       const line = CODE[r % CODE.length];
       const y = r * LINE_H + LINE_H / 2;
-      // Quelques lignes "actives" plus lumineuses
-      const active = (r * 7 + 3) % 11 === 0;
-      ctx.fillStyle = active
-        ? `rgb(${hi.r},${hi.g},${hi.b})`
-        : `rgba(${base.r},${base.g},${base.b},0.82)`;
-      ctx.fillText(line, 60, y);
+      let x = 70;
+      for (const tok of tokenize(line)) {
+        ctx.fillStyle = tok.c;
+        ctx.shadowColor = tok.c;
+        ctx.shadowBlur = 8;
+        ctx.fillText(tok.t, x, y);
+        x += ctx.measureText(tok.t).width;
+      }
     }
+    ctx.shadowBlur = 0;
     texture.needsUpdate = true;
-  };
+  }, [ctx, texture]);
 
-  useFrame((state, dt) => {
-    const p = Math.max(0, Math.min(1, progressRef.current));
-
-    // Redessine seulement quand la couleur change sensiblement (perf)
-    const step = Math.round(p * 36);
-    if (step !== lastStep.current) {
-      lastStep.current = step;
-      draw(p);
-    }
-
-    // Défilement du tapis vers la caméra
-    texture.offset.y -= dt * (0.06 + p * 0.05);
-
-    // Rails latéraux : couleur + pulsation lumineuse
-    const c = lerpColor(p);
-    colorObj.setRGB(c.r / 255, c.g / 255, c.b / 255);
-    const pulse = 0.7 + Math.sin(state.clock.elapsedTime * 2) * 0.3;
-    railRefs.current.forEach((m) => {
-      if (m) m.color.copy(colorObj).multiplyScalar(pulse);
-    });
-    if (carpetMat.current) carpetMat.current.color.copy(colorObj);
+  useFrame((_, dt) => {
+    texture.offset.y -= dt * 0.07;
   });
 
   return (
-    <group position={[0, -1.9, 0]}>
-      {/* Le tapis de code (piste au sol, en perspective) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} renderOrder={-3}>
-        <planeGeometry args={[8, 110]} />
-        <meshBasicMaterial
-          ref={carpetMat}
-          map={texture}
-          transparent
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-        />
-      </mesh>
-
-      {/* Rails lumineux qui bordent le chemin */}
-      {[-4.1, 4.1].map((x, i) => (
-        <mesh key={i} position={[x, 0.02, 0]}>
-          <boxGeometry args={[0.05, 0.05, 110]} />
-          <meshBasicMaterial
-            ref={(el) => (railRefs.current[i] = el)}
-            toneMapped={false}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      ))}
-
-      {/* Reflet diffus sous le tapis (halo) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, -10]}>
-        <planeGeometry args={[14, 120]} />
-        <meshBasicMaterial
-          color="#0a0f0a"
-          transparent
-          opacity={0.25}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-    </group>
+    <mesh position={[0, -1.9, -10]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-3}>
+      <planeGeometry args={[22, 150]} />
+      <meshBasicMaterial
+        map={texture}
+        transparent
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        toneMapped={false}
+      />
+    </mesh>
   );
 }
