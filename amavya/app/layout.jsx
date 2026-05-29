@@ -115,6 +115,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
+        <a
+          href="#main"
+          className="sr-only sr-only-focusable z-[200] rounded-full bg-gold-bright px-4 py-2 text-sm font-semibold text-ink shadow-[0_8px_30px_-8px_rgba(212,175,55,0.7)]"
+          style={{ left: "1rem", top: "1rem" }}
+        >
+          Aller au contenu
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
