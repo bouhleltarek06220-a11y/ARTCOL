@@ -9,6 +9,8 @@ interface ExperienceState {
   muted: boolean;
   reducedMotion: boolean;
   selectedZone: string | null;
+  /** Personnage sélectionné par clic : son id, sa position figée, son texte. */
+  selectedCharacter: { id: string; name: string; lines: string[]; pos: [number, number, number] } | null;
   setProgress: (p: number) => void;
   ready: () => void;
   enter: () => void;
@@ -18,6 +20,8 @@ interface ExperienceState {
   selectZone: (id: string) => void;
   closeZone: () => void;
   stepZone: (dir: 1 | -1) => void;   // navigation séquentielle entre slides
+  selectCharacter: (c: { id: string; name: string; lines: string[]; pos: [number, number, number] }) => void;
+  closeCharacter: () => void;
 }
 
 const prefersReduced =
@@ -30,6 +34,7 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   muted: true,
   reducedMotion: prefersReduced,
   selectedZone: null,
+  selectedCharacter: null,
   setProgress: (p) => set({ progress: Math.max(get().progress, p) }),
   ready: () => set((s) => (s.phase === 'loading' ? { phase: 'gate' } : {})),
   enter: () =>
@@ -47,4 +52,6 @@ export const useExperience = create<ExperienceState>((set, get) => ({
       const next = (i + dir + zones.length) % zones.length;
       return { selectedZone: zones[next].id };
     }),
+  selectCharacter: (c) => set({ selectedCharacter: c }),
+  closeCharacter: () => set({ selectedCharacter: null }),
 }));

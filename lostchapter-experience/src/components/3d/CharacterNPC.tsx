@@ -4,6 +4,7 @@ import { useGLTF, Html } from '@react-three/drei';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import * as THREE from 'three';
 import { useCharacterAnimation } from '../../lib/useCharacterAnimation';
+import { useExperience } from '../../store';
 
 export interface CharacterDef {
   url: string;
@@ -29,8 +30,11 @@ export interface CharacterNPCProps {
   preserveTextures?: boolean; // garde la texture KayKit (armure, robe…)
   darkenColor?: string;      // teinte sombre médiévale pour matcher l'ambiance
   emissive?: string;
-  /** Nom affiché dans une bulle au-dessus de la tête (ex: "TAREK"). */
-  name?: string;
+  /**
+   * Si fourni, le perso devient cliquable : au clic, position figée + zoom
+   * caméra + ouverture d'une bulle de dialogue dans `CharacterDialogue`.
+   */
+  interaction?: { id: string; displayName: string; lines: string[] };
   /**
    * Palette de couleurs PAR sous-mesh (Knight_Head, Mage_Cape, etc.). Permet de
    * colorier chaque partie du corps avec une logique thématique. La clé `default`
@@ -60,7 +64,7 @@ export function CharacterNPC({
   darkenColor = '#1a1208',
   emissive = '#2a1a0a',
   meshColors,
-  name,
+  interaction,
 }: CharacterNPCProps) {
   const gltf = useGLTF(character.url) as unknown as {
     scene: THREE.Group;
@@ -161,11 +165,17 @@ export function CharacterNPC({
 
   useCharacterAnimation(animations, cloned, character.animationName, character.timeScale ?? 1);
 
+  // Lit le store pour figer le perso si sélectionné par clic.
+  const selectedCharacterId = useExperience((s) => s.selectedCharacter?.id ?? null);
+  const isFrozen = !!interaction && selectedCharacterId === interaction.id;
+
   // Déplacement le long du chemin (le walk-cycle des bones tourne sur place,
   // c'est nous qui translatons le groupe). Si pas de chemin, idle stationnaire.
+  // Si le perso est sélectionné (dialogue ouvert) → on fige la position.
   useFrame(({ clock }) => {
     const g = groupRef.current;
     if (!g) return;
+    if (isFrozen) return; // perso figé pour le dialogue
     if (path && path.length >= 2) {
       const segs = path.length;
       const u = (clock.elapsedTime * speed + offset) % segs;
@@ -187,19 +197,25 @@ export function CharacterNPC({
     }
   });
 
+  const selectCharacter = useExperience((s) => s.selectCharacter);
+  const onClickChar = (e: { stopPropagation: () => void }) => {
+    if (!interaction) return;
+    e.stopPropagation();
+    const g = groupRef.current;
+    const p: [number, number, number] = g
+      ? [g.position.x, g.position.y, g.position.z]
+      : [position[0], position[1] ?? 0, position[2]];
+    selectCharacter({ id: interaction.id, name: interaction.displayName, lines: interaction.lines, pos: p });
+  };
+
   return (
     <group ref={groupRef} position={position} scale={character.scale ?? 1}>
-      <primitive object={cloned} />
-      {name && (
-        <Html position={[0, 2.6, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-          <div
-            className="font-display whitespace-nowrap rounded-full border border-goldbright/70 bg-stone/85 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-parchment"
-            style={{ textShadow: '0 0 8px rgba(229,199,136,0.5)' }}
-          >
-            {name}
-          </div>
-        </Html>
-      )}
+      <primitive
+        object={cloned}
+        onClick={interaction ? onClickChar : undefined}
+        onPointerOver={interaction ? () => (document.body.style.cursor = 'pointer') : undefined}
+        onPointerOut={interaction ? () => (document.body.style.cursor = 'default') : undefined}
+      />
     </group>
   );
 }

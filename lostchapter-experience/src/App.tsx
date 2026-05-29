@@ -5,6 +5,7 @@ import { LoadingScreen } from './components/ui/LoadingScreen';
 import { CinematicOverlay } from './components/ui/CinematicOverlay';
 import { SoundToggle } from './components/ui/SoundToggle';
 import { ZonePanel } from './components/ui/ZonePanel';
+import { CharacterDialogue } from './components/ui/CharacterDialogue';
 import { useExperience } from './store';
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
       <CastleScene />
       <CinematicOverlay />
       <ZonePanel />
+      <CharacterDialogue />
       <SoundToggle />
       <LoadingScreen />
     </>

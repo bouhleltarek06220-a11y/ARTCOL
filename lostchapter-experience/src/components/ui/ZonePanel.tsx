@@ -41,26 +41,23 @@ export function ZonePanel() {
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.45 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative mx-6 w-full max-w-3xl rounded-2xl border border-gold/40 bg-[#1a0f08]/95 p-8 text-parchment shadow-[0_30px_120px_rgba(0,0,0,0.7)] md:p-14"
+            className="parchment-panel relative mx-6 w-full max-w-3xl rounded-2xl p-8 md:p-14"
           >
             {/* Numéro de section */}
-            <p className="font-display text-xs uppercase tracking-[0.5em] text-gold">
+            <p className="font-display text-xs uppercase tracking-[0.5em] text-[#7a4a18]">
               Chapitre {idx + 1} / {zones.length}
             </p>
-            <h2
-              className="font-medieval mt-3 text-5xl text-parchment md:text-6xl"
-              style={{ textShadow: '0 0 30px rgba(229,199,136,0.45)' }}
-            >
+            <h2 className="font-medieval mt-3 text-5xl text-[#2a1810] md:text-6xl">
               {z.title}
             </h2>
-            <div className="mt-5 h-[2px] w-20 bg-gradient-to-r from-transparent via-goldbright to-transparent" />
-            <p className="font-ui mt-5 text-lg italic text-parchment/70">{z.blurb}</p>
+            <div className="mt-5 h-[2px] w-20 bg-gradient-to-r from-transparent via-[#7a4a18] to-transparent" />
+            <p className="font-ui mt-5 text-lg italic text-[#3a2412]/80">{z.blurb}</p>
 
             {/* Contenu de la slide */}
             <ul className="font-ui mt-7 space-y-3">
               {z.content.map((line, i) => (
-                <li key={i} className="flex items-start gap-3 text-base text-parchment/90 md:text-lg">
-                  <span className="mt-2 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-goldbright" />
+                <li key={i} className="flex items-start gap-3 text-base text-[#2a1810] md:text-lg">
+                  <span className="mt-2 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#7a4a18]" />
                   <span>{line}</span>
                 </li>
               ))}
@@ -70,7 +67,7 @@ export function ZonePanel() {
             <div className="mt-10 flex items-center justify-between">
               <button
                 onClick={() => step(-1)}
-                className="font-display rounded-md border border-gold/50 px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-parchment transition hover:bg-gold/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-goldbright"
+                className="font-display rounded-md border border-[#3a2412]/50 px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-[#2a1810] transition hover:bg-[#3a2412]/15"
               >
                 ◀ Précédent
               </button>
@@ -80,14 +77,14 @@ export function ZonePanel() {
                 {zones.map((zz, i) => (
                   <span
                     key={zz.id}
-                    className={`h-1.5 w-1.5 rounded-full ${i === idx ? 'bg-goldbright' : 'bg-parchment/25'}`}
+                    className={`h-1.5 w-1.5 rounded-full ${i === idx ? 'bg-[#7a4a18]' : 'bg-[#3a2412]/25'}`}
                   />
                 ))}
               </div>
 
               <button
                 onClick={() => step(1)}
-                className="font-display rounded-md border border-goldbright bg-gradient-to-br from-goldbright to-gold px-5 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-stone transition hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-goldbright"
+                className="font-display rounded-md border border-[#3a2412] bg-[#3a2412] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-parchment transition hover:bg-[#1a0f08] hover:scale-[1.03]"
               >
                 Suivant ▶
               </button>
@@ -97,7 +94,7 @@ export function ZonePanel() {
             <button
               onClick={close}
               aria-label="Fermer"
-              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-gold/40 text-parchment/70 transition hover:bg-gold/15 hover:text-parchment"
+              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-[#3a2412]/40 text-[#3a2412] transition hover:bg-[#3a2412]/15"
             >
               ✕
             </button>

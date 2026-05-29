@@ -22,9 +22,24 @@ const USE_DUNGEON = import.meta.env.BASE_URL.includes('v3');
 // target.x [-7, 7], target.y [1.2, 11], target.z [-46, -6]
 function ClampedOrbitControls() {
   const ref = useRef<any>(null);
-  useFrame(() => {
+  const focusPos = useExperience((s) => s.selectedCharacter?.pos ?? null);
+  // Snapshot temporaire pour lerper en douceur
+  const focusTmp = useRef(new THREE.Vector3());
+  const camTmp = useRef(new THREE.Vector3());
+  useFrame(({ camera }) => {
     const c = ref.current;
     if (!c?.target) return;
+
+    if (focusPos) {
+      // ── Mode FOCUS PERSONNAGE ── cible le perso + zoom caméra à 2.5 m devant
+      focusTmp.current.set(focusPos[0], focusPos[1] + 1.2, focusPos[2]);
+      c.target.lerp(focusTmp.current, 0.12);
+      // position caméra : à 2.5 m devant le perso et 0.5 m au-dessus
+      camTmp.current.set(focusPos[0], focusPos[1] + 1.7, focusPos[2] + 2.5);
+      camera.position.lerp(camTmp.current, 0.1);
+      return;
+    }
+
     const t = c.target as THREE.Vector3;
     t.x = Math.max(-7, Math.min(7, t.x));
     t.y = Math.max(1.2, Math.min(11, t.y));
