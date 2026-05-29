@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useExperience } from '../../store';
 
-// Ambiance sonore (réutilise /assets/ambience.mp3 du site lostchapter, même origine).
+// Musique médiévale (valse de tank — uploadée par l'utilisateur).
+const TRACK = '/assets/sound/medieval_waltz.mp3';
 export function SoundToggle() {
   const muted = useExperience((s) => s.muted);
   const toggle = useExperience((s) => s.toggleMute);
@@ -9,7 +10,7 @@ export function SoundToggle() {
   const audio = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const a = new Audio('/assets/ambience.mp3');
+    const a = new Audio(TRACK);
     a.loop = true;
     a.volume = 0.45;
     audio.current = a;

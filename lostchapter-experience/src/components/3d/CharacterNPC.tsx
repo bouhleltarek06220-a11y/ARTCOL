@@ -198,6 +198,10 @@ export function CharacterNPC({
   });
 
   const selectCharacter = useExperience((s) => s.selectCharacter);
+  const closeCharacter = useExperience((s) => s.closeCharacter);
+  const selectedCharacter = useExperience((s) => s.selectedCharacter);
+  const isOpen = !!interaction && selectedCharacter?.id === interaction.id;
+
   const onClickChar = (e: { stopPropagation: () => void }) => {
     if (!interaction) return;
     e.stopPropagation();
@@ -216,6 +220,51 @@ export function CharacterNPC({
         onPointerOver={interaction ? () => (document.body.style.cursor = 'pointer') : undefined}
         onPointerOut={interaction ? () => (document.body.style.cursor = 'default') : undefined}
       />
+      {/* Bulle de dialogue style jeu vidéo, à côté de la tête du perso */}
+      {isOpen && interaction && (
+        <Html
+          position={[1.6, 1.7, 0]}
+          center
+          distanceFactor={6}
+          style={{ pointerEvents: 'auto' }}
+          zIndexRange={[100, 0]}
+        >
+          <div
+            className="parchment-panel relative w-[280px] rounded-lg p-4 shadow-2xl"
+            style={{ borderWidth: '2px' }}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {/* Petite queue de bulle qui pointe vers le perso (à gauche) */}
+            <span
+              aria-hidden
+              className="absolute -left-3 top-7 h-0 w-0"
+              style={{
+                borderTop: '10px solid transparent',
+                borderBottom: '10px solid transparent',
+                borderRight: '14px solid #8a6a3a',
+              }}
+            />
+            {/* Bandeau nom */}
+            <div className="font-medieval mb-2 inline-block rounded border border-[#3a2412]/30 bg-[#3a2412] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-parchment">
+              {interaction.displayName}
+            </div>
+            {/* Texte */}
+            <div className="font-ui space-y-2 text-[13px] leading-snug text-[#2a1810]">
+              {interaction.lines.map((line, i) => (
+                <p key={i} className={i === 0 ? 'font-semibold' : ''}>{line}</p>
+              ))}
+            </div>
+            {/* Fermer */}
+            <button
+              onClick={(e) => { e.stopPropagation(); closeCharacter(); }}
+              aria-label="Fermer"
+              className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-[#3a2412]/10 text-[#3a2412] transition hover:bg-[#3a2412]/25"
+            >
+              ✕
+            </button>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
