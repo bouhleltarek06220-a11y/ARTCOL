@@ -5,9 +5,18 @@ import * as THREE from 'three';
 import type { Zone } from '../../data/zones';
 import { useExperience } from '../../store';
 import { chime, activationChord } from '../../lib/audio';
+import { CharacterNPC, type CharacterDef } from './CharacterNPC';
 
 const FRAME = '/assets/dungeon/wall_doorway.glb'; // arche de pierre KayKit (4×4×1)
 useGLTF.preload(FRAME);
+
+// Alpaking : créature ailée qui survole et surveille chaque porte
+const ALPAKING: CharacterDef = {
+  url: '/assets/characters/custom/Alpaking.glb',
+  scale: 0.5,
+  animationName: 'CharacterArmature|Flying_Idle',
+  timeScale: 0.8,
+};
 
 const accent: Record<Zone['accent'], string> = {
   torch: '#ff9d4d',
@@ -127,13 +136,21 @@ export function ChapterDoor({
         <Leaf side={-1} open={openAmount} />
         <Leaf side={1} open={openAmount} />
       </group>
-      {/* Étiquette du chapitre */}
-      <Html position={[0, 4.3, 0]} center distanceFactor={11} occlude style={{ pointerEvents: 'none' }}>
-        <div className="font-medieval whitespace-nowrap text-[12px] uppercase tracking-[0.3em] text-parchment"
-             style={{ textShadow: '0 0 10px rgba(0,0,0,0.85), 0 0 16px rgba(229,199,136,0.4)' }}>
-          {zone.title}
-        </div>
-      </Html>
+      {/* Alpaking ailé qui survole et surveille la porte */}
+      <CharacterNPC character={ALPAKING} position={[0, 4.6, 0.8]} rotationY={Math.PI} preserveTextures />
+
+      {/* Bulle de texte (tooltip) au survol : intitulé de la porte */}
+      {hover && (
+        <Html position={[0, 4.0, 0.6]} center distanceFactor={9} style={{ pointerEvents: 'none' }}>
+          <div
+            className="font-medieval whitespace-nowrap rounded-lg border border-goldbright/60 bg-stone/90 px-4 py-2 text-[13px] uppercase tracking-[0.28em] text-parchment shadow-[0_8px_28px_rgba(0,0,0,0.6)]"
+            style={{ textShadow: '0 0 10px rgba(229,199,136,0.5)' }}
+          >
+            {zone.title}
+          </div>
+        </Html>
+      )}
+
       {/* Bouton d'entrée DOM au survol */}
       {hover && (
         <Html position={[0, 1.7, 0.4]} center distanceFactor={7} style={{ pointerEvents: 'auto' }}>

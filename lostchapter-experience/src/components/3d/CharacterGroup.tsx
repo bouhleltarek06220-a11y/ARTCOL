@@ -21,15 +21,17 @@ const KNIGHT_STATIC: CharacterDef = { url: `${C}/Knight.glb`, scale: SC };
 // Dragon — pièce maîtresse qui plane au-dessus de la salle
 const DRAGON: CharacterDef = { url: `${C}/Dragon_Evolved.glb`, scale: 1.3, animationName: 'CharacterArmature|Flying_Idle', timeScale: 0.8 };
 
-// ── Gardiens : un devant chaque porte, orientés vers le centre ──
+// ── Gardiens à l'épée (Knight) devant chaque porte, orientés vers le centre ──
 const CENTER: [number, number] = [0, -18];
 const facing = (x: number, z: number) => Math.atan2(CENTER[0] - x, CENTER[1] - z);
-// Cycle varié (Roi, Chevalier, Encapuchonné, Sorcière, Aventurier, Aventurier 2)
-const IDLE_CYCLE = [KING_IDLE, KNIGHT_STATIC, HOODED_IDLE, WITCH_IDLE, ADV_IDLE, ADV2_IDLE];
 
+// Le chevalier à l'épée garde CHAQUE porte. La porte principale (fond centre)
+// en a DEUX : un à gauche, un à droite.
 const GUARDS: [number, number, number][] = [
-  // Fond (portes x=-4,0,4)
-  [-4, 0, -33.5], [0, 0, -33.5], [4, 0, -33.5],
+  // Fond : porte gauche (x=-4), PORTE PRINCIPALE (x=0 → 2 gardes flanquants), porte droite (x=4)
+  [-4, 0, -33.5],
+  [-1.4, 0, -33.5], [1.4, 0, -33.5], // les deux gardes de la porte principale
+  [4, 0, -33.5],
   // Gauche (x=-10)
   [-7.5, 0, -10], [-7.5, 0, -18], [-7.5, 0, -26],
   // Droite (x=10)
@@ -50,11 +52,11 @@ export function CharacterGroup() {
       {/* Dragon qui plane au-dessus de la nef (pièce maîtresse) */}
       <CharacterNPC character={DRAGON} position={[0, 8, -20]} rotationY={Math.PI} preserveTextures />
 
-      {/* 9 gardiens fixes — un devant chaque porte */}
+      {/* Gardiens à l'épée — un devant chaque porte, deux à la porte principale */}
       {GUARDS.map((pos, i) => (
         <CharacterNPC
           key={`guard-${i}`}
-          character={IDLE_CYCLE[i % IDLE_CYCLE.length]}
+          character={KNIGHT_STATIC}
           position={pos}
           rotationY={facing(pos[0], pos[2])}
           offset={i * 0.7}
