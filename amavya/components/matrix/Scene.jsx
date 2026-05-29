@@ -7,7 +7,7 @@ import { EffectComposer, Bloom, Vignette, ChromaticAberration, Noise } from "@re
 import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 import CodeWorld from "./CodeWorld";
-import Rings3D from "./Rings3D";
+import CodeCarpet from "./CodeCarpet";
 import Message3D from "./Message3D";
 import { lerpColor } from "./data";
 
@@ -105,7 +105,7 @@ export default function Scene({ progressRef, mobile, lang = "fr", onReady }) {
 
       <Ambience progressRef={progressRef} />
       <CodeWorld progressRef={progressRef} />
-      <Rings3D progressRef={progressRef} />
+      <CodeCarpet progressRef={progressRef} />
       <Core progressRef={progressRef} />
       <Message3D progressRef={progressRef} lang={lang} />
 
