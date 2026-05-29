@@ -54,7 +54,7 @@ function Word({ word, at, final, progressRef }) {
 
   return (
     <Float speed={final ? 1.2 : 2} rotationIntensity={final ? 0.2 : 0.5} floatIntensity={final ? 0.4 : 0.8}>
-      <group ref={group} position={[0, 0, 1.5]} scale={0.001}>
+      <group ref={group} position={[0, 2.7, 0]} scale={0.001}>
         <Center>
           <Text3D
             font={FONT}
