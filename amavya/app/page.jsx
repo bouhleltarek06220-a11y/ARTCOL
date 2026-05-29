@@ -9,6 +9,7 @@ import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
 import MusicToggle from "@/components/MusicToggle";
+import BackToTop from "@/components/BackToTop";
 
 export default function Home() {
   return (
@@ -16,8 +17,9 @@ export default function Home() {
       <AnimatedBackground />
       <ContactModal />
       <MusicToggle />
+      <BackToTop />
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
         <Services />
         <Vision />

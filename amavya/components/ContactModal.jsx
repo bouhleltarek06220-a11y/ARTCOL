@@ -51,13 +51,42 @@ export default function ContactModal() {
     };
   }, [open, close]);
 
-  const set = (k) => (e) => setData((d) => ({ ...d, [k]: e.target.value }));
+  const validateField = (k, v) => {
+    const s = (v || "").trim();
+    if (k === "full_name" && s.length < 2) return c.errors.fullName;
+    if (k === "email" && !EMAIL_RX.test(s)) return c.errors.email;
+    if (k === "message" && s.length < 2) return c.errors.message;
+    return null;
+  };
+
+  const set = (k) => (e) => {
+    const v = e.target.value;
+    setData((d) => ({ ...d, [k]: v }));
+    // si le champ était en erreur et redevient valide → on nettoie
+    setErrors((er) => {
+      if (!er[k]) return er;
+      const msg = validateField(k, v);
+      if (msg) return er;
+      const { [k]: _drop, ...rest } = er;
+      return rest;
+    });
+  };
+
+  const blur = (k) => () => {
+    const msg = validateField(k, data[k]);
+    setErrors((er) => {
+      if (msg) return { ...er, [k]: msg };
+      const { [k]: _drop, ...rest } = er;
+      return rest;
+    });
+  };
 
   const validate = () => {
     const er = {};
-    if (data.full_name.trim().length < 2) er.full_name = c.errors.fullName;
-    if (!EMAIL_RX.test(data.email.trim())) er.email = c.errors.email;
-    if (data.message.trim().length < 2) er.message = c.errors.message;
+    ["full_name", "email", "message"].forEach((k) => {
+      const m = validateField(k, data[k]);
+      if (m) er[k] = m;
+    });
     setErrors(er);
     return Object.keys(er).length === 0;
   };
@@ -185,6 +214,8 @@ export default function ContactModal() {
                       <input
                         value={data.full_name}
                         onChange={set("full_name")}
+                        onBlur={blur("full_name")}
+                        aria-invalid={!!errors.full_name}
                         placeholder={c.placeholders.fullName}
                         className={`${field} ${errors.full_name ? "border-red-500/60" : "border-white/10"}`}
                       />
@@ -210,6 +241,8 @@ export default function ContactModal() {
                         type="email"
                         value={data.email}
                         onChange={set("email")}
+                        onBlur={blur("email")}
+                        aria-invalid={!!errors.email}
                         placeholder={c.placeholders.email}
                         className={`${field} ${errors.email ? "border-red-500/60" : "border-white/10"}`}
                       />
@@ -233,6 +266,8 @@ export default function ContactModal() {
                     <textarea
                       value={data.message}
                       onChange={set("message")}
+                      onBlur={blur("message")}
+                      aria-invalid={!!errors.message}
                       rows={4}
                       placeholder={c.placeholders.message}
                       className={`${field} resize-none ${errors.message ? "border-red-500/60" : "border-white/10"}`}
@@ -266,8 +301,14 @@ export default function ContactModal() {
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-all hover:-translate-y-0.5 disabled:opacity-60"
+                    className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                   >
+                    {status === "loading" && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="animate-spin" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.3" strokeWidth="3" />
+                        <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                    )}
                     {status === "loading" ? c.submitting : c.submit}
                   </button>
                 </form>
