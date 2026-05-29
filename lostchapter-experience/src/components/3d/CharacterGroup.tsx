@@ -55,17 +55,7 @@ export function CharacterGroup() {
       {/* Dragon qui plane au-dessus des portes du fond, face à l'entrée */}
       <CharacterNPC character={DRAGON} position={[0, 6, -32]} rotationY={0} preserveTextures />
 
-      {/* Gardiens à l'épée — un devant chaque porte, deux à la porte principale */}
-      {GUARDS.map((pos, i) => (
-        <CharacterNPC
-          key={`guard-${i}`}
-          character={SWORD_GUARD}
-          position={pos}
-          rotationY={facing(pos[0], pos[2])}
-          offset={i * 0.7}
-          preserveTextures
-        />
-      ))}
+      {/* (Gardiens devant les portes retirés — soutenance épurée) */}
 
       {/* Marcheurs (peu, variés, lents) */}
       {WALKERS.map((w, i) => (

@@ -5,15 +5,16 @@ export interface Zone {
   accent: 'torch' | 'twitch' | 'gold';
 }
 
-// Les 9 zones du hall (contenu enrichi dans les phases suivantes).
+// Les 9 portes = les 9 sections de la soutenance Lost Chapter.
+// Ordre = placement dans DungeonHall : fond (0-2), gauche (3-5), droite (6-8).
 export const zones: Zone[] = [
-  { id: 'projet',       title: 'Le Projet',          blurb: 'Les lieux historiques deviennent des aventures immersives live.', accent: 'gold' },
-  { id: 'lieux',        title: 'Lieux historiques',  blurb: 'Mont-Saint-Michel, Carcassonne, Avignon, Chambord…',              accent: 'gold' },
-  { id: 'jdr',          title: 'Jeu de rôle',        blurb: 'Personnages, dés et quêtes grandeur nature.',                     accent: 'torch' },
-  { id: 'influenceurs', title: 'Influenceurs',       blurb: 'Ils racontent l’expérience en direct.',                           accent: 'twitch' },
-  { id: 'public',       title: 'Public & Twitch',    blurb: 'Spectateurs sur place et derrière l’écran, réunis.',              accent: 'twitch' },
-  { id: 'sponsors',     title: 'Sponsors & Mécènes', blurb: 'Visibilité, fiscalité, stand, impact.',                           accent: 'gold' },
-  { id: 'coulisses',    title: 'Coulisses',          blurb: 'Recherche, technique, costumes, décors.',                         accent: 'torch' },
-  { id: 'donateurs',    title: 'Donateurs',          blurb: 'Le mur d’honneur des contributeurs.',                             accent: 'gold' },
-  { id: 'contact',      title: 'Contact / QR',       blurb: 'Découvrez les prochains chapitres.',                              accent: 'twitch' },
+  { id: 'nous',        title: 'Nous',                 blurb: "L'équipe derrière Lost Chapter.",                          accent: 'gold' },
+  { id: 'startup',     title: 'Startup',              blurb: "Lost Chapter : la vision et le concept.",                  accent: 'gold' },
+  { id: 'objectif',    title: 'Objectif',            blurb: "Ce que nous voulons accomplir.",                           accent: 'gold' },
+  { id: 'icp',         title: 'ICP / Persona',       blurb: "À qui s'adresse Lost Chapter.",                            accent: 'twitch' },
+  { id: 'strategie',   title: 'Stratégie',           blurb: "Notre plan pour y arriver.",                               accent: 'twitch' },
+  { id: 'probleme',    title: 'Problème / Solution', blurb: "Le besoin et notre réponse.",                              accent: 'torch' },
+  { id: 'kpi',         title: 'KPI',                 blurb: "Nos indicateurs de réussite.",                             accent: 'torch' },
+  { id: 'reco',        title: 'Recommandation',      blurb: "Nos préconisations.",                                      accent: 'gold' },
+  { id: 'merci',       title: 'Remerciement',        blurb: "Merci de votre attention.",                                accent: 'twitch' },
 ];

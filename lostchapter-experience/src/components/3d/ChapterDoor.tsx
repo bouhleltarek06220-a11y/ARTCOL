@@ -136,8 +136,9 @@ export function ChapterDoor({
         <Leaf side={-1} open={openAmount} />
         <Leaf side={1} open={openAmount} />
       </group>
-      {/* Alpaking ailé qui survole et surveille la porte */}
-      <CharacterNPC character={ALPAKING} position={[0, 4.6, 0.8]} rotationY={Math.PI} preserveTextures />
+      {/* Alpaking ailé qui surveille la porte — orienté FACE CAMÉRA (annule la
+          rotation de la porte pour regarder toujours vers l'entrée +Z). */}
+      <CharacterNPC character={ALPAKING} position={[0, 4.6, 0.8]} rotationY={-rotationY} preserveTextures />
 
       {/* Bulle de texte (tooltip) au survol : intitulé de la porte */}
       {hover && (
