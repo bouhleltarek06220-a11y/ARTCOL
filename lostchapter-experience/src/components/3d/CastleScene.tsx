@@ -228,16 +228,17 @@ export function CastleScene() {
         shadow-bias={-0.0005}
       />
 
-      {/* TERRE : grand sol naturel qui plante le château dans le paysage
-          (comble le vide noir autour, capte la lumière chaude du coucher). */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, -18]} receiveShadow>
-        <planeGeometry args={[900, 900]} />
-        <meshStandardMaterial color="#6e5d39" roughness={1} metalness={0} />
+      {/* TERRE : grand sol non éclairé (MeshBasic) → JAMAIS noir quelle que soit
+          l'exposition/le fog. Teinte terre chaude de coucher de soleil, plante
+          le château dans le paysage et comble tout le vide autour. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, -18]}>
+        <planeGeometry args={[1200, 1200]} />
+        <meshBasicMaterial color="#b9925b" toneMapped={false} fog={false} />
       </mesh>
-      {/* Liseré de terre plus sombre autour de l'emprise du château */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, -18]}>
-        <ringGeometry args={[16, 60, 48]} />
-        <meshStandardMaterial color="#5a4a2c" roughness={1} />
+      {/* Anneau d'herbe sèche plus foncé autour du château (transition douce) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -18]}>
+        <ringGeometry args={[14, 80, 64]} />
+        <meshBasicMaterial color="#8c7242" toneMapped={false} fog={false} />
       </mesh>
 
       <CastleExterior mobile={mobile} />

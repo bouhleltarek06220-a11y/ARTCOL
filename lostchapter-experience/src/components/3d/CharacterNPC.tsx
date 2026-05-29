@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html } from '@react-three/drei';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import * as THREE from 'three';
 import { useCharacterAnimation } from '../../lib/useCharacterAnimation';
@@ -29,6 +29,8 @@ export interface CharacterNPCProps {
   preserveTextures?: boolean; // garde la texture KayKit (armure, robe…)
   darkenColor?: string;      // teinte sombre médiévale pour matcher l'ambiance
   emissive?: string;
+  /** Nom affiché dans une bulle au-dessus de la tête (ex: "TAREK"). */
+  name?: string;
   /**
    * Palette de couleurs PAR sous-mesh (Knight_Head, Mage_Cape, etc.). Permet de
    * colorier chaque partie du corps avec une logique thématique. La clé `default`
@@ -58,6 +60,7 @@ export function CharacterNPC({
   darkenColor = '#1a1208',
   emissive = '#2a1a0a',
   meshColors,
+  name,
 }: CharacterNPCProps) {
   const gltf = useGLTF(character.url) as unknown as {
     scene: THREE.Group;
@@ -187,6 +190,16 @@ export function CharacterNPC({
   return (
     <group ref={groupRef} position={position} scale={character.scale ?? 1}>
       <primitive object={cloned} />
+      {name && (
+        <Html position={[0, 2.6, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+          <div
+            className="font-display whitespace-nowrap rounded-full border border-goldbright/70 bg-stone/85 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-parchment"
+            style={{ textShadow: '0 0 8px rgba(229,199,136,0.5)' }}
+          >
+            {name}
+          </div>
+        </Html>
+      )}
     </group>
   );
 }

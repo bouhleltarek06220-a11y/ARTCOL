@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { zones } from './data/zones';
 
 export type Phase = 'loading' | 'gate' | 'entering' | 'inside';
 
@@ -16,6 +17,7 @@ interface ExperienceState {
   toggleMute: () => void;
   selectZone: (id: string) => void;
   closeZone: () => void;
+  stepZone: (dir: 1 | -1) => void;   // navigation séquentielle entre slides
 }
 
 const prefersReduced =
@@ -37,4 +39,12 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   toggleMute: () => set((s) => ({ muted: !s.muted })),
   selectZone: (id) => set({ selectedZone: id }),
   closeZone: () => set({ selectedZone: null }),
+  stepZone: (dir) =>
+    set((s) => {
+      if (!s.selectedZone) return {};
+      const i = zones.findIndex((z) => z.id === s.selectedZone);
+      if (i < 0) return {};
+      const next = (i + dir + zones.length) % zones.length;
+      return { selectedZone: zones[next].id };
+    }),
 }));
