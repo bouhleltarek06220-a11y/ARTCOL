@@ -1,62 +1,31 @@
-/* Données partagées de l'AI Command Center (modules + sections bilingues) */
+/* Chapitres du cinématique "The Living Planet" (bilingue) */
 
-export const MODULES = [
-  { key: "prospect",  color: "#67e8f9", r: 2.7, sp: 0.22, ph: 0,    tx:  0.18, tz:  0.05 },
-  { key: "crm",       color: "#f0d27a", r: 3.1, sp: 0.18, ph: 1.1,  tx: -0.22, tz:  0.10 },
-  { key: "auto",      color: "#a78bfa", r: 3.4, sp: 0.20, ph: 2.2,  tx:  0.10, tz: -0.18 },
-  { key: "human",     color: "#fb7185", r: 2.8, sp: 0.24, ph: 3.3,  tx: -0.08, tz:  0.22 },
-  { key: "analytics", color: "#34d399", r: 3.6, sp: 0.16, ph: 4.4,  tx:  0.26, tz: -0.10 },
-  { key: "knowledge", color: "#93c5fd", r: 2.6, sp: 0.26, ph: 5.5,  tx: -0.14, tz: -0.22 },
-];
-
-// Préréglages de caméra — un par section
 export const CAM = [
-  { pos: [0,  2.0,  9.5], look: [0, 0, 0] },
-  { pos: [ 3.8, 0.6, 6.5], look: [0, 0, 0] },
-  { pos: [-3.8, 1.2, 6.5], look: [0, 0, 0] },
-  { pos: [ 3.2,-0.8, 6.0], look: [0, 0, 0] },
-  { pos: [-3.4,-1.0, 6.5], look: [0, 0, 0] },
-  { pos: [ 0,   2.8, 6.8], look: [0, 0, 0] },
+  { pos: [0,  2.0, 18], look: [0, 0, 0] },   // 0 — Deep space
+  { pos: [0,  1.4, 12], look: [0, 0, 0] },   // 1 — Approach
+  { pos: [ 3.2, 2.6,  7.5], look: [0, 0, 0] }, // 2 — Orbiting AMAVYA
+  { pos: [-2.4, 4.2,  5.6], look: [0, 0, 0] }, // 3 — Atmosphere
+  { pos: [ 4.0,-1.0,  4.9], look: [0, 0, 0] }, // 4 — Surface flyover
+  { pos: [ 0.0, 0.6,  6.6], look: [0, 0, 0] }, // 5 — Cinematic finale
 ];
 
-export const SECTIONS = {
+export const CHAPTERS = {
   fr: [
-    { tag: "00 · NOYAU",        title: "AI CORE",            text: "Le cerveau d'AMAVYA. L'intelligence qui orchestre toute l'expérience.",        accent: "#f0d27a" },
-    { tag: "01 · PROSPECTION",  title: "PROSPECTING ENGINE", text: "Identifier les bons prospects, en continu — pilote automatique.",              accent: "#67e8f9" },
-    { tag: "02 · CRM",          title: "CRM INTELLIGENCE",   text: "Vos contacts qualifiés, scorés et priorisés en temps réel.",                   accent: "#f0d27a" },
-    { tag: "03 · AUTOMATION",   title: "AUTOMATION CENTER",  text: "Vos outils connectés. Vos process exécutés tout seuls, sans friction.",        accent: "#a78bfa" },
-    { tag: "04 · COLLABORATION",title: "HUMAN + AI",         text: "L'IA n'est pas là pour remplacer. Elle est là pour augmenter l'humain.",       accent: "#fb7185" },
-    { tag: "05 · ANALYTIQUE",   title: "ANALYTICS HUB",      text: "Vos données vivantes. Vos décisions éclairées par la prédiction.",             accent: "#34d399" },
+    { tag: "00 · DEEP SPACE",     title: "Au-delà des étoiles…",            text: "Une lueur familière se dessine au cœur de l'obscurité." },
+    { tag: "01 · APPROACH",       title: "Une planète vivante apparaît.",   text: "À mi-chemin entre nature, robotique et intelligence." },
+    { tag: "02 · AMAVYA",         title: "Bienvenue sur AMAVYA.",           text: "Là où les humains et l'IA construisent un futur commun." },
+    { tag: "03 · ECOSYSTÈME",     title: "Un monde qui respire.",           text: "Forêts lumineuses, îles flottantes, rivières neuronales." },
+    { tag: "04 · LE NOYAU",       title: "Le Core nourrit tout l'écosystème.", text: "Soleil artificiel, arbre de vie, intelligence quantique." },
+    { tag: "05 · L'AVENIR",       title: "Un futur bâti ensemble.",         text: "L'IA n'est pas là pour remplacer. Elle est là pour augmenter." },
   ],
   en: [
-    { tag: "00 · CORE",         title: "AI CORE",            text: "The brain of AMAVYA. The intelligence that orchestrates the entire experience.", accent: "#f0d27a" },
-    { tag: "01 · PROSPECTING",  title: "PROSPECTING ENGINE", text: "Spotting the right prospects, continuously — on autopilot.",                    accent: "#67e8f9" },
-    { tag: "02 · CRM",          title: "CRM INTELLIGENCE",   text: "Your contacts qualified, scored and prioritized in real time.",                 accent: "#f0d27a" },
-    { tag: "03 · AUTOMATION",   title: "AUTOMATION CENTER",  text: "Your tools connected. Your processes running on their own, friction-free.",      accent: "#a78bfa" },
-    { tag: "04 · COLLABORATION",title: "HUMAN + AI",         text: "AI is not here to replace people. It is here to augment them.",                 accent: "#fb7185" },
-    { tag: "05 · ANALYTICS",    title: "ANALYTICS HUB",      text: "Your data alive. Your decisions guided by prediction.",                          accent: "#34d399" },
+    { tag: "00 · DEEP SPACE",     title: "Beyond the stars…",               text: "A familiar glow shapes itself in the heart of the void." },
+    { tag: "01 · APPROACH",       title: "A living planet appears.",        text: "Where nature, robotics and intelligence meet." },
+    { tag: "02 · AMAVYA",         title: "Welcome to AMAVYA.",              text: "Where humans and AI build a shared future." },
+    { tag: "03 · ECOSYSTEM",      title: "A world that breathes.",          text: "Luminous forests, floating islands, neural rivers." },
+    { tag: "04 · THE CORE",       title: "The Core powers everything.",     text: "An artificial sun. A tree of life. A quantum intelligence." },
+    { tag: "05 · THE FUTURE",     title: "A future, built together.",       text: "AI is not here to replace. It is here to augment." },
   ],
 };
 
-export const MODULE_LABEL = {
-  fr: {
-    prospect: "Prospecting AI",
-    crm: "CRM Intelligence",
-    auto: "Automation",
-    human: "Human + AI",
-    analytics: "Analytics",
-    knowledge: "Knowledge AI",
-  },
-  en: {
-    prospect: "Prospecting AI",
-    crm: "CRM Intelligence",
-    auto: "Automation",
-    human: "Human + AI",
-    analytics: "Analytics",
-    knowledge: "Knowledge AI",
-  },
-};
-
-// Le stop 0 (Core) ne met aucun orbiter en avant ; stops 1..5 → modules 0..4.
-export const STOP_TO_MODULE = [null, 0, 1, 2, 3, 4];
-export const STOPS = SECTIONS.fr.length;
+export const STOPS = CHAPTERS.fr.length;
