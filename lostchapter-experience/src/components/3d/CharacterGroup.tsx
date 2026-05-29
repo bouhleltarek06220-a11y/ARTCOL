@@ -20,6 +20,9 @@ const RANGER_WALK:   CharacterDef = { url: `${BASE}/Ranger.glb`, scale: SCALE, a
 const HOODED_CUSTOM: CharacterDef = { url: '/assets/characters/custom/Hooded_Adventurer.glb', scale: 0.62, animationName: 'CharacterArmature|Walk', timeScale: 1.0 };
 const HOODED_IDLE:   CharacterDef = { url: '/assets/characters/custom/Hooded_Adventurer.glb', scale: 0.62, animationName: 'CharacterArmature|Idle', timeScale: 0.9 };
 const KNIGHT_STATIC: CharacterDef = { url: '/assets/characters/custom/Knight.glb', scale: 0.62 };
+const KING_IDLE:     CharacterDef = { url: '/assets/characters/custom/King.glb', scale: 0.64, animationName: 'CharacterArmature|Idle', timeScale: 0.85 };
+const WITCH_WALK:    CharacterDef = { url: '/assets/characters/custom/Witch.glb', scale: 0.6, animationName: 'CharacterArmature|Walk', timeScale: 1.0 };
+const ADVENTURER_WALK: CharacterDef = { url: '/assets/characters/custom/Adventurer.glb', scale: 0.62, animationName: 'CharacterArmature|Walk', timeScale: 1.0 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Palettes thématiques par archétype — coloration partie par partie
@@ -163,6 +166,32 @@ export function CharacterGroup() {
         position={[-1.2, 0, -28]}
         rotationY={0}
         offset={1.0}
+        preserveTextures
+      />
+
+      {/* LE ROI — trône symbolique au centre du fond, idle majestueux */}
+      <CharacterNPC
+        character={KING_IDLE}
+        position={[0, 0, -30]}
+        rotationY={Math.PI}
+        preserveTextures
+      />
+
+      {/* LA SORCIÈRE — déambule côté gauche */}
+      <CharacterNPC
+        character={WITCH_WALK}
+        path={[[-3, -14], [-3, -24], [-2.2, -28], [-2.2, -16]]}
+        speed={0.4}
+        offset={1.7}
+        preserveTextures
+      />
+
+      {/* AVENTURIER — traverse côté droit */}
+      <CharacterNPC
+        character={ADVENTURER_WALK}
+        path={[[3, -16], [3, -26], [2.2, -30], [2.2, -14]]}
+        speed={0.46}
+        offset={3.3}
         preserveTextures
       />
 

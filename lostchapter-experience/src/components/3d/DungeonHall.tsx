@@ -127,13 +127,17 @@ export function DungeonHall() {
         zones[i + 6] ? <ChapterDoor key={`dr-${i}`} zone={zones[i + 6]} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} /> : null,
       )}
 
-      {/* ─── COLONNES le long des murs (rythme) ─── */}
-      {rows.filter((_, i) => i % 2 === 0).map((z) => (
-        <group key={`col-${z}`}>
-          <Piece url={COLUMN} position={[X_LEFT + 0.9, 0, z]} scale={1.6} />
-          <Piece url={COLUMN} position={[X_RIGHT - 0.9, 0, z]} scale={1.6} />
-        </group>
-      ))}
+      {/* ─── COLONNES le long des murs (sauf devant les portes latérales) ─── */}
+      {rows.filter((_, i) => i % 2 === 0).map((z) => {
+        const isDoorRow = z === -10 || z === -18 || z === -26;
+        if (isDoorRow) return null; // pas de colonne devant une porte
+        return (
+          <group key={`col-${z}`}>
+            <Piece url={COLUMN} position={[X_LEFT + 0.9, 0, z]} scale={1.6} />
+            <Piece url={COLUMN} position={[X_RIGHT - 0.9, 0, z]} scale={1.6} />
+          </group>
+        );
+      })}
 
       {/* ─── TORCHES murales + lumière chaude ─── */}
       {rows.filter((_, i) => i % 2 === 1).map((z, i) => (
