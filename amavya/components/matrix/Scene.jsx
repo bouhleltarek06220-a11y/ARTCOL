@@ -1,26 +1,12 @@
 "use client";
 
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, Lightformer, Sparkles, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette, ChromaticAberration, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import * as THREE from "three";
 import CodeWorld from "./CodeWorld";
 import CodeCarpet from "./CodeCarpet";
-import Message3D from "./Message3D";
-import { lerpColor } from "./data";
-
-/* ===== Pilote l'ambiance (fog + sparkles color) selon le voyage ===== */
-function Ambience({ progressRef }) {
-  const fog = useRef();
-  useFrame(({ scene }) => {
-    const p = Math.max(0, Math.min(1, progressRef.current));
-    const c = lerpColor(p);
-    if (scene.fog) scene.fog.color.setRGB((c.r / 255) * 0.12, (c.g / 255) * 0.12, (c.b / 255) * 0.12);
-  });
-  return null;
-}
 
 export default function Scene({ progressRef, mobile, lang = "fr", onReady }) {
   return (
@@ -50,10 +36,8 @@ export default function Scene({ progressRef, mobile, lang = "fr", onReady }) {
         <Stars radius={60} depth={50} count={mobile ? 700 : 2000} factor={3} fade speed={0.25} />
         <Sparkles count={mobile ? 40 : 90} scale={[20, 16, 20]} size={2.2} speed={0.3} color="#f0d27a" opacity={0.5} />
 
-        <Ambience progressRef={progressRef} />
         <CodeWorld progressRef={progressRef} />
         <CodeCarpet />
-        <Message3D progressRef={progressRef} lang={lang} />
       </Suspense>
 
       {/* L'humanoïde Spline (calque au-dessus) capte la souris : on laisse

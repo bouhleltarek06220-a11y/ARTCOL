@@ -7,7 +7,7 @@ import Scene from "@/components/matrix/Scene";
 import Hud from "@/components/matrix/Hud";
 import { SplineScene } from "@/components/ui/splite";
 import { Spotlight } from "@/components/ui/spotlight";
-import { JOURNEY_DURATION, UI } from "@/components/matrix/data";
+import { JOURNEY_DURATION } from "@/components/matrix/data";
 
 // Scène Spline : humanoïde 3D qui suit le curseur
 const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
@@ -95,7 +95,6 @@ export default function MatrixClient() {
   }, []);
 
   const [ready, setReady] = useState(false);
-  const ui = UI[lang] || UI.fr;
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
@@ -108,29 +107,16 @@ export default function MatrixClient() {
         <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
       </div>
 
-      <Hud
-        progress={progress}
-        playing={playing}
-        onTogglePlay={togglePlay}
-        onScrub={scrub}
-        onReplay={replay}
-        lang={lang}
-        setLang={setLang}
-      />
+      <Hud progress={progress} />
 
-      {/* Loader */}
+      {/* Loader (sans texte) */}
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: ready ? 0 : 1 }}
         transition={{ duration: 0.8 }}
         className={`absolute inset-0 z-20 flex items-center justify-center bg-black ${ready ? "pointer-events-none" : ""}`}
       >
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-emerald-400/30 border-t-emerald-400" />
-          <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-emerald-400/70">
-            {ui.loading}
-          </p>
-        </div>
+        <span className="loader" />
       </motion.div>
     </div>
   );
