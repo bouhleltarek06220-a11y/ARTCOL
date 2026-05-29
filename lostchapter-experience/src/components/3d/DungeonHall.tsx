@@ -3,6 +3,8 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
 import { Brazier } from './Brazier';
+import { ChapterDoor } from './ChapterDoor';
+import { zones } from '../../data/zones';
 
 // Pack KayKit Dungeon Remastered (CC0) — pièces modulaires sur grille de 4 unités.
 const B = '/assets/dungeon';
@@ -85,25 +87,45 @@ export function DungeonHall() {
         <meshStandardMaterial color="#5a1a1a" roughness={0.92} metalness={0.05} />
       </mesh>
 
-      {/* ─── MURS LATÉRAUX (2 niveaux : bas plein, haut arches-fenêtres) ─── */}
-      {rows.map((z) => (
-        <group key={`wl-${z}`}>
-          {/* gauche */}
-          <Piece url={WALL} position={[X_LEFT, 0, z]} rotationY={Math.PI / 2} />
-          <Piece url={WALL_ARCH} position={[X_LEFT, TILE, z]} rotationY={Math.PI / 2} />
-          {/* droite */}
-          <Piece url={WALL} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} />
-          <Piece url={WALL_ARCH} position={[X_RIGHT, TILE, z]} rotationY={-Math.PI / 2} />
-        </group>
-      ))}
+      {/* ─── MURS LATÉRAUX (2 niveaux) ─── */}
+      {rows.map((z) => {
+        const isDoorRow = z === -10 || z === -18 || z === -26;
+        return (
+          <group key={`wl-${z}`}>
+            {/* gauche : porte si door-row, sinon mur plein */}
+            {!isDoorRow && <Piece url={WALL} position={[X_LEFT, 0, z]} rotationY={Math.PI / 2} />}
+            <Piece url={WALL_ARCH} position={[X_LEFT, TILE, z]} rotationY={Math.PI / 2} />
+            {/* droite */}
+            {!isDoorRow && <Piece url={WALL} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} />}
+            <Piece url={WALL_ARCH} position={[X_RIGHT, TILE, z]} rotationY={-Math.PI / 2} />
+          </group>
+        );
+      })}
 
-      {/* ─── MUR DU FOND (avec ouvertures de porte) ─── */}
-      {cols.map((x) => (
-        <group key={`wb-${x}`}>
-          <Piece url={x === 0 ? WALL_DOOR : WALL} position={[x, 0, Z_BACK]} rotationY={0} />
-          <Piece url={WALL} position={[x, TILE, Z_BACK]} rotationY={0} />
-        </group>
-      ))}
+      {/* ─── MUR DU FOND (2 niveaux, ouvertures pour portes en x=-4,0,4) ─── */}
+      {cols.map((x) => {
+        const isDoorCol = x === -4 || x === 0 || x === 4;
+        return (
+          <group key={`wb-${x}`}>
+            {!isDoorCol && <Piece url={WALL} position={[x, 0, Z_BACK]} rotationY={0} />}
+            <Piece url={WALL} position={[x, TILE, Z_BACK]} rotationY={0} />
+          </group>
+        );
+      })}
+
+      {/* ─── LES 9 VRAIES PORTES ─── */}
+      {/* Fond (zones 0-2) */}
+      {[-4, 0, 4].map((x, i) =>
+        zones[i] ? <ChapterDoor key={`db-${i}`} zone={zones[i]} position={[x, 0, Z_BACK]} rotationY={0} /> : null,
+      )}
+      {/* Gauche (zones 3-5) */}
+      {[-10, -18, -26].map((z, i) =>
+        zones[i + 3] ? <ChapterDoor key={`dl-${i}`} zone={zones[i + 3]} position={[X_LEFT, 0, z]} rotationY={Math.PI / 2} /> : null,
+      )}
+      {/* Droite (zones 6-8) */}
+      {[-10, -18, -26].map((z, i) =>
+        zones[i + 6] ? <ChapterDoor key={`dr-${i}`} zone={zones[i + 6]} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} /> : null,
+      )}
 
       {/* ─── COLONNES le long des murs (rythme) ─── */}
       {rows.filter((_, i) => i % 2 === 0).map((z) => (
