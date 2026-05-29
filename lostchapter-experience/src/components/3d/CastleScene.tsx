@@ -214,19 +214,31 @@ export function CastleScene() {
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight
         castShadow={!mobile}
-        position={[16, 26, 10]}
-        intensity={0.85}
-        color="#aec4ff"
+        position={[18, 22, 16]}
+        intensity={1.4}
+        color="#ffd9a0"
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-near={1}
-        shadow-camera-far={120}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
+        shadow-camera-far={140}
+        shadow-camera-left={-40}
+        shadow-camera-right={40}
+        shadow-camera-top={40}
+        shadow-camera-bottom={-40}
         shadow-bias={-0.0005}
       />
+
+      {/* TERRE : grand sol naturel qui plante le château dans le paysage
+          (comble le vide noir autour, capte la lumière chaude du coucher). */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, -18]} receiveShadow>
+        <planeGeometry args={[900, 900]} />
+        <meshStandardMaterial color="#6e5d39" roughness={1} metalness={0} />
+      </mesh>
+      {/* Liseré de terre plus sombre autour de l'emprise du château */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, -18]}>
+        <ringGeometry args={[16, 60, 48]} />
+        <meshStandardMaterial color="#5a4a2c" roughness={1} />
+      </mesh>
 
       <CastleExterior mobile={mobile} />
       <CastleGate />

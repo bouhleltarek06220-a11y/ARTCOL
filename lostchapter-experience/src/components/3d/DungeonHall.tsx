@@ -167,9 +167,11 @@ export function DungeonHall() {
         penumbra={0.7}
       />
 
-      {/* ─── 2 grands braseros + personnages ─── */}
+      {/* ─── 4 grands braseros (2 entrée + 2 fond, symétriques) + personnages ─── */}
       <Brazier position={[-6, 0, -8]} />
       <Brazier position={[6, 0, -8]} />
+      <Brazier position={[-6, 0, -30]} />
+      <Brazier position={[6, 0, -30]} />
       <CharacterGroup />
     </group>
   );

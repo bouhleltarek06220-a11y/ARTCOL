@@ -18,7 +18,10 @@ const ADV2_IDLE: CharacterDef = { url: `${C}/Adventurer_2.glb`, scale: SC, anima
 const HOODED_IDLE: CharacterDef = { url: `${C}/Hooded_Adventurer.glb`, scale: SC, animationName: 'CharacterArmature|Idle', timeScale: 0.85 };
 const KNIGHT_STATIC: CharacterDef = { url: `${C}/Knight.glb`, scale: SC };
 
-// Dragon — pièce maîtresse qui plane au-dessus de la salle
+// Garde à l'épée : Adventurer en pose Idle_Sword (animé — plus de T-pose)
+const SWORD_GUARD: CharacterDef = { url: `${C}/Adventurer.glb`, scale: SC, animationName: 'CharacterArmature|Idle_Sword', timeScale: 0.8 };
+
+// Dragon — plane au-dessus des portes du fond, face à l'entrée (regarde le visiteur)
 const DRAGON: CharacterDef = { url: `${C}/Dragon_Evolved.glb`, scale: 1.3, animationName: 'CharacterArmature|Flying_Idle', timeScale: 0.8 };
 
 // ── Gardiens à l'épée (Knight) devant chaque porte, orientés vers le centre ──
@@ -49,14 +52,14 @@ const WALKERS: { c: CharacterDef; path: [number, number][]; speed: number; offse
 export function CharacterGroup() {
   return (
     <>
-      {/* Dragon qui plane au-dessus de la nef (pièce maîtresse) */}
-      <CharacterNPC character={DRAGON} position={[0, 8, -20]} rotationY={Math.PI} preserveTextures />
+      {/* Dragon qui plane au-dessus des portes du fond, face à l'entrée */}
+      <CharacterNPC character={DRAGON} position={[0, 6, -32]} rotationY={0} preserveTextures />
 
       {/* Gardiens à l'épée — un devant chaque porte, deux à la porte principale */}
       {GUARDS.map((pos, i) => (
         <CharacterNPC
           key={`guard-${i}`}
-          character={KNIGHT_STATIC}
+          character={SWORD_GUARD}
           position={pos}
           rotationY={facing(pos[0], pos[2])}
           offset={i * 0.7}
