@@ -68,5 +68,5 @@ export const UI = {
   },
 };
 
-// Durée du voyage automatique (secondes)
-export const JOURNEY_DURATION = 42;
+// Durée avant l'apparition du bouton logo (secondes)
+export const JOURNEY_DURATION = 18;

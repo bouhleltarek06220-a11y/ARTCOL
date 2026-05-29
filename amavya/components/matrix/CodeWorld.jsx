@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { lerpColor } from "./data";
 
 /**
  * Monde de code à 360° : la pluie de code est dessinée dans un canvas 2D
@@ -112,11 +111,9 @@ export default function CodeWorld({ progressRef }) {
   }, [cylinders, ribbons, clones]);
 
   useFrame((state, dt) => {
-    const p = Math.max(0, Math.min(1, progressRef.current));
-    const col = lerpColor(p);
-    const head = lerpColor(Math.min(1, p + 0.15));
+    const t = state.clock.elapsedTime;
 
-    // --- Dessin de la pluie sur le canvas partagé ---
+    // --- Dessin de la pluie sur le canvas partagé (arc-en-ciel) ---
     ctx.fillStyle = "rgba(0,0,0,0.09)";
     ctx.fillRect(0, 0, TEX, TEX);
     ctx.font = `bold ${CELL}px "Courier New", monospace`;
@@ -124,9 +121,11 @@ export default function CodeWorld({ progressRef }) {
     for (let i = 0; i < COLS; i++) {
       const x = i * CELL;
       const y = drops[i] * CELL;
-      ctx.fillStyle = `rgb(${head.r},${head.g},${head.b})`;
+      // Teinte qui défile dans le temps + selon la colonne → toutes les couleurs
+      const hue = (t * 55 + i * 9) % 360;
+      ctx.fillStyle = `hsl(${hue}, 100%, 72%)`;
       ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], x, y);
-      ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},0.85)`;
+      ctx.fillStyle = `hsl(${hue}, 100%, 56%)`;
       ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], x, y - CELL);
       if (y > TEX && Math.random() > 0.97) drops[i] = 0;
       drops[i] += 1;
@@ -134,19 +133,17 @@ export default function CodeWorld({ progressRef }) {
     base.needsUpdate = true;
 
     // Anime le défilement vertical + signale la maj des clones
-    const t = state.clock.elapsedTime;
     clones.forEach((c, idx) => {
       c.offset.y -= dt * (0.18 + idx * 0.06);
       c.needsUpdate = true;
     });
 
-    // Cylindres : rotation lente + opacité (atténuée vers la fin pour révéler le cœur)
-    const fade = p < 0.62 ? 1 : Math.max(0.12, 1 - (p - 0.62) / 0.3);
+    // Cylindres : rotation lente
     cylinders.forEach((c, i) => {
       const m = cylRefs.current[i];
       if (!m) return;
       m.rotation.y += dt * c.speed * c.dir;
-      m.material.opacity = c.op * fade;
+      m.material.opacity = c.op;
     });
 
     // Lamelles : l'anneau tourne doucement, chaque lamelle ondule
@@ -155,7 +152,7 @@ export default function CodeWorld({ progressRef }) {
       const m = ribbonRefs.current[i];
       if (!m) return;
       m.position.y = rb.y + Math.sin(t * 0.4 + rb.bob) * 0.6;
-      m.material.opacity = (0.8 - i * 0.005) * (p < 0.62 ? 1 : Math.max(0.15, 1 - (p - 0.62) / 0.3));
+      m.material.opacity = 0.8 - i * 0.005;
     });
   });
 
