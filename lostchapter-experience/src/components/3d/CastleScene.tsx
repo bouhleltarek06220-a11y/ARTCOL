@@ -185,9 +185,14 @@ export function CastleScene() {
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       camera={{ fov: 65, near: 0.1, far: 400, position: [0, 3, 18] }}
       onCreated={({ gl }) => {
+        // Tone mapping cinéma ACES Filmic obligatoire avec HDR sinon tout
+        // ce qui dépasse 1.0 (les sources lumineuses du HDR) est juste clamp
+        // au blanc → scène cramée.
+        gl.toneMapping = THREE.ACESFilmicToneMapping;
+        // Donjon (intérieur sombre/crypte) : exposure réduite ;
+        // Sponza (atrium ouvert) : exposure normale.
+        gl.toneMappingExposure = USE_DUNGEON ? 0.45 : 0.95;
         gl.setClearColor('#080604');
-        // Active le clipping LOCAL (par-matériau) : utilisé par HallScene pour
-        // cacher le mur court de Sponza qui ferme l'atrium côté entrée.
         gl.localClippingEnabled = true;
       }}
     >

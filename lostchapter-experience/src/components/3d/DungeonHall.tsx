@@ -39,6 +39,15 @@ function Piece({
       if (m.isMesh) {
         m.castShadow = true;
         m.receiveShadow = true;
+        // Clone le matériau (sinon on modifie toutes les instances) et coupe
+        // l'IBL HDR (sinon le ciel plein-jour lave la pierre KayKit).
+        if (m.material) {
+          const orig = m.material as THREE.MeshStandardMaterial;
+          const mat = (orig.isMeshStandardMaterial ? orig.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
+          if ('envMapIntensity' in mat) mat.envMapIntensity = 0.12;
+          mat.color.multiplyScalar(0.78); // assombrir légèrement la teinte
+          m.material = mat;
+        }
       }
     });
     return c;
