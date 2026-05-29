@@ -163,11 +163,21 @@ export function CharacterNPC({
     }
   }, [cloned, preserveTextures, darkenColor, emissive, meshColors]);
 
-  useCharacterAnimation(animations, cloned, character.animationName, character.timeScale ?? 1);
-
   // Lit le store pour figer le perso si sélectionné par clic.
   const selectedCharacterId = useExperience((s) => s.selectedCharacter?.id ?? null);
   const isFrozen = !!interaction && selectedCharacterId === interaction.id;
+
+  // Quand le perso est figé pour le dialogue, on tente de basculer sur un clip d'idle
+  // (KayKit/Quaternius : "...|Idle" ou "Idle") pour qu'il s'arrête de marcher visuellement.
+  const activeAnimName = (() => {
+    if (!isFrozen) return character.animationName;
+    const wanted = character.animationName?.replace(/Walk|Running|Run/i, 'Idle') ?? 'Idle';
+    const has = animations?.some((c) => c.name === wanted);
+    if (has) return wanted;
+    const fallback = animations?.find((c) => /idle/i.test(c.name))?.name;
+    return fallback ?? character.animationName;
+  })();
+  useCharacterAnimation(animations, cloned, activeAnimName, character.timeScale ?? 1);
 
   // Déplacement le long du chemin (le walk-cycle des bones tourne sur place,
   // c'est nous qui translatons le groupe). Si pas de chemin, idle stationnaire.
