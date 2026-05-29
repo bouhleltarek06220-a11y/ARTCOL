@@ -271,6 +271,36 @@ h3,
   animation: ticker 2.4s ease-in-out infinite;
 }
 
+/* Spotlight (composant Spline) */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+.animate-spotlight {
+  animation: spotlight 2s var(--ease-smooth) 0.75s 1 forwards;
+}
+
+/* Loader (fallback de la scène Spline) */
+.loader {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid color-mix(in oklab, var(--color-gold) 25%, transparent);
+  border-top-color: var(--color-gold-bright);
+  animation: loader-spin 0.9s linear infinite;
+}
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .shimmer-line {
   background: linear-gradient(
     90deg,
