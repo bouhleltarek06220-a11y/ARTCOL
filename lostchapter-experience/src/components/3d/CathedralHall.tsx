@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react';
-import { useGLTF, Text, Html } from '@react-three/drei';
+import { useGLTF, Html, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
@@ -211,6 +211,62 @@ function Pew({ position, rotationY = 0 }: { position: [number, number, number]; 
   );
 }
 
+// Vrai logo Lost Chapter (étoile à 8 branches sur fond rond, monogramme LC central).
+// Chargé depuis le SVG du site et plaqué sur un disque émissif géant. Tourne
+// lentement, halo doré, cliquable → ouvre la présentation de soutenance.
+function LostChapterLogo({ position }: { position: [number, number, number] }) {
+  const tex = useTexture('/assets/lostchapter-logo.svg') as THREE.Texture;
+  useMemo(() => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 16;
+    tex.needsUpdate = true;
+  }, [tex]);
+  const ref = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    // Légère rotation cérémoniale + souffle de halo
+    ref.current.rotation.z = Math.sin(clock.elapsedTime * 0.15) * 0.04;
+  });
+  const open = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.open('/Soutenance.html', '_blank', 'noopener');
+  };
+  return (
+    <group
+      ref={ref}
+      position={position}
+      onClick={open}
+      onPointerOver={() => (document.body.style.cursor = 'pointer')}
+      onPointerOut={() => (document.body.style.cursor = 'default')}
+    >
+      {/* Anneau lumineux extérieur (or chaud) */}
+      <mesh>
+        <ringGeometry args={[2.6, 2.85, 64]} />
+        <meshStandardMaterial
+          color="#ffd980"
+          emissive="#ffd980"
+          emissiveIntensity={3.2}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      {/* Disque logo : SVG en map + emissiveMap pour briller comme un vitrail */}
+      <mesh>
+        <circleGeometry args={[2.6, 64]} />
+        <meshStandardMaterial
+          map={tex}
+          emissiveMap={tex}
+          emissive="#ffd980"
+          emissiveIntensity={1.9}
+          toneMapped={false}
+          transparent
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
   // Nef très longue : 15 rangées (× TILE = 60 unités de profondeur)
   const cols = useMemo(() => [-8, -4, 0, 4, 8], []);
@@ -308,25 +364,10 @@ export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
           <Piece url={WALL_ARCH} position={[x, TILE * 2, Z_BACK]} rotationY={0} />
         </group>
       ))}
-      {/* Grande rosace dorée au fond, derrière l'autel */}
-      <group position={[0, 9, Z_BACK + 0.05]}>
-        <mesh>
-          <circleGeometry args={[2.4, 32]} />
-          <meshStandardMaterial color="#ffd980" emissive="#ffd980" emissiveIntensity={2.8} toneMapped={false} side={THREE.DoubleSide} />
-        </mesh>
-        {/* Pétales (8) en alternance bleu/rouge */}
-        {Array.from({ length: 8 }).map((_, i) => {
-          const a = (i / 8) * Math.PI * 2;
-          const c = i % 2 === 0 ? '#3a78d8' : '#c84a32';
-          return (
-            <mesh key={i} position={[Math.cos(a) * 1.6, Math.sin(a) * 1.6, 0.01]} rotation={[0, 0, a]}>
-              <planeGeometry args={[1.1, 0.7]} />
-              <meshStandardMaterial color={c} emissive={c} emissiveIntensity={2.2} toneMapped={false} side={THREE.DoubleSide} />
-            </mesh>
-          );
-        })}
-        <pointLight color="#ffd980" intensity={70} distance={28} decay={2} />
-      </group>
+      {/* Vrai LOGO Lost Chapter (étoile à 8 branches) au fond, derrière l'autel.
+          Cliquable → ouvre la présentation de soutenance dans un nouvel onglet. */}
+      <LostChapterLogo position={[0, 9, Z_BACK + 0.06]} />
+      <pointLight position={[0, 9, Z_BACK + 1.2]} color="#ffd980" intensity={80} distance={28} decay={2} />
 
       {/* ─── MUR D'ENTRÉE (façade, 3 niveaux + ouverture centrale = porte de retour) ─── */}
       {cols.map((x) => {
