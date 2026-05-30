@@ -197,7 +197,6 @@ export function CastleScene() {
   const mobile = useIsMobile();
   const phase = useExperience((s) => s.phase);
   const skip = useExperience((s) => s.skip);
-  const selectZone = useExperience((s) => s.selectZone);
 
   // En mode cathédrale on saute directement la séquence porte/cinématique :
   // l'utilisateur arrive du donjon (via le dragon), on le pose dans la nef.
@@ -292,7 +291,7 @@ export function CastleScene() {
       {!mobile && (
         <Suspense fallback={null}>
           {USE_CATHEDRAL ? (
-            <CathedralHall onAltarClick={() => selectZone('merci')} />
+            <CathedralHall />
           ) : USE_DUNGEON ? (
             <DungeonHall />
           ) : (

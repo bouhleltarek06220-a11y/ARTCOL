@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react';
-import { useGLTF, Html, useTexture } from '@react-three/drei';
+import { useGLTF, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
@@ -123,14 +123,25 @@ function LightShaft({
   );
 }
 
-// Autel + livre du "Chapitre Perdu" qui flotte et rayonne au-dessus.
-function Altar({ onClick }: { onClick: () => void }) {
-  const bookRef = useRef<THREE.Group>(null);
+// Autel + petit logo Lost Chapter qui flotte au-dessus, à la place du livre.
+// Cliquable → ouvre la présentation de soutenance.
+function Altar() {
+  const logoRef = useRef<THREE.Group>(null);
+  const tex = useTexture('/assets/lostchapter-logo.svg') as THREE.Texture;
+  useMemo(() => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 16;
+    tex.needsUpdate = true;
+  }, [tex]);
   useFrame(({ clock }) => {
-    if (!bookRef.current) return;
-    bookRef.current.position.y = 2.6 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
-    bookRef.current.rotation.y = clock.elapsedTime * 0.35;
+    if (!logoRef.current) return;
+    logoRef.current.position.y = 2.7 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
+    logoRef.current.rotation.y = clock.elapsedTime * 0.35;
   });
+  const open = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.open('/Soutenance.html', '_blank', 'noopener');
+  };
   return (
     <group position={[0, 0, -58]}>
       {/* Marches (3 degrés) */}
@@ -150,25 +161,27 @@ function Altar({ onClick }: { onClick: () => void }) {
         <boxGeometry args={[2.8, 0.04, 1.6]} />
         <meshStandardMaterial color="#7a1f1f" roughness={0.85} />
       </mesh>
-      {/* Livre flottant du Chapitre Perdu */}
-      <group ref={bookRef} position={[0, 2.6, -0.5]} onClick={(e) => { e.stopPropagation(); onClick(); }}>
-        <mesh castShadow>
-          <boxGeometry args={[0.6, 0.12, 0.85]} />
-          <meshStandardMaterial color="#8a5a2a" roughness={0.7} metalness={0.3} emissive="#ffb066" emissiveIntensity={0.35} />
+      {/* Petit logo Lost Chapter flottant — cliquer ouvre la soutenance. */}
+      <group
+        ref={logoRef}
+        position={[0, 2.7, -0.5]}
+        onClick={open}
+        onPointerOver={() => (document.body.style.cursor = 'pointer')}
+        onPointerOut={() => (document.body.style.cursor = 'default')}
+      >
+        <mesh>
+          <circleGeometry args={[0.55, 48]} />
+          <meshStandardMaterial
+            map={tex}
+            emissiveMap={tex}
+            emissive="#ffd980"
+            emissiveIntensity={1.7}
+            toneMapped={false}
+            transparent
+            side={THREE.DoubleSide}
+          />
         </mesh>
-        {/* Pages */}
-        <mesh position={[0, 0.07, 0]}>
-          <boxGeometry args={[0.54, 0.04, 0.8]} />
-          <meshStandardMaterial color="#f4e2c7" emissive="#ffd9a0" emissiveIntensity={0.9} toneMapped={false} />
-        </mesh>
-        {/* Halo doré */}
         <pointLight color="#ffd9a0" intensity={26} distance={14} decay={2} />
-        {/* Étiquette flottante */}
-        <Html position={[0, 0.6, 0]} center distanceFactor={9} occlude={false}>
-          <div className="pointer-events-none select-none rounded-full border border-[#8a6a3a]/70 bg-black/55 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd9a0] shadow-lg backdrop-blur-sm">
-            ✦ Chapitre Perdu — cliquer ✦
-          </div>
-        </Html>
       </group>
       {/* Chandeliers */}
       {[-2.0, 2.0].map((x) => (
@@ -211,63 +224,7 @@ function Pew({ position, rotationY = 0 }: { position: [number, number, number]; 
   );
 }
 
-// Vrai logo Lost Chapter (étoile à 8 branches sur fond rond, monogramme LC central).
-// Chargé depuis le SVG du site et plaqué sur un disque émissif géant. Tourne
-// lentement, halo doré, cliquable → ouvre la présentation de soutenance.
-function LostChapterLogo({ position }: { position: [number, number, number] }) {
-  const tex = useTexture('/assets/lostchapter-logo.svg') as THREE.Texture;
-  useMemo(() => {
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = 16;
-    tex.needsUpdate = true;
-  }, [tex]);
-  const ref = useRef<THREE.Group>(null);
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    // Légère rotation cérémoniale + souffle de halo
-    ref.current.rotation.z = Math.sin(clock.elapsedTime * 0.15) * 0.04;
-  });
-  const open = (e: { stopPropagation: () => void }) => {
-    e.stopPropagation();
-    window.open('/Soutenance.html', '_blank', 'noopener');
-  };
-  return (
-    <group
-      ref={ref}
-      position={position}
-      onClick={open}
-      onPointerOver={() => (document.body.style.cursor = 'pointer')}
-      onPointerOut={() => (document.body.style.cursor = 'default')}
-    >
-      {/* Anneau lumineux extérieur (or chaud) */}
-      <mesh>
-        <ringGeometry args={[3.4, 3.7, 64]} />
-        <meshStandardMaterial
-          color="#ffd980"
-          emissive="#ffd980"
-          emissiveIntensity={3.2}
-          toneMapped={false}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      {/* Disque logo : SVG en map + emissiveMap pour briller comme un vitrail */}
-      <mesh>
-        <circleGeometry args={[3.4, 64]} />
-        <meshStandardMaterial
-          map={tex}
-          emissiveMap={tex}
-          emissive="#ffd980"
-          emissiveIntensity={1.9}
-          toneMapped={false}
-          transparent
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
+export function CathedralHall() {
   // Nef très longue : 15 rangées (× TILE = 60 unités de profondeur)
   const cols = useMemo(() => [-8, -4, 0, 4, 8], []);
   const rows = useMemo(
@@ -356,25 +313,14 @@ export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
         );
       })}
 
-      {/* ─── MUR DU FOND : 3 niveaux pleins, scellés derrière l'autel ─── */}
+      {/* ─── MUR DU FOND (3 niveaux, base pleine + 2 niveaux d'arches) ─── */}
       {cols.map((x) => (
         <group key={`wb-${x}`}>
           <Piece url={WALL} position={[x, 0, Z_BACK]} rotationY={0} />
-          <Piece url={WALL} position={[x, TILE, Z_BACK]} rotationY={0} />
-          <Piece url={WALL} position={[x, TILE * 2, Z_BACK]} rotationY={0} />
+          <Piece url={WALL_ARCH} position={[x, TILE, Z_BACK]} rotationY={0} />
+          <Piece url={WALL_ARCH} position={[x, TILE * 2, Z_BACK]} rotationY={0} />
         </group>
       ))}
-      {/* Backdrop sombre juste devant le mur, pour éviter toute fuite de fog
-          ou jointure entre pièces et faire ressortir le logo doré. */}
-      <mesh position={[0, 7.5, Z_BACK + 0.4]}>
-        <planeGeometry args={[22, 13]} />
-        <meshStandardMaterial color="#0e0716" roughness={1} metalness={0} />
-      </mesh>
-      {/* Vrai LOGO Lost Chapter (étoile à 8 branches) suspendu dans la nef,
-          au-dessus et derrière l'autel, parfaitement visible.
-          Cliquable → ouvre la présentation de soutenance dans un nouvel onglet. */}
-      <LostChapterLogo position={[0, 8, Z_BACK + 2.5]} />
-      <pointLight position={[0, 8, Z_BACK + 4]} color="#ffd980" intensity={120} distance={32} decay={2} />
 
       {/* ─── MUR D'ENTRÉE (façade, 3 niveaux + ouverture centrale = porte de retour) ─── */}
       {cols.map((x) => {
@@ -439,7 +385,7 @@ export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
       {/* ─── Braseros & autel ─── */}
       <Brazier position={[-5, 0, -55]} />
       <Brazier position={[5, 0, -55]} />
-      <Altar onClick={onAltarClick} />
+      <Altar />
 
       {/* ─── Équipe présente comme témoins, sans dragon ─── */}
       <CharacterGroup showDragon={false} />
