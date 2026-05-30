@@ -172,7 +172,8 @@ export function DungeonHall() {
       <Brazier position={[6, 0, -8]} />
       <Brazier position={[-6, 0, -30]} />
       <Brazier position={[6, 0, -30]} />
-      <CharacterGroup />
+      {/* Le dragon volant est un portail vers la cathédrale gothique (/experience-v4/). */}
+      <CharacterGroup dragonPortalUrl="/experience-v4/" />
     </group>
   );
 }

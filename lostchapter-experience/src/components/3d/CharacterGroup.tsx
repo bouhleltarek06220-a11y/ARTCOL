@@ -60,17 +60,21 @@ const TEAM: {
   },
 ];
 
-export function CharacterGroup() {
+export function CharacterGroup({ showDragon = true, dragonPortalUrl }: { showDragon?: boolean; dragonPortalUrl?: string } = {}) {
   return (
     <>
-      {/* Dragon en vol circulaire au-dessus de la nef (y constant = 7) */}
-      <CharacterNPC
-        character={DRAGON}
-        path={[[-6, -12], [6, -12], [6, -30], [-6, -30]]}
-        speed={0.12}
-        position={[0, 7, 0]}
-        preserveTextures
-      />
+      {/* Dragon en vol circulaire au-dessus de la nef. Cliquable = portail vers
+          un autre monde (ex: cathédrale gothique) si dragonPortalUrl est fourni. */}
+      {showDragon && (
+        <CharacterNPC
+          character={DRAGON}
+          path={[[-6, -12], [6, -12], [6, -30], [-6, -30]]}
+          speed={0.12}
+          position={[0, 7, 0]}
+          preserveTextures
+          portalUrl={dragonPortalUrl}
+        />
+      )}
 
       {/* L'équipe — cliquable, dialogue qui s'ouvre + zoom caméra */}
       {TEAM.map((m) => (

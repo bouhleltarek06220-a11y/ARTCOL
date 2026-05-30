@@ -1,4 +1,4 @@
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
@@ -10,12 +10,15 @@ import { Torch } from './Torch';
 import { FloatingEmbers } from './FloatingEmbers';
 import { HallScene } from './HallScene';
 import { DungeonHall } from './DungeonHall';
+import { CathedralHall } from './CathedralHall';
 import { useIsMobile } from '../../lib/useIsMobile';
 import { useExperience } from '../../store';
 
 // Choix de l'environnement selon l'URL de déploiement :
+//   /experience-v4 → cathédrale gothique (sanctuaire final)
 //   /experience-v3 → salle de donjon modulaire KayKit
 //   sinon          → atrium Sponza
+const USE_CATHEDRAL = import.meta.env.BASE_URL.includes('v4');
 const USE_DUNGEON = import.meta.env.BASE_URL.includes('v3');
 
 // OrbitControls verrouillés dans la boîte de l'atrium Sponza ×1.4 :
@@ -42,14 +45,14 @@ function ClampedOrbitControls() {
 
     const t = c.target as THREE.Vector3;
     t.x = Math.max(-7, Math.min(7, t.x));
-    t.y = Math.max(1.2, Math.min(11, t.y));
-    t.z = Math.max(-46, Math.min(-6, t.z));
+    t.y = Math.max(1.2, Math.min(USE_CATHEDRAL ? 13 : 11, t.y));
+    t.z = Math.max(USE_CATHEDRAL ? -60 : -46, Math.min(-2, t.z));
   });
   return (
     <OrbitControls
       ref={ref}
       makeDefault
-      target={[0, 3, -30]}
+      target={USE_CATHEDRAL ? [0, 3, -40] : [0, 3, -30]}
       enablePan
       enableRotate
       enableZoom
@@ -193,20 +196,28 @@ function EntranceCorridor({ mobile }: { mobile: boolean }) {
 export function CastleScene() {
   const mobile = useIsMobile();
   const phase = useExperience((s) => s.phase);
+  const skip = useExperience((s) => s.skip);
+  const selectZone = useExperience((s) => s.selectZone);
+
+  // En mode cathédrale on saute directement la séquence porte/cinématique :
+  // l'utilisateur arrive du donjon (via le dragon), on le pose dans la nef.
+  useEffect(() => {
+    if (USE_CATHEDRAL && phase !== 'inside') skip();
+  }, [phase, skip]);
+
   return (
     <Canvas
       shadows={!mobile}
       dpr={[1, mobile ? 1.4 : 2]}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 65, near: 0.1, far: 400, position: [0, 3, 18] }}
+      camera={USE_CATHEDRAL
+        ? { fov: 60, near: 0.1, far: 400, position: [0, 4, 0] }
+        : { fov: 65, near: 0.1, far: 400, position: [0, 3, 18] }}
       onCreated={({ gl }) => {
-        // Tone mapping cinéma ACES Filmic obligatoire avec HDR sinon tout
-        // ce qui dépasse 1.0 (les sources lumineuses du HDR) est juste clamp
-        // au blanc → scène cramée.
         gl.toneMapping = THREE.ACESFilmicToneMapping;
-        // Donjon (intérieur sombre/crypte) : exposure réduite ;
-        // Sponza (atrium ouvert) : exposure normale.
-        gl.toneMappingExposure = USE_DUNGEON ? 0.45 : 0.95;
+        // Cathédrale : très sombre / cinéma cathédrale ;
+        // Donjon : sombre ; Sponza : exposure normale.
+        gl.toneMappingExposure = USE_CATHEDRAL ? 0.42 : USE_DUNGEON ? 0.45 : 0.95;
         gl.setClearColor('#080604');
         gl.localClippingEnabled = true;
       }}
@@ -219,12 +230,20 @@ export function CastleScene() {
           un éclairage plus généreux. */}
       <Environment
         files="/assets/hdr/landscape.exr"
-        background
+        background={!USE_CATHEDRAL}
         blur={0.05}
-        environmentIntensity={USE_DUNGEON ? 0.18 : 0.85}
+        environmentIntensity={USE_CATHEDRAL ? 0.08 : USE_DUNGEON ? 0.18 : 0.85}
       />
-      {/* Fog atmosphérique chaud, très lointain, pour ne pas masquer le HDR */}
-      <fog attach="fog" args={['#080604', USE_DUNGEON ? 26 : 90, USE_DUNGEON ? 130 : 320]} />
+      {/* Fog atmosphérique chaud, très lointain, pour ne pas masquer le HDR.
+          Cathédrale : fog court & froid (atmosphère sacrée / encens). */}
+      <fog
+        attach="fog"
+        args={USE_CATHEDRAL
+          ? ['#1a1228', 14, 90]
+          : USE_DUNGEON
+            ? ['#080604', 26, 130]
+            : ['#080604', 90, 320]}
+      />
       <ambientLight intensity={0.22} color="#5a4632" />
       <hemisphereLight args={['#2d3a55', '#241509', 0.25]} />
       <directionalLight
@@ -256,19 +275,30 @@ export function CastleScene() {
         <meshBasicMaterial color="#8c7242" toneMapped={false} fog={false} />
       </mesh>
 
-      <CastleExterior mobile={mobile} />
-      <CastleGate />
-      {/* Corridor d'arches gothiques entre la porte et le hall : fait le passage
-          architectural réaliste et empêche la caméra de traverser du vide. */}
-      <EntranceCorridor mobile={mobile} />
-      <Torch position={[-3.0, 4.0, 1.0]} />
-      <Torch position={[3.0, 4.0, 1.0]} />
-      {!mobile && <FloatingEmbers count={360} />}
+      {/* En mode cathédrale on n'affiche ni l'extérieur, ni la porte d'entrée, ni
+          le corridor : l'utilisateur arrive directement dans la nef sacrée. */}
+      {!USE_CATHEDRAL && (
+        <>
+          <CastleExterior mobile={mobile} />
+          <CastleGate />
+          <EntranceCorridor mobile={mobile} />
+          <Torch position={[-3.0, 4.0, 1.0]} />
+          <Torch position={[3.0, 4.0, 1.0]} />
+        </>
+      )}
+      {!mobile && !USE_CATHEDRAL && <FloatingEmbers count={360} />}
 
-      {/* Le hall (Sponza + portails + NPC + bannières) est rendu derrière la porte,
-          il commence à se charger immédiatement et useProgress reflète son téléchargement. */}
+      {/* Le hall principal (différent selon le déploiement). */}
       {!mobile && (
-        <Suspense fallback={null}>{USE_DUNGEON ? <DungeonHall /> : <HallScene />}</Suspense>
+        <Suspense fallback={null}>
+          {USE_CATHEDRAL ? (
+            <CathedralHall onAltarClick={() => selectZone('merci')} />
+          ) : USE_DUNGEON ? (
+            <DungeonHall />
+          ) : (
+            <HallScene />
+          )}
+        </Suspense>
       )}
 
       <CinematicCamera />

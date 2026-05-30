@@ -36,6 +36,11 @@ export interface CharacterNPCProps {
    */
   interaction?: { id: string; displayName: string; lines: string[] };
   /**
+   * Si fourni, le perso devient un portail : clic = transition vers une autre
+   * page (autre déploiement, ex: /experience-v4/ pour la cathédrale).
+   */
+  portalUrl?: string;
+  /**
    * Palette de couleurs PAR sous-mesh (Knight_Head, Mage_Cape, etc.). Permet de
    * colorier chaque partie du corps avec une logique thématique. La clé `default`
    * est utilisée pour tout mesh non listé. Prioritaire sur preserveTextures/darkenColor.
@@ -65,6 +70,7 @@ export function CharacterNPC({
   emissive = '#2a1a0a',
   meshColors,
   interaction,
+  portalUrl,
 }: CharacterNPCProps) {
   const gltf = useGLTF(character.url) as unknown as {
     scene: THREE.Group;
@@ -213,8 +219,17 @@ export function CharacterNPC({
   const isOpen = !!interaction && selectedCharacter?.id === interaction.id;
 
   const onClickChar = (e: { stopPropagation: () => void }) => {
-    if (!interaction) return;
     e.stopPropagation();
+    if (portalUrl) {
+      // Transition portail : fondu rapide puis chargement de la nouvelle page.
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:#000;opacity:0;transition:opacity 0.6s ease;z-index:9999;pointer-events:none';
+      document.body.appendChild(overlay);
+      requestAnimationFrame(() => (overlay.style.opacity = '1'));
+      setTimeout(() => { window.location.href = portalUrl; }, 650);
+      return;
+    }
+    if (!interaction) return;
     const g = groupRef.current;
     const p: [number, number, number] = g
       ? [g.position.x, g.position.y, g.position.z]
@@ -222,13 +237,15 @@ export function CharacterNPC({
     selectCharacter({ id: interaction.id, name: interaction.displayName, lines: interaction.lines, pos: p });
   };
 
+  const isClickable = !!interaction || !!portalUrl;
+
   return (
     <group ref={groupRef} position={position} scale={character.scale ?? 1}>
       <primitive
         object={cloned}
-        onClick={interaction ? onClickChar : undefined}
-        onPointerOver={interaction ? () => (document.body.style.cursor = 'pointer') : undefined}
-        onPointerOut={interaction ? () => (document.body.style.cursor = 'default') : undefined}
+        onClick={isClickable ? onClickChar : undefined}
+        onPointerOver={isClickable ? () => (document.body.style.cursor = 'pointer') : undefined}
+        onPointerOut={isClickable ? () => (document.body.style.cursor = 'default') : undefined}
       />
       {/* Bulle de dialogue style jeu vidéo, à côté de la tête du perso */}
       {isOpen && interaction && (

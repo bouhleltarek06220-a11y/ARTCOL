@@ -7,6 +7,20 @@ import { SoundToggle } from './components/ui/SoundToggle';
 import { ZonePanel } from './components/ui/ZonePanel';
 import { useExperience } from './store';
 
+// Petit bouton "← Retour au donjon" affiché uniquement dans la cathédrale
+// (/experience-v4/) pour permettre de revenir au monde précédent.
+function BackToDungeon() {
+  if (!import.meta.env.BASE_URL.includes('v4')) return null;
+  return (
+    <a
+      href="/experience-v3/"
+      className="font-display fixed left-5 top-5 z-50 inline-flex items-center gap-2 rounded-full border border-goldbright/50 bg-stone/70 px-4 py-2 text-xs uppercase tracking-[0.25em] text-parchment shadow-lg backdrop-blur-sm transition hover:scale-105 hover:bg-stone/85"
+    >
+      ◀ Retour au donjon
+    </a>
+  );
+}
+
 export default function App() {
   const setProgress = useExperience((s) => s.setProgress);
   const ready = useExperience((s) => s.ready);
@@ -35,6 +49,7 @@ export default function App() {
       <CinematicOverlay />
       <ZonePanel />
       <SoundToggle />
+      <BackToDungeon />
       <LoadingScreen />
     </>
   );
