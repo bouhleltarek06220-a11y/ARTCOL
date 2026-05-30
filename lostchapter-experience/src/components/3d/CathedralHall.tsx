@@ -241,7 +241,7 @@ function LostChapterLogo({ position }: { position: [number, number, number] }) {
     >
       {/* Anneau lumineux extérieur (or chaud) */}
       <mesh>
-        <ringGeometry args={[2.6, 2.85, 64]} />
+        <ringGeometry args={[3.4, 3.7, 64]} />
         <meshStandardMaterial
           color="#ffd980"
           emissive="#ffd980"
@@ -252,7 +252,7 @@ function LostChapterLogo({ position }: { position: [number, number, number] }) {
       </mesh>
       {/* Disque logo : SVG en map + emissiveMap pour briller comme un vitrail */}
       <mesh>
-        <circleGeometry args={[2.6, 64]} />
+        <circleGeometry args={[3.4, 64]} />
         <meshStandardMaterial
           map={tex}
           emissiveMap={tex}
@@ -356,18 +356,25 @@ export function CathedralHall({ onAltarClick }: { onAltarClick: () => void }) {
         );
       })}
 
-      {/* ─── MUR DU FOND (derrière l'autel, 3 niveaux + grande rosace) ─── */}
+      {/* ─── MUR DU FOND : 3 niveaux pleins, scellés derrière l'autel ─── */}
       {cols.map((x) => (
         <group key={`wb-${x}`}>
           <Piece url={WALL} position={[x, 0, Z_BACK]} rotationY={0} />
-          <Piece url={WALL_ARCH} position={[x, TILE, Z_BACK]} rotationY={0} />
-          <Piece url={WALL_ARCH} position={[x, TILE * 2, Z_BACK]} rotationY={0} />
+          <Piece url={WALL} position={[x, TILE, Z_BACK]} rotationY={0} />
+          <Piece url={WALL} position={[x, TILE * 2, Z_BACK]} rotationY={0} />
         </group>
       ))}
-      {/* Vrai LOGO Lost Chapter (étoile à 8 branches) au fond, derrière l'autel.
+      {/* Backdrop sombre juste devant le mur, pour éviter toute fuite de fog
+          ou jointure entre pièces et faire ressortir le logo doré. */}
+      <mesh position={[0, 7.5, Z_BACK + 0.4]}>
+        <planeGeometry args={[22, 13]} />
+        <meshStandardMaterial color="#0e0716" roughness={1} metalness={0} />
+      </mesh>
+      {/* Vrai LOGO Lost Chapter (étoile à 8 branches) suspendu dans la nef,
+          au-dessus et derrière l'autel, parfaitement visible.
           Cliquable → ouvre la présentation de soutenance dans un nouvel onglet. */}
-      <LostChapterLogo position={[0, 9, Z_BACK + 0.06]} />
-      <pointLight position={[0, 9, Z_BACK + 1.2]} color="#ffd980" intensity={80} distance={28} decay={2} />
+      <LostChapterLogo position={[0, 8, Z_BACK + 2.5]} />
+      <pointLight position={[0, 8, Z_BACK + 4]} color="#ffd980" intensity={120} distance={32} decay={2} />
 
       {/* ─── MUR D'ENTRÉE (façade, 3 niveaux + ouverture centrale = porte de retour) ─── */}
       {cols.map((x) => {
