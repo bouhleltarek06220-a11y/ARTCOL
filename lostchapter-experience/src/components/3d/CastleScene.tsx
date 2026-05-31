@@ -11,6 +11,7 @@ import { FloatingEmbers } from './FloatingEmbers';
 import { HallScene } from './HallScene';
 import { DungeonHall } from './DungeonHall';
 import { CathedralHall } from './CathedralHall';
+import { GuidedTour } from './GuidedTour';
 import { useIsMobile } from '../../lib/useIsMobile';
 import { useExperience } from '../../store';
 
@@ -26,12 +27,16 @@ const USE_DUNGEON = import.meta.env.BASE_URL.includes('v3');
 function ClampedOrbitControls() {
   const ref = useRef<any>(null);
   const focusPos = useExperience((s) => s.selectedCharacter?.pos ?? null);
+  const tourPhase = useExperience((s) => s.tourPhase);
+  const tourRunning = tourPhase === 'dungeon' || tourPhase === 'cathedral' || tourPhase === 'transition';
   // Snapshot temporaire pour lerper en douceur
   const focusTmp = useRef(new THREE.Vector3());
   const camTmp = useRef(new THREE.Vector3());
   useFrame(({ camera }) => {
     const c = ref.current;
     if (!c?.target) return;
+    // Pendant la visite guidée, on laisse GuidedTour piloter intégralement la caméra.
+    if (tourRunning) return;
 
     if (focusPos) {
       // ── Mode FOCUS PERSONNAGE ── cible le perso + zoom caméra à 2.5 m devant
@@ -53,6 +58,7 @@ function ClampedOrbitControls() {
       ref={ref}
       makeDefault
       target={USE_CATHEDRAL ? [0, 3, -40] : [0, 3, -30]}
+      enabled={!tourRunning}
       enablePan
       enableRotate
       enableZoom
@@ -322,6 +328,16 @@ export function CastleScene() {
       )}
 
       <CinematicCamera />
+      <GuidedTour
+        onTransition={() => {
+          // Fin du tour donjon : fondu noir + navigation vers la cathédrale.
+          const overlay = document.createElement('div');
+          overlay.style.cssText = 'position:fixed;inset:0;background:#000;opacity:0;transition:opacity 1.2s ease;z-index:9999;pointer-events:none';
+          document.body.appendChild(overlay);
+          requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+          setTimeout(() => { window.location.href = '/experience-v4/?tour=1'; }, 1250);
+        }}
+      />
 
       {/* Navigation libre clampée dans la boîte du hall (target box-bound). */}
       {phase === 'inside' && <ClampedOrbitControls />}

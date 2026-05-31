@@ -7,6 +7,7 @@ export function SoundToggle() {
   const muted = useExperience((s) => s.muted);
   const toggle = useExperience((s) => s.toggleMute);
   const phase = useExperience((s) => s.phase);
+  const tourPhase = useExperience((s) => s.tourPhase);
   const audio = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -19,11 +20,29 @@ export function SoundToggle() {
     };
   }, []);
 
+  // Pendant l'intro guidée : on bumpe le volume à 0.75 pour l'effet cinéma.
+  useEffect(() => {
+    const a = audio.current;
+    if (!a) return;
+    const isTouring = tourPhase === 'dungeon' || tourPhase === 'cathedral' || tourPhase === 'transition';
+    a.volume = isTouring ? 0.78 : 0.45;
+  }, [tourPhase]);
+
   useEffect(() => {
     const a = audio.current;
     if (!a) return;
     if (!muted && phase !== 'loading') {
-      a.play().catch(() => {});
+      // Tente play() immédiat ; si l'autoplay est bloqué (cas /experience-v4/
+      // ouverte sans geste user), on retente au premier événement utilisateur.
+      const tryPlay = () => a.play().catch(() => {});
+      tryPlay();
+      const events = ['pointerdown', 'keydown', 'touchstart', 'click'] as const;
+      const onGesture = () => {
+        tryPlay();
+        events.forEach((e) => window.removeEventListener(e, onGesture));
+      };
+      events.forEach((e) => window.addEventListener(e, onGesture, { once: false, passive: true }));
+      return () => events.forEach((e) => window.removeEventListener(e, onGesture));
     } else {
       a.pause();
     }

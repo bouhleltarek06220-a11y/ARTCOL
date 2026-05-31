@@ -5,6 +5,15 @@ import { useExperience } from '../../store';
 export function CinematicOverlay() {
   const phase = useExperience((s) => s.phase);
   const enter = useExperience((s) => s.enter);
+  const startTour = useExperience((s) => s.startTour);
+  const muted = useExperience((s) => s.muted);
+  const toggleMute = useExperience((s) => s.toggleMute);
+  const onEnter = () => {
+    // Geste utilisateur : on déverrouille l'autoplay audio et on lance la musique.
+    if (muted) toggleMute();
+    startTour();
+    enter();
+  };
 
   return (
     <div className="pointer-events-none fixed inset-0 z-40">
@@ -19,7 +28,7 @@ export function CinematicOverlay() {
             className="pointer-events-auto absolute inset-0 flex items-center justify-center px-6"
           >
             <motion.button
-              onClick={enter}
+              onClick={onEnter}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}

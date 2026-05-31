@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { zones } from './data/zones';
 
 export type Phase = 'loading' | 'gate' | 'entering' | 'inside';
+export type TourPhase = 'idle' | 'dungeon' | 'transition' | 'cathedral' | 'done';
 
 interface ExperienceState {
   phase: Phase;
@@ -9,8 +10,8 @@ interface ExperienceState {
   muted: boolean;
   reducedMotion: boolean;
   selectedZone: string | null;
-  /** Personnage sélectionné par clic : son id, sa position figée, son texte. */
   selectedCharacter: { id: string; name: string; lines: string[]; pos: [number, number, number] } | null;
+  tourPhase: TourPhase;
   setProgress: (p: number) => void;
   ready: () => void;
   enter: () => void;
@@ -19,19 +20,28 @@ interface ExperienceState {
   toggleMute: () => void;
   selectZone: (id: string) => void;
   closeZone: () => void;
-  stepZone: (dir: 1 | -1) => void;   // navigation séquentielle entre slides
+  stepZone: (dir: 1 | -1) => void;
   selectCharacter: (c: { id: string; name: string; lines: string[]; pos: [number, number, number] }) => void;
   closeCharacter: () => void;
+  startTour: () => void;
+  setTourPhase: (p: TourPhase) => void;
+  endTour: () => void;
 }
 
 const prefersReduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// On garde l'état muet en localStorage pour qu'il survive à la navigation
+// entre /experience-v3/ et /experience-v4/ pendant l'intro guidée.
+const initialMuted = typeof window !== 'undefined'
+  ? localStorage.getItem('lc-muted') !== 'false'
+  : true;
+
 export const useExperience = create<ExperienceState>((set, get) => ({
   phase: 'loading',
   progress: 0,
-  muted: true,
+  muted: initialMuted,
   reducedMotion: prefersReduced,
   selectedZone: null,
   selectedCharacter: null,
@@ -41,7 +51,11 @@ export const useExperience = create<ExperienceState>((set, get) => ({
     set((s) => (s.phase === 'gate' ? { phase: get().reducedMotion ? 'inside' : 'entering' } : {})),
   arrived: () => set((s) => (s.phase === 'entering' ? { phase: 'inside' } : {})),
   skip: () => set({ phase: 'inside' }),
-  toggleMute: () => set((s) => ({ muted: !s.muted })),
+  toggleMute: () => set((s) => {
+    const next = !s.muted;
+    if (typeof window !== 'undefined') localStorage.setItem('lc-muted', String(next));
+    return { muted: next };
+  }),
   selectZone: (id) => set({ selectedZone: id }),
   closeZone: () => set({ selectedZone: null }),
   stepZone: (dir) =>
@@ -54,4 +68,8 @@ export const useExperience = create<ExperienceState>((set, get) => ({
     }),
   selectCharacter: (c) => set({ selectedCharacter: c }),
   closeCharacter: () => set({ selectedCharacter: null }),
+  tourPhase: 'idle',
+  startTour: () => set({ tourPhase: 'dungeon' }),
+  setTourPhase: (p) => set({ tourPhase: p }),
+  endTour: () => set({ tourPhase: 'done' }),
 }));
