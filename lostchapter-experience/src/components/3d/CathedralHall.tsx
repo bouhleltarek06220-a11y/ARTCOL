@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react';
-import { useGLTF, useTexture } from '@react-three/drei';
+import { useGLTF, useTexture, Billboard } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
@@ -157,8 +157,7 @@ function Altar() {
 
   useFrame(({ clock }) => {
     if (logoRef.current) {
-      logoRef.current.position.y = 3.4 + Math.sin(clock.elapsedTime * 0.9) * 0.06;
-      logoRef.current.rotation.y = clock.elapsedTime * 0.35;
+      logoRef.current.position.y = 3.8 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
     }
     if (bookRef.current) {
       bookRef.current.position.y = 2.0 + Math.sin(clock.elapsedTime * 0.6) * 0.015;
@@ -204,27 +203,35 @@ function Altar() {
         <primitive object={book} />
       </group>
 
-      {/* Petit logo Lost Chapter qui flotte au-dessus du livre (sceau lumineux) */}
+      {/* Logo Lost Chapter qui flotte au-dessus du livre — sceau lumineux toujours
+          orienté face à la caméra (Billboard) pour rester lisible peu importe l'angle. */}
       <group
         ref={logoRef}
-        position={[0, 3.4, -0.5]}
+        position={[0, 3.8, -0.5]}
         onClick={open}
         onPointerOver={hover}
         onPointerOut={unhover}
       >
-        <mesh>
-          <circleGeometry args={[0.45, 48]} />
-          <meshStandardMaterial
-            map={tex}
-            emissiveMap={tex}
-            emissive="#ffd980"
-            emissiveIntensity={1.9}
-            toneMapped={false}
-            transparent
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-        <pointLight color="#ffd9a0" intensity={28} distance={14} decay={2} />
+        <Billboard>
+          {/* Halo doré derrière le logo (légèrement plus grand) */}
+          <mesh position={[0, 0, -0.01]}>
+            <circleGeometry args={[1.4, 48]} />
+            <meshBasicMaterial color="#ffd980" transparent opacity={0.35} toneMapped={false} />
+          </mesh>
+          {/* Disque logo SVG */}
+          <mesh>
+            <circleGeometry args={[1.15, 48]} />
+            <meshStandardMaterial
+              map={tex}
+              emissiveMap={tex}
+              emissive="#ffd980"
+              emissiveIntensity={3.2}
+              toneMapped={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        </Billboard>
+        <pointLight color="#ffd9a0" intensity={60} distance={20} decay={2} />
       </group>
 
       {/* Chandeliers */}
