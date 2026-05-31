@@ -204,6 +204,31 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .thanks .grat b{color:var(--brown)}
 .thanks .org{font-size:12px;color:#7a5536;margin-top:20px;letter-spacing:.03em}
 .thanks .org a{color:var(--gold);text-decoration:none}
+/* QR landing — bloc « Découvrez-nous » */
+.thanks .qr-block{
+  display:flex;align-items:center;gap:24px;margin-top:30px;padding:18px 26px 18px 18px;
+  border:1.5px solid var(--gold);border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.2));
+  box-shadow:0 10px 28px rgba(58,33,20,.18);
+}
+.thanks .qr-frame{
+  width:148px;height:148px;padding:8px;background:#F2E6D0;
+  border:1px solid var(--gold-b);border-radius:8px;flex-shrink:0;
+  box-shadow:inset 0 0 0 1px rgba(58,33,20,.1),0 2px 6px rgba(58,33,20,.12);
+}
+.thanks .qr-frame img{width:100%;height:100%;display:block}
+.thanks .qr-cta{text-align:left;display:flex;flex-direction:column;gap:6px}
+.thanks .qr-cta .lbl{
+  font-family:var(--display);font-weight:700;font-size:28px;
+  color:var(--brown);letter-spacing:.10em;text-transform:uppercase;line-height:1
+}
+.thanks .qr-cta .url{
+  font-family:var(--display);font-size:13px;color:var(--gold);
+  letter-spacing:.24em;text-transform:uppercase
+}
+.thanks .qr-cta .hint{
+  font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink2)
+}
 
 /* ===== BRAND MARK + NAV ===== */
 .brandmark{position:fixed;top:20px;left:24px;z-index:30;display:flex;align-items:center;gap:11px}
@@ -974,7 +999,19 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     <div class="sb" data-anim style="--d:.28s">Réveillons l'Histoire, ensemble.</div>
     <div class="names" data-anim style="--d:.4s">Équipe Jupiter — Tarek · Julie · Myriam</div>
     <div class="grat" data-anim style="--d:.5s">Avec nos remerciements à <b>Bastien Vergoni</b> (Play Azur Production), <b>Anne Brogini</b> (UCA — CNRS), <b>FibreTigre</b>, notre coach <b>Bruno</b> et toute l'équipe <b>Rocket School</b>.</div>
-    <div class="org" data-anim style="--d:.6s"><a href="https://lostchapter.vercel.app">lostchapter.vercel.app</a> · <a href="mailto:contact@playazur.fr">contact@playazur.fr</a></div>
+
+    <div class="qr-block" data-anim style="--d:.65s">
+      <a class="qr-frame" href="https://lostchapter.vercel.app/" target="_blank" rel="noopener" aria-label="QR vers lostchapter.vercel.app">
+        <img src="/assets/qr-landing.svg" alt="QR code">
+      </a>
+      <div class="qr-cta">
+        <div class="lbl">Découvrez-nous</div>
+        <div class="url">lostchapter.vercel.app</div>
+        <div class="hint">Scannez le code pour entrer dans l'expérience.</div>
+      </div>
+    </div>
+
+    <div class="org" data-anim style="--d:.74s"><a href="https://lostchapter.vercel.app">lostchapter.vercel.app</a> · <a href="mailto:contact@playazur.fr">contact@playazur.fr</a></div>
   </div>
 </section>
 
