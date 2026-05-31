@@ -358,6 +358,179 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   margin: 0; font-size: 16.5px; line-height: 1.55; color: var(--ink);
   font-style: italic;
 }
+
+/* ═══ Bouton TORCHE — déclenche la séquence immersive ═══ */
+.flame-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-top: 14px; padding: 11px 22px 11px 18px;
+  font-family: var(--display); font-weight: 700; font-size: 13px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: #fdf7ea;
+  background: linear-gradient(135deg, #2a1409 0%, #4a2412 50%, #2a1409 100%);
+  border: 1.5px solid var(--gold-b); border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(58,33,20,.4),
+    inset 0 0 18px rgba(255,160,60,.18);
+  transition: transform .2s, box-shadow .25s, border-color .25s;
+  position: relative; overflow: hidden;
+}
+.flame-btn::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 15% 50%, rgba(255,140,40,.32), transparent 50%);
+  animation: btnGlow 2.6s ease-in-out infinite alternate;
+}
+.flame-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: #ffd980;
+  box-shadow:
+    0 8px 22px rgba(255,120,40,.35),
+    inset 0 0 28px rgba(255,160,60,.3);
+}
+.flame-btn .torch { width: 16px; height: 22px; position: relative; z-index: 1; }
+.flame-btn .torch .flame { animation: flameFlicker .35s ease-in-out infinite alternate; transform-origin: 10px 14px; }
+.flame-btn span:last-child { position: relative; z-index: 1; }
+@keyframes btnGlow { 0% { opacity: .6; } 100% { opacity: 1; } }
+@keyframes flameFlicker {
+  0%   { transform: scale(1, 1) skewX(0deg); filter: brightness(1); }
+  100% { transform: scale(1.06, 1.12) skewX(-2deg); filter: brightness(1.18); }
+}
+
+/* ═══ MODALE SCÉNARIO — Retour vers le passé ═══ */
+.scn-overlay {
+  position: fixed; inset: 0; z-index: 260;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 80%, #3a1a0a 0%, transparent 60%),
+    radial-gradient(ellipse 60% 90% at 50% 50%, #1a0a04 0%, #050201 80%);
+  opacity: 0; pointer-events: none; overflow: hidden;
+  transition: opacity .55s var(--ease);
+  font-family: var(--sans);
+}
+.scn-overlay.open { opacity: 1; pointer-events: auto; }
+.scn-overlay::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, transparent 0, transparent 2px, rgba(0,0,0,.08) 3px, transparent 4px);
+  mix-blend-mode: multiply; opacity: .5;
+}
+
+/* Flammes au bas de l'écran (radial gradients animés) */
+.scn-flames {
+  position: absolute; left: 0; right: 0; bottom: -40px; height: 55%;
+  pointer-events: none; filter: blur(10px);
+  background:
+    radial-gradient(ellipse 280px 180px at 8% 100%, rgba(255,120,40,.55), transparent 70%),
+    radial-gradient(ellipse 320px 220px at 28% 100%, rgba(255,180,60,.50), transparent 70%),
+    radial-gradient(ellipse 280px 200px at 50% 100%, rgba(255,140,50,.55), transparent 70%),
+    radial-gradient(ellipse 320px 200px at 72% 100%, rgba(255,170,55,.50), transparent 70%),
+    radial-gradient(ellipse 260px 180px at 92% 100%, rgba(255,110,30,.55), transparent 70%);
+  animation: flameDance 3.2s ease-in-out infinite alternate;
+}
+@keyframes flameDance {
+  0%   { transform: translateY(0) scaleY(1); }
+  33%  { transform: translateY(-12px) scaleY(1.08); }
+  66%  { transform: translateY(-6px) scaleY(.95); }
+  100% { transform: translateY(-18px) scaleY(1.04); }
+}
+
+/* Braises qui s'élèvent */
+.scn-embers { position: absolute; inset: 0; pointer-events: none; }
+.scn-embers .em {
+  position: absolute; bottom: -10px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: radial-gradient(circle, #ffd980 0%, #ff8a40 45%, transparent 75%);
+  left: var(--x); opacity: 0;
+  animation: emberRise var(--dur) linear var(--delay) infinite;
+  filter: blur(.4px);
+}
+@keyframes emberRise {
+  0%   { transform: translate3d(0, 0, 0) scale(.5); opacity: 0; }
+  10%  { opacity: 1; }
+  80%  { opacity: .8; }
+  100% { transform: translate3d(var(--drift), -110vh, 0) scale(.2); opacity: 0; }
+}
+
+/* Contenu de la modale */
+.scn-content {
+  position: relative; z-index: 5;
+  max-width: 980px; margin: 0 auto;
+  padding: 56px 60px 48px;
+  height: 100%; overflow-y: auto;
+  color: #f4e2c7;
+  scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+}
+.scn-content::-webkit-scrollbar { width: 6px; }
+.scn-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 6px; }
+
+.scn-close {
+  position: fixed; top: 16px; right: 18px; z-index: 10;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(20, 12, 6, .85);
+  border: 1px solid rgba(255, 217, 128, .55);
+  color: #ffd980; font-size: 18px; cursor: pointer;
+  display: grid; place-items: center;
+  backdrop-filter: blur(8px); transition: transform .2s, background .25s;
+}
+.scn-close:hover { transform: scale(1.08); background: rgba(60, 12, 6, .9); }
+
+.scn-kicker {
+  font-family: var(--display); font-size: 11px; letter-spacing: .5em;
+  text-transform: uppercase; color: #ffd980; margin-bottom: 10px;
+}
+.scn-title {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(34px, 4.5vw, 56px); line-height: 1.05;
+  color: #ffe9a8; margin: 0; text-shadow: 0 2px 18px rgba(255,150,50,.35);
+}
+.scn-title .accent { color: #ff9d4d; }
+.scn-date {
+  margin: 12px 0 0; font-size: 14px; letter-spacing: .25em;
+  text-transform: uppercase; color: rgba(255, 217, 128, .75);
+}
+
+.scn-intro {
+  margin: 28px 0 36px; padding: 18px 22px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px; line-height: 1.55; color: #f4e2c7;
+  font-style: italic; text-align: center;
+  border-top: 1px solid rgba(255, 217, 128, .25);
+  border-bottom: 1px solid rgba(255, 217, 128, .25);
+}
+
+.acts { display: flex; flex-direction: column; gap: 22px; }
+.act {
+  display: grid; grid-template-columns: 70px 1fr; gap: 22px;
+  padding: 22px 24px;
+  background: linear-gradient(135deg, rgba(255,160,60,.10), rgba(0,0,0,.4));
+  border: 1px solid rgba(255, 217, 128, .25);
+  border-radius: 10px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.5);
+}
+.act .num {
+  font-family: var(--display); font-weight: 900; font-size: 44px;
+  color: #ff9d4d; line-height: 1; align-self: center;
+  text-shadow: 0 0 18px rgba(255,140,50,.55);
+}
+.act h3 {
+  margin: 0 0 8px; font-family: var(--display); font-weight: 700;
+  font-size: 19px; letter-spacing: .04em; color: #ffe9a8;
+}
+.act p { margin: 0; font-size: 15.5px; line-height: 1.6; color: #f4e2c7; }
+.act p b { color: #ffd980; font-weight: 600; }
+
+.scn-finale {
+  margin-top: 32px; padding: 24px 26px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,217,128,.16), rgba(0,0,0,.4));
+  border: 1.5px solid var(--gold-b);
+  box-shadow: 0 6px 28px rgba(255,140,50,.18);
+}
+.scn-finale .lbl {
+  font-family: var(--display); font-weight: 700; font-size: 11px;
+  letter-spacing: .4em; text-transform: uppercase; color: #ffd980;
+  margin-bottom: 10px;
+}
+.scn-finale p { margin: 0; font-size: 15.5px; line-height: 1.6; color: #f4e2c7; }
+.scn-finale p b { color: #ffe9a8; }
 </style>
 </head>
 <body>
@@ -635,6 +808,21 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     <div class="arc" data-anim style="--d:.58s">
       <div class="lbl">★ Comment Lost Chapter le raconte</div>
       <p>« On éteint les projecteurs touristiques et on rallume la guerre, la prison, le vent salé de 1794. Un comédien-historien, une caméra immersive, une caution CNRS — et le Fort redevient un acteur de l'Histoire, en direct sur Twitch. »</p>
+      <button class="flame-btn" type="button" id="scnBtn">
+        <svg class="torch" viewBox="0 0 16 22" aria-hidden="true">
+          <defs>
+            <linearGradient id="flameG" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#ff5a1f"/>
+              <stop offset=".55" stop-color="#ffb066"/>
+              <stop offset="1" stop-color="#ffe9a8"/>
+            </linearGradient>
+          </defs>
+          <rect x="7" y="13" width="2" height="9" fill="#3a2013"/>
+          <rect x="5" y="11" width="6" height="3" fill="#5a3a26"/>
+          <path class="flame" d="M8 1 C 4.5 5 4 8.5 6 11 C 7.5 9.5 7.5 8 8 7 C 8.5 8 8.5 9.5 10 11 C 12 8 11.5 5 8 1 Z" fill="url(#flameG)"/>
+        </svg>
+        <span>Revivre août 1794</span>
+      </button>
     </div>
   </div>
 </section>
@@ -800,6 +988,70 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 </div>
 <div class="hint" id="hint">← → pour naviguer · clic pour avancer</div>
 
+<!-- ═══ MODALE SCÉNARIO IMMERSIF — Bonaparte au Fort Carré ═══ -->
+<div class="scn-overlay" id="scnOverlay" aria-hidden="true">
+  <div class="scn-flames" aria-hidden="true"></div>
+  <div class="scn-embers" id="scnEmbers" aria-hidden="true"></div>
+  <button class="scn-close" id="scnClose" aria-label="Fermer le scénario">✕</button>
+  <div class="scn-content">
+    <div class="scn-kicker">★ Retour vers le passé ★</div>
+    <h1 class="scn-title">Bonaparte, <span class="accent">prisonnier</span> du Fort Carré</h1>
+    <p class="scn-date">9 → 20 août 1794 · Antibes · An II de la République</p>
+
+    <div class="scn-intro">
+      « Dix jours dans la pierre auraient pu réécrire l'Europe.<br>
+      Le Fort Carré garde ce silence — Lost Chapter le réveille. »
+    </div>
+
+    <div class="acts">
+      <div class="act">
+        <div class="num">I</div>
+        <div>
+          <h3>27 juillet 1794 — Le ciel s'effondre</h3>
+          <p>À Paris, <b>9 thermidor an II</b>. Robespierre tombe sous la guillotine. Mille kilomètres au sud, à Nice, un capitaine d'artillerie de 24 ans apprend la nouvelle. Il s'appelle <b>Napoléon Bonaparte</b>. Son protecteur, Augustin Robespierre, frère du Tyran, vient d'être exécuté avec lui.</p>
+        </div>
+      </div>
+
+      <div class="act">
+        <div class="num">II</div>
+        <div>
+          <h3>9 août 1794 — L'arrestation</h3>
+          <p>Les commissaires conventionnels <b>Albitte</b> et <b>Salicetti</b> envoient les gendarmes. Bonaparte est arrêté à Antibes comme « complice et bras droit » de la chute. On le conduit, sous escorte, jusqu'aux portes du <b>Fort Carré</b>. La nuit est tombée sur la Méditerranée.</p>
+        </div>
+      </div>
+
+      <div class="act">
+        <div class="num">III</div>
+        <div>
+          <h3>Dix jours dans la pierre</h3>
+          <p>Cellule au cœur de la citadelle. Murs de <b>trois mètres d'épaisseur</b>. Au-dessus, la garnison relève la garde toutes les quatre heures. Bonaparte rédige sa défense — un mémoire de vingt-huit pages — et l'expédie au Comité de salut public. Dehors, on parle de procès. Sur le continent, la lame ne s'est pas arrêtée.</p>
+        </div>
+      </div>
+
+      <div class="act">
+        <div class="num">IV</div>
+        <div>
+          <h3>20 août 1794 — La libération</h3>
+          <p>Aucune preuve de robespierrisme. <b>Salicetti</b>, ami devenu juge, plaide sa cause. La Convention relâche Bonaparte « jusqu'à plus ample informé ». Le futur Empereur franchit la grande porte du Fort. Il aura <b>25 ans dans cinq jours</b>.</p>
+        </div>
+      </div>
+
+      <div class="act">
+        <div class="num">V</div>
+        <div>
+          <h3>L'écho — Si la lame était tombée</h3>
+          <p>Pas d'Italie. Pas d'Égypte. Pas de Marengo. <b>Pas de Code civil. Pas d'Empire. Pas de Waterloo.</b> Une décision de garnison, dix jours d'août, et l'Europe entière reste à écrire. La pierre du Fort Carré porte ce vertige.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="scn-finale">
+      <div class="lbl">⚔ La mise en scène Lost Chapter</div>
+      <p><b>Une heure en direct sur Twitch.</b> Un comédien-historien dans la peau de Bonaparte, la <b>vraie cour intérieure</b> du Fort comme décor, une caution scientifique <b>CNRS</b>, une réalisation multi-caméra. Le public vit l'arrestation, lit le mémoire à l'écran, vote sur la condamnation. <b>Documentaire et drame fondus</b> en une seule expérience — et la jeune génération réapprend l'Histoire par le frisson, pas par le manuel.</p>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   document.body.classList.add('js');
@@ -929,6 +1181,41 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   document.addEventListener('keydown', autostart, true);
   document.addEventListener('click', autostart, true);
   paint();
+
+  /* ═══ SCÉNARIO IMMERSIF — Bonaparte au Fort Carré ═══ */
+  var scnOverlay=document.getElementById('scnOverlay');
+  var scnBtn=document.getElementById('scnBtn');
+  var scnClose=document.getElementById('scnClose');
+  var scnEmbers=document.getElementById('scnEmbers');
+  // Génération des braises (40 particules animées)
+  var EMBER_COUNT=40;
+  for(var k=0;k<EMBER_COUNT;k++){
+    var em=document.createElement('span'); em.className='em';
+    em.style.setProperty('--x', (Math.random()*100)+'%');
+    em.style.setProperty('--dur', (5+Math.random()*7)+'s');
+    em.style.setProperty('--delay', (Math.random()*8)+'s');
+    em.style.setProperty('--drift', (Math.random()*120-60)+'px');
+    em.style.width = em.style.height = (3+Math.random()*4)+'px';
+    scnEmbers.appendChild(em);
+  }
+  function openScn(){
+    scnOverlay.classList.add('open');
+    scnOverlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closeScn(){
+    scnOverlay.classList.remove('open');
+    scnOverlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  scnBtn && scnBtn.addEventListener('click', function(e){ e.stopPropagation(); openScn(); });
+  scnClose && scnClose.addEventListener('click', function(e){ e.stopPropagation(); closeScn(); });
+  scnOverlay && scnOverlay.addEventListener('click', function(e){
+    if(e.target===scnOverlay) closeScn();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && scnOverlay.classList.contains('open')){ closeScn(); }
+  });
 })();
 </script>
 </body>
