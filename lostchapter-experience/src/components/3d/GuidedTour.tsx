@@ -19,15 +19,17 @@ const DUNGEON_TOUR: WP[] = [
   { pos: [0, 4.5, -10], look: [0, 2.6, -34], dur: 2.4 },        // revient face aux 9 portes
 ];
 
-// ─── CATHÉDRALE (v4) ── arrivée au fond de la nef, descente jusqu'au livre.
-// Spawn caméra à l'entrée [0, 4, 0] regardant la nef.
+// ─── CATHÉDRALE (v4) ── arrivée au fond de la nef, descente jusqu'à l'autel
+// puis cadre final sur le livre + les 3 personnages (Julie/Tarek/Myriam) qui
+// se tiennent debout devant l'autel, prêts à présenter.
+// Personnages statiques à z ≈ -52, autel & livre à z ≈ -58.
 const CATHEDRAL_TOUR: WP[] = [
-  { pos: [0, 4, 0],   look: [0, 3, -30],  dur: 0 },             // entrée nef
-  { pos: [0, 4.2, -14], look: [0, 3, -42], dur: 3.6 },          // glisse en avant
-  { pos: [-4, 4.5, -26], look: [4, 3.5, -36], dur: 2.6 },       // pan léger à droite (vitraux)
-  { pos: [4, 4.5, -36], look: [-2, 3, -50], dur: 2.6 },         // pan à gauche
-  { pos: [0, 3.6, -50], look: [0, 2.5, -58], dur: 2.6 },        // approche autel
-  { pos: [0, 2.8, -55.5], look: [0, 2.1, -58.5], dur: 2.0 },    // cadre final sur le livre
+  { pos: [0, 4, 0],     look: [0, 3, -30],  dur: 0 },           // entrée nef
+  { pos: [0, 4.2, -16], look: [0, 3, -42],  dur: 3.6 },         // glisse en avant
+  { pos: [-4, 4.5, -28], look: [4, 3.5, -38], dur: 2.6 },       // pan léger droite (vitraux)
+  { pos: [4, 4.5, -38], look: [-2, 3, -50], dur: 2.6 },         // pan à gauche
+  { pos: [0, 4.2, -46], look: [0, 2.4, -56], dur: 2.4 },        // approche large (équipe + autel)
+  { pos: [0, 3.6, -45], look: [0, 2.5, -57], dur: 2.4 },        // cadre stable face à la scène
 ];
 
 const USE_CATHEDRAL = typeof window !== 'undefined' && window.location.pathname.includes('experience-v4');

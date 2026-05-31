@@ -60,7 +60,28 @@ const TEAM: {
   },
 ];
 
-export function CharacterGroup({ showDragon = true, dragonPortalUrl }: { showDragon?: boolean; dragonPortalUrl?: string } = {}) {
+// Placement statique de l'équipe devant l'autel pour la cathédrale (mode soutenance).
+// Trois personnages debout en arc, face caméra (qui arrive depuis +z), prêts à présenter.
+const STATIC_POS: Record<string, [number, number, number]> = {
+  julie:  [-2.8, 0, -52.5],
+  tarek:  [0,    0, -51],
+  myriam: [2.8,  0, -52.5],
+};
+const STATIC_ROT: Record<string, number> = {
+  julie:  0.18,
+  tarek:  0,
+  myriam: -0.18,
+};
+
+export function CharacterGroup({
+  showDragon = true,
+  dragonPortalUrl,
+  staticPlacement = false,
+}: {
+  showDragon?: boolean;
+  dragonPortalUrl?: string;
+  staticPlacement?: boolean;
+} = {}) {
   return (
     <>
       {/* Dragon en vol circulaire au-dessus de la nef. Cliquable = portail vers
@@ -76,16 +97,16 @@ export function CharacterGroup({ showDragon = true, dragonPortalUrl }: { showDra
         />
       )}
 
-      {/* L'équipe — cliquable, dialogue qui s'ouvre + zoom caméra */}
+      {/* L'équipe — soit en patrouille (donjon), soit figée devant l'autel (cathédrale) */}
       {TEAM.map((m) => (
         <CharacterNPC
           key={m.id}
           character={m.c}
           interaction={{ id: m.id, displayName: m.displayName, lines: m.lines }}
-          path={m.path}
-          speed={m.speed}
-          offset={m.offset}
           preserveTextures
+          {...(staticPlacement
+            ? { position: STATIC_POS[m.id], rotationY: STATIC_ROT[m.id], forceIdle: true }
+            : { path: m.path, speed: m.speed, offset: m.offset })}
         />
       ))}
     </>

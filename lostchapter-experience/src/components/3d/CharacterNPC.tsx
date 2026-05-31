@@ -40,6 +40,9 @@ export interface CharacterNPCProps {
    * page (autre déploiement, ex: /experience-v4/ pour la cathédrale).
    */
   portalUrl?: string;
+  /** Force l'animation Idle (au lieu de Walk) — utilisé pour les personnages
+   *  immobiles devant l'autel pendant la soutenance. */
+  forceIdle?: boolean;
   /**
    * Palette de couleurs PAR sous-mesh (Knight_Head, Mage_Cape, etc.). Permet de
    * colorier chaque partie du corps avec une logique thématique. La clé `default`
@@ -71,6 +74,7 @@ export function CharacterNPC({
   meshColors,
   interaction,
   portalUrl,
+  forceIdle = false,
 }: CharacterNPCProps) {
   const gltf = useGLTF(character.url) as unknown as {
     scene: THREE.Group;
@@ -173,10 +177,10 @@ export function CharacterNPC({
   const selectedCharacterId = useExperience((s) => s.selectedCharacter?.id ?? null);
   const isFrozen = !!interaction && selectedCharacterId === interaction.id;
 
-  // Quand le perso est figé pour le dialogue, on tente de basculer sur un clip d'idle
-  // (KayKit/Quaternius : "...|Idle" ou "Idle") pour qu'il s'arrête de marcher visuellement.
+  // Quand le perso est figé pour le dialogue OU explicitement immobile (forceIdle),
+  // on bascule sur un clip d'idle (KayKit/Quaternius : "...|Idle" ou "Idle").
   const activeAnimName = (() => {
-    if (!isFrozen) return character.animationName;
+    if (!isFrozen && !forceIdle) return character.animationName;
     const wanted = character.animationName?.replace(/Walk|Running|Run/i, 'Idle') ?? 'Idle';
     const has = animations?.some((c) => c.name === wanted);
     if (has) return wanted;

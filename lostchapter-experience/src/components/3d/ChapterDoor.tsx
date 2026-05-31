@@ -5,18 +5,9 @@ import * as THREE from 'three';
 import type { Zone } from '../../data/zones';
 import { useExperience } from '../../store';
 import { chime, activationChord } from '../../lib/audio';
-import { CharacterNPC, type CharacterDef } from './CharacterNPC';
 
 const FRAME = '/assets/dungeon/wall_doorway.glb'; // arche de pierre KayKit (4×4×1)
 useGLTF.preload(FRAME);
-
-// Alpaking : créature ailée qui survole et surveille chaque porte
-const ALPAKING: CharacterDef = {
-  url: '/assets/characters/custom/Alpaking.glb',
-  scale: 0.5,
-  animationName: 'CharacterArmature|Flying_Idle',
-  timeScale: 0.8,
-};
 
 const accent: Record<Zone['accent'], string> = {
   torch: '#ff9d4d',
@@ -136,21 +127,22 @@ export function ChapterDoor({
         <Leaf side={-1} open={openAmount} />
         <Leaf side={1} open={openAmount} />
       </group>
-      {/* Alpaking ailé qui surveille la porte — orienté FACE CAMÉRA (annule la
-          rotation de la porte pour regarder toujours vers l'entrée +Z). */}
-      <CharacterNPC character={ALPAKING} position={[0, 4.6, 0.8]} rotationY={-rotationY} preserveTextures />
 
-      {/* Bulle de texte (tooltip) au survol : intitulé de la porte */}
-      {hover && (
-        <Html position={[0, 4.0, 0.6]} center distanceFactor={9} style={{ pointerEvents: 'none' }}>
-          <div
-            className="font-medieval whitespace-nowrap rounded-lg border border-goldbright/60 bg-stone/90 px-4 py-2 text-[13px] uppercase tracking-[0.28em] text-parchment shadow-[0_8px_28px_rgba(0,0,0,0.6)]"
-            style={{ textShadow: '0 0 10px rgba(229,199,136,0.5)' }}
-          >
-            {zone.title}
-          </div>
-        </Html>
-      )}
+      {/* TITRE de la porte — TOUJOURS visible, grand format, lisible depuis le tour de la pièce */}
+      <Html position={[0, 4.4, 0.4]} center distanceFactor={10} occlude={false} style={{ pointerEvents: 'none' }}>
+        <div
+          className="font-medieval whitespace-nowrap rounded-lg border-2 border-goldbright/70 bg-stone/85 px-6 py-3 text-[22px] uppercase tracking-[0.32em] text-parchment shadow-[0_10px_36px_rgba(0,0,0,0.7)] backdrop-blur-sm"
+          style={{
+            textShadow: `0 0 14px ${color}aa, 0 2px 6px rgba(0,0,0,0.8)`,
+            color: hover ? color : undefined,
+            transition: 'color .25s, transform .25s, border-color .25s',
+            transform: hover ? 'scale(1.08)' : 'scale(1)',
+            borderColor: hover ? color : undefined,
+          }}
+        >
+          {zone.title}
+        </div>
+      </Html>
 
       {/* Bouton d'entrée DOM au survol */}
       {hover && (

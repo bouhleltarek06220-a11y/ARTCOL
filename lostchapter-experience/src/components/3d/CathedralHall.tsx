@@ -148,7 +148,9 @@ function Altar() {
 
   useFrame(({ clock }) => {
     if (bookRef.current) {
-      bookRef.current.position.y = 2.0 + Math.sin(clock.elapsedTime * 0.6) * 0.015;
+      bookRef.current.position.y = 2.0 + Math.sin(clock.elapsedTime * 0.6) * 0.04;
+      // Rotation lente sur lui-même comme une relique exposée.
+      bookRef.current.rotation.y = clock.elapsedTime * 0.45;
     }
   });
 
@@ -399,8 +401,8 @@ export function CathedralHall() {
       <Brazier position={[5, 0, -55]} />
       <Altar />
 
-      {/* ─── Équipe présente comme témoins, sans dragon ─── */}
-      <CharacterGroup showDragon={false} />
+      {/* ─── Équipe figée devant l'autel pour la soutenance (Julie / Tarek / Myriam) ─── */}
+      <CharacterGroup showDragon={false} staticPlacement />
     </group>
   );
 }
