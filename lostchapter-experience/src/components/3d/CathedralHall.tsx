@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react';
-import { useGLTF, useTexture, Billboard } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
@@ -123,11 +123,9 @@ function LightShaft({
   );
 }
 
-// Autel + livre 3D du Chapitre Perdu posé dessus + petit logo flottant
-// au-dessus. Tout l'ensemble est cliquable → ouvre la soutenance.
+// Autel + livre 3D du Chapitre Perdu posé dessus. Cliquable → soutenance.
 function Altar() {
   const bookRef = useRef<THREE.Group>(null);
-  const logoRef = useRef<THREE.Group>(null);
   const { scene: bookScene } = useGLTF('/assets/characters/custom/Book.glb') as unknown as { scene: THREE.Group };
   const book = useMemo(() => {
     const c = bookScene.clone(true);
@@ -148,17 +146,7 @@ function Altar() {
     return c;
   }, [bookScene]);
 
-  const tex = useTexture('/assets/lostchapter-logo.svg') as THREE.Texture;
-  useMemo(() => {
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = 16;
-    tex.needsUpdate = true;
-  }, [tex]);
-
   useFrame(({ clock }) => {
-    if (logoRef.current) {
-      logoRef.current.position.y = 3.8 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
-    }
     if (bookRef.current) {
       bookRef.current.position.y = 2.0 + Math.sin(clock.elapsedTime * 0.6) * 0.015;
     }
@@ -203,36 +191,8 @@ function Altar() {
         <primitive object={book} />
       </group>
 
-      {/* Logo Lost Chapter qui flotte au-dessus du livre — sceau lumineux toujours
-          orienté face à la caméra (Billboard) pour rester lisible peu importe l'angle. */}
-      <group
-        ref={logoRef}
-        position={[0, 3.8, -0.5]}
-        onClick={open}
-        onPointerOver={hover}
-        onPointerOut={unhover}
-      >
-        <Billboard>
-          {/* Halo doré derrière le logo (légèrement plus grand) */}
-          <mesh position={[0, 0, -0.01]}>
-            <circleGeometry args={[1.4, 48]} />
-            <meshBasicMaterial color="#ffd980" transparent opacity={0.35} toneMapped={false} />
-          </mesh>
-          {/* Disque logo SVG */}
-          <mesh>
-            <circleGeometry args={[1.15, 48]} />
-            <meshStandardMaterial
-              map={tex}
-              emissiveMap={tex}
-              emissive="#ffd980"
-              emissiveIntensity={3.2}
-              toneMapped={false}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </Billboard>
-        <pointLight color="#ffd9a0" intensity={60} distance={20} decay={2} />
-      </group>
+      {/* Halo doré au-dessus du livre pour le mettre en valeur */}
+      <pointLight position={[0, 3, -0.5]} color="#ffd9a0" intensity={40} distance={18} decay={2} />
 
       {/* Chandeliers */}
       {[-2.0, 2.0].map((x) => (
