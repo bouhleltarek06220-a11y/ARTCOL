@@ -102,22 +102,23 @@ export function ChapterDoor({
   const color = accent[zone.accent];
 
   // ── Reveal progressif du titre pendant la visite caméra ──
+  const phase = useExperience((s) => s.phase);
   const tourPhase = useExperience((s) => s.tourPhase);
   const tourCameraStartedAt = useExperience((s) => s.tourCameraStartedAt);
-  const [titleVisible, setTitleVisible] = useState(true);
+  const [titleVisible, setTitleVisible] = useState(false);
   useEffect(() => {
-    // Hors visite donjon (idle, transition, cathedral, done) → titres toujours visibles
-    if (tourPhase !== 'dungeon' || !tourCameraStartedAt) {
-      setTitleVisible(true);
-      return;
-    }
-    // Pendant le tour : on hide puis reveal au delay prévu
+    // Tant que l'utilisateur n'est pas vraiment à l'intérieur du château
+    // (loading, gate avec la vidéo d'intro, entering = cinématique caméra) → titres cachés.
+    if (phase !== 'inside') { setTitleVisible(false); return; }
+    // À l'intérieur mais hors visite donjon → titres tous visibles directement.
+    if (tourPhase !== 'dungeon' || !tourCameraStartedAt) { setTitleVisible(true); return; }
+    // Pendant la visite : on hide puis on reveal au delay prévu.
     const elapsed = (Date.now() - tourCameraStartedAt) / 1000;
     if (elapsed >= revealDelay) { setTitleVisible(true); return; }
     setTitleVisible(false);
     const t = window.setTimeout(() => setTitleVisible(true), (revealDelay - elapsed) * 1000);
     return () => window.clearTimeout(t);
-  }, [tourPhase, tourCameraStartedAt, revealDelay]);
+  }, [phase, tourPhase, tourCameraStartedAt, revealDelay]);
 
   useFrame(({ clock }) => {
     if (glow.current) {
