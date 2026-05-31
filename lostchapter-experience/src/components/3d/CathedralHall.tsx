@@ -123,25 +123,55 @@ function LightShaft({
   );
 }
 
-// Autel + petit logo Lost Chapter qui flotte au-dessus, à la place du livre.
-// Cliquable → ouvre la présentation de soutenance.
+// Autel + livre 3D du Chapitre Perdu posé dessus + petit logo flottant
+// au-dessus. Tout l'ensemble est cliquable → ouvre la soutenance.
 function Altar() {
+  const bookRef = useRef<THREE.Group>(null);
   const logoRef = useRef<THREE.Group>(null);
+  const { scene: bookScene } = useGLTF('/assets/characters/custom/Book.glb') as unknown as { scene: THREE.Group };
+  const book = useMemo(() => {
+    const c = bookScene.clone(true);
+    c.traverse((o) => {
+      const m = o as THREE.Mesh;
+      if (m.isMesh && m.material) {
+        const orig = m.material as THREE.MeshStandardMaterial;
+        const mat = (orig.isMeshStandardMaterial ? orig.clone() : new THREE.MeshStandardMaterial()) as THREE.MeshStandardMaterial;
+        // Coup d'éclat doré pour qu'il brille comme une relique sacrée
+        mat.emissive = new THREE.Color('#ffb066');
+        mat.emissiveIntensity = 0.35;
+        if ('envMapIntensity' in mat) mat.envMapIntensity = 0.4;
+        m.castShadow = true;
+        m.receiveShadow = true;
+        m.material = mat;
+      }
+    });
+    return c;
+  }, [bookScene]);
+
   const tex = useTexture('/assets/lostchapter-logo.svg') as THREE.Texture;
   useMemo(() => {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 16;
     tex.needsUpdate = true;
   }, [tex]);
+
   useFrame(({ clock }) => {
-    if (!logoRef.current) return;
-    logoRef.current.position.y = 2.7 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
-    logoRef.current.rotation.y = clock.elapsedTime * 0.35;
+    if (logoRef.current) {
+      logoRef.current.position.y = 3.4 + Math.sin(clock.elapsedTime * 0.9) * 0.06;
+      logoRef.current.rotation.y = clock.elapsedTime * 0.35;
+    }
+    if (bookRef.current) {
+      bookRef.current.position.y = 2.0 + Math.sin(clock.elapsedTime * 0.6) * 0.015;
+    }
   });
+
   const open = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     window.open('/Soutenance.html', '_blank', 'noopener');
   };
+  const hover = () => (document.body.style.cursor = 'pointer');
+  const unhover = () => (document.body.style.cursor = 'default');
+
   return (
     <group position={[0, 0, -58]}>
       {/* Marches (3 degrés) */}
@@ -161,28 +191,42 @@ function Altar() {
         <boxGeometry args={[2.8, 0.04, 1.6]} />
         <meshStandardMaterial color="#7a1f1f" roughness={0.85} />
       </mesh>
-      {/* Petit logo Lost Chapter flottant — cliquer ouvre la soutenance. */}
+
+      {/* Livre 3D posé sur l'autel (fermé), légèrement flottant, cliquable */}
+      <group
+        ref={bookRef}
+        position={[0, 2.0, -0.5]}
+        scale={1.2}
+        onClick={open}
+        onPointerOver={hover}
+        onPointerOut={unhover}
+      >
+        <primitive object={book} />
+      </group>
+
+      {/* Petit logo Lost Chapter qui flotte au-dessus du livre (sceau lumineux) */}
       <group
         ref={logoRef}
-        position={[0, 2.7, -0.5]}
+        position={[0, 3.4, -0.5]}
         onClick={open}
-        onPointerOver={() => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'default')}
+        onPointerOver={hover}
+        onPointerOut={unhover}
       >
         <mesh>
-          <circleGeometry args={[0.55, 48]} />
+          <circleGeometry args={[0.45, 48]} />
           <meshStandardMaterial
             map={tex}
             emissiveMap={tex}
             emissive="#ffd980"
-            emissiveIntensity={1.7}
+            emissiveIntensity={1.9}
             toneMapped={false}
             transparent
             side={THREE.DoubleSide}
           />
         </mesh>
-        <pointLight color="#ffd9a0" intensity={26} distance={14} decay={2} />
+        <pointLight color="#ffd9a0" intensity={28} distance={14} decay={2} />
       </group>
+
       {/* Chandeliers */}
       {[-2.0, 2.0].map((x) => (
         <group key={x} position={[x, 1.9, -0.5]}>
@@ -200,6 +244,7 @@ function Altar() {
     </group>
   );
 }
+useGLTF.preload('/assets/characters/custom/Book.glb');
 
 // Banc d'église (low-poly) : siège + dossier en bois sombre.
 function Pew({ position, rotationY = 0 }: { position: [number, number, number]; rotationY?: number }) {
