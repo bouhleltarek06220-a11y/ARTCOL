@@ -281,8 +281,29 @@ export function CastleScene() {
           <CastleExterior mobile={mobile} />
           <CastleGate />
           <EntranceCorridor mobile={mobile} />
-          <Torch position={[-3.0, 4.0, 1.0]} />
-          <Torch position={[3.0, 4.0, 1.0]} />
+
+          {/* ─── 2 FLAMBEAUX DE FAÇADE qui illuminent l'entrée du château ───
+              Plantés de part et d'autre de la grande porte, légèrement
+              en avant de la pierre, scale 1.7 pour la présence cinéma. */}
+          <group position={[-3.4, 3.6, 1.6]} scale={1.7}>
+            <Torch position={[0, 0, 0]} />
+          </group>
+          <group position={[3.4, 3.6, 1.6]} scale={1.7}>
+            <Torch position={[0, 0, 0]} />
+          </group>
+          {/* Wash lumineux chaud qui baigne la porte + l'avant-cour */}
+          <pointLight position={[-3.4, 3.0, 2.5]} color="#ffae62" intensity={55} distance={18} decay={2} />
+          <pointLight position={[3.4, 3.0, 2.5]} color="#ffae62" intensity={55} distance={18} decay={2} />
+          {/* Spot rasant qui dramatise le portail */}
+          <spotLight
+            position={[0, 7, 5]}
+            target-position={[0, 2.5, 0]}
+            color="#ffc88a"
+            intensity={90}
+            distance={14}
+            angle={0.8}
+            penumbra={0.85}
+          />
         </>
       )}
       {!mobile && !USE_CATHEDRAL && <FloatingEmbers count={360} />}
