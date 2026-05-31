@@ -275,42 +275,6 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   100%{transform:translate3d(var(--drift),-95vh,0) scale(.2);opacity:0}
 }
 
-/* Silhouettes de personnages qui traversent à chaque tournage de page. */
-.amb-walker{
-  position:fixed;bottom:48px;z-index:7;
-  width:48px;height:78px;pointer-events:none;
-  animation:walkerCross var(--cross-dur,4.5s) linear forwards;
-  opacity:.85;filter:drop-shadow(0 8px 12px rgba(0,0,0,.4))
-}
-.amb-walker.ltr{left:-80px;animation-name:walkerLTR}
-.amb-walker.rtl{right:-80px;animation-name:walkerRTL}
-@keyframes walkerLTR{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(calc(100vw + 80px))}
-}
-@keyframes walkerRTL{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(calc(-100vw - 80px))}
-}
-.amb-walker svg{width:100%;height:100%;display:block}
-.amb-walker .leg{transform-origin:center top;animation:walkerLegs .55s ease-in-out infinite alternate}
-.amb-walker .leg.r{animation-delay:-.275s}
-@keyframes walkerLegs{
-  0%{transform:rotate(-18deg)}
-  100%{transform:rotate(18deg)}
-}
-.amb-walker .arm{transform-origin:center top;animation:walkerArms .55s ease-in-out infinite alternate}
-.amb-walker .arm.r{animation-delay:-.275s}
-@keyframes walkerArms{
-  0%{transform:rotate(14deg)}
-  100%{transform:rotate(-14deg)}
-}
-.amb-walker .body{animation:walkerBob .55s ease-in-out infinite alternate}
-@keyframes walkerBob{
-  0%{transform:translateY(0)}
-  100%{transform:translateY(-2px)}
-}
-
 /* Bannière de chapitre qui glisse en haut. */
 .ch-banner{
   position:fixed;top:0;left:50%;transform:translate(-50%,-100%);z-index:30;
@@ -703,7 +667,6 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   </svg>
 </div>
 <div class="amb-sparks" id="ambSparks" aria-hidden="true"></div>
-<div id="ambWalkers" aria-hidden="true"></div>
 <div class="ch-banner" id="chBanner" aria-hidden="true">
   <span class="roman" id="chRoman">CHAPITRE I</span>
   <span class="name" id="chName">L'équipe</span>
@@ -1290,9 +1253,8 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     var ch=+next.dataset.ch;
     dotEls.forEach(function(d,k){d.classList.toggle('on',chapters[k]===ch);});
     animateCounts(next);
-    // Ambiance : son de page + silhouette qui traverse + bannière de chapitre si on change.
+    // Ambiance : son de page + bannière de chapitre si on change.
     pageSound();
-    spawnWalker();
     showChBanner(ch);
     if(idx>0){var h=document.getElementById('hint'); if(h)h.classList.add('hide');}
     setTimeout(function(){
@@ -1343,40 +1305,6 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   var CH_NAMES={1:"L'équipe",2:"Lost Chapter",3:"Notre objectif",4:"Les cibles",5:"Le monument",6:"Obstacles & solutions",7:"Nos chiffres",8:"Recommandations",9:"Remerciements"};
   var ROMAN=['','I','II','III','IV','V','VI','VII','VIII','IX'];
 
-  // Silhouettes SVG simplifiées de l'équipe — Tarek (astronaute), Julie (encapuchonnée), Myriam (sorcière)
-  function silhouetteSVG(name){
-    var COLOR={tarek:'#e5e5e5',julie:'#3a2412',myriam:'#2a1a3a'}[name]||'#3a2412';
-    var hat;
-    if(name==='myriam'){
-      hat='<path d="M14 8 L24 -4 L34 8 Z" fill="'+COLOR+'"/><ellipse cx="24" cy="9" rx="11" ry="2.5" fill="'+COLOR+'"/>';
-    }else if(name==='julie'){
-      hat='<path d="M13 16 Q13 4 24 4 Q35 4 35 16 L35 20 L13 20 Z" fill="'+COLOR+'"/>';
-    }else{
-      hat='<circle cx="24" cy="12" r="9" fill="'+COLOR+'"/><circle cx="24" cy="12" r="6" fill="#1a1a2a" opacity=".55"/><rect x="22" y="20" width="4" height="3" fill="'+COLOR+'"/>';
-    }
-    return '<svg viewBox="0 0 48 78">'+hat+
-      '<g class="body"><circle cx="24" cy="20" r="4" fill="#2a1810"/></g>'+
-      '<rect class="body" x="18" y="24" width="12" height="22" fill="'+COLOR+'" rx="2"/>'+
-      '<g class="arm l"><rect x="12" y="26" width="4" height="16" fill="'+COLOR+'" rx="2"/></g>'+
-      '<g class="arm r"><rect x="32" y="26" width="4" height="16" fill="'+COLOR+'" rx="2"/></g>'+
-      '<g class="leg l"><rect x="19" y="46" width="4" height="22" fill="'+COLOR+'" rx="2"/></g>'+
-      '<g class="leg r"><rect x="25" y="46" width="4" height="22" fill="'+COLOR+'" rx="2"/></g>'+
-      '</svg>';
-  }
-  function spawnWalker(){
-    var chars=['tarek','julie','myriam'];
-    var name=chars[Math.floor(Math.random()*chars.length)];
-    var dir=Math.random()<0.5?'ltr':'rtl';
-    var dur=4.5+Math.random()*2.5;
-    var el=document.createElement('div');
-    el.className='amb-walker '+dir;
-    el.style.setProperty('--cross-dur',dur+'s');
-    el.style.bottom=(46+Math.random()*40)+'px';
-    el.innerHTML=silhouetteSVG(name);
-    document.getElementById('ambWalkers').appendChild(el);
-    setTimeout(function(){el.remove();},dur*1000+200);
-  }
-
   // Bannière de chapitre qui glisse depuis le haut
   var currentCh=-1;
   function showChBanner(ch){
@@ -1390,22 +1318,52 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     showChBanner._t=setTimeout(function(){b.classList.remove('show');},2400);
   }
 
-  // Son court "tournage de page" via Web Audio (filtered noise burst)
+  // Son tournage de page — 2 couches synthétisées : froissement papier puis whoosh d'air
   var actx;
   function pageSound(){
     try{
       if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)();
-      var dur=0.5;
-      var buffer=actx.createBuffer(1,Math.floor(actx.sampleRate*dur),actx.sampleRate);
-      var data=buffer.getChannelData(0);
-      for(var i=0;i<data.length;i++){
-        var t=i/actx.sampleRate;
-        data[i]=(Math.random()*2-1)*Math.exp(-t*9)*0.5;
+      var ctx=actx;var now=ctx.currentTime;var sr=ctx.sampleRate;
+
+      // ─── Couche 1 : froissement initial (papier qui se courbe, 0-160ms) ───
+      var d1=0.16;var b1=ctx.createBuffer(1,Math.floor(sr*d1),sr);var a1=b1.getChannelData(0);
+      for(var i=0;i<a1.length;i++){
+        var t=i/sr;
+        // bruit haute fréquence avec attaque très rapide + décroissance
+        a1[i]=(Math.random()*2-1)*Math.exp(-t*22)*Math.min(1,t*80);
       }
-      var src=actx.createBufferSource();src.buffer=buffer;
-      var bp=actx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2200;bp.Q.value=1.4;
-      var gain=actx.createGain();gain.gain.value=0.14;
-      src.connect(bp).connect(gain).connect(actx.destination);src.start();
+      var s1=ctx.createBufferSource();s1.buffer=b1;
+      var hp1=ctx.createBiquadFilter();hp1.type='highpass';hp1.frequency.value=2600;
+      var lp1=ctx.createBiquadFilter();lp1.type='lowpass';lp1.frequency.value=7000;
+      var g1=ctx.createGain();g1.gain.value=0.22;
+      s1.connect(hp1).connect(lp1).connect(g1).connect(ctx.destination);
+      s1.start(now);
+
+      // ─── Couche 2 : whoosh d'air (la page traverse, 80-450ms) ───
+      var d2=0.42;var b2=ctx.createBuffer(1,Math.floor(sr*d2),sr);var a2=b2.getChannelData(0);
+      for(var j=0;j<a2.length;j++){
+        // bruit modulé en cloche (enveloppe sinus)
+        a2[j]=(Math.random()*2-1)*Math.sin(Math.PI*j/a2.length);
+      }
+      var s2=ctx.createBufferSource();s2.buffer=b2;
+      var lp2=ctx.createBiquadFilter();lp2.type='lowpass';
+      lp2.frequency.setValueAtTime(2400,now+0.08);
+      lp2.frequency.exponentialRampToValueAtTime(450,now+0.5);
+      var g2=ctx.createGain();
+      g2.gain.setValueAtTime(0.0001,now+0.08);
+      g2.gain.exponentialRampToValueAtTime(0.18,now+0.2);
+      g2.gain.exponentialRampToValueAtTime(0.0001,now+0.52);
+      s2.connect(lp2).connect(g2).connect(ctx.destination);
+      s2.start(now+0.08);
+
+      // ─── Couche 3 : petit "thwap" final (la page se pose, ~380ms) ───
+      var d3=0.08;var b3=ctx.createBuffer(1,Math.floor(sr*d3),sr);var a3=b3.getChannelData(0);
+      for(var k=0;k<a3.length;k++){a3[k]=(Math.random()*2-1)*Math.exp(-k/sr*40);}
+      var s3=ctx.createBufferSource();s3.buffer=b3;
+      var lp3=ctx.createBiquadFilter();lp3.type='lowpass';lp3.frequency.value=1200;
+      var g3=ctx.createGain();g3.gain.value=0.08;
+      s3.connect(lp3).connect(g3).connect(ctx.destination);
+      s3.start(now+0.38);
     }catch(e){}
   }
 
