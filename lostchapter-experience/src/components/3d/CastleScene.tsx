@@ -50,7 +50,8 @@ function ClampedOrbitControls() {
 
     const t = c.target as THREE.Vector3;
     t.x = Math.max(-7, Math.min(7, t.x));
-    t.y = Math.max(1.2, Math.min(USE_CATHEDRAL ? 13 : 11, t.y));
+    // On élargit le clamp vertical du donjon pour permettre de viser le livre dans le ciel (y=11).
+    t.y = Math.max(1.2, Math.min(USE_CATHEDRAL ? 13 : 13, t.y));
     t.z = Math.max(USE_CATHEDRAL ? -60 : -46, Math.min(-2, t.z));
   });
   return (
@@ -328,16 +329,7 @@ export function CastleScene() {
       )}
 
       <CinematicCamera />
-      <GuidedTour
-        onTransition={() => {
-          // Fin du tour donjon : fondu noir + navigation vers la cathédrale.
-          const overlay = document.createElement('div');
-          overlay.style.cssText = 'position:fixed;inset:0;background:#000;opacity:0;transition:opacity 1.2s ease;z-index:9999;pointer-events:none';
-          document.body.appendChild(overlay);
-          requestAnimationFrame(() => { overlay.style.opacity = '1'; });
-          setTimeout(() => { window.location.href = '/experience-v4/?tour=1'; }, 1250);
-        }}
-      />
+      <GuidedTour />
 
       {/* Navigation libre clampée dans la boîte du hall (target box-bound). */}
       {phase === 'inside' && <ClampedOrbitControls />}

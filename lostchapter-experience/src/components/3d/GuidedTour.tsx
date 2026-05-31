@@ -7,16 +7,16 @@ import { easeInOut, clamp01 } from '../../lib/easing';
 // Waypoint = position caméra + point regardé + durée pour ARRIVER à ce point depuis le précédent.
 type WP = { pos: [number, number, number]; look: [number, number, number]; dur: number };
 
-// ─── DONJON (v3) ── tour cinéma de la salle puis transition cathédrale.
+// ─── DONJON (v3) ── tour cinéma de la salle qui se termine cadrée sur le livre
+// flottant gardé par le dragon dans le ciel ([0, 11, -22]).
 // Démarrage là où CinematicCamera nous a posés : [0, 4.4, -10] regardant [0, 2.8, -38].
 const DUNGEON_TOUR: WP[] = [
-  { pos: [0, 4.4, -10], look: [0, 2.8, -38], dur: 0 },          // point de départ
-  { pos: [6, 4.6, -12], look: [0, 2.5, -22], dur: 2.8 },        // pan vers la droite, vue d'ensemble
-  { pos: [8.5, 5.2, -22], look: [-2, 2.2, -26], dur: 2.6 },     // glisse vers la partie centrale
-  { pos: [3, 2.4, -22], look: [-1, 1.8, -24], dur: 2.4 },       // descend au niveau des personnages
-  { pos: [-3, 2.4, -22], look: [1.5, 1.8, -24], dur: 2.0 },     // balaye l'équipe
-  { pos: [0, 5.4, -18], look: [0, 8, -24], dur: 1.8 },          // lève la tête vers le dragon
-  { pos: [0, 4.5, -10], look: [0, 2.6, -34], dur: 2.4 },        // revient face aux 9 portes
+  { pos: [0, 4.4, -10], look: [0, 2.8, -38], dur: 0 },          // point de départ (face fond)
+  { pos: [6, 4.6, -12], look: [0, 2.5, -22], dur: 2.8 },        // pan droite, vue d'ensemble + portes droite
+  { pos: [3, 2.4, -22], look: [-1, 1.8, -24], dur: 2.6 },       // descend au niveau des personnages
+  { pos: [-3, 2.4, -22], look: [1.5, 1.8, -24], dur: 2.4 },     // balaye l'équipe + portes gauche
+  { pos: [0, 6, -14], look: [0, 11, -22], dur: 2.6 },           // s'élève, lève les yeux vers le livre & dragon
+  { pos: [0, 8.5, -14], look: [0, 11, -22], dur: 2.6 },         // se rapproche, cadre final sur le livre
 ];
 
 // ─── CATHÉDRALE (v4) ── arrivée au fond de la nef, descente jusqu'à l'autel
@@ -34,11 +34,10 @@ const CATHEDRAL_TOUR: WP[] = [
 
 const USE_CATHEDRAL = typeof window !== 'undefined' && window.location.pathname.includes('experience-v4');
 
-export function GuidedTour({ onTransition }: { onTransition: () => void }) {
+export function GuidedTour() {
   const camera = useThree((s) => s.camera);
   const tourPhase = useExperience((s) => s.tourPhase);
   const phase = useExperience((s) => s.phase);
-  const setTourPhase = useExperience((s) => s.setTourPhase);
   const endTour = useExperience((s) => s.endTour);
   const markTourCameraStart = useExperience((s) => s.markTourCameraStart);
   const tRef = useRef(0);
@@ -88,13 +87,9 @@ export function GuidedTour({ onTransition }: { onTransition: () => void }) {
       cum += segDur;
     }
 
-    // Fin du tour : dans le donjon on enchaîne sur la cathédrale, dans la cathédrale on rend la main.
-    if (!USE_CATHEDRAL) {
-      setTourPhase('transition');
-      onTransition();
-    } else {
-      endTour();
-    }
+    // Fin du tour (donjon ou cathédrale) : on rend la main aux OrbitControls et
+    // on affiche le hint « Cliquez sur le livre ».
+    endTour();
   });
 
   return null;

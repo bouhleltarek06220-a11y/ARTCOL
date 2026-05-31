@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { CharacterGroup } from './CharacterGroup';
 import { Brazier } from './Brazier';
 import { ChapterDoor } from './ChapterDoor';
+import { FloatingBook } from './FloatingBook';
 import { zones } from '../../data/zones';
 
 // Pack KayKit Dungeon Remastered (CC0) — pièces modulaires sur grille de 4 unités.
@@ -177,8 +178,12 @@ export function DungeonHall() {
       <Brazier position={[6, 0, -8]} />
       <Brazier position={[-6, 0, -30]} />
       <Brazier position={[6, 0, -30]} />
-      {/* Le dragon volant est un portail vers la cathédrale gothique (/experience-v4/). */}
-      <CharacterGroup dragonPortalUrl="/experience-v4/" />
+
+      {/* ─── LIVRE DU CHAPITRE PERDU suspendu dans le ciel, gardé par le dragon ─── */}
+      <FloatingBook />
+
+      {/* L'équipe en patrouille + dragon qui orbite autour du livre comme un protecteur. */}
+      <CharacterGroup dragonGuardsBook />
     </group>
   );
 }

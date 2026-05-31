@@ -8,39 +8,14 @@ import { SoundToggle } from './components/ui/SoundToggle';
 import { ZonePanel } from './components/ui/ZonePanel';
 import { useExperience } from './store';
 
-const IS_CATHEDRAL = import.meta.env.BASE_URL.includes('v4');
-
-// Bouton "← Retour au donjon" — uniquement dans la cathédrale, et masqué pendant l'intro guidée.
-function BackToDungeon() {
-  const tourPhase = useExperience((s) => s.tourPhase);
-  if (!IS_CATHEDRAL) return null;
-  if (tourPhase === 'cathedral') return null;
-  return (
-    <a
-      href="/experience-v3/"
-      className="font-display fixed left-5 top-5 z-50 inline-flex items-center gap-2 rounded-full border border-goldbright/50 bg-stone/70 px-4 py-2 text-xs uppercase tracking-[0.25em] text-parchment shadow-lg backdrop-blur-sm transition hover:scale-105 hover:bg-stone/85"
-    >
-      ◀ Retour au donjon
-    </a>
-  );
-}
-
-// Bouton "Passer l'intro" — visible pendant la visite guidée pour zapper le cinématique.
+// Bouton "Passer l'intro" — visible pendant la visite caméra guidée.
 function SkipTour() {
   const tourPhase = useExperience((s) => s.tourPhase);
   const endTour = useExperience((s) => s.endTour);
-  const setTourPhase = useExperience((s) => s.setTourPhase);
   if (tourPhase !== 'dungeon' && tourPhase !== 'cathedral') return null;
-  const skip = () => {
-    if (tourPhase === 'dungeon') {
-      setTourPhase('done');
-    } else {
-      endTour();
-    }
-  };
   return (
     <button
-      onClick={skip}
+      onClick={endTour}
       className="font-display fixed bottom-5 right-5 z-50 rounded-full border border-goldbright/50 bg-stone/70 px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-parchment shadow-lg backdrop-blur-sm transition hover:scale-105 hover:bg-stone/85"
     >
       Passer l'intro ▸▸
@@ -48,10 +23,9 @@ function SkipTour() {
   );
 }
 
-// Indice flottant qui apparaît à la fin du tour cathédrale, invitant à cliquer le livre.
+// Indice flottant qui apparaît à la fin de la visite, invitant à cliquer le livre flottant.
 function BookCallout() {
   const tourPhase = useExperience((s) => s.tourPhase);
-  if (!IS_CATHEDRAL) return null;
   if (tourPhase !== 'done') return null;
   return (
     <AnimatePresence>
@@ -76,12 +50,10 @@ function BookCallout() {
 export default function App() {
   const setProgress = useExperience((s) => s.setProgress);
   const ready = useExperience((s) => s.ready);
-  const setTourPhase = useExperience((s) => s.setTourPhase);
-  const phase = useExperience((s) => s.phase);
   const { progress, active } = useProgress();
 
-  // Le chargement réel est piloté par useProgress (drei) — il reflète le téléchargement
-  // des assets (Sponza, etc.). Quand tout est prêt, on déverrouille la porte.
+  // Le chargement réel est piloté par useProgress (drei) : il reflète le téléchargement
+  // des assets (Sponza, Dungeon, etc.). Quand tout est prêt, on déverrouille la porte.
   useEffect(() => {
     setProgress(progress / 100);
     if (!active && progress >= 99.99) {
@@ -96,26 +68,12 @@ export default function App() {
     return () => clearTimeout(fallback);
   }, [ready]);
 
-  // Auto-démarrage du tour cathédrale quand on arrive avec ?tour=1
-  useEffect(() => {
-    if (!IS_CATHEDRAL) return;
-    if (phase !== 'inside') return;
-    if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('tour') === '1') {
-      // Léger délai pour laisser le rendu se stabiliser
-      const id = setTimeout(() => setTourPhase('cathedral'), 300);
-      return () => clearTimeout(id);
-    }
-  }, [phase, setTourPhase]);
-
   return (
     <>
       <CastleScene />
       <CinematicOverlay />
       <ZonePanel />
       <SoundToggle />
-      <BackToDungeon />
       <SkipTour />
       <BookCallout />
       <LoadingScreen />

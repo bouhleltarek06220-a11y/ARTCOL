@@ -75,25 +75,31 @@ const STATIC_ROT: Record<string, number> = {
 
 export function CharacterGroup({
   showDragon = true,
-  dragonPortalUrl,
+  dragonGuardsBook = false,
   staticPlacement = false,
 }: {
   showDragon?: boolean;
-  dragonPortalUrl?: string;
+  /** Si true, le dragon ne patrouille plus mais orbite autour du livre flottant
+   *  ([0, 11, -22]) à hauteur du ciel, comme un gardien. */
+  dragonGuardsBook?: boolean;
   staticPlacement?: boolean;
 } = {}) {
+  // Path circulaire serré autour du livre (rayon ~5, centré sur x=0 z=-22).
+  // Quand le dragon ne garde pas le livre, il fait un grand circuit dans la salle.
+  const dragonPath: [number, number][] = dragonGuardsBook
+    ? [[-5, -22], [-3.5, -25.5], [0, -27], [3.5, -25.5], [5, -22], [3.5, -18.5], [0, -17], [-3.5, -18.5]]
+    : [[-6, -12], [6, -12], [6, -30], [-6, -30]];
+  const dragonY = dragonGuardsBook ? 10.5 : 7;
+  const dragonSpeed = dragonGuardsBook ? 0.18 : 0.12;
   return (
     <>
-      {/* Dragon en vol circulaire au-dessus de la nef. Cliquable = portail vers
-          un autre monde (ex: cathédrale gothique) si dragonPortalUrl est fourni. */}
       {showDragon && (
         <CharacterNPC
           character={DRAGON}
-          path={[[-6, -12], [6, -12], [6, -30], [-6, -30]]}
-          speed={0.12}
-          position={[0, 7, 0]}
+          path={dragonPath}
+          speed={dragonSpeed}
+          position={[0, dragonY, 0]}
           preserveTextures
-          portalUrl={dragonPortalUrl}
         />
       )}
 
