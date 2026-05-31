@@ -293,53 +293,67 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .timer.paused { opacity: .55; }
 @keyframes timerPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 
-/* ═══ Slide Fort Carré — Histoire ═══ */
-.slide.history .s-inner { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; align-items: start; }
-.slide.history .photos { display: grid; grid-template-rows: 1.4fr 1fr 1fr; gap: 10px; height: 580px; }
-.slide.history .photo {
-  position: relative; overflow: hidden; border-radius: 8px;
-  border: 1px solid rgba(201, 155, 92, .35);
-  box-shadow: 0 10px 28px rgba(0,0,0,.5);
-  background: linear-gradient(135deg, #2a1810 0%, #1a0f08 100%);
+/* ═══ Slide Fort Carré — Histoire (refonte aérée) ═══ */
+.slide.history .hist-grid {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px;
+  align-items: stretch; margin-top: 20px;
 }
-.slide.history .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.slide.history .photo::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 40%, rgba(20,12,6,.75) 100%);
-}
-.slide.history .photo .cap {
-  position: absolute; bottom: 8px; left: 12px; right: 12px;
-  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .25em;
-  text-transform: uppercase; color: #e5c788; text-shadow: 0 1px 3px rgba(0,0,0,.7);
-  z-index: 2;
-}
-.slide.history .photo .ph-placeholder {
-  position: absolute; inset: 0; display: grid; place-items: center;
-  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .25em;
-  color: rgba(201, 155, 92, .55); text-align: center; padding: 18px;
-  z-index: 1;
-}
-.slide.history .narrative { padding-top: 6px; }
+.slide.history .timeline { display: flex; flex-direction: column; gap: 12px; }
 .slide.history .era {
-  display: flex; gap: 14px; margin-top: 14px; padding: 12px 14px;
-  border-left: 2px solid #c99b5c;
-  background: linear-gradient(90deg, rgba(201,155,92,.08), transparent);
+  display: grid; grid-template-columns: 92px 1fr; gap: 16px;
+  padding: 14px 18px; border-left: 3px solid #c99b5c;
+  background: linear-gradient(90deg, rgba(201,155,92,.10), rgba(201,155,92,.02));
+  border-radius: 0 6px 6px 0;
 }
 .slide.history .era .year {
-  font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px;
-  color: #e5c788; min-width: 78px; letter-spacing: .04em;
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 24px;
+  color: #e5c788; letter-spacing: .04em; line-height: 1;
+  align-self: center;
 }
-.slide.history .era p { margin: 0; font-size: 14.5px; line-height: 1.55; color: #f4e2c7; }
+.slide.history .era p {
+  margin: 0; font-size: 16px; line-height: 1.55; color: #f4e2c7;
+}
+.slide.history .era p b { color: #ffd980; }
+.slide.history .hero-col { display: flex; flex-direction: column; gap: 10px; }
+.slide.history .hero {
+  flex: 1; min-height: 280px;
+  position: relative; overflow: hidden; border-radius: 10px;
+  border: 1px solid rgba(201, 155, 92, .4);
+  box-shadow: 0 12px 32px rgba(0,0,0,.55);
+}
+.slide.history .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slide.history .hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(20,12,6,.78) 100%);
+  pointer-events: none;
+}
+.slide.history .hero .cap {
+  position: absolute; bottom: 10px; left: 14px; right: 14px;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .28em;
+  text-transform: uppercase; color: #ffd980;
+  text-shadow: 0 1px 4px rgba(0,0,0,.85); z-index: 2;
+}
+.slide.history .thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.slide.history .thumb {
+  height: 105px; overflow: hidden; border-radius: 6px;
+  border: 1px solid rgba(201, 155, 92, .3);
+  box-shadow: 0 5px 14px rgba(0,0,0,.4);
+}
+.slide.history .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 .slide.history .arc {
-  margin-top: 22px; padding: 16px 18px; border-radius: 8px;
-  background: linear-gradient(135deg, rgba(201,155,92,.16) 0%, rgba(201,155,92,.04) 100%);
-  border: 1px solid rgba(201,155,92,.35);
+  margin-top: 22px; padding: 18px 22px; border-radius: 8px;
+  background: linear-gradient(135deg, rgba(201,155,92,.18) 0%, rgba(201,155,92,.04) 100%);
+  border: 1px solid rgba(201,155,92,.4);
 }
 .slide.history .arc .lbl {
-  font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: .35em;
-  text-transform: uppercase; color: #c99b5c; margin-bottom: 6px;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .38em;
+  text-transform: uppercase; color: #ffd980; margin-bottom: 8px;
 }
-.slide.history .arc p { margin: 0; font-size: 14.5px; line-height: 1.5; color: #f4e2c7; font-style: italic; }
+.slide.history .arc p {
+  margin: 0; font-size: 16.5px; line-height: 1.55; color: #f4e2c7;
+  font-style: italic;
+}
 </style>
 </head>
 <body>
@@ -582,45 +596,41 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     <h1 class="title" data-anim style="--d:.08s">Histoire du <span class="u">Fort Carré</span></h1>
     <p class="sub" data-anim style="--d:.16s">Cinq siècles de défense au-dessus du Port Vauban — la matière brute d'un grand récit moderne.</p>
 
-    <div class="s-inner" style="margin-top:18px;padding:0">
-      <div class="photos" data-anim style="--d:.22s">
-        <div class="photo">
-          <img src="/assets/fort-carre/fc-1.jpg" alt="Fort Carré d'Antibes" loading="lazy">
-          <div class="cap">Fort Carré · Antibes</div>
-        </div>
-        <div class="photo">
-          <img src="/assets/fort-carre/fc-3.jpg" alt="Vue d'ensemble" loading="lazy">
-          <div class="cap">Vue d'ensemble</div>
-        </div>
-        <div class="photo">
-          <img src="/assets/fort-carre/fc-2.jpg" alt="Détail des remparts" loading="lazy">
-          <div class="cap">Détail des remparts</div>
-        </div>
-      </div>
-
-      <div class="narrative">
-        <div class="era" data-anim style="--d:.30s">
+    <div class="hist-grid">
+      <div class="timeline">
+        <div class="era" data-anim style="--d:.24s">
           <div class="year">1553</div>
-          <p><b>Henri II</b> ordonne la construction sur la colline Saint-Laurent : 4 bastions en forme d'étoile, posés face à la mer, pour défendre la frontière du Var.</p>
+          <p><b>Henri II</b> ordonne la construction sur la colline Saint-Laurent : quatre bastions en étoile face à la mer, pour défendre la frontière du Var.</p>
         </div>
-        <div class="era" data-anim style="--d:.38s">
+        <div class="era" data-anim style="--d:.32s">
           <div class="year">1680</div>
           <p><b>Vauban</b> renforce les remparts et perfectionne la géométrie défensive. Le Fort entre dans le patrimoine militaire d'élite du Royaume.</p>
         </div>
-        <div class="era" data-anim style="--d:.46s">
+        <div class="era" data-anim style="--d:.40s">
           <div class="year">1794</div>
-          <p>Un jeune capitaine d'artillerie, <b>Napoléon Bonaparte</b>, y est emprisonné dix jours après la chute de Robespierre. La pierre garde mémoire.</p>
+          <p>Un jeune capitaine d'artillerie, <b>Napoléon Bonaparte</b>, y est emprisonné dix jours après la chute de Robespierre.</p>
         </div>
-        <div class="era" data-anim style="--d:.54s">
+        <div class="era" data-anim style="--d:.48s">
           <div class="year">1967</div>
-          <p>Classé <b>Monument Historique</b>. Ouvert au public depuis 1998, géré par la Ville d'Antibes. ~80 000 visiteurs/an.</p>
-        </div>
-
-        <div class="arc" data-anim style="--d:.62s">
-          <div class="lbl">★ Comment Lost Chapter le raconte</div>
-          <p>« On éteint les projecteurs touristiques et on rallume la guerre, la prison, le vent salé de 1794. Un comédien-historien, une caméra immersive, une caution CNRS — et le Fort redevient ce qu'il était : un acteur de l'Histoire, en direct sur Twitch. »</p>
+          <p>Classé <b>Monument Historique</b>. Ouvert au public depuis 1998 — environ 80 000 visiteurs par an.</p>
         </div>
       </div>
+
+      <div class="hero-col" data-anim style="--d:.28s">
+        <div class="hero">
+          <img src="/assets/fort-carre/fc-1.jpg" alt="Vue aérienne du Fort Carré">
+          <div class="cap">Vue aérienne · 4 bastions en étoile</div>
+        </div>
+        <div class="thumbs">
+          <div class="thumb"><img src="/assets/fort-carre/fc-2.jpg" alt="Façade"></div>
+          <div class="thumb"><img src="/assets/fort-carre/fc-3.jpg" alt="Remparts"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arc" data-anim style="--d:.58s">
+      <div class="lbl">★ Comment Lost Chapter le raconte</div>
+      <p>« On éteint les projecteurs touristiques et on rallume la guerre, la prison, le vent salé de 1794. Un comédien-historien, une caméra immersive, une caution CNRS — et le Fort redevient un acteur de l'Histoire, en direct sur Twitch. »</p>
     </div>
   </div>
 </section>
