@@ -293,7 +293,7 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .timer.paused { opacity: .55; }
 @keyframes timerPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 
-/* ═══ Slide Fort Carré — Histoire (refonte aérée) ═══ */
+/* ═══ Slide Fort Carré — Histoire (couleurs lisibles parchemin/encre) ═══ */
 .slide.history .hist-grid {
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px;
   align-items: stretch; margin-top: 20px;
@@ -301,25 +301,27 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .slide.history .timeline { display: flex; flex-direction: column; gap: 12px; }
 .slide.history .era {
   display: grid; grid-template-columns: 92px 1fr; gap: 16px;
-  padding: 14px 18px; border-left: 3px solid #c99b5c;
-  background: linear-gradient(90deg, rgba(201,155,92,.10), rgba(201,155,92,.02));
+  padding: 14px 18px; border-left: 3px solid var(--gold);
+  background: rgba(255, 255, 255, .35);
   border-radius: 0 6px 6px 0;
+  box-shadow: 0 1px 3px rgba(58,33,20,.08);
 }
 .slide.history .era .year {
-  font-family: 'Cinzel', serif; font-weight: 700; font-size: 24px;
-  color: #e5c788; letter-spacing: .04em; line-height: 1;
+  font-family: var(--display); font-weight: 700; font-size: 26px;
+  color: var(--brown); letter-spacing: .04em; line-height: 1;
   align-self: center;
 }
 .slide.history .era p {
-  margin: 0; font-size: 16px; line-height: 1.55; color: #f4e2c7;
+  margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink);
 }
-.slide.history .era p b { color: #ffd980; }
+.slide.history .era p b { color: var(--brown); font-weight: 700; }
+
 .slide.history .hero-col { display: flex; flex-direction: column; gap: 10px; }
 .slide.history .hero {
   flex: 1; min-height: 280px;
   position: relative; overflow: hidden; border-radius: 10px;
-  border: 1px solid rgba(201, 155, 92, .4);
-  box-shadow: 0 12px 32px rgba(0,0,0,.55);
+  border: 1px solid rgba(58,33,20,.25);
+  box-shadow: 0 12px 32px rgba(58,33,20,.25);
 }
 .slide.history .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .slide.history .hero::after {
@@ -329,29 +331,31 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 }
 .slide.history .hero .cap {
   position: absolute; bottom: 10px; left: 14px; right: 14px;
-  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .28em;
+  font-family: var(--display); font-size: 11px; letter-spacing: .28em;
   text-transform: uppercase; color: #ffd980;
   text-shadow: 0 1px 4px rgba(0,0,0,.85); z-index: 2;
 }
 .slide.history .thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .slide.history .thumb {
   height: 105px; overflow: hidden; border-radius: 6px;
-  border: 1px solid rgba(201, 155, 92, .3);
-  box-shadow: 0 5px 14px rgba(0,0,0,.4);
+  border: 1px solid rgba(58,33,20,.25);
+  box-shadow: 0 4px 12px rgba(58,33,20,.2);
 }
 .slide.history .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .slide.history .arc {
   margin-top: 22px; padding: 18px 22px; border-radius: 8px;
-  background: linear-gradient(135deg, rgba(201,155,92,.18) 0%, rgba(201,155,92,.04) 100%);
-  border: 1px solid rgba(201,155,92,.4);
+  background: linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.25) 100%);
+  border: 1px solid var(--gold);
+  box-shadow: 0 4px 14px rgba(58,33,20,.12);
 }
 .slide.history .arc .lbl {
-  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .38em;
-  text-transform: uppercase; color: #ffd980; margin-bottom: 8px;
+  font-family: var(--display); font-size: 11px; letter-spacing: .38em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  font-weight: 700;
 }
 .slide.history .arc p {
-  margin: 0; font-size: 16.5px; line-height: 1.55; color: #f4e2c7;
+  margin: 0; font-size: 16.5px; line-height: 1.55; color: var(--ink);
   font-style: italic;
 }
 </style>
