@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useExperience } from '../../store';
 
-const INTRO_VIDEO = '/assets/video/lost-chapter-experience.mp4';
+const INTRO_VIDEO = '/assets/video/lost-chapter-logo.mp4';
 
 export function CinematicOverlay() {
   const phase = useExperience((s) => s.phase);

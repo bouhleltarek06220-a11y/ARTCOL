@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -67,10 +67,15 @@ export function ChapterDoor({
   zone,
   position,
   rotationY = 0,
+  revealDelay = 0,
 }: {
   zone: Zone;
   position: [number, number, number];
   rotationY?: number;
+  /** Délai en secondes avant que le TITRE de la porte n'apparaisse pendant la
+   *  visite caméra du donjon. À 0 si on n'est pas en mode tour, le titre est
+   *  visible immédiatement. */
+  revealDelay?: number;
 }) {
   const { scene } = useGLTF(FRAME) as unknown as { scene: THREE.Group };
   const frame = useMemo(() => {
@@ -95,6 +100,24 @@ export function ChapterDoor({
   const select = useExperience((s) => s.selectZone);
   const glow = useRef<THREE.PointLight>(null);
   const color = accent[zone.accent];
+
+  // ── Reveal progressif du titre pendant la visite caméra ──
+  const tourPhase = useExperience((s) => s.tourPhase);
+  const tourCameraStartedAt = useExperience((s) => s.tourCameraStartedAt);
+  const [titleVisible, setTitleVisible] = useState(true);
+  useEffect(() => {
+    // Hors visite donjon (idle, transition, cathedral, done) → titres toujours visibles
+    if (tourPhase !== 'dungeon' || !tourCameraStartedAt) {
+      setTitleVisible(true);
+      return;
+    }
+    // Pendant le tour : on hide puis reveal au delay prévu
+    const elapsed = (Date.now() - tourCameraStartedAt) / 1000;
+    if (elapsed >= revealDelay) { setTitleVisible(true); return; }
+    setTitleVisible(false);
+    const t = window.setTimeout(() => setTitleVisible(true), (revealDelay - elapsed) * 1000);
+    return () => window.clearTimeout(t);
+  }, [tourPhase, tourCameraStartedAt, revealDelay]);
 
   useFrame(({ clock }) => {
     if (glow.current) {
@@ -128,16 +151,19 @@ export function ChapterDoor({
         <Leaf side={1} open={openAmount} />
       </group>
 
-      {/* TITRE de la porte — TOUJOURS visible, grand format, lisible depuis le tour de la pièce */}
+      {/* TITRE de la porte — apparaît progressivement pendant le tour caméra */}
       <Html position={[0, 4.4, 0.4]} center distanceFactor={10} occlude={false} style={{ pointerEvents: 'none' }}>
         <div
           className="font-medieval whitespace-nowrap rounded-lg border-2 border-goldbright/70 bg-stone/85 px-6 py-3 text-[22px] uppercase tracking-[0.32em] text-parchment shadow-[0_10px_36px_rgba(0,0,0,0.7)] backdrop-blur-sm"
           style={{
             textShadow: `0 0 14px ${color}aa, 0 2px 6px rgba(0,0,0,0.8)`,
             color: hover ? color : undefined,
-            transition: 'color .25s, transform .25s, border-color .25s',
-            transform: hover ? 'scale(1.08)' : 'scale(1)',
             borderColor: hover ? color : undefined,
+            opacity: titleVisible ? 1 : 0,
+            transform: titleVisible
+              ? (hover ? 'scale(1.08) translateY(0)' : 'scale(1) translateY(0)')
+              : 'scale(0.6) translateY(22px)',
+            transition: 'opacity .75s cubic-bezier(.22,.61,.36,1), transform .75s cubic-bezier(.22,.61,.36,1), color .25s, border-color .25s',
           }}
         >
           {zone.title}

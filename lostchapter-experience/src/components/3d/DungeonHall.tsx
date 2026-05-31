@@ -113,19 +113,24 @@ export function DungeonHall() {
         );
       })}
 
-      {/* ─── LES 9 VRAIES PORTES ─── */}
-      {/* Fond (zones 0-2) */}
-      {[-4, 0, 4].map((x, i) =>
-        zones[i] ? <ChapterDoor key={`db-${i}`} zone={zones[i]} position={[x, 0, Z_BACK]} rotationY={0} /> : null,
-      )}
-      {/* Gauche (zones 3-5) */}
-      {[-10, -18, -26].map((z, i) =>
-        zones[i + 3] ? <ChapterDoor key={`dl-${i}`} zone={zones[i + 3]} position={[X_LEFT, 0, z]} rotationY={Math.PI / 2} /> : null,
-      )}
-      {/* Droite (zones 6-8) */}
-      {[-10, -18, -26].map((z, i) =>
-        zones[i + 6] ? <ChapterDoor key={`dr-${i}`} zone={zones[i + 6]} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} /> : null,
-      )}
+      {/* ─── LES 9 VRAIES PORTES ───
+          Délais de reveal calibrés sur les waypoints du GuidedTour : la caméra
+          regarde d'abord le fond, pivote à droite, puis à gauche, puis revient. */}
+      {/* Fond (zones 0-2) — révélées en premier (camera spawn face au fond) */}
+      {[-4, 0, 4].map((x, i) => {
+        const delays = [0.4, 0.8, 1.2];
+        return zones[i] ? <ChapterDoor key={`db-${i}`} zone={zones[i]} position={[x, 0, Z_BACK]} rotationY={0} revealDelay={delays[i]} /> : null;
+      })}
+      {/* Droite (zones 6-8) — révélées pendant le pan vers la droite (~3s) */}
+      {[-10, -18, -26].map((z, i) => {
+        const delays = [2.8, 3.4, 4.0];
+        return zones[i + 6] ? <ChapterDoor key={`dr-${i}`} zone={zones[i + 6]} position={[X_RIGHT, 0, z]} rotationY={-Math.PI / 2} revealDelay={delays[i]} /> : null;
+      })}
+      {/* Gauche (zones 3-5) — révélées pendant le pan vers la gauche (~5-7s) */}
+      {[-10, -18, -26].map((z, i) => {
+        const delays = [5.4, 6.0, 6.6];
+        return zones[i + 3] ? <ChapterDoor key={`dl-${i}`} zone={zones[i + 3]} position={[X_LEFT, 0, z]} rotationY={Math.PI / 2} revealDelay={delays[i]} /> : null;
+      })}
 
       {/* ─── COLONNES le long des murs (sauf devant les portes latérales) ─── */}
       {rows.filter((_, i) => i % 2 === 0).map((z) => {

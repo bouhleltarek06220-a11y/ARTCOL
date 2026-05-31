@@ -40,13 +40,15 @@ export function GuidedTour({ onTransition }: { onTransition: () => void }) {
   const phase = useExperience((s) => s.phase);
   const setTourPhase = useExperience((s) => s.setTourPhase);
   const endTour = useExperience((s) => s.endTour);
+  const markTourCameraStart = useExperience((s) => s.markTourCameraStart);
   const tRef = useRef(0);
   const startedRef = useRef(false);
 
   const waypoints = USE_CATHEDRAL ? CATHEDRAL_TOUR : DUNGEON_TOUR;
   const isActive = USE_CATHEDRAL ? tourPhase === 'cathedral' : tourPhase === 'dungeon';
 
-  // Snap initial caméra au W0 quand la tour démarre
+  // Snap initial caméra au W0 quand la tour démarre + signale au reste de l'app
+  // (utilisé par les titres de portes pour le reveal progressif).
   useEffect(() => {
     if (!isActive || phase !== 'inside') return;
     if (startedRef.current) return;
@@ -55,7 +57,8 @@ export function GuidedTour({ onTransition }: { onTransition: () => void }) {
     const w0 = waypoints[0];
     camera.position.set(w0.pos[0], w0.pos[1], w0.pos[2]);
     camera.lookAt(w0.look[0], w0.look[1], w0.look[2]);
-  }, [isActive, phase, camera, waypoints]);
+    if (!USE_CATHEDRAL) markTourCameraStart();
+  }, [isActive, phase, camera, waypoints, markTourCameraStart]);
 
   useFrame((_, dt) => {
     if (!isActive || phase !== 'inside') return;

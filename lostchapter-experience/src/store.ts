@@ -12,6 +12,9 @@ interface ExperienceState {
   selectedZone: string | null;
   selectedCharacter: { id: string; name: string; lines: string[]; pos: [number, number, number] } | null;
   tourPhase: TourPhase;
+  /** Timestamp (ms) auquel la visite caméra commence vraiment dans le donjon.
+   *  Sert au reveal progressif des titres de portes pendant le tour. */
+  tourCameraStartedAt: number | null;
   setProgress: (p: number) => void;
   ready: () => void;
   enter: () => void;
@@ -26,6 +29,7 @@ interface ExperienceState {
   startTour: () => void;
   setTourPhase: (p: TourPhase) => void;
   endTour: () => void;
+  markTourCameraStart: () => void;
 }
 
 const prefersReduced =
@@ -69,7 +73,9 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   selectCharacter: (c) => set({ selectedCharacter: c }),
   closeCharacter: () => set({ selectedCharacter: null }),
   tourPhase: 'idle',
-  startTour: () => set({ tourPhase: 'dungeon' }),
+  tourCameraStartedAt: null,
+  startTour: () => set({ tourPhase: 'dungeon', tourCameraStartedAt: null }),
   setTourPhase: (p) => set({ tourPhase: p }),
   endTour: () => set({ tourPhase: 'done' }),
+  markTourCameraStart: () => set({ tourCameraStartedAt: Date.now() }),
 }));
