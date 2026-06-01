@@ -314,6 +314,95 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .demo-tile .demo-cta::after{content:"→";transition:transform .2s}
 .demo-tile:hover .demo-cta::after{transform:translateX(5px)}
 
+/* ═══ SLIDE WORKFLOW — flow 5 étapes avec reveal séquentiel + bloc TMC ═══ */
+.flow-pro{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+  gap:10px;align-items:stretch;margin-top:28px;position:relative
+}
+/* Ligne dorée subtile en arrière-plan qui parcourt les 5 étapes */
+.flow-pro::before{
+  content:"";position:absolute;left:1%;right:1%;top:50%;height:2px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold-s) 18%,var(--gold) 50%,var(--gold-s) 82%,transparent 100%);
+  opacity:.35;z-index:0;transform:translateY(-2px)
+}
+.fp-step{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,#fdf7ea 0%,#f7ecd5 100%);
+  border:1.5px solid var(--gold-s);border-radius:12px;
+  padding:18px 13px 14px;
+  display:flex;flex-direction:column;gap:5px;
+  box-shadow:0 6px 18px rgba(58,33,20,.10),0 0 0 2px rgba(255,255,255,.6) inset;
+  min-height:170px
+}
+.fp-step .num{
+  position:absolute;top:-11px;left:14px;
+  background:linear-gradient(180deg,#dcc081 0%,#b3842c 100%);
+  color:#fff;font-family:var(--display);font-weight:800;font-size:11px;
+  letter-spacing:.22em;padding:4px 10px;border-radius:6px;
+  box-shadow:0 4px 10px rgba(122,75,24,.4)
+}
+.fp-step .ico{
+  font-size:28px;line-height:1;margin-top:4px;align-self:flex-start;
+  filter:drop-shadow(0 2px 4px rgba(58,33,20,.18))
+}
+.fp-step .name{
+  font-family:var(--display);font-weight:700;font-size:14.5px;
+  color:var(--brown);letter-spacing:.06em;
+  text-transform:uppercase;line-height:1.1
+}
+.fp-step .meth{
+  font-size:11.5px;color:var(--ink2);line-height:1.45;
+  margin:2px 0 6px;flex:1
+}
+.fp-step .meth b{color:var(--brown);font-weight:600}
+.fp-step .metric{
+  font-family:var(--display);font-weight:700;font-size:15px;
+  color:var(--gold);margin-top:auto;
+  padding:7px 10px;
+  background:rgba(201,162,76,.12);
+  border-left:2.5px solid var(--gold);
+  border-radius:0 6px 6px 0;letter-spacing:.01em;line-height:1.2
+}
+.fp-step .metric .num-big{font-size:20px;color:var(--brown);font-weight:800;display:block;margin-bottom:1px}
+
+.fp-arr{
+  display:grid;place-items:center;z-index:1;
+  font-family:var(--display);color:var(--gold);font-size:22px;font-weight:900;
+  text-shadow:0 0 10px rgba(201,162,76,.4)
+}
+
+/* ─── Bloc TMC : la signature de la machine ─── */
+.tmc-block{
+  margin-top:24px;display:grid;
+  grid-template-columns:auto auto 1fr;gap:24px;align-items:center;
+  padding:18px 26px;border-radius:14px;
+  background:linear-gradient(135deg,#3a2013 0%,#1f120a 100%);
+  border:1.5px solid var(--gold-b);
+  color:var(--paper);
+  box-shadow:0 14px 32px rgba(58,33,20,.45),0 0 28px rgba(255,170,70,.18)
+}
+.tmc-tag{
+  font-family:var(--display);font-weight:700;font-size:10.5px;
+  letter-spacing:.42em;text-transform:uppercase;
+  color:var(--gold-s);max-width:130px;line-height:1.5
+}
+.tmc-value{
+  font-family:var(--display);font-weight:800;font-size:48px;
+  color:#fdf7ea;line-height:1;text-shadow:0 0 22px rgba(255,170,70,.4);
+  white-space:nowrap;
+  border-left:1px solid rgba(220,192,129,.35);padding-left:24px
+}
+.tmc-value .tmc-unit{
+  font-size:18px;color:var(--gold-s);font-weight:600;letter-spacing:.06em;
+  margin-left:6px
+}
+.tmc-quote{
+  font-family:var(--serif);font-style:italic;font-size:14.5px;
+  color:rgba(247,236,213,.92);line-height:1.45;
+  border-left:1px solid rgba(220,192,129,.35);padding-left:22px
+}
+
 /* ═══ AMBIANCE PERSISTANTE — torches, étincelles, silhouettes, bannière chapitre ═══ */
 
 /* Torches fixes aux 2 coins bas du deck, indépendantes de la slide active. */
@@ -1036,36 +1125,64 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   </div>
 </section>
 
-<!-- 8 · STRATÉGIE — CANAUX & WORKFLOW -->
+<!-- 8 · WORKFLOW — du contact froid à la signature (avec reveal séquentiel) -->
 <section class="slide" data-ch="5">
   <div class="wm">05</div>
   <div class="s-inner">
-    <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Stratégie · Canaux & workflow</span></div>
-    <h1 class="title" data-anim style="--d:.08s">Le <span class="u">workflow</span>, de A à Z</h1>
-    <div class="pills" data-anim style="--d:.16s;margin-top:18px">
-      <span class="pill">✉️ <b>lemlist</b> · séquences cold email</span>
-      <span class="pill">📞 <b>Téléphone</b> · cold call</span>
-      <span class="pill">💼 <b>LinkedIn</b></span>
-      <span class="pill">🚶 <b>Terrain</b> · RDV</span>
-      <span class="pill">📨 <b>Brevo</b> (API) · emailing</span>
+    <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Stratégie · Workflow</span></div>
+    <h1 class="title" data-anim style="--d:.08s">Du <span class="u">contact froid</span> à la signature</h1>
+    <p class="sub" data-anim style="--d:.18s">Cinq étapes, cinq chiffres réels, une seule machine — la donnée traverse, le contact se transforme.</p>
+
+    <div class="flow-pro">
+      <div class="fp-step" data-anim style="--d:.45s">
+        <div class="num">01</div>
+        <div class="ico">🎯</div>
+        <div class="name">Identifier</div>
+        <div class="meth">ICP <b>monuments classés</b> + offices de tourisme + opérateurs patrimoniaux. Scraping ciblé + bases publiques.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="1240">1 240</span></span>lieux sourcés (France)</div>
+      </div>
+      <div class="fp-arr" data-anim style="--d:.85s">→</div>
+
+      <div class="fp-step" data-anim style="--d:1.0s">
+        <div class="num">02</div>
+        <div class="ico">🔍</div>
+        <div class="name">Enrichir</div>
+        <div class="meth"><b>Apollo</b> · <b>Clay</b> · <b>Pappers</b>. Décideur, email pro vérifié, ligne directe, score d'intérêt.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="265">265</span></span>prospects qualifiés au CRM</div>
+      </div>
+      <div class="fp-arr" data-anim style="--d:1.4s">→</div>
+
+      <div class="fp-step" data-anim style="--d:1.55s">
+        <div class="num">03</div>
+        <div class="ico">✉️</div>
+        <div class="name">Mailing</div>
+        <div class="meth">Séquences cadencées <b>lemlist</b> (3 touches) + transactionnel <b>Brevo</b>. Pitch perso par segment ICP.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="420">420</span></span>contactés · <b>47%</b> d'ouverture</div>
+      </div>
+      <div class="fp-arr" data-anim style="--d:1.95s">→</div>
+
+      <div class="fp-step" data-anim style="--d:2.1s">
+        <div class="num">04</div>
+        <div class="ico">📞</div>
+        <div class="name">Téléphone</div>
+        <div class="meth">Relance ciblée sur les répondants. <b>Pitch 30 s</b> + qualification besoins + agenda RDV.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="92">92</span></span>réponses traitées en call</div>
+      </div>
+      <div class="fp-arr" data-anim style="--d:2.5s">→</div>
+
+      <div class="fp-step" data-anim style="--d:2.65s">
+        <div class="num">05</div>
+        <div class="ico">🤝</div>
+        <div class="name">Terrain</div>
+        <div class="meth">RDV physique sur site (Antibes, Nice). Bilan, scoring final, transmission à <b>Bastien</b> pour closing.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="21">21</span></span>RDV décrochés · <b>8</b> en négo</div>
+      </div>
     </div>
-    <div class="flow">
-      <div class="node" data-anim style="--d:.24s"><div class="k">01</div><div class="t">Cibler</div><div class="d">ICP · France entière</div></div>
-      <div class="arr" data-anim style="--d:.28s">→</div>
-      <div class="node" data-anim style="--d:.32s"><div class="k">02</div><div class="t">Scraper</div><div class="d">Bright Data · Pappers · Apollo</div></div>
-      <div class="arr" data-anim style="--d:.36s">→</div>
-      <div class="node" data-anim style="--d:.4s"><div class="k">03</div><div class="t">Enrichir</div><div class="d">Clay · Tarkus V2</div></div>
-      <div class="arr" data-anim style="--d:.44s">→</div>
-      <div class="node" data-anim style="--d:.48s"><div class="k">04</div><div class="t">Centraliser</div><div class="d">CRM Supabase</div></div>
-    </div>
-    <div class="flow" style="margin-top:10px">
-      <div class="node" data-anim style="--d:.54s"><div class="k">05</div><div class="t">Activer</div><div class="d">email · tel · LinkedIn · inbound</div></div>
-      <div class="arr" data-anim style="--d:.58s">→</div>
-      <div class="node" data-anim style="--d:.62s"><div class="k">06</div><div class="t">Qualifier</div><div class="d">scoring /100 · pipeline</div></div>
-      <div class="arr" data-anim style="--d:.66s">→</div>
-      <div class="node" data-anim style="--d:.7s"><div class="k">07</div><div class="t">Terrain</div><div class="d">RDV · faisabilité</div></div>
-      <div class="arr" data-anim style="--d:.74s">→</div>
-      <div class="node k7" data-anim style="--d:.78s"><div class="k">08</div><div class="t">Closing</div><div class="d">Bastien · bilan</div></div>
+
+    <div class="tmc-block" data-anim style="--d:3.15s">
+      <div class="tmc-tag">★ TMC<br>Temps Moyen de Communication</div>
+      <div class="tmc-value">~4<span class="tmc-unit">min / contact</span></div>
+      <div class="tmc-quote">« Une machine qui industrialise sans jamais diluer la qualité humaine du contact — on personnalise chaque touche, on suit chaque échange. »</div>
     </div>
   </div>
 </section>
