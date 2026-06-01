@@ -735,6 +735,55 @@ body.js .slide.active .persona-card[data-anim]{
 }
 .obj-figure .fig-cap b{color:#fdf7ea;font-weight:700}
 
+/* ─── Problèmes & solutions : paires en bulles, reveal une par une ─── */
+.psd{display:flex;flex-direction:column;gap:13px;margin-top:16px}
+.psd-legend{display:flex;gap:26px;margin-top:2px;
+  font-family:var(--display);font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+.psd-legend .pl{color:#b35336;font-weight:800}
+.psd-legend .sl{color:#5f8c3f;font-weight:800}
+.psd-pair{display:grid;grid-template-columns:1fr 38px 1.12fr;align-items:stretch;gap:0}
+.psd-bubble{
+  position:relative;border-radius:14px;padding:13px 16px;
+  display:flex;gap:12px;align-items:flex-start;
+  box-shadow:0 8px 20px rgba(58,33,20,.12)
+}
+.psd-bubble .b-ico{
+  flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  font-size:15px;font-weight:800;font-family:var(--display)
+}
+.psd-bubble h4{font-family:var(--display);font-weight:800;font-size:13.5px;margin:0 0 3px;line-height:1.15}
+.psd-bubble p{font-size:11.5px;line-height:1.42;margin:0}
+.psd-bubble p b{font-weight:700}
+/* Problème — ton chaud/rouge */
+.psd-bubble.prob{background:linear-gradient(155deg,#fbeae4,#f6d8cd);border:1.5px solid #e0a892}
+.psd-bubble.prob .b-ico{background:rgba(179,83,54,.18);color:#9c4a38;border:1px solid rgba(179,83,54,.4)}
+.psd-bubble.prob h4{color:#8f3f2c}
+.psd-bubble.prob p{color:#6b3b2e}
+.psd-bubble.prob p b{color:#8f3f2c}
+/* Solution — ton vert/or */
+.psd-bubble.sol{background:linear-gradient(155deg,#eef5e2,#e0eecb);border:1.5px solid #aac77e}
+.psd-bubble.sol .b-ico{background:rgba(95,140,63,.18);color:#4d6b28;border:1px solid rgba(95,140,63,.4)}
+.psd-bubble.sol h4{color:#456325}
+.psd-bubble.sol p{color:#3f4f2a}
+.psd-bubble.sol p b{color:#456325}
+/* Flèche centrale obstacle → solution */
+.psd-arrow{display:grid;place-items:center;color:var(--gold);
+  font-family:var(--display);font-weight:900;font-size:22px;
+  text-shadow:0 0 10px rgba(201,162,76,.4)}
+/* Reveal une par une (cascade) — chaque bulle a son propre data-anim --d */
+.psd-pair [data-anim]{opacity:0}
+body.js .slide.active .psd-pair [data-anim]{
+  animation:psdPop .6s cubic-bezier(.22,1.15,.36,1) both;animation-delay:var(--d,0s)
+}
+.psd-bubble.prob[data-anim]{transform:translateX(-26px) scale(.96)}
+.psd-bubble.sol[data-anim]{transform:translateX(26px) scale(.96)}
+.psd-arrow[data-anim]{transform:scale(.4)}
+@keyframes psdPop{
+  0%{opacity:0}
+  60%{opacity:1}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
 /* ═══ AMBIANCE PERSISTANTE — torches, étincelles, silhouettes, bannière chapitre ═══ */
 
 /* Torches fixes aux 2 coins bas du deck, indépendantes de la slide active. */
@@ -1995,25 +2044,81 @@ body.js .slide.active .persona-card[data-anim]{
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 6 <span class="ch">— Problèmes & solutions</span></div>
     <h1 class="title" data-anim style="--d:.08s">Les obstacles, et comment on les <span class="u">lève</span></h1>
-    <div class="ps">
-      <div class="pb" data-anim style="--d:.24s">
-        <div class="col-h">⚠ Ce qu'on rencontre</div>
-        <div class="row"><span class="m">›</span><div>Joindre le bon décideur (standards, redirections)</div></div>
-        <div class="row"><span class="m">›</span><div>Données sales, doublons, faux emails</div></div>
-        <div class="row"><span class="m">›</span><div>« On n'a pas de budget »</div></div>
-        <div class="row"><span class="m">›</span><div>« Twitch ? Ce n'est pas notre public »</div></div>
-        <div class="row"><span class="m">›</span><div>Accès aux monuments : autorisations, sécurité</div></div>
-      </div>
-      <div class="so" data-anim style="--d:.34s">
-        <div class="col-h">✓ Nos solutions</div>
-        <div class="row"><span class="m">→</span><div>Enrichissement multi-source + <b>relances cadencées</b> multi-canal</div></div>
-        <div class="row"><span class="m">→</span><div>Format <b>Tarkus Collector V2</b> + qualité &gt; quantité (vérification)</div></div>
-        <div class="row"><span class="m">→</span><div>Levier <b>Aillagon 60 %</b> : un don de 5 000 € coûte 2 000 €</div></div>
-        <div class="row"><span class="m">→</span><div>Pont clé en main vers les <b>18–35 ans</b> — on gère tout</div></div>
-        <div class="row"><span class="m">→</span><div>Format <b>1 jour, lieu rendu intact</b> + le CMN comme clé maître</div></div>
-      </div>
+    <div class="psd-legend" data-anim style="--d:.16s">
+      <span class="pl">⚠ Ce qu'on rencontre</span>
+      <span class="sl">✓ Comment on le lève</span>
     </div>
-    <p class="disclaim" data-anim style="--d:.46s">Bonus technique : nos vidéos teasers IA hallucinaient le texte français → solution adoptée, générer les plans seuls et ajouter les cartons en post-production.</p>
+
+    <div class="psd">
+
+      <!-- PAIRE 1 -->
+      <div class="psd-pair">
+        <div class="psd-bubble prob" data-anim style="--d:.30s">
+          <div class="b-ico">⚠</div>
+          <div><h4>Joindre le bon décideur</h4><p>Standards qui filtrent, adresses génériques, redirections en boucle — la bonne personne est introuvable.</p></div>
+        </div>
+        <div class="psd-arrow" data-anim style="--d:.42s">→</div>
+        <div class="psd-bubble sol" data-anim style="--d:.48s">
+          <div class="b-ico">✓</div>
+          <div><h4>Enrichissement + cadence multi-canal</h4><p><b>Apollo · Clay · Pappers · LinkedIn</b> pour le contact nominatif, puis relances cadencées <b>email + téléphone + LinkedIn</b> jusqu'à la bonne personne.</p></div>
+        </div>
+      </div>
+
+      <!-- PAIRE 2 -->
+      <div class="psd-pair">
+        <div class="psd-bubble prob" data-anim style="--d:.72s">
+          <div class="b-ico">⚠</div>
+          <div><h4>Données sales</h4><p>Doublons, emails obsolètes ou inventés, fiches incomplètes — des heures perdues sur du vent.</p></div>
+        </div>
+        <div class="psd-arrow" data-anim style="--d:.84s">→</div>
+        <div class="psd-bubble sol" data-anim style="--d:.90s">
+          <div class="b-ico">✓</div>
+          <div><h4>Tarkus Collector V2</h4><p>Format normalisé maison : <b>dédoublonnage</b> + <b>vérification de délivrabilité</b>. On vise la <b>qualité &gt; la quantité</b> — chaque fiche est exploitable.</p></div>
+        </div>
+      </div>
+
+      <!-- PAIRE 3 -->
+      <div class="psd-pair">
+        <div class="psd-bubble prob" data-anim style="--d:1.14s">
+          <div class="b-ico">⚠</div>
+          <div><h4>« On n'a pas de budget »</h4><p>Le réflexe n°1 des lieux et fondations face à une dépense culturelle.</p></div>
+        </div>
+        <div class="psd-arrow" data-anim style="--d:1.26s">→</div>
+        <div class="psd-bubble sol" data-anim style="--d:1.32s">
+          <div class="b-ico">✓</div>
+          <div><h4>Levier fiscal Aillagon — 60 %</h4><p>Un don de <b>5 000 €</b> ne coûte réellement que <b>2 000 €</b>. On transforme une dépense en <b>investissement défiscalisé</b>.</p></div>
+        </div>
+      </div>
+
+      <!-- PAIRE 4 -->
+      <div class="psd-pair">
+        <div class="psd-bubble prob" data-anim style="--d:1.56s">
+          <div class="b-ico">⚠</div>
+          <div><h4>« Twitch ? Pas notre public »</h4><p>Les institutions ne perçoivent pas la valeur de l'audience jeune en ligne.</p></div>
+        </div>
+        <div class="psd-arrow" data-anim style="--d:1.68s">→</div>
+        <div class="psd-bubble sol" data-anim style="--d:1.74s">
+          <div class="b-ico">✓</div>
+          <div><h4>Pont clé en main vers les 18–35 ans</h4><p>On apporte <b>créateurs + audience + production</b>. Le lieu touche une génération qu'il n'atteint jamais — <b>sans rien gérer</b>.</p></div>
+        </div>
+      </div>
+
+      <!-- PAIRE 5 -->
+      <div class="psd-pair">
+        <div class="psd-bubble prob" data-anim style="--d:1.98s">
+          <div class="b-ico">⚠</div>
+          <div><h4>Accès aux monuments</h4><p>Autorisations multiples, contraintes de sécurité, peur pour le patrimoine.</p></div>
+        </div>
+        <div class="psd-arrow" data-anim style="--d:2.10s">→</div>
+        <div class="psd-bubble sol" data-anim style="--d:2.16s">
+          <div class="b-ico">✓</div>
+          <div><h4>Format 1 jour, lieu rendu intact</h4><p>Montage / live / démontage le jour même, <b>0 transformation</b>. Le <b>CMN</b> (≈200 sites) sert de <b>clé maître</b> pour ouvrir tout le réseau.</p></div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="disclaim" data-anim style="--d:2.5s">Bonus technique : nos vidéos teasers IA hallucinaient le texte français → solution adoptée, générer les plans seuls et ajouter les cartons en post-production.</p>
   </div>
 </section>
 
