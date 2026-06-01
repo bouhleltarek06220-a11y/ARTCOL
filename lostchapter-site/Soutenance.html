@@ -612,6 +612,59 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .arbo-legend span{display:inline-flex;align-items:center;gap:6px}
 .arbo-legend .ic{font-size:14px}
 
+/* ─── Premiers retours (citations live extraites Gmail) ─── */
+.rep-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+.rep-stat{
+  padding:14px 16px;border-radius:12px;text-align:center;
+  background:linear-gradient(155deg,#1d130a,#0f0805);
+  border:1.5px solid var(--gold-b);color:var(--paper);
+  box-shadow:0 8px 20px rgba(0,0,0,.35)
+}
+.rep-stat .v{font-family:var(--display);font-weight:800;font-size:34px;
+  color:#fdf7ea;line-height:1;text-shadow:0 0 18px rgba(255,170,70,.35)}
+.rep-stat .l{margin-top:6px;font-family:var(--display);font-size:9.5px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold-s)}
+.rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.rep-col{
+  border-radius:14px;padding:16px 16px 14px;
+  background:linear-gradient(160deg,#fdf7ea,#f4e2c7);
+  border:1px solid var(--gold-b);box-shadow:0 8px 22px rgba(58,33,20,.14);
+  display:flex;flex-direction:column;gap:10px
+}
+.rep-col .col-head{
+  display:flex;align-items:baseline;gap:8px;padding-bottom:8px;
+  border-bottom:1px solid rgba(122,74,24,.22)
+}
+.rep-col .col-head .em{font-size:18px}
+.rep-col .col-head .tt{font-family:var(--display);font-weight:800;font-size:12px;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--brown)}
+.rep-col .col-head .ct{margin-left:auto;font-family:var(--display);
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.rep-quote{
+  position:relative;padding:10px 12px 10px 16px;
+  background:rgba(255,255,255,.55);border-radius:8px;
+  border-left:3px solid var(--gold);
+  box-shadow:0 2px 8px rgba(58,33,20,.06)
+}
+.rep-quote .who{font-family:var(--display);font-weight:700;font-size:11px;
+  color:var(--brown);letter-spacing:.04em}
+.rep-quote .who .ag{color:var(--ink2);font-weight:500;font-size:10px}
+.rep-quote .ctx{font-family:var(--display);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin:2px 0 6px}
+.rep-quote .q{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13.5px;line-height:1.45;color:#2a1810;margin:0}
+.rep-quote .q::before{content:"« ";color:var(--gold);font-weight:700}
+.rep-quote .q::after{content:" »";color:var(--gold);font-weight:700}
+.rep-badge{
+  display:inline-block;margin-top:6px;
+  font-family:var(--display);font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:700;
+  padding:2px 8px;border-radius:6px
+}
+.rep-badge.win{background:rgba(127,194,106,.18);color:#3a6b3a;border:1px solid rgba(127,194,106,.45)}
+.rep-badge.rdv{background:rgba(201,162,76,.18);color:#7a4a18;border:1px solid rgba(201,162,76,.45)}
+.rep-badge.up {background:rgba(95,176,216,.18);color:#1c5878;border:1px solid rgba(95,176,216,.45)}
+
 /* ═══ AMBIANCE PERSISTANTE — torches, étincelles, silhouettes, bannière chapitre ═══ */
 
 /* Torches fixes aux 2 coins bas du deck, indépendantes de la slide active. */
@@ -1582,6 +1635,129 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
       <span><span class="ic">✋</span> Action manuelle</span>
       <span><span class="ic">◆</span> Nœud de décision conditionnel</span>
     </div>
+  </div>
+</section>
+
+<!-- 8-ter · PREMIERS RETOURS — citations live extraites Gmail (RDV, escalades, accords de principe) -->
+<section class="slide" data-ch="5">
+  <div class="wm">05</div>
+  <div class="s-inner">
+    <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Premiers retours</span></div>
+    <h1 class="title" data-anim style="--d:.08s">La machine <span class="u">délivre</span></h1>
+    <p class="sub" data-anim style="--d:.16s">Les réponses entrantes — extraites en direct de notre Gmail — confirment que le pitch passe : <b>RDV pris, escalades en interne, accords de principe</b>.</p>
+
+    <!-- KPI hero — chiffres réels du carnet de réponses -->
+    <div class="rep-stats">
+      <div class="rep-stat" data-anim style="--d:.22s">
+        <div class="v"><span class="count" data-to="5" data-delay="500">0</span></div>
+        <div class="l">RDV décrochés</div>
+      </div>
+      <div class="rep-stat" data-anim style="--d:.30s">
+        <div class="v"><span class="count" data-to="3" data-delay="650">0</span></div>
+        <div class="l">Agences influence engagées</div>
+      </div>
+      <div class="rep-stat" data-anim style="--d:.38s">
+        <div class="v"><span class="count" data-to="4" data-delay="800">0</span></div>
+        <div class="l">Lieux qualifiés en interne</div>
+      </div>
+      <div class="rep-stat" data-anim style="--d:.46s">
+        <div class="v"><span class="count" data-to="1" data-delay="950">0</span></div>
+        <div class="l">Sponsor corporate en call</div>
+      </div>
+    </div>
+
+    <div class="rep-grid">
+      <!-- ── INFLUENCEURS ── -->
+      <div class="rep-col" data-anim style="--d:.58s">
+        <div class="col-head">
+          <span class="em">🎮</span>
+          <span class="tt">Influenceurs</span>
+          <span class="ct">3 / 5 contactés</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Elyse Phelip <span class="ag">— Head of Walter Agency · Bob Lennon</span></div>
+          <div class="ctx">22 mai · suite à 4 échanges</div>
+          <p class="q">Le projet est effectivement beaucoup plus clair maintenant et honnêtement l'approche mêlant patrimoine, narration historique et JDR live est vraiment intéressante.</p>
+          <span class="rep-badge win">Accord de principe · enveloppe talents</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Céline <span class="ag">— Cheffe de projet · Ponce (Aurélien Gilles)</span></div>
+          <div class="ctx">26 mai · prise d'initiative</div>
+          <p class="q">Votre mail m'intrigue un peu. J'ai pris un rdv sur votre calendrier ouvert pour demain midi.</p>
+          <span class="rep-badge rdv">RDV calendar auto-pris</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Shanice Coillard <span class="ag">— Talent Mgmt OBA OBA · Baghera Jones</span></div>
+          <div class="ctx">21 mai · visio planifiée</div>
+          <p class="q">Merci beaucoup pour cette proposition. Je serais ravie d'avoir plus d'informations !</p>
+          <span class="rep-badge rdv">Visio confirmée</span>
+        </div>
+      </div>
+
+      <!-- ── LIEUX PATRIMONIAUX ── -->
+      <div class="rep-col" data-anim style="--d:.70s">
+        <div class="col-head">
+          <span class="em">🏛️</span>
+          <span class="tt">Lieux</span>
+          <span class="ct">4 / 12 contactés</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Maïlys Lalanne <span class="ag">— Médiatrice, Fort Carré d'Antibes</span></div>
+          <div class="ctx">22 mai · cible n°1 du projet</div>
+          <p class="q">J'ai transféré votre mail à mon responsable qui le fait remonter pour voir la faisabilité. Je vous fais signe quand j'en saurai plus.</p>
+          <span class="rep-badge up">Escalade interne ville d'Antibes</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Stéphanie <span class="ag">— Château de Trécesson</span></div>
+          <div class="ctx">30 mai · numéro direct partagé</div>
+          <p class="q">Vous pouvez me rappeler pour échanger sur votre projet au 06 72 73 89 36.</p>
+          <span class="rep-badge rdv">Call ligne directe ouvert</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Anne-Éloïse <span class="ag">— Château de Braux</span></div>
+          <div class="ctx">27 mai · suite à appel</div>
+          <p class="q">Merci encore pour notre échange téléphonique. Comme convenu, rendez-vous demain avec Bastien.</p>
+          <span class="rep-badge rdv">RDV téléphonique pris</span>
+        </div>
+      </div>
+
+      <!-- ── SPONSORS & CORPORATE ── -->
+      <div class="rep-col" data-anim style="--d:.82s">
+        <div class="col-head">
+          <span class="em">🤝</span>
+          <span class="tt">Sponsors</span>
+          <span class="ct">2 / 8 contactés</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Julian Charrial <span class="ag">— Guillemot Corp · Thrustmaster / Hercules</span></div>
+          <div class="ctx">26 mai · réponse à J+1</div>
+          <p class="q">Je veux bien me rendre disponible pour un call de 20 minutes cette semaine.</p>
+          <span class="rep-badge win">Call corporate confirmé</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">Frédéric Hubin <span class="ag">— Directeur mécénat, Fondation Maeght</span></div>
+          <div class="ctx">22 mai · refus argumenté</div>
+          <p class="q">Une idée atypique et fun pour nous, cependant notre assureur ne nous laissera pas mener un tel projet compte tenu de la valeur des œuvres…</p>
+          <span class="rep-badge up">Signal positif sur le concept</span>
+        </div>
+
+        <div class="rep-quote">
+          <div class="who">→ Prochaines cibles</div>
+          <div class="ctx">à activer · juin / juillet</div>
+          <p class="q">Logitech G · Razer · Fnac · Cultura · BPI · fondations bancaires régionales — pipeline déjà sourcé sur le CRM.</p>
+          <span class="rep-badge up">Pipeline en cours</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
