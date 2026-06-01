@@ -539,49 +539,49 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .icp-card p{font-size:12px;color:var(--ink2);line-height:1.5;margin:0}
 .icp-card .note{margin-top:7px;font-size:11px;color:var(--ink);font-style:italic;opacity:.85}
 
-/* ─── Persona cards XL (2 colonnes, photo + détails riches) ─── */
-.persona-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:18px;align-items:stretch}
-.persona-card{border-radius:18px;overflow:hidden;border:1.5px solid var(--gold-b);
+/* ─── Persona cards (3 colonnes, photo en haut + détails riches) ─── */
+.persona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;align-items:stretch}
+.persona-card{border-radius:16px;overflow:hidden;border:1.5px solid var(--gold-b);
   background:linear-gradient(160deg,#fdf7ea,#f5e9d4);
-  box-shadow:0 14px 32px rgba(58,33,20,.18);
-  display:grid;grid-template-columns:218px 1fr;min-height:340px;
+  box-shadow:0 12px 28px rgba(58,33,20,.16);
+  display:flex;flex-direction:column;
   transition:transform .25s,box-shadow .3s}
-.persona-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px rgba(58,33,20,.26)}
-.persona-photo{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;border-right:1px solid rgba(122,74,24,.18)}
-.persona-body{padding:18px 20px;display:flex;flex-direction:column;gap:7px;min-width:0;overflow:hidden}
+.persona-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(58,33,20,.24)}
+.persona-photo{width:100%;height:150px;object-fit:cover;object-position:center top;display:block;flex-shrink:0;border-bottom:1px solid rgba(122,74,24,.18)}
+.persona-body{padding:13px 15px 15px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .persona-tag{
-  display:inline-block;font-family:var(--display);font-size:9.5px;letter-spacing:.32em;
+  display:inline-block;font-family:var(--display);font-size:9px;letter-spacing:.3em;
   text-transform:uppercase;color:#7a4a18;font-weight:800;
-  padding:3px 9px;border-radius:6px;background:rgba(201,162,76,.22);
+  padding:3px 8px;border-radius:6px;background:rgba(201,162,76,.22);
   border:1px solid rgba(201,162,76,.5);width:fit-content
 }
-.persona-card h3{font-family:var(--display);font-size:20px;color:var(--brown);margin:5px 0 0;font-weight:800;line-height:1.1}
-.persona-card .role{font-size:12px;color:var(--ink2);margin:0 0 4px;line-height:1.45;font-style:italic}
+.persona-card h3{font-family:var(--display);font-size:16px;color:var(--brown);margin:4px 0 0;font-weight:800;line-height:1.12}
+.persona-card .role{font-size:10.5px;color:var(--ink2);margin:0 0 3px;line-height:1.4;font-style:italic}
 .persona-card .sig{
-  margin:2px 0 4px;padding:6px 10px;border-radius:8px;
+  margin:2px 0 3px;padding:5px 9px;border-radius:7px;
   background:rgba(127,194,106,.13);border-left:3px solid #5fa84a;
-  font-family:var(--display);font-size:10px;letter-spacing:.14em;
+  font-family:var(--display);font-size:9px;letter-spacing:.1em;
   text-transform:uppercase;color:#3a6b3a;font-weight:700;line-height:1.3
 }
 .persona-card .sig.warn{background:rgba(201,162,76,.13);border-left-color:var(--gold);color:#7a4a18}
-.persona-block{margin-top:2px}
-.persona-block .lbl{font-family:var(--display);font-size:9px;letter-spacing:.28em;
+.persona-block{margin-top:1px}
+.persona-block .lbl{font-family:var(--display);font-size:8.5px;letter-spacing:.24em;
   text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:2px;display:block}
-.persona-block .body{font-size:11.5px;color:var(--ink);line-height:1.45;margin:0}
+.persona-block .body{font-size:10.5px;color:var(--ink);line-height:1.4;margin:0}
 .persona-block .body b{color:var(--brown);font-weight:700}
-.persona-card .ptick{list-style:none;padding:0;margin:1px 0 0;display:flex;flex-direction:column;gap:3px}
-.persona-card .ptick li{font-size:11.5px;color:var(--ink);padding-left:16px;position:relative;line-height:1.4}
-.persona-card .ptick li::before{content:"✦";position:absolute;left:0;color:var(--gold);font-size:9px;top:3px}
+.persona-card .ptick{list-style:none;padding:0;margin:1px 0 0;display:flex;flex-direction:column;gap:2px}
+.persona-card .ptick li{font-size:10.5px;color:var(--ink);padding-left:14px;position:relative;line-height:1.35}
+.persona-card .ptick li::before{content:"✦";position:absolute;left:0;color:var(--gold);font-size:8px;top:3px}
 .persona-card .ptick li b{color:var(--brown);font-weight:700}
 
 /* Reveal un-par-un — fade+rise marqué, contrôlé par le délai data-anim */
-.persona-card[data-anim]{opacity:0;transform:translateY(28px) scale(.97)}
+.persona-card[data-anim]{opacity:0;transform:translateY(26px) scale(.97)}
 body.js .slide.active .persona-card[data-anim]{
   animation:personaPop .8s cubic-bezier(.22,1.15,.36,1) both;
   animation-delay:var(--d,0s)
 }
 @keyframes personaPop{
-  0%{opacity:0;transform:translateY(30px) scale(.95)}
+  0%{opacity:0;transform:translateY(28px) scale(.95)}
   55%{opacity:1;transform:translateY(-3px) scale(1.015)}
   100%{opacity:1;transform:translateY(0) scale(1)}
 }
@@ -1389,13 +1389,13 @@ body.js .slide.active .persona-card[data-anim]{
   </div>
 </section>
 
-<!-- 6 · PERSONAS — 2 personas XL avec détails riches + reveal séquentiel -->
+<!-- 6 · PERSONAS — 3 personas enrichis + reveal séquentiel un par un -->
 <section class="slide" data-ch="4">
   <div class="wm">04</div>
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 4 <span class="ch">— Personas</span></div>
     <h1 class="title" data-anim style="--d:.08s">À qui parlons-nous <span class="u">vraiment</span> ?</h1>
-    <p class="sub" data-anim style="--d:.16s">Deux profils-clés, identifiés sur le terrain, qui débloquent toute la chaîne : <b>le gardien du lieu</b> et <b>le créateur d'audience</b>.</p>
+    <p class="sub" data-anim style="--d:.16s">Trois profils-clés, identifiés sur le terrain, qui débloquent toute la chaîne : <b>le lieu</b>, <b>le financeur</b> et <b>le créateur d'audience</b>.</p>
 
     <div class="persona-grid">
 
@@ -1405,57 +1405,71 @@ body.js .slide.active .persona-card[data-anim]{
         <div class="persona-body">
           <span class="persona-tag">Persona · Lieu</span>
           <h3>Maïlys Lalanne, 38 ans</h3>
-          <p class="role">Médiatrice culturelle &amp; régisseure suppléante — Fort Carré d'Antibes (Ville d'Antibes)</p>
+          <p class="role">Médiatrice culturelle &amp; régisseure suppléante — Fort Carré d'Antibes</p>
           <div class="sig">✓ Contact réel · escalade interne en cours</div>
 
-          <div class="persona-block">
-            <span class="lbl">Son quotidien</span>
-            <p class="body">Programmation des visites guidées, accueil scolaires, médiation pour un monument classé (80 000 visiteurs/an). Travaille avec la <b>mairie d'Antibes</b> et la <b>conservation départementale</b>.</p>
-          </div>
-
-          <span class="lbl" style="margin-top:4px">Ce qu'elle veut</span>
+          <span class="lbl" style="display:block;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ce qu'elle veut</span>
           <ul class="ptick">
             <li><b>Rajeunir</b> l'image du Fort, toucher 18-35 ans</li>
-            <li>Faire <b>rayonner</b> Antibes hors saison estivale</li>
-            <li>Inscrire le lieu sur la <b>carte culturelle</b> nationale</li>
+            <li>Faire <b>rayonner</b> Antibes hors saison</li>
+            <li>Inscrire le lieu sur la <b>carte culturelle</b></li>
           </ul>
 
-          <span class="lbl" style="margin-top:4px">Ses blocages — ce qu'on doit lever</span>
+          <span class="lbl" style="display:block;margin-top:4px;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ses blocages → ce qu'on lève</span>
           <ul class="ptick">
-            <li>Jauge limitée (&lt;100 pers.) → on diffuse en <b>live Twitch</b></li>
-            <li>Risque pour le bâti → on garantit <b>0 transformation</b>, montage/démontage en 1 jour</li>
-            <li>Décision partagée mairie/conservation → on cible <b>les deux</b> dès le 1<sup>er</sup> contact</li>
+            <li>Jauge &lt;100 pers. → diffusion <b>live Twitch</b></li>
+            <li>Risque bâti → <b>0 transformation</b>, 1 jour</li>
+            <li>Décision mairie/conservation → on cible <b>les deux</b></li>
           </ul>
         </div>
       </div>
 
-      <!-- PERSONA 2 — Le Créateur : apparaît à 1.2s (one-by-one bien marqué) -->
-      <div class="persona-card" data-anim style="--d:1.20s">
+      <!-- PERSONA 2 — Frédéric (Sponsor/Financeur) : apparaît à 1.0s -->
+      <div class="persona-card" data-anim style="--d:1.0s">
+        <img class="persona-photo" src="/assets/personas/frederic-photo.jpg" alt="Frédéric Hubin, fondation régionale">
+        <div class="persona-body">
+          <span class="persona-tag">Persona · Financeur</span>
+          <h3>Frédéric Hubin, 49 ans</h3>
+          <p class="role">Directeur mécénat &amp; développement — fondation / mécène régional Région Sud</p>
+          <div class="sig warn">◆ Décideur budget · cycle de validation long (CA)</div>
+
+          <span class="lbl" style="display:block;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ce qu'il cherche</span>
+          <ul class="ptick">
+            <li>Un <b>ancrage local</b> fort, image innovante</li>
+            <li>Toucher une <b>audience jeune</b> (18-35)</li>
+            <li>Des <b>contreparties mesurables</b> (logo, RP, data)</li>
+          </ul>
+
+          <span class="lbl" style="display:block;margin-top:4px;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ses blocages → ce qu'on lève</span>
+          <ul class="ptick">
+            <li>« Pas de budget » → <b>Aillagon 60 %</b> : 5 000 € = 2 000 €</li>
+            <li>Validation CA longue → <b>dossier clé en main</b> fourni</li>
+            <li>Risque image → <b>caution CNRS / université</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PERSONA 3 — Le Créateur : apparaît à 1.6s (one-by-one bien marqué) -->
+      <div class="persona-card" data-anim style="--d:1.6s">
         <img class="persona-photo" src="/assets/personas/streameur-photo.jpg" alt="Le Créateur — streameur Histoire/JDR">
         <div class="persona-body">
           <span class="persona-tag">Persona · Créateur</span>
           <h3>Le Créateur, 30-35 ans</h3>
-          <p class="role">Streameur Histoire/JDR · 100 k → 1 M abonnés · représenté par une agence (Walter Agency, OBA OBA, Twenty Z Agency…)</p>
-          <div class="sig">✓ 3 agences déjà engagées · Bob Lennon · Ponce · Baghera</div>
+          <p class="role">Streameur Histoire/JDR · 100 k → 1 M abonnés · via agence (Walter, OBA OBA…)</p>
+          <div class="sig">✓ 3 agences engagées · Bob Lennon · Ponce · Baghera</div>
 
-          <div class="persona-block">
-            <span class="lbl">Son écosystème</span>
-            <p class="body">Vit du <b>live Twitch</b> + <b>YouTube long-format</b> + sponsoring de marque. L'agence filtre tout, valide budgets et calendriers. <b>JDR live</b> et <b>histoire vulgarisée</b> sont son terrain naturel.</p>
-          </div>
-
-          <span class="lbl" style="margin-top:4px">Ce qu'il cherche</span>
+          <span class="lbl" style="display:block;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ce qu'il cherche</span>
           <ul class="ptick">
             <li>Du <b>contenu différenciant</b> qui le sort du lot</li>
-            <li>Un <b>décor d'exception</b> impossible à reproduire chez soi</li>
-            <li>Une <b>caution scientifique</b> (CNRS / université) pour la crédibilité</li>
-            <li>Un format <b>court</b> (1 journée, scénario prêt) — son temps est rare</li>
+            <li>Un <b>décor d'exception</b> impossible chez soi</li>
+            <li>Une <b>caution scientifique</b> pour la crédibilité</li>
           </ul>
 
-          <span class="lbl" style="margin-top:4px">Ses signaux d'achat — observés en réponse</span>
+          <span class="lbl" style="display:block;margin-top:4px;font-family:var(--display);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800">Ses signaux d'achat — observés</span>
           <ul class="ptick">
-            <li>Walter Agency : <b>aligné sur le principe</b> d'enveloppe talents</li>
-            <li>Ponce : <b>RDV pris</b> spontanément sur le calendrier ouvert</li>
-            <li>OBA OBA : <b>visio confirmée</b> en moins de 24h</li>
+            <li>Walter Agency : <b>aligné</b> sur l'enveloppe talents</li>
+            <li>Ponce : <b>RDV pris</b> seul sur le calendrier</li>
+            <li>OBA OBA : <b>visio confirmée</b> en &lt;24h</li>
           </ul>
         </div>
       </div>
