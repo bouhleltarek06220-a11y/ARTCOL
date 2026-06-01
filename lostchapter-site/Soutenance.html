@@ -412,6 +412,55 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 }
 .proof-txt .cta::after{content:"⤢";font-size:13px}
 
+/* ─── Funnel Brevo animé (fusion campagne à étapes × stats réelles) ─── */
+.bv-panel{
+  margin-top:20px;display:grid;grid-template-columns:1fr 248px;gap:18px;
+  padding:18px 20px;border-radius:16px;
+  background:linear-gradient(150deg,#1d130a 0%,#0f0805 100%);
+  border:1.5px solid var(--gold-b);
+  box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 24px rgba(255,170,70,.10)
+}
+.bvp-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.bvp-head .tag{font-family:var(--display);font-weight:800;font-size:10.5px;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--gold-s)}
+.bvp-head .period{margin-left:auto;font-family:var(--display);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(220,192,129,.6)}
+.bvp-head .src{font-family:var(--display);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(220,192,129,.6)}
+.bv-funnel{display:flex;flex-direction:column;gap:11px}
+.bvf-stage{display:grid;grid-template-columns:128px 1fr;gap:14px;align-items:center}
+.bvf-meta{text-align:right}
+.bvf-num{font-family:var(--display);font-weight:800;font-size:22px;color:#fdf7ea;line-height:1}
+.bvf-lbl{font-family:var(--display);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(220,192,129,.7);margin-top:3px}
+.bvf-track{position:relative;height:30px;border-radius:8px;
+  background:rgba(247,236,213,.06);overflow:hidden;
+  border:1px solid rgba(220,192,129,.14)}
+.bvf-track i{
+  position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+  transition:width 1.1s cubic-bezier(.22,1,.36,1) var(--bd,0s)
+}
+.slide.active .bvf-track i{width:var(--w)}
+.bvf-track .rate{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-family:var(--display);font-weight:700;font-size:11px;
+  letter-spacing:.1em;color:#1f120a;z-index:2;
+  text-shadow:0 1px 0 rgba(255,255,255,.25)
+}
+.bvf-track .rate.out{color:rgba(247,236,213,.85);text-shadow:none}
+.bvp-proof{
+  display:flex;flex-direction:column;gap:8px;cursor:pointer;
+  align-self:stretch;justify-content:center
+}
+.bvp-proof img{width:100%;border-radius:8px;display:block;
+  border:1px solid rgba(220,192,129,.35);box-shadow:0 6px 16px rgba(0,0,0,.4);
+  transition:transform .2s}
+.bvp-proof:hover img{transform:scale(1.02)}
+.bvp-proof .cap{font-family:var(--display);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(220,192,129,.7);text-align:center}
+.bvp-proof .cap b{color:var(--gold-s)}
+
 /* Lightbox plein écran */
 .lightbox{
   position:fixed;inset:0;z-index:300;
@@ -1349,8 +1398,8 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="num">03</div>
         <div class="ico">✉️</div>
         <div class="name">Mailing</div>
-        <div class="meth">Séquences cadencées <b>lemlist</b> (3 touches) + transactionnel <b>Brevo</b>. Pitch personnalisé par monument ciblé.</div>
-        <div class="metric pending"><span class="num-big">—</span>contactés · ouverture</div>
+        <div class="meth">Séquences cadencées <b>lemlist</b> (arbre conditionnel) + transactionnel <b>Brevo</b>. Pitch personnalisé par monument ciblé.</div>
+        <div class="metric"><span class="num-big"><span class="count" data-to="256" data-delay="1600">0</span></span>emails · <span class="count" data-to="45.93" data-decimals="2" data-suffix="%" data-delay="1600">0</span> d'ouverture</div>
       </div>
       <div class="fp-arr" data-anim style="--d:1.95s">→</div>
 
@@ -1372,14 +1421,48 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
       </div>
     </div>
 
-    <!-- Preuve réelle : campagne mailing Brevo (cliquer pour agrandir) -->
-    <div class="proof-bar" data-anim style="--d:3.1s" data-lightbox="/assets/proof/brevo-campagne.png">
-      <div class="proof-thumb"><img src="/assets/proof/brevo-campagne.png" alt="Statistiques campagne Brevo Lost Chapter"></div>
-      <div class="proof-txt">
-        <div class="tag">★ Preuve réelle · campagne mailing</div>
-        <h3>Notre campagne Brevo « Lost Chapter »</h3>
-        <p>Propositions de partenariat personnalisées envoyées aux monuments et créateurs — données live exportées de notre console Brevo.</p>
-        <span class="cta">Cliquer pour agrandir</span>
+    <!-- Fusion : funnel de la campagne à étapes ALIMENTÉ par les vraies stats Brevo -->
+    <div class="bv-panel" data-anim style="--d:3.0s">
+      <div>
+        <div class="bvp-head">
+          <span class="tag">★ Campagne réelle · entonnoir live</span>
+          <span class="period">18 mai → 1 juin 2026</span>
+        </div>
+        <div class="bv-funnel">
+          <div class="bvf-stage">
+            <div class="bvf-meta">
+              <div class="bvf-num"><span class="count" data-to="256" data-delay="3100">0</span></div>
+              <div class="bvf-lbl">Emails envoyés</div>
+            </div>
+            <div class="bvf-track"><i style="--w:100%;--c1:#6b4a22;--c2:#c99b5c;--bd:3.1s"></i><span class="rate">100%</span></div>
+          </div>
+          <div class="bvf-stage">
+            <div class="bvf-meta">
+              <div class="bvf-num"><span class="count" data-to="166" data-delay="3350">0</span></div>
+              <div class="bvf-lbl">Délivrés</div>
+            </div>
+            <div class="bvf-track"><i style="--w:64.8%;--c1:#3a6b3a;--c2:#7fc26a;--bd:3.35s"></i><span class="rate">64,84%</span></div>
+          </div>
+          <div class="bvf-stage">
+            <div class="bvf-meta">
+              <div class="bvf-num"><span class="count" data-to="76" data-delay="3600">0</span></div>
+              <div class="bvf-lbl">Ouvreurs estimés</div>
+            </div>
+            <div class="bvf-track"><i style="--w:29.7%;--c1:#2f6a8f;--c2:#5fb0d8;--bd:3.6s"></i><span class="rate out">45,93%</span></div>
+          </div>
+          <div class="bvf-stage">
+            <div class="bvf-meta">
+              <div class="bvf-num"><span class="count" data-to="20" data-delay="3850">0</span></div>
+              <div class="bvf-lbl">Cliqueurs uniques</div>
+            </div>
+            <div class="bvf-track"><i style="--w:7.8%;--c1:#8a5a14;--c2:#e0a93a;--bd:3.85s"></i><span class="rate out">12,05%</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Preuve : screenshot Brevo cliquable (lightbox) -->
+      <div class="bvp-proof" data-lightbox="/assets/proof/brevo-campagne.png">
+        <img src="/assets/proof/brevo-campagne.png" alt="Statistiques campagne Brevo Lost Chapter">
+        <div class="cap">⤢ Console <b>Brevo</b> · cliquer pour agrandir</div>
       </div>
     </div>
   </div>
@@ -1832,10 +1915,18 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     var els=slide.querySelectorAll('.count');
     els.forEach(function(el){
       var to=parseFloat(el.dataset.to), suf=el.dataset.suffix||'', pre=el.dataset.prefix||'';
-      var dur=1100, t0=null;
-      function fmt(v){var s=Math.round(v).toString(); if(Math.round(v)>=1000){s=s.replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');} return pre+s+suf;}
+      var dec=parseInt(el.dataset.decimals||'0',10);
+      var dur=parseInt(el.dataset.dur||'1100',10);
+      var delay=parseInt(el.dataset.delay||'0',10), t0=null;
+      function fmt(v){
+        var s = dec>0 ? v.toFixed(dec) : Math.round(v).toString();
+        if(dec===0 && Math.round(v)>=1000){s=s.replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');}
+        return pre+s+suf;
+      }
       function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1); var e=1-Math.pow(1-p,3); el.textContent=fmt(to*e); if(p<1)requestAnimationFrame(step);}
-      el.textContent=fmt(0); requestAnimationFrame(step);
+      el.textContent=fmt(0);
+      if(delay>0){ setTimeout(function(){ t0=null; requestAnimationFrame(step); }, delay); }
+      else { requestAnimationFrame(step); }
     });
   }
 
