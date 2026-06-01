@@ -230,6 +230,88 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink2)
 }
 
+/* ═══ SLIDE STACK — logos d'outils + démo live CRM/Landing ═══ */
+.stack-card{
+  padding:16px 18px;border-radius:12px;
+  background:var(--paper);
+  border:1px solid var(--edge);
+  box-shadow:0 4px 14px rgba(58,33,20,.07);
+  display:flex;flex-direction:column;gap:8px
+}
+.stack-card .tagline{
+  font-family:var(--display);font-weight:700;font-size:10px;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--gold)
+}
+.stack-card h3{
+  margin:2px 0 4px;font-family:var(--display);font-weight:700;
+  font-size:17px;color:var(--brown);line-height:1.1
+}
+.stack-card p{font-size:12.5px;line-height:1.5;color:var(--ink);margin:6px 0 0}
+
+/* Strip de logos */
+.lgo-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.lgo{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px 5px 7px;
+  font-family:var(--sans);font-weight:600;font-size:11.5px;line-height:1;
+  border-radius:6px;letter-spacing:.02em;
+  background:color-mix(in srgb,var(--c,var(--gold)) 13%,#fff);
+  color:var(--c,var(--brown));
+  border:1px solid color-mix(in srgb,var(--c,var(--gold)) 35%,transparent);
+  white-space:nowrap
+}
+.lgo .ico{width:14px;height:14px;display:inline-grid;place-items:center;border-radius:3px;flex-shrink:0}
+.lgo .ico svg{width:100%;height:100%;display:block}
+
+/* Carte démo live (CRM + Landing cliquables) */
+.demo-card{
+  margin-top:14px;padding:16px 20px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#fdf7ea,#f4e2c7);
+  border:1.5px solid var(--gold-b);
+  box-shadow:0 8px 22px rgba(58,33,20,.12)
+}
+.demo-card .tagline{
+  font-family:var(--display);font-weight:700;font-size:10px;
+  letter-spacing:.36em;text-transform:uppercase;color:var(--gold)
+}
+.demo-card h3{
+  margin:6px 0 4px;font-family:var(--display);font-weight:700;
+  font-size:18px;color:var(--brown)
+}
+.demo-card .lead{font-size:12.5px;color:var(--ink2);margin:0 0 12px}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.demo-tile{
+  display:flex;flex-direction:column;gap:5px;padding:14px 16px;
+  background:#fff;border:1.5px solid var(--gold-s);border-radius:10px;
+  text-decoration:none;color:var(--ink);
+  transition:transform .2s,box-shadow .25s,border-color .25s;
+  position:relative;overflow:hidden;cursor:pointer
+}
+.demo-tile::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 90% 0%,color-mix(in srgb,var(--c) 18%,transparent),transparent 50%);
+  pointer-events:none;opacity:0;transition:opacity .25s
+}
+.demo-tile:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(58,33,20,.18);border-color:var(--c)}
+.demo-tile:hover::before{opacity:1}
+.demo-tile .demo-tag{
+  font-family:var(--display);font-weight:700;font-size:9.5px;
+  letter-spacing:.36em;text-transform:uppercase;color:var(--c)
+}
+.demo-tile .demo-title{
+  font-family:var(--display);font-weight:700;font-size:17px;color:var(--brown);
+  margin-top:2px
+}
+.demo-tile .demo-url{font-family:var(--sans);font-size:11px;color:var(--ink2)}
+.demo-tile .demo-cta{
+  display:inline-flex;align-items:center;gap:6px;margin-top:6px;
+  font-family:var(--display);font-weight:700;font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--c)
+}
+.demo-tile .demo-cta::after{content:"→";transition:transform .2s}
+.demo-tile:hover .demo-cta::after{transform:translateX(5px)}
+
 /* ═══ AMBIANCE PERSISTANTE — torches, étincelles, silhouettes, bannière chapitre ═══ */
 
 /* Torches fixes aux 2 coins bas du deck, indépendantes de la slide active. */
@@ -889,15 +971,65 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Stratégie · Les outils</span></div>
     <h1 class="title" data-anim style="--d:.08s">Notre <span class="u">stack</span> d'acquisition</h1>
     <p class="sub" data-anim style="--d:.16s">Du scraping à la signature : une chaîne d'outils maîtrisée, en grande partie construite par l'équipe.</p>
-    <div class="grid g4" style="margin-top:24px">
-      <div class="card hover" data-anim style="--d:.22s"><div class="tagline">Sourcing</div><h3 style="margin-top:9px;font-size:16px">Scraping & data</h3><p><strong>Bright Data</strong>, <strong>Pappers</strong> (entreprises FR), <strong>Apollo.io</strong> + scraping ciblé d'annuaires (offices de tourisme, monuments).</p></div>
-      <div class="card hover" data-anim style="--d:.3s"><div class="tagline">Enrichissement</div><h3 style="margin-top:9px;font-size:16px">Qualification data</h3><p><strong>Clay</strong> & <strong>Apollo</strong> pour emails, fonctions, décideurs — normalisés au format maison <strong>Tarkus Collector V2</strong>.</p></div>
-      <div class="card hover" data-anim style="--d:.38s"><div class="tagline">Centralisation</div><h3 style="margin-top:9px;font-size:16px">CRM sur-mesure</h3><p>Notre <strong>CRM Play Azur</strong> (HTML + Supabase), multi-utilisateurs, conçu par l'équipe — pipeline, scoring, relances.</p></div>
-      <div class="card hover" data-anim style="--d:.46s"><div class="tagline">Inbound</div><h3 style="margin-top:9px;font-size:16px">Landing connectée</h3><p><strong>lostchapter.vercel.app</strong> — 4 portes par profil qui alimentent <strong>directement le CRM</strong>.</p></div>
+    <div class="grid g3" style="margin-top:20px">
+      <!-- Sourcing -->
+      <div class="stack-card" data-anim style="--d:.22s">
+        <div class="tagline">Sourcing & data</div>
+        <h3>Du scraping aux décideurs</h3>
+        <div class="lgo-row">
+          <span class="lgo" style="--c:#FF6B00">Bright Data</span>
+          <span class="lgo" style="--c:#0F9D58">Pappers</span>
+          <span class="lgo" style="--c:#0077B5"><span class="ico"><svg viewBox="0 0 14 14"><rect width="14" height="14" rx="2.5" fill="#0077B5"/><text x="7" y="10.5" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="8" font-weight="900">in</text></svg></span>LinkedIn</span>
+          <span class="lgo" style="--c:#003D7A">Société.com</span>
+          <span class="lgo" style="--c:#5B2EFC">Pharow</span>
+        </div>
+        <p>Annuaires officiels, base d'entreprises FR, prospection sociale ciblée. Format normalisé maison <strong>Tarkus Collector V2</strong>.</p>
+      </div>
+
+      <!-- Enrichissement -->
+      <div class="stack-card" data-anim style="--d:.30s">
+        <div class="tagline">Enrichissement</div>
+        <h3>Qualification & contacts</h3>
+        <div class="lgo-row">
+          <span class="lgo" style="--c:#6E2EE7">Apollo.io</span>
+          <span class="lgo" style="--c:#1f1f1f">Clay</span>
+          <span class="lgo" style="--c:#FF5A1F">Zeliq</span>
+        </div>
+        <p>Emails pro, vérification de la délivrabilité, hiérarchisation décideurs. Chaque prospect = un score, pas un nom au hasard.</p>
+      </div>
+
+      <!-- Activation -->
+      <div class="stack-card" data-anim style="--d:.38s">
+        <div class="tagline">Activation</div>
+        <h3>Canaux multi-touch</h3>
+        <div class="lgo-row">
+          <span class="lgo" style="--c:#D03A30">lemlist</span>
+          <span class="lgo" style="--c:#0B996E">Brevo</span>
+          <span class="lgo" style="--c:#0077B5"><span class="ico"><svg viewBox="0 0 14 14"><rect width="14" height="14" rx="2.5" fill="#0077B5"/><text x="7" y="10.5" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="8" font-weight="900">in</text></svg></span>LinkedIn</span>
+        </div>
+        <p>Séquences cold email cadencées, emailing transactionnel via API, prise de contact sociale. Téléphone + terrain en complément.</p>
+      </div>
     </div>
-    <div class="feature" data-anim style="--d:.54s">
-      <div class="lbl">Ce qui nous distingue</div>
-      <div class="ft">Une vraie machine connectée : la landing transforme l'inbound en leads CRM automatiquement, en plus de l'outbound.</div>
+
+    <!-- DÉMO LIVE — CRM + Landing cliquables -->
+    <div class="demo-card" data-anim style="--d:.50s">
+      <div class="tagline">★ Démo live · cliquez pour ouvrir</div>
+      <h3>Notre machine connectée</h3>
+      <p class="lead">Inbound (landing) + outbound (CRM) en pipeline auto, construits par l'équipe.</p>
+      <div class="demo-grid">
+        <a class="demo-tile" href="https://crm-play-azur.vercel.app/" target="_blank" rel="noopener" style="--c:#7a4a18">
+          <div class="demo-tag">Centralisation · HTML + Supabase</div>
+          <div class="demo-title">CRM Play Azur</div>
+          <div class="demo-url">crm-play-azur.vercel.app</div>
+          <div class="demo-cta">Ouvrir le CRM</div>
+        </a>
+        <a class="demo-tile" href="https://lostchapter.vercel.app/" target="_blank" rel="noopener" style="--c:#c99b5c">
+          <div class="demo-tag">Inbound · 4 portes par profil</div>
+          <div class="demo-title">Landing Lost Chapter</div>
+          <div class="demo-url">lostchapter.vercel.app</div>
+          <div class="demo-cta">Ouvrir la landing</div>
+        </a>
+      </div>
     </div>
   </div>
 </section>
