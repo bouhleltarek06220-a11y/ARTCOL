@@ -357,7 +357,7 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 }
 .fp-step .meth b{color:var(--brown);font-weight:600}
 .fp-step .metric{
-  font-family:var(--display);font-weight:700;font-size:15px;
+  font-family:var(--display);font-weight:700;font-size:13px;
   color:var(--gold);margin-top:auto;
   padding:7px 10px;
   background:rgba(201,162,76,.12);
@@ -365,6 +365,74 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   border-radius:0 6px 6px 0;letter-spacing:.01em;line-height:1.2
 }
 .fp-step .metric .num-big{font-size:20px;color:var(--brown);font-weight:800;display:block;margin-bottom:1px}
+/* État « chiffre à venir » : placeholder discret en attendant les vrais chiffres */
+.fp-step .metric.pending{
+  background:rgba(58,33,20,.05);border-left-color:var(--gold-s);
+  color:var(--ink2);font-weight:600;font-size:11.5px
+}
+.fp-step .metric.pending .num-big{
+  color:var(--gold-s);font-size:22px;letter-spacing:.1em
+}
+
+/* ─── Preuve campagne Brevo (image cliquable + lightbox) ─── */
+.proof-bar{
+  margin-top:22px;display:flex;align-items:center;gap:20px;
+  padding:14px 18px;border-radius:14px;
+  background:linear-gradient(135deg,#fdf7ea,#f4e2c7);
+  border:1.5px solid var(--gold-b);
+  box-shadow:0 8px 22px rgba(58,33,20,.12);
+  cursor:pointer;transition:transform .2s,box-shadow .25s
+}
+.proof-bar:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(58,33,20,.2)}
+.proof-thumb{
+  width:230px;flex-shrink:0;border-radius:8px;overflow:hidden;
+  border:1px solid var(--gold-s);box-shadow:0 4px 12px rgba(58,33,20,.18);
+  position:relative
+}
+.proof-thumb img{width:100%;display:block}
+.proof-thumb::after{
+  content:"⤢";position:absolute;top:6px;right:8px;
+  width:24px;height:24px;display:grid;place-items:center;
+  background:rgba(31,18,10,.78);color:var(--gold-s);
+  border-radius:6px;font-size:13px
+}
+.proof-txt .tag{
+  font-family:var(--display);font-weight:700;font-size:10.5px;
+  letter-spacing:.36em;text-transform:uppercase;color:var(--gold)
+}
+.proof-txt h3{
+  margin:5px 0 4px;font-family:var(--display);font-weight:700;
+  font-size:18px;color:var(--brown)
+}
+.proof-txt p{font-size:12.5px;color:var(--ink2);margin:0;line-height:1.5}
+.proof-txt .cta{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+  font-family:var(--display);font-weight:700;font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold)
+}
+.proof-txt .cta::after{content:"⤢";font-size:13px}
+
+/* Lightbox plein écran */
+.lightbox{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(15,9,4,.92);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;padding:40px
+}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{
+  max-width:94%;max-height:90%;border-radius:12px;
+  border:1px solid var(--gold-b);
+  box-shadow:0 30px 80px rgba(0,0,0,.7)
+}
+.lightbox .lb-close{
+  position:absolute;top:20px;right:24px;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(20,12,6,.85);border:1px solid var(--gold-b);
+  color:var(--gold-s);font-size:20px;cursor:pointer;
+  display:grid;place-items:center;transition:transform .2s
+}
+.lightbox .lb-close:hover{transform:scale(1.1)}
 
 .fp-arr{
   display:grid;place-items:center;z-index:1;
@@ -1130,8 +1198,8 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   <div class="wm">05</div>
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Stratégie · Workflow</span></div>
-    <h1 class="title" data-anim style="--d:.08s">Du <span class="u">contact froid</span> à la signature</h1>
-    <p class="sub" data-anim style="--d:.18s">Cinq étapes, cinq chiffres réels, une seule machine — la donnée traverse, le contact se transforme.</p>
+    <h1 class="title" data-anim style="--d:.08s"><span class="u">Workflow</span></h1>
+    <p class="sub" data-anim style="--d:.18s">Cinq étapes, une seule machine — la donnée traverse, le contact froid se transforme en partenaire.</p>
 
     <div class="flow-pro">
       <div class="fp-step" data-anim style="--d:.45s">
@@ -1139,7 +1207,7 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="ico">🎯</div>
         <div class="name">Identifier</div>
         <div class="meth">ICP <b>monuments classés</b> + offices de tourisme + opérateurs patrimoniaux. Scraping ciblé + bases publiques.</div>
-        <div class="metric"><span class="num-big"><span class="count" data-to="1240">1 240</span></span>lieux sourcés (France)</div>
+        <div class="metric pending"><span class="num-big">—</span>lieux sourcés (France)</div>
       </div>
       <div class="fp-arr" data-anim style="--d:.85s">→</div>
 
@@ -1148,7 +1216,7 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="ico">🔍</div>
         <div class="name">Enrichir</div>
         <div class="meth"><b>Apollo</b> · <b>Clay</b> · <b>Pappers</b>. Décideur, email pro vérifié, ligne directe, score d'intérêt.</div>
-        <div class="metric"><span class="num-big"><span class="count" data-to="265">265</span></span>prospects qualifiés au CRM</div>
+        <div class="metric pending"><span class="num-big">—</span>prospects qualifiés au CRM</div>
       </div>
       <div class="fp-arr" data-anim style="--d:1.4s">→</div>
 
@@ -1156,8 +1224,8 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="num">03</div>
         <div class="ico">✉️</div>
         <div class="name">Mailing</div>
-        <div class="meth">Séquences cadencées <b>lemlist</b> (3 touches) + transactionnel <b>Brevo</b>. Pitch perso par segment ICP.</div>
-        <div class="metric"><span class="num-big"><span class="count" data-to="420">420</span></span>contactés · <b>47%</b> d'ouverture</div>
+        <div class="meth">Séquences cadencées <b>lemlist</b> (3 touches) + transactionnel <b>Brevo</b>. Pitch personnalisé par monument ciblé.</div>
+        <div class="metric pending"><span class="num-big">—</span>contactés · ouverture</div>
       </div>
       <div class="fp-arr" data-anim style="--d:1.95s">→</div>
 
@@ -1165,8 +1233,8 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="num">04</div>
         <div class="ico">📞</div>
         <div class="name">Téléphone</div>
-        <div class="meth">Relance ciblée sur les répondants. <b>Pitch 30 s</b> + qualification besoins + agenda RDV.</div>
-        <div class="metric"><span class="num-big"><span class="count" data-to="92">92</span></span>réponses traitées en call</div>
+        <div class="meth">Relance ciblée sur les répondants. <b>Pitch 30 s</b> + qualification des besoins + prise de RDV.</div>
+        <div class="metric pending"><span class="num-big">—</span>réponses traitées en call</div>
       </div>
       <div class="fp-arr" data-anim style="--d:2.5s">→</div>
 
@@ -1174,15 +1242,20 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="num">05</div>
         <div class="ico">🤝</div>
         <div class="name">Terrain</div>
-        <div class="meth">RDV physique sur site (Antibes, Nice). Bilan, scoring final, transmission à <b>Bastien</b> pour closing.</div>
-        <div class="metric"><span class="num-big"><span class="count" data-to="21">21</span></span>RDV décrochés · <b>8</b> en négo</div>
+        <div class="meth">RDV physique sur site (Antibes, Nice). Bilan, scoring final, transmission à <b>Bastien</b> pour le suivi.</div>
+        <div class="metric pending"><span class="num-big">—</span>RDV décrochés</div>
       </div>
     </div>
 
-    <div class="tmc-block" data-anim style="--d:3.15s">
-      <div class="tmc-tag">★ TMC<br>Temps Moyen de Communication</div>
-      <div class="tmc-value">~4<span class="tmc-unit">min / contact</span></div>
-      <div class="tmc-quote">« Une machine qui industrialise sans jamais diluer la qualité humaine du contact — on personnalise chaque touche, on suit chaque échange. »</div>
+    <!-- Preuve réelle : campagne mailing Brevo (cliquer pour agrandir) -->
+    <div class="proof-bar" data-anim style="--d:3.1s" data-lightbox="/assets/proof/brevo-campagne.png">
+      <div class="proof-thumb"><img src="/assets/proof/brevo-campagne.png" alt="Statistiques campagne Brevo Lost Chapter"></div>
+      <div class="proof-txt">
+        <div class="tag">★ Preuve réelle · campagne mailing</div>
+        <h3>Notre campagne Brevo « Lost Chapter »</h3>
+        <p>Propositions de partenariat personnalisées envoyées aux monuments et créateurs — données live exportées de notre console Brevo.</p>
+        <span class="cta">Cliquer pour agrandir</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1486,6 +1559,12 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   </div>
 </div>
 
+<!-- Lightbox réutilisable (preuves zoomables) -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Fermer">✕</button>
+  <img id="lbImg" src="" alt="">
+</div>
+
 <script>
 (function(){
   document.body.classList.add('js');
@@ -1733,6 +1812,35 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
   });
   document.addEventListener('keydown', function(e){
     if(e.key==='Escape' && scnOverlay.classList.contains('open')){ closeScn(); }
+  });
+
+  /* ═══ LIGHTBOX — preuves zoomables (screenshot Brevo, etc.) ═══ */
+  var lightbox=document.getElementById('lightbox');
+  var lbImg=document.getElementById('lbImg');
+  var lbClose=document.getElementById('lbClose');
+  function openLightbox(src){
+    lbImg.src=src;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  document.querySelectorAll('[data-lightbox]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      openLightbox(el.getAttribute('data-lightbox'));
+    });
+  });
+  lbClose && lbClose.addEventListener('click', function(e){ e.stopPropagation(); closeLightbox(); });
+  lightbox && lightbox.addEventListener('click', function(e){
+    if(e.target===lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
   });
 })();
 </script>
