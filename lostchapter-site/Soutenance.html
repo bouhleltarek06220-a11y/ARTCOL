@@ -249,17 +249,19 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
 .stack-card p{font-size:12.5px;line-height:1.5;color:var(--ink);margin:6px 0 0}
 
 /* Strip de logos */
-.lgo-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.lgo-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;align-items:center}
 .lgo{
   display:inline-flex;align-items:center;gap:6px;
-  padding:5px 10px 5px 7px;
+  padding:6px 11px;
   font-family:var(--sans);font-weight:600;font-size:11.5px;line-height:1;
-  border-radius:6px;letter-spacing:.02em;
-  background:color-mix(in srgb,var(--c,var(--gold)) 13%,#fff);
+  border-radius:7px;letter-spacing:.02em;
+  background:#fff;
   color:var(--c,var(--brown));
   border:1px solid color-mix(in srgb,var(--c,var(--gold)) 35%,transparent);
-  white-space:nowrap
+  white-space:nowrap;
+  box-shadow:0 1px 3px rgba(58,33,20,.06)
 }
+.lgo img{height:18px;width:auto;display:block}
 .lgo .ico{width:14px;height:14px;display:inline-grid;place-items:center;border-radius:3px;flex-shrink:0}
 .lgo .ico svg{width:100%;height:100%;display:block}
 
@@ -977,11 +979,11 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="tagline">Sourcing & data</div>
         <h3>Du scraping aux décideurs</h3>
         <div class="lgo-row">
-          <span class="lgo" style="--c:#FF6B00">Bright Data</span>
-          <span class="lgo" style="--c:#0F9D58">Pappers</span>
-          <span class="lgo" style="--c:#0077B5"><span class="ico"><svg viewBox="0 0 14 14"><rect width="14" height="14" rx="2.5" fill="#0077B5"/><text x="7" y="10.5" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="8" font-weight="900">in</text></svg></span>LinkedIn</span>
-          <span class="lgo" style="--c:#003D7A">Société.com</span>
-          <span class="lgo" style="--c:#5B2EFC">Pharow</span>
+          <span class="lgo" style="--c:#FF6B00"><img src="/assets/logos/brightdata.png" alt="Bright Data"></span>
+          <span class="lgo" style="--c:#1A56DB"><img src="/assets/logos/pappers.png" alt="Pappers entreprises"></span>
+          <span class="lgo" style="--c:#0077B5"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span>
+          <span class="lgo" style="--c:#003D7A"><img src="/assets/logos/societe.png" alt="Société.info"></span>
+          <span class="lgo" style="--c:#5B2EFC"><img src="/assets/logos/pharow.png" alt="Pharow"></span>
         </div>
         <p>Annuaires officiels, base d'entreprises FR, prospection sociale ciblée. Format normalisé maison <strong>Tarkus Collector V2</strong>.</p>
       </div>
@@ -991,9 +993,9 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="tagline">Enrichissement</div>
         <h3>Qualification & contacts</h3>
         <div class="lgo-row">
-          <span class="lgo" style="--c:#6E2EE7">Apollo.io</span>
-          <span class="lgo" style="--c:#1f1f1f">Clay</span>
-          <span class="lgo" style="--c:#FF5A1F">Zeliq</span>
+          <span class="lgo" style="--c:#FFC500"><img src="/assets/logos/apollo.png" alt="Apollo.io"></span>
+          <span class="lgo" style="--c:#1f1f1f"><img src="/assets/logos/clay.png" alt="Clay"></span>
+          <span class="lgo" style="--c:#1ED760"><img src="/assets/logos/zeliq.png" alt="Zeliq"></span>
         </div>
         <p>Emails pro, vérification de la délivrabilité, hiérarchisation décideurs. Chaque prospect = un score, pas un nom au hasard.</p>
       </div>
@@ -1003,9 +1005,9 @@ body.js .funnel .ffill{width:0} body.js .slide.active .funnel .ffill{width:var(-
         <div class="tagline">Activation</div>
         <h3>Canaux multi-touch</h3>
         <div class="lgo-row">
-          <span class="lgo" style="--c:#D03A30">lemlist</span>
-          <span class="lgo" style="--c:#0B996E">Brevo</span>
-          <span class="lgo" style="--c:#0077B5"><span class="ico"><svg viewBox="0 0 14 14"><rect width="14" height="14" rx="2.5" fill="#0077B5"/><text x="7" y="10.5" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="8" font-weight="900">in</text></svg></span>LinkedIn</span>
+          <span class="lgo" style="--c:#3461FE"><img src="/assets/logos/lemlist.png" alt="lemlist"></span>
+          <span class="lgo" style="--c:#0B996E"><img src="/assets/logos/brevo.png" alt="Brevo"></span>
+          <span class="lgo" style="--c:#0077B5"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span>
         </div>
         <p>Séquences cold email cadencées, emailing transactionnel via API, prise de contact sociale. Téléphone + terrain en complément.</p>
       </div>
