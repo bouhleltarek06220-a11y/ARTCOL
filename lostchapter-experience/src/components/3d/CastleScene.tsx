@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
-import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast, HueSaturation } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, ToneMapping, Vignette, Noise, BrightnessContrast } from '@react-three/postprocessing';
 import { ToneMappingMode, BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 import { CastleGate } from './CastleGate';
@@ -247,7 +247,7 @@ export function CastleScene() {
         args={USE_CATHEDRAL
           ? ['#1a1228', 14, 90]
           : USE_DUNGEON
-            ? ['#0e0a06', 20, 115]
+            ? ['#080604', 26, 130]
             : ['#080604', 90, 320]}
       />
       <ambientLight intensity={0.22} color="#5a4632" />
@@ -336,10 +336,9 @@ export function CastleScene() {
 
       <EffectComposer>
         {/* Halo des flammes et portails — douceur cinéma */}
-        <Bloom intensity={1.2} luminanceThreshold={0.18} luminanceSmoothing={0.4} mipmapBlur />
-        {/* Étalonnage couleur (contraste + chaleur + saturation chiaroscuro) */}
-        <BrightnessContrast brightness={-0.02} contrast={0.1} />
-        <HueSaturation saturation={0.12} />
+        <Bloom intensity={1.05} luminanceThreshold={0.2} luminanceSmoothing={0.35} mipmapBlur />
+        {/* Étalonnage couleur léger (un cran de contraste + chaleur) */}
+        <BrightnessContrast brightness={-0.02} contrast={0.08} />
         {/* Grain de pellicule subtil */}
         <Noise opacity={0.06} blendFunction={BlendFunction.OVERLAY} premultiply />
         {/* Vignette cinéma : assombrit les bords pour focaliser le regard */}
