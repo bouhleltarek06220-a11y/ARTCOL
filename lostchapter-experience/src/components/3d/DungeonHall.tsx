@@ -5,7 +5,7 @@ import { CharacterGroup } from './CharacterGroup';
 import { Brazier } from './Brazier';
 import { ChapterDoor } from './ChapterDoor';
 import { FloatingBook } from './FloatingBook';
-import { FlickerLight, WindowGlow, GodRayShaft } from './Atmosphere';
+import { FlickerLight, GodRayShaft, LandscapeBackdrop, Tapestry } from './Atmosphere';
 import { zones } from '../../data/zones';
 
 // Pack KayKit Dungeon Remastered (CC0) — pièces modulaires sur grille de 4 unités.
@@ -156,23 +156,21 @@ export function DungeonHall() {
         </group>
       ))}
 
-      {/* ─── Lueur chaude derrière les fenêtres en ogive (jour dehors) ─── */}
-      {rows.map((z) => (
-        <group key={`win-${z}`}>
-          <WindowGlow position={[X_LEFT - 0.35, 6, z]} rotationY={Math.PI / 2} />
-          <WindowGlow position={[X_RIGHT + 0.35, 6, z]} rotationY={-Math.PI / 2} />
-        </group>
-      ))}
+      {/* ─── Paysage médiéval (golden hour) visible à travers les fenêtres ─── */}
+      <LandscapeBackdrop position={[X_LEFT - 2.5, 8, -18]} rotationY={Math.PI / 2} />
+      <LandscapeBackdrop position={[X_RIGHT + 2.5, 8, -18]} rotationY={-Math.PI / 2} />
       {/* ─── Rais de lumière (god rays) côté soleil, plongeant vers la nef ─── */}
       {[-6, -14, -22, -30].map((z) => (
         <GodRayShaft key={`ray-${z}`} from={[9.4, 7, z]} to={[1.2, 0.1, z + 1.5]} />
       ))}
 
-      {/* ─── BANNIÈRES ─── */}
-      <Piece url={BANNER} position={[X_LEFT + 0.6, 5.5, -12]} rotationY={-Math.PI / 2} scale={1.4} />
-      <Piece url={BANNER} position={[X_RIGHT - 0.6, 5.5, -12]} rotationY={Math.PI / 2} scale={1.4} />
-      <Piece url={BANNER} position={[X_LEFT + 0.6, 5.5, -24]} rotationY={-Math.PI / 2} scale={1.4} />
-      <Piece url={BANNER} position={[X_RIGHT - 0.6, 5.5, -24]} rotationY={Math.PI / 2} scale={1.4} />
+      {/* ─── TAPISSERIES héraldiques générées (blason du livre) sur les murs bas ─── */}
+      {[-6, -22].map((z) => (
+        <group key={`tap-${z}`}>
+          <Tapestry position={[X_LEFT + 0.45, 2.3, z]} rotationY={Math.PI / 2} w={2.0} h={3.4} />
+          <Tapestry position={[X_RIGHT - 0.45, 2.3, z]} rotationY={-Math.PI / 2} w={2.0} h={3.4} />
+        </group>
+      ))}
 
       {/* ─── Éclairage d'ambiance ─── */}
       <ambientLight intensity={0.4} color="#5a4632" />

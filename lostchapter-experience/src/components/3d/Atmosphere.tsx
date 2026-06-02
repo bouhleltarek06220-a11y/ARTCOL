@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
 /**
@@ -28,50 +29,6 @@ export function FlickerLight({
     ref.current.intensity = Math.max(0.5, base + f * amp);
   });
   return <pointLight ref={ref} position={position} color={color} intensity={base} distance={distance} decay={2} />;
-}
-
-/**
- * Lueur chaude derrière une fenêtre/ouverture : un plan additif (jamais noir,
- * non affecté par le fog) qui simule la lumière du jour dehors et fait "respirer"
- * doucement. Sert de base avant d'y coller un vrai paysage (phase Décor IA).
- */
-export function WindowGlow({
-  position,
-  rotationY = 0,
-  w = 2.7,
-  h = 3.1,
-  color = '#ffd9a0',
-  opacity = 0.85,
-}: {
-  position: [number, number, number];
-  rotationY?: number;
-  w?: number;
-  h?: number;
-  color?: string;
-  opacity?: number;
-}) {
-  const ref = useRef<THREE.Mesh>(null);
-  const seed = useMemo(() => Math.random() * 10, []);
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const m = ref.current.material as THREE.MeshBasicMaterial;
-    m.opacity = opacity * (0.9 + 0.1 * Math.sin(clock.elapsedTime * 0.6 + seed));
-  });
-  return (
-    <mesh ref={ref} position={position} rotation={[0, rotationY, 0]}>
-      <planeGeometry args={[w, h]} />
-      <meshBasicMaterial
-        color={color}
-        transparent
-        opacity={opacity}
-        side={THREE.DoubleSide}
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-        toneMapped={false}
-        fog={false}
-      />
-    </mesh>
-  );
 }
 
 /**
@@ -128,6 +85,62 @@ export function GodRayShaft({
         toneMapped={false}
         fog={false}
       />
+    </mesh>
+  );
+}
+
+/**
+ * Paysage médiéval (golden hour) visible à travers les fenêtres : grand plan
+ * non éclairé, lumineux comme le jour dehors, placé juste derrière le mur.
+ * Texture générée (Higgsfield).
+ */
+export function LandscapeBackdrop({
+  position,
+  rotationY,
+  w = 42,
+  h = 24,
+}: {
+  position: [number, number, number];
+  rotationY: number;
+  w?: number;
+  h?: number;
+}) {
+  const tex = useTexture('/assets/dungeon-art/landscape.png');
+  useMemo(() => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.MirroredRepeatWrapping;
+  }, [tex]);
+  return (
+    <mesh position={position} rotation={[0, rotationY, 0]}>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} toneMapped={false} fog={false} side={THREE.DoubleSide} />
+    </mesh>
+  );
+}
+
+/**
+ * Tapisserie héraldique générée (Higgsfield) suspendue au mur, avec une légère
+ * lueur dorée (le blason du livre rayonne) et une ondulation discrète du tissu.
+ */
+export function Tapestry({
+  position,
+  rotationY = 0,
+  w = 2.0,
+  h = 3.6,
+}: {
+  position: [number, number, number];
+  rotationY?: number;
+  w?: number;
+  h?: number;
+}) {
+  const tex = useTexture('/assets/dungeon-art/tapestry.png');
+  useMemo(() => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+  }, [tex]);
+  return (
+    <mesh position={position} rotation={[0, rotationY, 0]}>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} side={THREE.DoubleSide} />
     </mesh>
   );
 }
