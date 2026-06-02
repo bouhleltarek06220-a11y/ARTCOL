@@ -5,6 +5,7 @@ import { CharacterGroup } from './CharacterGroup';
 import { Brazier } from './Brazier';
 import { ChapterDoor } from './ChapterDoor';
 import { FloatingBook } from './FloatingBook';
+import { FlickerLight, WindowGlow, GodRayShaft } from './Atmosphere';
 import { zones } from '../../data/zones';
 
 // Pack KayKit Dungeon Remastered (CC0) — pièces modulaires sur grille de 4 unités.
@@ -150,9 +151,21 @@ export function DungeonHall() {
         <group key={`t-${z}`}>
           <Piece url={TORCH} position={[X_LEFT + 0.55, 2.6, z]} rotationY={-Math.PI / 2} />
           <Piece url={TORCH} position={[X_RIGHT - 0.55, 2.6, z]} rotationY={Math.PI / 2} />
-          <pointLight position={[X_LEFT + 1.4, 2.9, z]} color="#ff9d4d" intensity={9} distance={11} decay={2} />
-          <pointLight position={[X_RIGHT - 1.4, 2.9, z]} color="#ff9d4d" intensity={9} distance={11} decay={2} />
+          <FlickerLight position={[X_LEFT + 1.4, 2.9, z]} base={9} amp={4} distance={11} />
+          <FlickerLight position={[X_RIGHT - 1.4, 2.9, z]} base={9} amp={4} distance={11} />
         </group>
+      ))}
+
+      {/* ─── Lueur chaude derrière les fenêtres en ogive (jour dehors) ─── */}
+      {rows.map((z) => (
+        <group key={`win-${z}`}>
+          <WindowGlow position={[X_LEFT - 0.35, 6, z]} rotationY={Math.PI / 2} />
+          <WindowGlow position={[X_RIGHT + 0.35, 6, z]} rotationY={-Math.PI / 2} />
+        </group>
+      ))}
+      {/* ─── Rais de lumière (god rays) côté soleil, plongeant vers la nef ─── */}
+      {[-6, -14, -22, -30].map((z) => (
+        <GodRayShaft key={`ray-${z}`} from={[9.4, 7, z]} to={[1.2, 0.1, z + 1.5]} />
       ))}
 
       {/* ─── BANNIÈRES ─── */}
