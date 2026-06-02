@@ -43,7 +43,7 @@ export function CentralHall({ onSelect, onHover }: { onSelect: (id: string) => v
       ))}
 
       {/* Carte de France holographique */}
-      <Suspense fallback={null}><FranceMap3D radius={3} /></Suspense>
+      <Suspense fallback={null}><FranceMap3D /></Suspense>
 
       {/* Les 9 portails */}
       {nationalZones.map((z) => (
