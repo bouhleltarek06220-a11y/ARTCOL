@@ -5,8 +5,10 @@ const BASE = import.meta.env.BASE_URL + 'national/';
 const TABLE_VIDEO = BASE + 'videos/final-table.mp4';
 const TABLE_POSTER = BASE + 'final-table.png';
 
-// Où s'ouvre la soutenance quand on clique le livre (URL finale du deck à brancher).
-const SOUTENANCE_URL = 'https://lostchapter.vercel.app/Soutenance';
+// Le livre ouvre la soutenance servie sur le MÊME hôte privé (jury-only) que
+// l'expérience — même lien protégé, rien sur le site public. Chemin relatif à
+// l'origine pour rester valable quel que soit le domaine de preview.
+const SOUTENANCE_URL = '/Soutenance';
 
 /** Tableau final : l'équipe (Tarek / Julie / Myriam) autour de la table dans la
  *  grande salle, le livre ouvert lumineux au centre. Cliquer le livre → ouvre la
