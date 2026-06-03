@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const BASE = import.meta.env.BASE_URL + 'national/videos/';
 // Visite enchaînée : entrée par la herse → couloir aux flambeaux → escalier de
 // tour → remparts/fenêtres → grande salle. Un plan absent est simplement sauté.
-const CLIPS = ['castle-gate.mp4', 'castle-corridor.mp4', 'castle-staircase.mp4', 'castle-ramparts.mp4', 'castle-hall.mp4'];
+const CLIPS = ['castle-gate.mp4', 'castle-corridor.mp4', 'castle-staircase.mp4', 'castle-ramparts.mp4', 'castle-rooftop.mp4', 'castle-hall.mp4'];
 
 /** Visite cinématique first-person du château (plein cadre, aucun texte).
  *  À la fin (ou « Passer »), on débouche dans le hall. */

@@ -1,47 +1,53 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Fond de la scène finale : la grande salle (la table + la cheminée). Sera
-// remplacé par la scène générée avec Tarek / Julie / Myriam autour de la table.
-const HALL = import.meta.env.BASE_URL + 'national/videos/castle-hall.mp4';
+const BASE = import.meta.env.BASE_URL + 'national/';
+const TABLE_VIDEO = BASE + 'videos/final-table.mp4';
+const TABLE_POSTER = BASE + 'final-table.png';
 
-// Où s'ouvre la soutenance quand on clique le livre.
-// (À pointer vers l'URL finale du deck quand le projet soutenance sera en place.)
+// Où s'ouvre la soutenance quand on clique le livre (URL finale du deck à brancher).
 const SOUTENANCE_URL = 'https://lostchapter.vercel.app/Soutenance';
 
-/** Tableau final : on est arrivé dans la grande salle. Un livre ouvert qui
- *  rayonne et pulse, cliquable → ouvre la présentation de la soutenance. */
+/** Tableau final : l'équipe (Tarek / Julie / Myriam) autour de la table dans la
+ *  grande salle, le livre ouvert lumineux au centre. Cliquer le livre → ouvre la
+ *  présentation de la soutenance. */
 export function FinalTableau() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    const id = setTimeout(() => setReady(true), 1400);
+    const id = setTimeout(() => setReady(true), 1600);
     return () => clearTimeout(id);
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}
-      className="fixed inset-0 overflow-hidden bg-black"
-    >
-      <video src={HALL} autoPlay muted loop playsInline preload="auto" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
-      <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 75% 60% at 50% 78%, transparent 30%, rgba(0,0,0,.72) 100%)' }} />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.1 }} className="fixed inset-0 overflow-hidden bg-black">
+      <video src={TABLE_VIDEO} poster={TABLE_POSTER} autoPlay muted loop playsInline preload="auto" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
 
+      {/* Zone cliquable posée sur le livre lumineux (centre de la table) */}
+      <AnimatePresence>
+        {ready && (
+          <motion.button
+            onClick={() => window.open(SOUTENANCE_URL, '_blank')}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}
+            className="group absolute left-1/2 top-[60%] z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+            style={{ width: 'min(18vw, 230px)', height: 'min(11vw, 150px)' }}
+            aria-label="Ouvrir la soutenance"
+          >
+            <span className="absolute inset-0 animate-pulse rounded-[45%]" style={{ boxShadow: '0 0 44px 14px rgba(255,210,120,.5)', background: 'radial-gradient(ellipse, rgba(255,214,128,.22), transparent 70%)' }} />
+            <span className="absolute inset-[-6%] rounded-[45%] border-2 border-transparent transition duration-300 group-hover:border-goldbright/80 group-hover:shadow-[0_0_30px_rgba(229,199,136,.7)]" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Invitation au clic */}
       <AnimatePresence>
         {ready && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
-            className="absolute inset-x-0 bottom-[14%] z-10 flex flex-col items-center"
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.3 }}
+            className="pointer-events-none absolute inset-x-0 bottom-[9%] z-10 text-center"
           >
-            <button
-              onClick={() => window.open(SOUTENANCE_URL, '_blank')}
-              className="group relative flex flex-col items-center"
-              aria-label="Ouvrir la soutenance"
-            >
-              <span className="text-[64px] leading-none transition-transform duration-300 group-hover:scale-110" style={{ filter: 'drop-shadow(0 0 22px rgba(229,199,136,.9)) drop-shadow(0 0 50px rgba(229,199,136,.5))' }}>📖</span>
-              <span className="font-display mt-4 rounded-md border border-goldbright bg-gradient-to-br from-goldbright to-gold px-8 py-3 text-sm font-bold uppercase tracking-[0.32em] text-stone shadow-[0_10px_30px_rgba(229,199,136,.45)] transition group-hover:scale-105">
-                Ouvrir la soutenance
-              </span>
-            </button>
+            <span className="font-display rounded-full border border-goldbright/60 bg-black/45 px-6 py-2 text-xs uppercase tracking-[0.32em] text-parchment backdrop-blur-sm" style={{ textShadow: '0 0 12px rgba(255,210,120,.6)' }}>
+              <span className="animate-pulse">✦</span>&nbsp; Cliquez le livre pour ouvrir la soutenance &nbsp;<span className="animate-pulse">✦</span>
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
