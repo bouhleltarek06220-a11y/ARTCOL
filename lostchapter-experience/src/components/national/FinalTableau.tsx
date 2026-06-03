@@ -28,8 +28,8 @@ export function FinalTableau() {
           <motion.button
             onClick={() => window.open(SOUTENANCE_URL, '_blank')}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}
-            className="group absolute left-1/2 top-[60%] z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-            style={{ width: 'min(18vw, 230px)', height: 'min(11vw, 150px)' }}
+            className="group absolute left-1/2 top-[72%] z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+            style={{ width: 'min(22vw, 280px)', height: 'min(10vw, 130px)' }}
             aria-label="Ouvrir la soutenance"
           >
             <span className="absolute inset-0 animate-pulse rounded-[45%]" style={{ boxShadow: '0 0 44px 14px rgba(255,210,120,.5)', background: 'radial-gradient(ellipse, rgba(255,214,128,.22), transparent 70%)' }} />
