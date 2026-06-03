@@ -12,18 +12,20 @@ export interface NationalZone {
   glyph: string;
   /** Angle (radians) de placement dans l'anneau de portails. */
   angle: number;
+  /** Aperçu vidéo animé (fichier dans national/videos/) affiché dans le portail. */
+  video?: string;
 }
 
 const N = 9;
 const ring = (i: number) => (i / N) * Math.PI * 2 - Math.PI / 2; // départ en haut
 
 export const nationalZones: NationalZone[] = [
-  { id: 'concept',   title: 'Le Concept',            subtitle: "L'Histoire devient vivante",        color: '#e5c788', glyph: '📖', angle: ring(0) },
-  { id: 'lieux',     title: 'Les Lieux Historiques', subtitle: 'Des monuments qui renaissent',       color: '#f0a64a', glyph: '🏰', angle: ring(1) },
-  { id: 'createurs', title: 'Créateurs & Streamers', subtitle: "Ils portent l'audience",             color: '#9146ff', glyph: '🎥', angle: ring(2) },
-  { id: 'sponsors',  title: 'Sponsors & Mécènes',    subtitle: 'Visibilité, impact, mécénat',        color: '#e9d27a', glyph: '🤝', angle: ring(3) },
-  { id: 'public',    title: 'Public & Twitch',       subtitle: 'Sur place et en ligne',              color: '#6f7bff', glyph: '🎭', angle: ring(4) },
-  { id: 'artistes',  title: 'Artistes & Bénévoles',  subtitle: 'Un écosystème humain',               color: '#5fb8a6', glyph: '🎪', angle: ring(5) },
+  { id: 'concept',   title: 'Le Concept',            subtitle: "L'Histoire devient vivante",        color: '#e5c788', glyph: '📖', angle: ring(0), video: 'concept.mp4' },
+  { id: 'lieux',     title: 'Les Lieux Historiques', subtitle: 'Des monuments qui renaissent',       color: '#f0a64a', glyph: '🏰', angle: ring(1), video: 'lieux.mp4' },
+  { id: 'createurs', title: 'Créateurs & Streamers', subtitle: "Ils portent l'audience",             color: '#9146ff', glyph: '🎥', angle: ring(2), video: 'createurs.mp4' },
+  { id: 'sponsors',  title: 'Sponsors & Mécènes',    subtitle: 'Visibilité, impact, mécénat',        color: '#e9d27a', glyph: '🤝', angle: ring(3), video: 'sponsors.mp4' },
+  { id: 'public',    title: 'Public & Twitch',       subtitle: 'Sur place et en ligne',              color: '#6f7bff', glyph: '🎭', angle: ring(4), video: 'public.mp4' },
+  { id: 'artistes',  title: 'Artistes & Bénévoles',  subtitle: 'Un écosystème humain',               color: '#5fb8a6', glyph: '🎪', angle: ring(5), video: 'artistes.mp4' },
   { id: 'coulisses', title: 'Les Coulisses',         subtitle: "L'invisible qui rend possible",      color: '#7fa6c9', glyph: '🎬', angle: ring(6) },
   { id: 'carte',     title: 'La Carte de France',    subtitle: 'Reproductible partout',              color: '#4ea3ff', glyph: '🗺️', angle: ring(7) },
   { id: 'contact',   title: 'Participer',            subtitle: 'Rejoignez le chapitre',              color: '#e5c788', glyph: '✉️', angle: ring(8) },

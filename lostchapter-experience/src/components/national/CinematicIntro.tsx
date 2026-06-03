@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const BG = import.meta.env.BASE_URL + 'national/intro.png';
+const POSTER = import.meta.env.BASE_URL + 'national/intro.png';
+const VIDEO = import.meta.env.BASE_URL + 'national/videos/intro.mp4';
 const LINES = [
   'Chaque pierre cache une mémoire.',
   'Chaque lieu attend son chapitre.',
@@ -23,9 +24,8 @@ export function CinematicIntro({ onEnter }: { onEnter: () => void }) {
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.04 }} transition={{ duration: 1 }}
       className="fixed inset-0 z-40 flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      <motion.img
-        src={BG} alt="" aria-hidden
-        initial={{ scale: 1.18 }} animate={{ scale: 1.04 }} transition={{ duration: 12, ease: 'linear' }}
+      <video
+        src={VIDEO} poster={POSTER} autoPlay muted loop playsInline preload="auto" aria-hidden
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 110% 85% at 50% 52%, rgba(0,0,0,.20) 28%, rgba(0,0,0,.88) 100%)' }} />
