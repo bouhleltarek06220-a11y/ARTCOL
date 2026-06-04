@@ -29,9 +29,10 @@ npm run dev      # http://localhost:5173
 - [x] **1. Scaffold** — Vite + R3F, `<Canvas>` qui tourne, build OK
 - [x] **2. Armure exploded view (souris)** — stand-in procédural, prêt pour le GLB Meshy
 - [x] **3. Monde navigable au scroll** — étages Hall/Sous-sol/Crypte, caméra GSAP+Lenis
-- [x] **4. Porte / portail + slides** — portail transmissif, artwork Higgsfield + vidéo Kling (« autre monde »), slides placeholder
+- [x] **4. Porte / portail + slides** — portail transmissif, artwork Higgsfield + vidéo Kling (« autre monde »)
 - [x] **5. Photoréalisme** — Environment procédural (Lightformers, sans CDN), Bloom/Vignette (+SSAO activable), torches animées
-- [ ] 6. Déploiement Vercel + compression assets
+- [x] **＋ Slides réelles** — deck Équipe Jupiter : titre dans le Hall, 14 slides en mur d'archives (Sous-sol)
+- [~] **6. Déploiement** — assets optimisés + `vercel.json` prêts ; déploiement = projet Vercel dédié (Root Directory `lostchapter-3d/`), cf. `DEPLOY.md`
 
 ## Assets
 
