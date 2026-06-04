@@ -1360,7 +1360,7 @@ body.js .slide.active .psd-pair [data-anim]{
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 3 <span class="ch">— Notre objectif</span></div>
     <h1 class="title" data-anim style="--d:.08s">Notre <span class="u">mission</span> BizDev</h1>
-    <p class="sub" data-anim style="--d:.16s">Au départ, tout repose sur une mission de terrain : réunir les <b>trois piliers</b> qui rendent Lost Chapter possible.</p>
+    <p class="sub" data-anim style="--d:.16s">Au départ : réunir les <b>3 piliers</b> du projet Lost Chapter.</p>
 
     <div class="orbit-stage" data-anim style="--d:.30s">
       <figure class="orbit-core">
@@ -1371,26 +1371,26 @@ body.js .slide.active .psd-pair [data-anim]{
           <div class="orbit-chip"><span class="oc-ico">🎮</span><b>Streameurs Twitch</b></div>
         </div>
         <div class="orbit-item" style="--a:120deg">
-          <div class="orbit-chip"><span class="oc-ico">🏛️</span><b>Monuments historiques</b></div>
+          <div class="orbit-chip"><span class="oc-ico">🏛️</span><b>Monuments historiques</b><small>& châteaux privés</small></div>
         </div>
         <div class="orbit-item" style="--a:240deg">
-          <div class="orbit-chip"><span class="oc-ico">🏰</span><b>Châteaux privés</b></div>
+          <div class="orbit-chip"><span class="oc-ico">💎</span><b>Sponsors &amp; mécènes</b></div>
         </div>
       </div>
     </div>
 
     <style>
     /* ── Slide « mission BizDev » : photo centrée + 3 piliers en orbite (lisible rétroprojecteur) ── */
-    .orbit-stage{position:relative;width:100%;height:620px;margin-top:2px;overflow:visible}
+    .orbit-stage{position:relative;width:100%;height:640px;margin-top:0;overflow:visible}
     .orbit-ring{position:absolute;inset:0;margin:auto;width:500px;height:500px;border-radius:50%;border:2px dashed rgba(179,132,44,.5);box-shadow:inset 0 0 70px rgba(179,132,44,.12);animation:orbit-pulse 6s ease-in-out infinite}
-    .orbit-core{position:absolute;inset:0;margin:auto;width:540px;height:360px;border-radius:18px;overflow:hidden;border:5px solid var(--gold-b);box-shadow:0 22px 60px -14px rgba(58,33,20,.6),0 0 0 10px rgba(253,247,234,.5);background:#1a0f08;z-index:2}
+    .orbit-core{position:absolute;inset:0;margin:auto;width:764px;height:510px;border-radius:20px;overflow:hidden;border:5px solid var(--gold-b);box-shadow:0 22px 60px -14px rgba(58,33,20,.6),0 0 0 10px rgba(253,247,234,.5);background:#1a0f08;z-index:2}
     .orbit-core img{width:100%;height:100%;object-fit:cover;display:block}
-    .orbit-spin{position:absolute;inset:0;margin:auto;width:536px;height:536px;animation:orbit-spin 34s linear infinite;z-index:3}
-    .orbit-item{position:absolute;top:50%;left:50%;width:0;height:0;transform:rotate(var(--a)) translateY(-268px)}
+    .orbit-spin{position:absolute;inset:0;margin:auto;width:540px;height:540px;animation:orbit-spin 34s linear infinite;z-index:3}
+    .orbit-item{position:absolute;top:50%;left:50%;width:0;height:0;transform:rotate(var(--a)) translateY(-270px)}
     .orbit-chip{position:absolute;left:50%;top:50%;width:max-content;max-width:360px;white-space:nowrap;text-align:center;transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)));animation:orbit-spin-rev 34s linear infinite;background:linear-gradient(155deg,#fdf7ea,#f3e6cd);border:1.5px solid var(--gold-b);border-radius:18px;padding:13px 26px;box-shadow:0 16px 36px -16px rgba(58,33,20,.7)}
     .orbit-chip .oc-ico{font-size:32px;line-height:1;display:block;margin-bottom:5px}
     .orbit-chip b{display:block;font-family:var(--display);font-size:24px;color:var(--brown)}
-    .orbit-chip small{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-top:3px}
+    .orbit-chip small{display:block;font-size:15px;font-weight:600;color:var(--ink2);margin-top:2px}
     @keyframes orbit-spin{to{transform:rotate(360deg)}}
     @keyframes orbit-spin-rev{from{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)))}to{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a) - 360deg))}}
     @keyframes orbit-pulse{0%,100%{opacity:.62;transform:scale(1)}50%{opacity:1;transform:scale(1.012)}}
