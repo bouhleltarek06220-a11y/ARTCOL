@@ -32,7 +32,7 @@ export const ROOMS = [
     accent: lostChapter.portal.createurs,
     portal: true,
     // Artwork "autre monde" (Higgsfield) : cadre + anneau d'énergie.
-    portalImage: '/textures/otherworld.png',
+    portalImage: '/textures/otherworld.webp',
     // Vidéo "autre monde" (Kling) qui anime le centre du portail.
     portalVideo: '/videos/portal.mp4',
   },
