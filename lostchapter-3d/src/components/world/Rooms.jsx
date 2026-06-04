@@ -2,6 +2,7 @@ import { ROOMS } from '../../config/rooms.js'
 import { lostChapter } from '../../config/theme.js'
 import SlideBoard from '../slides/SlideBoard.jsx'
 import Portal from './Portal.jsx'
+import Torch from './Torch.jsx'
 
 /**
  * Une salle = sol + mur + torches, puis :
@@ -36,9 +37,9 @@ function Room({ label, y, accent, slide, portal }) {
         </>
       )}
 
-      {/* Torches : une à l'accent de la salle, une braise */}
-      <pointLight position={[-3.6, 1.6, 1.8]} intensity={16} distance={13} color={accent} />
-      <pointLight position={[3.6, 1.6, 1.8]} intensity={16} distance={13} color={lostChapter.ember} />
+      {/* Torches animées (vacillement + flamme émissive captée par le Bloom). */}
+      <Torch position={[-3.6, 1.6, 1.8]} color={accent} intensity={16} distance={13} />
+      <Torch position={[3.6, 1.6, 1.8]} color={lostChapter.ember} intensity={16} distance={13} />
     </group>
   )
 }

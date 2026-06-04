@@ -30,7 +30,7 @@ npm run dev      # http://localhost:5173
 - [x] **2. Armure exploded view (souris)** — stand-in procédural, prêt pour le GLB Meshy
 - [x] **3. Monde navigable au scroll** — étages Hall/Sous-sol/Crypte, caméra GSAP+Lenis
 - [x] **4. Porte / portail + slides** — portail transmissif, artwork Higgsfield + vidéo Kling (« autre monde »), slides placeholder
-- [ ] 5. Photoréalisme (HDRI, post-processing, torches)
+- [x] **5. Photoréalisme** — Environment procédural (Lightformers, sans CDN), Bloom/Vignette (+SSAO activable), torches animées
 - [ ] 6. Déploiement Vercel + compression assets
 
 ## Assets
