@@ -1,10 +1,21 @@
 import { Suspense } from 'react'
-import { MeshTransmissionMaterial, Sparkles, Float, useVideoTexture } from '@react-three/drei'
+import { MeshTransmissionMaterial, Sparkles, useTexture, useVideoTexture } from '@react-three/drei'
 import { DoubleSide } from 'three'
 import { lostChapter } from '../../config/theme.js'
 
-// "Autre monde" en vidéo (Kling) — utilisé seulement si une source est fournie.
-function OtherWorldVideo({ src }) {
+// Artwork du portail (image Higgsfield) : fournit le cadre de pierre + l'anneau d'énergie.
+function PortalArtwork({ src, size }) {
+  const tex = useTexture(src)
+  return (
+    <mesh position={[0, 0.78, -0.35]}>
+      <planeGeometry args={size} />
+      <meshBasicMaterial map={tex} toneMapped={false} />
+    </mesh>
+  )
+}
+
+// Centre animé du portail (vidéo Kling) — affiché par-dessus le centre de l'artwork.
+function InnerRealmVideo({ src }) {
   const tex = useVideoTexture(src, {
     muted: true,
     loop: true,
@@ -13,88 +24,78 @@ function OtherWorldVideo({ src }) {
     crossOrigin: 'anonymous',
   })
   return (
-    <mesh position={[0, 0.7, -0.4]}>
-      <planeGeometry args={[4.6, 2.7]} />
+    <mesh position={[0, 0.78, -0.28]}>
+      <circleGeometry args={[1.12, 48]} />
       <meshBasicMaterial map={tex} toneMapped={false} />
     </mesh>
   )
 }
 
-// Fallback procédural si aucune vidéo : formes flottantes + particules dans l'accent.
-function OtherWorldFallback({ accent }) {
+// Fallback procédural si aucune image n'est fournie.
+function ProceduralRealm({ accent }) {
   return (
-    <group position={[0, 0.7, -0.45]}>
+    <group position={[0, 0.78, -0.35]}>
       <mesh>
-        <planeGeometry args={[4.6, 2.7]} />
+        <planeGeometry args={[4.9, 2.74]} />
         <meshBasicMaterial color={lostChapter.brown} toneMapped={false} />
       </mesh>
-      <Float speed={2} rotationIntensity={1.2} floatIntensity={1.6}>
-        <mesh position={[-0.9, 0.2, 0.3]}>
-          <icosahedronGeometry args={[0.36, 0]} />
-          <meshBasicMaterial color={accent} wireframe toneMapped={false} />
-        </mesh>
-      </Float>
-      <Float speed={1.5} rotationIntensity={1} floatIntensity={1.2}>
-        <mesh position={[0.95, -0.1, 0.5]}>
-          <octahedronGeometry args={[0.32, 0]} />
-          <meshBasicMaterial color={lostChapter.goldBright} wireframe toneMapped={false} />
-        </mesh>
-      </Float>
-      <Sparkles count={40} scale={[4.4, 2.6, 1]} size={3} speed={0.4} color={accent} />
+      <Sparkles count={40} scale={[4, 2.4, 1]} size={3} speed={0.4} color={accent} />
     </group>
   )
 }
 
 /**
- * Portail vers un autre monde (Crypte) : arche + vitre transmissive (MeshTransmissionMaterial)
- * qui réfracte « l'autre monde » placé derrière (vidéo Kling ou fallback procédural).
- *
- * @param {string} [videoSrc] vidéo de l'autre monde (sinon : fallback)
+ * Portail vers un autre monde (Crypte).
+ *  - `imageSrc` : artwork Higgsfield (cadre + anneau) ;
+ *  - `videoSrc` : vidéo Kling qui anime le centre (optionnelle) ;
+ *  - une vitre `MeshTransmissionMaterial` ajoute un miroitement/réfraction live.
  */
-export default function Portal({ y = -16, accent = lostChapter.portal.createurs, videoSrc }) {
+export default function Portal({
+  y = -16,
+  accent = lostChapter.portal.createurs,
+  imageSrc,
+  videoSrc,
+  size = [4.9, 2.74],
+}) {
   return (
-    <group position={[0, y, -4.2]}>
-      {/* Arche du portail */}
-      <mesh position={[0, 0.7, -0.12]}>
-        <torusGeometry args={[1.72, 0.12, 16, 64]} />
-        <meshStandardMaterial
-          color={accent}
-          emissive={accent}
-          emissiveIntensity={0.6}
-          metalness={0.8}
-          roughness={0.3}
-          toneMapped={false}
-        />
-      </mesh>
-
-      {/* L'autre monde (réfracté par la vitre) */}
-      {videoSrc ? (
-        <Suspense fallback={<OtherWorldFallback accent={accent} />}>
-          <OtherWorldVideo src={videoSrc} />
+    <group position={[0, y, -4.0]}>
+      {/* Artwork (cadre + anneau d'énergie) */}
+      {imageSrc ? (
+        <Suspense fallback={<ProceduralRealm accent={accent} />}>
+          <PortalArtwork src={imageSrc} size={size} />
         </Suspense>
       ) : (
-        <OtherWorldFallback accent={accent} />
+        <ProceduralRealm accent={accent} />
       )}
 
-      {/* Vitre du portail : transmission/réfraction */}
-      <mesh position={[0, 0.7, 0]}>
-        <circleGeometry args={[1.62, 64]} />
+      {/* Centre animé (Kling) par-dessus l'artwork */}
+      {videoSrc && (
+        <Suspense fallback={null}>
+          <InnerRealmVideo src={videoSrc} />
+        </Suspense>
+      )}
+
+      {/* Vitre transmissive : miroitement + réfraction de l'autre monde */}
+      <mesh position={[0, 0.78, -0.14]}>
+        <circleGeometry args={[1.2, 64]} />
         <MeshTransmissionMaterial
           transmission={1}
-          thickness={0.6}
-          roughness={0.15}
-          ior={1.25}
-          chromaticAberration={0.25}
-          distortion={0.4}
-          distortionScale={0.4}
-          temporalDistortion={0.2}
+          thickness={0.4}
+          roughness={0.12}
+          ior={1.2}
+          chromaticAberration={0.2}
+          distortion={0.35}
+          distortionScale={0.3}
+          temporalDistortion={0.15}
           backside
           side={DoubleSide}
           color={accent}
         />
       </mesh>
 
-      <pointLight position={[0, 0.7, 1.6]} intensity={22} distance={11} color={accent} />
+      {/* Particules magiques + halo */}
+      <Sparkles count={36} scale={[2.6, 2, 0.6]} position={[0, 0.78, 0]} size={3} speed={0.4} color={accent} />
+      <pointLight position={[0, 0.78, 1.6]} intensity={18} distance={10} color={accent} />
     </group>
   )
 }

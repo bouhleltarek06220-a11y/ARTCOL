@@ -51,7 +51,13 @@ export default function Rooms() {
       ))}
       {/* Portail rendu pour la(les) salle(s) marquée(s) `portal`. */}
       {ROOMS.filter((r) => r.portal).map((r) => (
-        <Portal key={`${r.id}-portal`} y={r.y} accent={r.accent} videoSrc={r.portalVideo} />
+        <Portal
+          key={`${r.id}-portal`}
+          y={r.y}
+          accent={r.accent}
+          imageSrc={r.portalImage}
+          videoSrc={r.portalVideo}
+        />
       ))}
     </group>
   )

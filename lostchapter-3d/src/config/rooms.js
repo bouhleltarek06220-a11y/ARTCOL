@@ -31,9 +31,10 @@ export const ROOMS = [
     y: -16,
     accent: lostChapter.portal.createurs,
     portal: true,
-    // Vidéo "autre monde" (Kling) une fois générée + déposée dans public/videos/.
-    // Laisser indéfini tant que le fichier n'existe pas (sinon : fallback procédural).
-    portalVideo: undefined,
+    // Artwork "autre monde" (Higgsfield) : cadre + anneau d'énergie.
+    portalImage: '/textures/otherworld.png',
+    // Vidéo "autre monde" (Kling) qui anime le centre du portail.
+    portalVideo: '/videos/portal.mp4',
   },
 ]
 
