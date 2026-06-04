@@ -27,7 +27,7 @@ npm run dev      # http://localhost:5173
 ## Avancement (plan en 6 étapes)
 
 - [x] **1. Scaffold** — Vite + R3F, `<Canvas>` qui tourne, build OK
-- [ ] 2. Armure exploded view (souris)
+- [x] **2. Armure exploded view (souris)** — stand-in procédural, prêt pour le GLB Meshy
 - [ ] 3. Monde navigable au scroll (GSAP + Lenis)
 - [ ] 4. Porte / portail (MeshTransmissionMaterial) + slides
 - [ ] 5. Photoréalisme (HDRI, post-processing, torches)

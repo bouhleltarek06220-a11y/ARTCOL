@@ -10,7 +10,7 @@ export default function App() {
       <Canvas
         // PERF : devicePixelRatio plafonné à [1, 2] pour éviter de saturer le GPU sur écrans HiDPI.
         dpr={[1, 2]}
-        camera={{ position: [0, 0, 5], fov: 45 }}
+        camera={{ position: [0, 0, 7], fov: 42 }}
         gl={{ antialias: true }}
       >
         <color attach="background" args={[lostChapter.brown]} />
@@ -25,7 +25,7 @@ export default function App() {
 
       <div className="overlay">
         <h1>Lost Chapter</h1>
-        <p>Expérience 3D de soutenance — scaffold (étape 1)</p>
+        <p>Bouge la souris — l'armure se décompose et se recompose · étape 2 (stand-in)</p>
       </div>
     </>
   )
