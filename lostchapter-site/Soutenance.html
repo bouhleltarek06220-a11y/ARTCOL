@@ -880,6 +880,7 @@ body.js .slide.active .psd-pair [data-anim]{
 .slide .exp-stats-col .stat{
   padding:14px 16px;flex:1;display:flex;flex-direction:column;justify-content:center;
 }
+.slide .exp-stats-col .exp-brand{width:88px;height:88px;flex:0 0 auto;align-self:center;border-radius:50%;box-shadow:0 12px 28px -10px rgba(0,0,0,.6),0 0 0 1px rgba(200,162,76,.4);margin:2px 0 6px}
 
 /* ===== BRAND MARK + NAV ===== */
 .brandmark{position:fixed;top:20px;left:24px;z-index:30;display:flex;align-items:center;gap:11px}
@@ -1320,11 +1321,6 @@ body.js .slide.active .psd-pair [data-anim]{
       <div class="card hover" data-anim style="--d:.26s"><div class="icoB">PA</div><h3>L'association</h3><p>Loi 1901, fondée à Nice, présidée par <strong>Bastien Vergoni</strong>, docteur en sciences. À l'origine du <strong>Play Azur Festival</strong> (~24 000 visiteurs / an).</p></div>
       <div class="card hover" data-anim style="--d:.34s"><div class="icoB">▶</div><h3>La production</h3><p>Vidéos de vulgarisation, captations et <strong>lives Twitch</strong> avec un réseau de <strong>75+ créateurs</strong> de la francophonie.</p></div>
     </div>
-    <div class="pills" data-anim style="--d:.5s;margin-top:20px">
-      <span class="pill">🤝 Partenaires <b>CNRS · CNC · Région Sud · Inserm</b></span>
-      <span class="pill">🎓 Caution <b>Université Côte d'Azur</b></span>
-      <span class="pill">📍 <b>Nice</b>, rayonnement national</span>
-    </div>
   </div>
 </section>
 
@@ -1344,10 +1340,10 @@ body.js .slide.active .psd-pair [data-anim]{
         </video>
       </div>
       <div class="exp-stats-col">
+        <img class="exp-brand" data-anim style="--d:.24s" src="/assets/lostchapter-logo.svg" alt="Lost Chapter — logo">
         <div class="stat" data-anim style="--d:.30s"><div class="n">1 jour</div><div class="l">Montage · live · démontage</div></div>
         <div class="stat" data-anim style="--d:.38s"><div class="n">2h30</div><div class="l">de JDR live immersif</div></div>
         <div class="stat" data-anim style="--d:.46s"><div class="n">&lt;100</div><div class="l">sur place · Twitch illimité</div></div>
-        <div class="stat" data-anim style="--d:.54s"><div class="n">60%</div><div class="l">déductible (mécénat)</div></div>
       </div>
     </div>
     <div class="grid g3" style="margin-top:18px">
@@ -1364,38 +1360,43 @@ body.js .slide.active .psd-pair [data-anim]{
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 3 <span class="ch">— Notre objectif</span></div>
     <h1 class="title" data-anim style="--d:.08s">Notre <span class="u">mission</span> BizDev</h1>
-    <p class="sub" data-anim style="--d:.16s">Bâtir le moteur d'acquisition qui rend Lost Chapter possible — puis reproductible partout en France.</p>
+    <p class="sub" data-anim style="--d:.16s">Au départ, tout repose sur une mission de terrain : réunir les <b>trois piliers</b> qui rendent Lost Chapter possible.</p>
 
-    <div class="obj-2col">
-      <!-- TEXTE À GAUCHE -->
-      <div class="obj-left">
-        <div class="feature" data-anim style="--d:.26s">
-          <div class="lbl">La règle d'or de l'équipe</div>
-          <div class="ft">Nous prospectons et qualifions. Le closing et la négociation budgétaire reviennent à Bastien Vergoni, fondateur.</div>
-          <p>Notre livrable : pour chaque structure, un <strong>contact direct nominatif + email + niveau d'intérêt qualifié</strong>, prêt à être transformé.</p>
+    <div class="orbit-stage" data-anim style="--d:.30s">
+      <div class="orbit-ring" aria-hidden="true"></div>
+      <figure class="orbit-core">
+        <img src="/assets/cheminement.webp" alt="Le cheminement Lost Chapter : de la carte de France aux lieux, sponsors et créateurs">
+      </figure>
+      <div class="orbit-spin">
+        <div class="orbit-item" style="--a:0deg">
+          <div class="orbit-chip"><span class="oc-ico">🏛️</span><b>Des lieux</b><small>monuments à convaincre</small></div>
         </div>
-        <div class="obj-cards">
-          <div class="obj-card" data-anim style="--d:.36s">
-            <div class="oc-ico">🏛️</div>
-            <div><h3>Ouvrir les lieux</h3><p>Identifier et convaincre les monuments d'accueillir une édition — à commencer par le <strong>Fort Carré d'Antibes</strong>.</p></div>
-          </div>
-          <div class="obj-card" data-anim style="--d:.44s">
-            <div class="oc-ico">💎</div>
-            <div><h3>Financer le projet</h3><p>Activer mécènes et sponsors via le levier fiscal <strong>loi Aillagon</strong> (60 %).</p></div>
-          </div>
-          <div class="obj-card" data-anim style="--d:.52s">
-            <div class="oc-ico">🎥</div>
-            <div><h3>Mobiliser les créateurs</h3><p>Recruter les streameurs qui porteront l'audience du live.</p></div>
-          </div>
+        <div class="orbit-item" style="--a:120deg">
+          <div class="orbit-chip"><span class="oc-ico">💎</span><b>Des financeurs</b><small>mécènes &amp; sponsors</small></div>
+        </div>
+        <div class="orbit-item" style="--a:240deg">
+          <div class="orbit-chip"><span class="oc-ico">🎥</span><b>Des créateurs</b><small>streameurs &amp; audience</small></div>
         </div>
       </div>
-
-      <!-- ILLUSTRATION À DROITE : le cheminement Lost Chapter -->
-      <figure class="obj-figure" data-anim style="--d:.34s">
-        <img src="/assets/cheminement.webp" alt="Le cheminement Lost Chapter : de la carte de France aux lieux, sponsors et créateurs">
-        <figcaption class="fig-cap">Un <b>territoire</b>, trois portes — <b>lieux</b>, <b>mécènes</b>, <b>créateurs</b> — un seul fil conducteur.</figcaption>
-      </figure>
     </div>
+
+    <style>
+    /* ── Slide « mission BizDev » : photo centrée + 3 piliers en orbite (lisible rétroprojecteur) ── */
+    .orbit-stage{position:relative;width:100%;height:600px;margin-top:6px;overflow:visible}
+    .orbit-ring{position:absolute;inset:0;margin:auto;width:460px;height:460px;border-radius:50%;border:2px dashed rgba(179,132,44,.5);box-shadow:inset 0 0 70px rgba(179,132,44,.12);animation:orbit-pulse 6s ease-in-out infinite}
+    .orbit-core{position:absolute;inset:0;margin:auto;width:286px;height:286px;border-radius:50%;overflow:hidden;border:4px solid var(--gold-b);box-shadow:0 22px 60px -14px rgba(58,33,20,.6),0 0 0 10px rgba(253,247,234,.5);background:#1a0f08;z-index:2}
+    .orbit-core img{width:100%;height:100%;object-fit:cover;display:block}
+    .orbit-spin{position:absolute;inset:0;margin:auto;width:460px;height:460px;animation:orbit-spin 34s linear infinite;z-index:3}
+    .orbit-item{position:absolute;top:50%;left:50%;width:0;height:0;transform:rotate(var(--a)) translateY(-230px)}
+    .orbit-chip{position:absolute;left:50%;top:50%;width:max-content;max-width:226px;text-align:center;transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)));animation:orbit-spin-rev 34s linear infinite;background:linear-gradient(155deg,#fdf7ea,#f3e6cd);border:1.5px solid var(--gold-b);border-radius:16px;padding:13px 20px;box-shadow:0 16px 36px -16px rgba(58,33,20,.7)}
+    .orbit-chip .oc-ico{font-size:28px;line-height:1;display:block;margin-bottom:5px}
+    .orbit-chip b{display:block;font-family:var(--display);font-size:20px;color:var(--brown)}
+    .orbit-chip small{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-top:3px}
+    @keyframes orbit-spin{to{transform:rotate(360deg)}}
+    @keyframes orbit-spin-rev{from{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)))}to{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a) - 360deg))}}
+    @keyframes orbit-pulse{0%,100%{opacity:.62;transform:scale(1)}50%{opacity:1;transform:scale(1.012)}}
+    @media (prefers-reduced-motion:reduce){.orbit-spin,.orbit-chip,.orbit-ring{animation:none}}
+    </style>
   </div>
 </section>
 
