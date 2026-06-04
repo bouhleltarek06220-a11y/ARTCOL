@@ -21,12 +21,18 @@ Ces **skills Claude Code** vivent dans `.claude/skills/`, sont **versionnées da
 | `batna-mesore` | Négociation raisonnée Harvard (MESORE, ZOPA, concessions/contreparties) |
 | `pitch-saas-immo` | Pitch SaaS immo (Apimo/OGHJI) en 5 actes + battle-cards |
 
-## 🎮 3D Web & Temps réel (3)
+## 🎮 3D Web, Temps réel & Pipeline IA-3D (9)
 | Skill | Rôle |
 |---|---|
 | `web3d-threejs` | three.js/R3F, pipeline, perf, **déploiement** (CSP wasm/workers — leçons Lost Chapter) |
 | `gltf-optimization-pipeline` | Alléger/optimiser les modèles (gltfjsx, meshopt, KTX2, Draco) |
 | `glsl-shaders` | Shaders GLSL (noise, fresnel, dissolve, SDF, LYGIA) |
+| `webgpu-tsl` | Rendu **WebGPU** (r171+) + shaders **TSL** — photoréalisme 2026 |
+| `ai-3d-generation` | Générer des modèles 3D par IA (Meshy, Tripo, Rodin, TRELLIS) + HDRI Skybox AI |
+| `blender-mcp-pipeline` | Piloter **Blender** depuis Claude Code (nettoyage, vue éclatée, bake, export GLB) |
+| `gaussian-splatting-web` | Lieux réels **photoréalistes** (capture → SuperSplat → R3F) + portail |
+| `web3d-effects-cookbook` | Recettes : vue éclatée, **portail verre**, navigation par étages, configurateur |
+| `claude-3d-setup` | Équiper un projet 3D (MCP Blender/Meshy, skills R3F, starter, CLAUDE.md) |
 
 ## 🎨 Conception de site, Design & Imagination (8)
 | Skill | Rôle |
