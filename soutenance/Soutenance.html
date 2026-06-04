@@ -1658,48 +1658,30 @@ body.js .slide.active .psd-pair [data-anim]{
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 5 <span class="ch">— Stratégie · Les outils</span></div>
     <h1 class="title" data-anim style="--d:.08s">Notre <span class="u">stack</span> d'acquisition</h1>
-    <p class="sub" data-anim style="--d:.16s">Du scraping à la signature : une chaîne d'outils maîtrisée, en grande partie construite par l'équipe.</p>
-    <div class="grid g3" style="margin-top:20px">
-      <!-- Sourcing -->
-      <div class="stack-card" data-anim style="--d:.22s">
-        <div class="tagline">Sourcing & data</div>
-        <h3>Du scraping aux décideurs</h3>
-        <div class="lgo-row">
-          <span class="lgo" style="--c:#FF6B00"><img src="/assets/logos/brightdata.png" alt="Bright Data"></span>
-          <span class="lgo" style="--c:#1A56DB"><img src="/assets/logos/pappers.png" alt="Pappers entreprises"></span>
-          <span class="lgo" style="--c:#0077B5"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span>
-          <span class="lgo" style="--c:#003D7A"><img src="/assets/logos/societe.png" alt="Société.info"></span>
-          <span class="lgo" style="--c:#5B2EFC"><img src="/assets/logos/pharow.png" alt="Pharow"></span>
-        </div>
-        <p>Annuaires officiels, base d'entreprises FR, prospection sociale ciblée. Format normalisé maison <strong>Tarkus Collector V2</strong>.</p>
-      </div>
+    <p class="sub" data-anim style="--d:.16s">Du scraping à la signature : une chaîne d'outils maîtrisée, en grande partie construite par l'équipe. <b>Cliquez une étape</b> pour voir les outils.</p>
 
-      <!-- Enrichissement -->
-      <div class="stack-card" data-anim style="--d:.30s">
-        <div class="tagline">Enrichissement</div>
-        <h3>Qualification & contacts</h3>
-        <div class="lgo-row">
-          <span class="lgo" style="--c:#FFC500"><img src="/assets/logos/apollo.png" alt="Apollo.io"></span>
-          <span class="lgo" style="--c:#1f1f1f"><img src="/assets/logos/clay.png" alt="Clay"></span>
-          <span class="lgo" style="--c:#1ED760"><img src="/assets/logos/zeliq.png" alt="Zeliq"></span>
-        </div>
-        <p>Emails pro, vérification de la délivrabilité, hiérarchisation décideurs. Chaque prospect = un score, pas un nom au hasard.</p>
-      </div>
-
-      <!-- Activation -->
-      <div class="stack-card" data-anim style="--d:.38s">
-        <div class="tagline">Activation</div>
-        <h3>Canaux multi-touch</h3>
-        <div class="lgo-row">
-          <span class="lgo" style="--c:#3461FE"><img src="/assets/logos/lemlist.png" alt="lemlist"></span>
-          <span class="lgo" style="--c:#0B996E"><img src="/assets/logos/brevo.png" alt="Brevo"></span>
-          <span class="lgo" style="--c:#0077B5"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span>
-        </div>
-        <p>Séquences cold email cadencées, emailing transactionnel via API, prise de contact sociale. Téléphone + terrain en complément.</p>
-      </div>
+    <div class="stx-grid">
+      <button class="stx-card" type="button" data-stx="1" data-anim style="--d:.24s" aria-expanded="false">
+        <span class="stx-step">1</span>
+        <span class="stx-tag">Sourcing &amp; data</span>
+        <span class="stx-h">Du scraping aux décideurs</span>
+        <span class="stx-cue">5 outils <span class="stx-arrow">↻</span></span>
+      </button>
+      <button class="stx-card" type="button" data-stx="2" data-anim style="--d:.32s" aria-expanded="false">
+        <span class="stx-step">2</span>
+        <span class="stx-tag">Enrichissement</span>
+        <span class="stx-h">Qualification &amp; contacts</span>
+        <span class="stx-cue">3 outils <span class="stx-arrow">↻</span></span>
+      </button>
+      <button class="stx-card" type="button" data-stx="3" data-anim style="--d:.40s" aria-expanded="false">
+        <span class="stx-step">3</span>
+        <span class="stx-tag">Activation</span>
+        <span class="stx-h">Canaux multi-touch</span>
+        <span class="stx-cue">3 outils <span class="stx-arrow">↻</span></span>
+      </button>
     </div>
 
-    <!-- DÉMO LIVE — CRM + Landing cliquables -->
+    <!-- DÉMO LIVE — CRM + Landing cliquables (conservée) -->
     <div class="demo-card" data-anim style="--d:.50s">
       <div class="tagline">★ Démo live · cliquez pour ouvrir</div>
       <h3>Notre machine connectée</h3>
@@ -1719,7 +1701,157 @@ body.js .slide.active .psd-pair [data-anim]{
         </a>
       </div>
     </div>
+  </div><!-- /.s-inner -->
+
+  <!-- OVERLAY : outils de l'étape, révélés un par un (enfant direct de .slide) -->
+  <div class="stx-overlay" id="stxOverlay" aria-hidden="true">
+    <div class="stx-floatwrap">
+      <button class="stx-close" type="button" id="stxClose" aria-label="Fermer">✕</button>
+
+      <!-- PANEL 1 — Sourcing & data -->
+      <article class="stx-panel" data-panel="1">
+        <span class="stx-ptag">Étape 1 · Sourcing &amp; data</span>
+        <h2 class="stx-ptitle">Du scraping aux décideurs</h2>
+        <p class="stx-pdesc">Annuaires officiels, base d'entreprises FR et prospection sociale ciblée — pour partir d'une donnée propre.</p>
+        <div class="stx-tools">
+          <div class="stx-tool" style="--i:0"><span class="stx-logo"><img src="/assets/logos/brightdata.png" alt="Bright Data"></span><div class="stx-tx"><b>Bright Data</b><span>Scraping web &amp; données à grande échelle</span></div></div>
+          <div class="stx-tool" style="--i:1"><span class="stx-logo"><img src="/assets/logos/pappers.png" alt="Pappers"></span><div class="stx-tx"><b>Pappers</b><span>Base entreprises FR · SIREN, dirigeants</span></div></div>
+          <div class="stx-tool" style="--i:2"><span class="stx-logo"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span><div class="stx-tx"><b>LinkedIn</b><span>Prospection &amp; ciblage social</span></div></div>
+          <div class="stx-tool" style="--i:3"><span class="stx-logo"><img src="/assets/logos/societe.png" alt="Société.info"></span><div class="stx-tx"><b>Société.info</b><span>Données légales &amp; annuaires officiels</span></div></div>
+          <div class="stx-tool" style="--i:4"><span class="stx-logo"><img src="/assets/logos/pharow.png" alt="Pharow"></span><div class="stx-tx"><b>Pharow</b><span>Ciblage &amp; signaux B2B</span></div></div>
+        </div>
+      </article>
+
+      <!-- PANEL 2 — Enrichissement -->
+      <article class="stx-panel" data-panel="2">
+        <span class="stx-ptag">Étape 2 · Enrichissement</span>
+        <h2 class="stx-ptitle">Qualification &amp; contacts</h2>
+        <p class="stx-pdesc">Emails pro, vérification de la délivrabilité, hiérarchisation des décideurs : chaque prospect = un score, pas un nom au hasard.</p>
+        <div class="stx-tools">
+          <div class="stx-tool" style="--i:0"><span class="stx-logo"><img src="/assets/logos/apollo.png" alt="Apollo.io"></span><div class="stx-tx"><b>Apollo.io</b><span>Emails pros &amp; data décideurs</span></div></div>
+          <div class="stx-tool" style="--i:1"><span class="stx-logo"><img src="/assets/logos/clay.png" alt="Clay"></span><div class="stx-tx"><b>Clay</b><span>Orchestration &amp; enrichissement data</span></div></div>
+          <div class="stx-tool" style="--i:2"><span class="stx-logo"><img src="/assets/logos/zeliq.png" alt="Zeliq"></span><div class="stx-tx"><b>Zeliq</b><span>Contacts &amp; vérification de délivrabilité</span></div></div>
+        </div>
+      </article>
+
+      <!-- PANEL 3 — Activation -->
+      <article class="stx-panel" data-panel="3">
+        <span class="stx-ptag">Étape 3 · Activation</span>
+        <h2 class="stx-ptitle">Canaux multi-touch</h2>
+        <p class="stx-pdesc">Séquences cold email cadencées, emailing via API et prise de contact sociale — téléphone + terrain en complément.</p>
+        <div class="stx-tools">
+          <div class="stx-tool" style="--i:0"><span class="stx-logo"><img src="/assets/logos/lemlist.png" alt="lemlist"></span><div class="stx-tx"><b>lemlist</b><span>Séquences cold email cadencées</span></div></div>
+          <div class="stx-tool" style="--i:1"><span class="stx-logo"><img src="/assets/logos/brevo.png" alt="Brevo"></span><div class="stx-tx"><b>Brevo</b><span>Emailing &amp; transactionnel via API</span></div></div>
+          <div class="stx-tool" style="--i:2"><span class="stx-logo"><img src="/assets/logos/linkedin.png" alt="LinkedIn"></span><div class="stx-tx"><b>LinkedIn</b><span>Prise de contact sociale</span></div></div>
+        </div>
+      </article>
+
+    </div>
   </div>
+
+  <style>
+  /* ── Stack d'acquisition : 3 étapes cliquables → outils révélés un par un ── */
+  .stx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:28px}
+  .stx-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+    background:var(--card,#fbf4e6);border:1px solid rgba(122,74,24,.20);border-radius:18px;overflow:hidden;
+    padding:30px 28px 26px;cursor:pointer;font-family:inherit;color:inherit;min-height:172px;justify-content:center;
+    box-shadow:0 10px 26px rgba(58,33,20,.12);
+    transition:transform .35s var(--ease,cubic-bezier(.2,.7,.2,1)),box-shadow .35s,border-color .35s}
+  .stx-card:hover,.stx-card.is-active{transform:translateY(-7px);box-shadow:0 24px 52px rgba(58,33,20,.26);border-color:var(--gold,#c9a24c)}
+  .stx-card:focus-visible{outline:3px solid var(--gold,#c9a24c);outline-offset:3px}
+  .stx-step{position:absolute;top:14px;right:20px;font-family:var(--display,Georgia,serif);font-weight:800;font-size:54px;line-height:1;color:var(--gold,#c9a24c);opacity:.22}
+  .stx-tag{font-family:var(--display,Georgia,serif);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800}
+  .stx-h{font-family:var(--display,Georgia,serif);font-weight:800;font-size:27px;line-height:1.13;color:var(--brown,#5a2f14);margin:10px 0 16px}
+  .stx-cue{display:inline-flex;align-items:center;gap:9px;font-size:15.5px;font-weight:800;color:var(--gold,#b3842c);letter-spacing:.04em;text-transform:uppercase}
+  .stx-arrow{display:inline-block;font-size:18px;transition:transform .5s}
+  .stx-card:hover .stx-arrow,.stx-card.is-active .stx-arrow{transform:rotate(360deg)}
+
+  .stx-overlay{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 42%, rgba(24,12,4,.42), rgba(18,9,3,.76));
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity .38s ease,visibility .38s;
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  .stx-overlay.open{opacity:1;visibility:visible;pointer-events:auto}
+  .stx-floatwrap{position:relative;will-change:transform}
+  .stx-overlay.open .stx-floatwrap{animation:stxFloat 5.5s ease-in-out 1s infinite}
+  .stx-close{position:absolute;top:-18px;right:-18px;z-index:6;width:50px;height:50px;border-radius:50%;
+    border:1px solid rgba(122,74,24,.35);background:#fff;color:var(--brown,#5a2f14);font-size:21px;line-height:1;
+    cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.34)}
+  .stx-close:hover{background:var(--gold,#c9a24c);color:#fff}
+  .stx-panel{display:none;width:min(900px,88vw);
+    background:var(--parch,#fbf4e6);border:1px solid rgba(201,162,76,.55);border-radius:26px;padding:36px 44px;
+    box-shadow:0 36px 84px rgba(18,9,3,.58), inset 0 0 0 1px rgba(255,255,255,.45);transform-origin:center}
+  .stx-overlay.open .stx-panel.show{display:block;animation:stxPanelIn .55s cubic-bezier(.22,.85,.25,1) both}
+  .stx-ptag{display:inline-block;font-family:var(--display,Georgia,serif);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800}
+  .stx-ptitle{font-family:var(--display,Georgia,serif);font-weight:800;font-size:38px;line-height:1.07;color:var(--brown,#5a2f14);margin:7px 0 10px}
+  .stx-pdesc{font-size:19px;line-height:1.45;color:var(--ink2,#6b5944);margin:0 0 22px;max-width:60ch}
+  .stx-tools{display:flex;flex-direction:column;gap:14px}
+  .stx-tool{display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.5);border:1px solid rgba(122,74,24,.14);border-radius:14px;padding:13px 18px;opacity:0}
+  .stx-overlay.open .stx-panel.show .stx-tool{animation:stxToolIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * .14s + .3s)}
+  .stx-logo{flex:0 0 auto;width:62px;height:62px;border-radius:12px;background:#fff;border:1px solid rgba(122,74,24,.14);display:flex;align-items:center;justify-content:center;padding:9px}
+  .stx-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+  .stx-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .stx-tx b{font-family:var(--display,Georgia,serif);font-size:22px;color:var(--brown,#5a2f14);font-weight:800;line-height:1.1}
+  .stx-tx span{font-size:17px;color:var(--ink,#3a2114);line-height:1.35}
+
+  @keyframes stxPanelIn{0%{opacity:0;transform:perspective(1300px) rotateX(8deg) scale(.9) translateY(24px)}100%{opacity:1;transform:perspective(1300px) rotateX(0) scale(1) translateY(0)}}
+  @keyframes stxToolIn{0%{opacity:0;transform:translateX(-30px)}100%{opacity:1;transform:translateX(0)}}
+  @keyframes stxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+
+  @media (max-width:900px){
+    .stx-grid{grid-template-columns:1fr;gap:14px}
+    .stx-card{min-height:0;padding:22px}
+    .stx-ptitle{font-size:28px}
+    .stx-tool{gap:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .stx-overlay.open .stx-panel.show{animation:stxFade .3s ease both}
+    .stx-overlay.open .stx-panel.show .stx-tool{animation:stxFade .3s ease both;animation-delay:0s}
+    .stx-overlay.open .stx-floatwrap{animation:none}
+    .stx-card:hover .stx-arrow,.stx-card.is-active .stx-arrow{transform:none}
+  }
+  @keyframes stxFade{from{opacity:0}to{opacity:1}}
+  </style>
+
+  <script>
+  (function(){
+    var sc = document.currentScript;
+    var slide = sc && sc.closest ? sc.closest('.slide') : null;
+    var overlay = document.getElementById('stxOverlay');
+    if(!slide || !overlay) return;
+    var cards = [].slice.call(slide.querySelectorAll('.stx-card'));
+    var closeBtn = document.getElementById('stxClose');
+
+    function open(id){
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden','false');
+      [].forEach.call(overlay.querySelectorAll('.stx-panel'), function(p){ p.classList.remove('show'); });
+      void overlay.offsetWidth;
+      var target = overlay.querySelector('.stx-panel[data-panel="'+id+'"]');
+      if(target) target.classList.add('show');
+      cards.forEach(function(c){
+        var on = c.getAttribute('data-stx')===id;
+        c.classList.toggle('is-active', on);
+        c.setAttribute('aria-expanded', on?'true':'false');
+      });
+    }
+    function close(){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      cards.forEach(function(c){ c.classList.remove('is-active'); c.setAttribute('aria-expanded','false'); });
+    }
+    cards.forEach(function(c){
+      c.addEventListener('click', function(e){
+        e.stopPropagation();
+        var id=c.getAttribute('data-stx');
+        if(overlay.classList.contains('open') && c.classList.contains('is-active')) close();
+        else open(id);
+      });
+    });
+    if(closeBtn) closeBtn.addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    overlay.addEventListener('click', function(e){ e.stopPropagation(); if(e.target===overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && overlay.classList.contains('open')) close(); });
+  })();
+  </script>
 </section>
 
 <!-- 8 · WORKFLOW — du contact froid à la signature (avec reveal séquentiel) -->
