@@ -1784,14 +1784,14 @@ body.js .slide.active .psd-pair [data-anim]{
   .stx-ptag{display:inline-block;font-family:var(--display,Georgia,serif);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800}
   .stx-ptitle{font-family:var(--display,Georgia,serif);font-weight:800;font-size:38px;line-height:1.07;color:var(--brown,#5a2f14);margin:7px 0 10px}
   .stx-pdesc{font-size:19px;line-height:1.45;color:var(--ink2,#6b5944);margin:0 0 22px;max-width:60ch}
-  .stx-tools{display:flex;flex-direction:column;gap:14px}
-  .stx-tool{display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.5);border:1px solid rgba(122,74,24,.14);border-radius:14px;padding:13px 18px;opacity:0}
-  .stx-overlay.open .stx-panel.show .stx-tool{animation:stxToolIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * .14s + .3s)}
-  .stx-logo{flex:0 0 auto;width:62px;height:62px;border-radius:12px;background:#fff;border:1px solid rgba(122,74,24,.14);display:flex;align-items:center;justify-content:center;padding:9px}
+  .stx-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(370px,1fr));gap:16px}
+  .stx-tool{display:flex;align-items:center;gap:22px;background:rgba(255,255,255,.55);border:1px solid rgba(122,74,24,.14);border-radius:16px;padding:15px 20px;opacity:0}
+  .stx-overlay.open .stx-panel.show .stx-tool{animation:stxToolIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * .13s + .3s)}
+  .stx-logo{flex:0 0 auto;width:90px;height:90px;border-radius:16px;background:#fff;border:1px solid rgba(122,74,24,.16);display:flex;align-items:center;justify-content:center;padding:10px}
   .stx-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-  .stx-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .stx-tx b{font-family:var(--display,Georgia,serif);font-size:22px;color:var(--brown,#5a2f14);font-weight:800;line-height:1.1}
-  .stx-tx span{font-size:17px;color:var(--ink,#3a2114);line-height:1.35}
+  .stx-tx{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .stx-tx b{font-family:var(--display,Georgia,serif);font-size:23px;color:var(--brown,#5a2f14);font-weight:800;line-height:1.1}
+  .stx-tx span{font-size:17.5px;color:var(--ink,#3a2114);line-height:1.35}
 
   @keyframes stxPanelIn{0%{opacity:0;transform:perspective(1300px) rotateX(8deg) scale(.9) translateY(24px)}100%{opacity:1;transform:perspective(1300px) rotateX(0) scale(1) translateY(0)}}
   @keyframes stxToolIn{0%{opacity:0;transform:translateX(-30px)}100%{opacity:1;transform:translateX(0)}}
