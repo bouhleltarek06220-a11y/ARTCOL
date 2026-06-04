@@ -1,0 +1,44 @@
+:root {
+  /* Palette Lost Chapter (cf. src/config/theme.js) */
+  --brown: #1a0f08;
+  --gold: #c99b5c;
+  --gold-bright: #e5c788;
+  --cream: #f2e6d0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #root { width: 100%; height: 100%; }
+
+body {
+  background: var(--brown);
+  color: var(--cream);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden; /* étape 3 : passera en scroll vertical (Lenis) */
+}
+
+/* Overlay titre du scaffold (étape 1) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 0 8vh;
+  pointer-events: none; /* la 3D reste interactive dessous */
+  text-align: center;
+}
+.overlay h1 {
+  font-size: clamp(28px, 6vw, 64px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gold-bright);
+  text-shadow: 0 0 40px rgba(229, 199, 136, 0.35);
+}
+.overlay p {
+  margin-top: 10px;
+  font-size: clamp(12px, 1.6vw, 16px);
+  color: var(--gold);
+  opacity: 0.85;
+}
