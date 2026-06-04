@@ -1434,11 +1434,6 @@ body.js .slide.active .psd-pair [data-anim]{
       </button>
     </div>
 
-    <div class="pills" data-anim style="--d:.5s;margin-top:18px">
-      <span class="pill">🇫🇷 <b>France entière</b></span>
-      <span class="pill">🗺️ <b>5 régions</b> · 30+ départements</span>
-      <span class="pill">🎯 Cible n°1 · <b>Fort Carré d'Antibes</b></span>
-    </div>
   </div><!-- /.s-inner -->
 
   <!-- OVERLAY : fiche persona révélée au clic (enfant direct de .slide => couvre toute la slide) -->
@@ -1575,22 +1570,22 @@ body.js .slide.active .psd-pair [data-anim]{
     border:1px solid rgba(122,74,24,.35);background:#fff;color:var(--brown,#5a2f14);font-size:21px;line-height:1;
     cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.34)}
   .ipx-close:hover{background:var(--gold,#c9a24c);color:#fff}
-  .ipx-fiche{display:none;width:min(940px,86vw);max-height:86vh;overflow:auto;
-    background:var(--parch,#fbf4e6);border:1px solid rgba(201,162,76,.55);border-radius:24px;padding:34px 42px;
+  .ipx-fiche{display:none;width:min(1040px,90vw);max-height:none;overflow:visible;
+    background:var(--parch,#fbf4e6);border:1px solid rgba(201,162,76,.55);border-radius:26px;padding:40px 50px;
     box-shadow:0 36px 84px rgba(18,9,3,.58), inset 0 0 0 1px rgba(255,255,255,.45);transform-origin:center}
   .ipx-overlay.open .ipx-fiche.show{display:block;animation:ipxSpin .95s cubic-bezier(.22,.75,.2,1) both}
-  .ipx-fhead{display:flex;gap:26px;align-items:center;border-bottom:1px solid rgba(122,74,24,.18);padding-bottom:20px;margin-bottom:20px}
-  .ipx-fphoto{width:138px;height:138px;border-radius:16px;object-fit:cover;object-position:center 24%;flex-shrink:0;border:2px solid var(--gold,#c9a24c)}
-  .ipx-ftag{display:inline-block;font-family:var(--display,Georgia,serif);font-size:13.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800}
-  .ipx-fname{font-family:var(--display,Georgia,serif);font-weight:800;font-size:35px;line-height:1.07;color:var(--brown,#5a2f14);margin:6px 0 6px}
-  .ipx-frole{font-size:19px;line-height:1.4;color:var(--ink2,#6b5944);margin:0 0 11px;font-style:italic}
-  .ipx-fsig{display:inline-block;font-size:16.5px;font-weight:700;color:#3f6b30;background:rgba(86,140,70,.15);border-left:4px solid #5a8e46;padding:8px 14px;border-radius:8px}
+  .ipx-fhead{display:flex;gap:30px;align-items:center;border-bottom:1px solid rgba(122,74,24,.18);padding-bottom:24px;margin-bottom:24px}
+  .ipx-fphoto{width:172px;height:172px;border-radius:18px;object-fit:cover;object-position:center 24%;flex-shrink:0;border:2px solid var(--gold,#c9a24c)}
+  .ipx-ftag{display:inline-block;font-family:var(--display,Georgia,serif);font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800}
+  .ipx-fname{font-family:var(--display,Georgia,serif);font-weight:800;font-size:42px;line-height:1.06;color:var(--brown,#5a2f14);margin:8px 0 8px}
+  .ipx-frole{font-size:21px;line-height:1.4;color:var(--ink2,#6b5944);margin:0 0 14px;font-style:italic}
+  .ipx-fsig{display:inline-block;font-size:18px;font-weight:700;color:#3f6b30;background:rgba(86,140,70,.15);border-left:4px solid #5a8e46;padding:10px 17px;border-radius:9px}
   .ipx-fsig.warn{background:rgba(201,162,76,.17);border-left-color:var(--gold,#c9a24c);color:#7a4a18}
-  .ipx-fcols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
-  .ipx-flbl{display:block;font-family:var(--display,Georgia,serif);font-size:14.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800;margin-bottom:12px}
-  .ipx-flist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
-  .ipx-flist li{position:relative;padding-left:27px;font-size:20px;line-height:1.45;color:var(--ink,#3a2114)}
-  .ipx-flist li::before{content:"✦";position:absolute;left:0;top:4px;color:var(--gold,#c9a24c);font-size:15px}
+  .ipx-fcols{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+  .ipx-flbl{display:block;font-family:var(--display,Georgia,serif);font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#b3842c);font-weight:800;margin-bottom:14px}
+  .ipx-flist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:15px}
+  .ipx-flist li{position:relative;padding-left:31px;font-size:22.5px;line-height:1.5;color:var(--ink,#3a2114)}
+  .ipx-flist li::before{content:"✦";position:absolute;left:0;top:5px;color:var(--gold,#c9a24c);font-size:17px}
   .ipx-flist li b{color:var(--brown,#5a2f14);font-weight:800}
 
   @keyframes ipxSpin{
