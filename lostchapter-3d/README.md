@@ -28,7 +28,7 @@ npm run dev      # http://localhost:5173
 
 - [x] **1. Scaffold** — Vite + R3F, `<Canvas>` qui tourne, build OK
 - [x] **2. Armure exploded view (souris)** — stand-in procédural, prêt pour le GLB Meshy
-- [ ] 3. Monde navigable au scroll (GSAP + Lenis)
+- [x] **3. Monde navigable au scroll** — étages Hall/Sous-sol/Crypte, caméra GSAP+Lenis
 - [ ] 4. Porte / portail (MeshTransmissionMaterial) + slides
 - [ ] 5. Photoréalisme (HDRI, post-processing, torches)
 - [ ] 6. Déploiement Vercel + compression assets
