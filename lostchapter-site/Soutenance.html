@@ -2414,6 +2414,14 @@ body.js .slide.active .psd-pair [data-anim]{
   </div>
   <button class="thx-mo-btn" type="button" id="moBtn" data-anim style="--d:.3s">🎬 Voir le Making Of</button>
 
+  <div class="thx-mo-overlay" id="moOverlay" aria-hidden="true">
+    <div class="thx-mo-modal" role="dialog" aria-modal="true" aria-label="Lost Chapter — l'expérience">
+      <button class="thx-mo-close" id="moClose" type="button" aria-label="Fermer">×</button>
+      <div class="thx-mo-stage">
+        <iframe class="thx-mo-frame" id="moFrame" title="Lost Chapter — l'expérience" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
 
   <style>
   .pg-slide{align-items:center;text-align:center}
@@ -2436,7 +2444,7 @@ body.js .slide.active .psd-pair [data-anim]{
   .thx-mo-close:hover{background:var(--gold);color:#1f120a}
   .thx-mo-stage{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
   .thx-mo-stage video{width:100%;height:100%;object-fit:cover;display:block}
-  .thx-mo-frame{width:100%;height:100%;border:0;display:none;background:#0c0804}
+  .thx-mo-frame{width:100%;height:100%;border:0;display:block;background:#0c0804}
   .thx-castle{width:100%;height:100%;object-fit:cover;display:none;background:#0c0804}
   .thx-skip{position:absolute;bottom:16px;right:18px;z-index:3;display:none;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.04em;color:#1f120a;background:rgba(220,192,129,.94);border:1px solid var(--gold-b);border-radius:30px;padding:8px 16px;cursor:pointer;box-shadow:0 6px 16px -8px rgba(0,0,0,.6)}
   .thx-skip:hover{background:var(--gold-s)}
@@ -2448,10 +2456,16 @@ body.js .slide.active .psd-pair [data-anim]{
 
   <script>
   (function(){
-    function go(e){ if(e) e.stopPropagation(); window.open('/experience-national','_blank','noopener'); }
+    var ov=document.getElementById('moOverlay'); if(!ov) return;
+    var frame=document.getElementById('moFrame');
+    function open(e){ if(e) e.stopPropagation(); if(frame) frame.src='/experience-national'; ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); }
+    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); if(frame) frame.src='about:blank'; }
     var btn=document.getElementById('moBtn'), portal=document.getElementById('moPortal');
-    if(btn) btn.addEventListener('click', go);
-    if(portal) portal.addEventListener('click', go);
+    if(btn) btn.addEventListener('click', open);
+    if(portal) portal.addEventListener('click', open);
+    document.getElementById('moClose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    ov.addEventListener('click', function(e){ e.stopPropagation(); if(e.target===ov) close(); });
+    document.addEventListener('keydown', function(e){ if(ov.classList.contains('open') && e.key==='Escape'){ e.stopPropagation(); close(); } }, true);
   })();
   </script>
 </section>
