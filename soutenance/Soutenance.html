@@ -2414,16 +2414,6 @@ body.js .slide.active .psd-pair [data-anim]{
   </div>
   <button class="thx-mo-btn" type="button" id="moBtn" data-anim style="--d:.3s">🎬 Voir le Making Of</button>
 
-  <div class="thx-mo-overlay" id="moOverlay" aria-hidden="true">
-    <div class="thx-mo-modal" role="dialog" aria-modal="true" aria-label="Making-of">
-      <button class="thx-mo-close" id="moClose" type="button" aria-label="Fermer">×</button>
-      <div class="thx-mo-stage">
-        <video class="thx-castle" id="moCastle" muted playsinline preload="auto"><source src="/assets/video/castle-hall.mp4" type="video/mp4"></video>
-        <button class="thx-skip" id="moSkip" type="button">Passer ▸</button>
-        <iframe class="thx-mo-frame" id="moFrame" title="Making Of — Lost Chapter" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
 
   <style>
   .pg-slide{align-items:center;text-align:center}
@@ -2458,23 +2448,10 @@ body.js .slide.active .psd-pair [data-anim]{
 
   <script>
   (function(){
-    var ov=document.getElementById('moOverlay'); if(!ov) return;
-    var frame=document.getElementById('moFrame'), castle=document.getElementById('moCastle'), skip=document.getElementById('moSkip');
-    function toMakingOf(){ if(castle){ castle.pause(); castle.style.display='none'; } if(skip) skip.style.display='none'; if(frame){ frame.style.display='block'; frame.src='/making-of'; } }
-    function open(e){ if(e) e.stopPropagation(); ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
-      if(frame){ frame.style.display='none'; frame.src='about:blank'; }
-      if(castle){ castle.style.display='block'; try{ castle.currentTime=0; var pr=castle.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(_){} }
-      if(skip) skip.style.display='block';
-    }
-    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); if(castle) castle.pause(); if(frame) frame.src='about:blank'; }
+    function go(e){ if(e) e.stopPropagation(); window.open('/experience-national','_blank','noopener'); }
     var btn=document.getElementById('moBtn'), portal=document.getElementById('moPortal');
-    if(portal) portal.addEventListener('click', open);
-    if(btn) btn.addEventListener('click', open);
-    if(castle) castle.addEventListener('ended', toMakingOf);
-    if(skip) skip.addEventListener('click', function(e){ e.stopPropagation(); toMakingOf(); });
-    document.getElementById('moClose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
-    ov.addEventListener('click', function(e){ e.stopPropagation(); if(e.target===ov) close(); });
-    document.addEventListener('keydown', function(e){ if(ov.classList.contains('open') && e.key==='Escape'){ e.stopPropagation(); close(); } }, true);
+    if(btn) btn.addEventListener('click', go);
+    if(portal) portal.addEventListener('click', go);
   })();
   </script>
 </section>
