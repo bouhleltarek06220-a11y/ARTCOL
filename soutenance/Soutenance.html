@@ -1362,39 +1362,75 @@ body.js .slide.active .psd-pair [data-anim]{
     <h1 class="title" data-anim style="--d:.08s">Notre <span class="u">mission</span> BizDev</h1>
     <p class="sub" data-anim style="--d:.16s">Au départ : réunir les <b>3 piliers</b> du projet Lost Chapter.</p>
 
-    <div class="orbit-stage" data-anim style="--d:.30s">
-      <figure class="orbit-core">
+    <div class="mz">
+      <svg class="mz-link" viewBox="0 0 1320 470" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <marker id="mzArrow" markerWidth="11" markerHeight="11" refX="7.5" refY="5.5" orient="auto">
+            <path d="M0,0 L10,5.5 L0,11 Z" fill="#b3842c"></path>
+          </marker>
+        </defs>
+        <path class="mz-wire" d="M430,67 C520,67 520,235 560,235"></path>
+        <path class="mz-wire" d="M430,235 L560,235"></path>
+        <path class="mz-wire" d="M430,403 C520,403 520,235 560,235"></path>
+        <line class="mz-wire mz-flow" x1="624" y1="235" x2="694" y2="235" marker-end="url(#mzArrow)"></line>
+        <circle class="mz-dot" cx="430" cy="67" r="5"></circle>
+        <circle class="mz-dot" cx="430" cy="235" r="5"></circle>
+        <circle class="mz-dot" cx="430" cy="403" r="5"></circle>
+      </svg>
+
+      <div class="mz-card mz-c1" data-anim style="--d:.34s"><div class="mz-in" style="animation-delay:0s">
+        <span class="mz-ico">🏛️</span>
+        <div><span class="mz-tag">Les lieux</span><b>Monuments &amp; châteaux privés</b></div>
+      </div></div>
+      <div class="mz-card mz-c2" data-anim style="--d:.42s"><div class="mz-in" style="animation-delay:-1.7s">
+        <span class="mz-ico">💎</span>
+        <div><span class="mz-tag">Le financement</span><b>Sponsors &amp; mécènes</b></div>
+      </div></div>
+      <div class="mz-card mz-c3" data-anim style="--d:.50s"><div class="mz-in" style="animation-delay:-3.4s">
+        <span class="mz-ico">🎮</span>
+        <div><span class="mz-tag">L'audience</span><b>Streameurs Twitch</b></div>
+      </div></div>
+
+      <div class="mz-fuse" data-anim style="--d:.62s">
+        <span class="mz-fuse-lbl">Notre mission :<br><b>les réunir</b></span>
+        <img src="/assets/lostchapter-logo.svg" alt="Lost Chapter">
+      </div>
+
+      <figure class="mz-photo" data-anim style="--d:.40s">
         <img src="/assets/cheminement.webp" alt="Le cheminement Lost Chapter : de la carte de France aux lieux, sponsors et créateurs">
       </figure>
-      <div class="orbit-spin">
-        <div class="orbit-item" style="--a:0deg">
-          <div class="orbit-chip"><span class="oc-ico">🎮</span><b>Streameurs Twitch</b></div>
-        </div>
-        <div class="orbit-item" style="--a:120deg">
-          <div class="orbit-chip"><span class="oc-ico">🏛️</span><b>Monuments historiques</b><small>& châteaux privés</small></div>
-        </div>
-        <div class="orbit-item" style="--a:240deg">
-          <div class="orbit-chip"><span class="oc-ico">💎</span><b>Sponsors &amp; mécènes</b></div>
-        </div>
-      </div>
     </div>
 
     <style>
-    /* ── Slide « mission BizDev » : photo centrée + 3 piliers en orbite (lisible rétroprojecteur) ── */
-    .orbit-stage{position:relative;width:100%;height:640px;margin-top:0;overflow:visible}
-    .orbit-ring{position:absolute;inset:0;margin:auto;width:500px;height:500px;border-radius:50%;border:2px dashed rgba(179,132,44,.5);box-shadow:inset 0 0 70px rgba(179,132,44,.12);animation:orbit-pulse 6s ease-in-out infinite}
-    .orbit-core{position:absolute;inset:0;margin:auto;width:764px;height:510px;border-radius:20px;overflow:hidden;border:5px solid var(--gold-b);box-shadow:0 22px 60px -14px rgba(58,33,20,.6),0 0 0 10px rgba(253,247,234,.5);background:#1a0f08;z-index:2}
-    .orbit-core img{width:100%;height:100%;object-fit:cover;display:block}
-    .orbit-spin{position:absolute;inset:0;margin:auto;width:540px;height:540px;animation:orbit-spin 34s linear infinite;z-index:3}
-    .orbit-item{position:absolute;top:50%;left:50%;width:0;height:0;transform:rotate(var(--a)) translateY(-270px)}
-    .orbit-chip{position:absolute;left:50%;top:50%;width:max-content;max-width:360px;white-space:nowrap;text-align:center;transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)));animation:orbit-spin-rev 34s linear infinite;background:linear-gradient(155deg,#fdf7ea,#f3e6cd);border:1.5px solid var(--gold-b);border-radius:18px;padding:13px 26px;box-shadow:0 16px 36px -16px rgba(58,33,20,.7)}
-    .orbit-chip .oc-ico{font-size:32px;line-height:1;display:block;margin-bottom:5px}
-    .orbit-chip b{display:block;font-family:var(--display);font-size:24px;color:var(--brown)}
-    .orbit-chip small{display:block;font-size:15px;font-weight:600;color:var(--ink2);margin-top:2px}
-    @keyframes orbit-spin{to{transform:rotate(360deg)}}
-    @keyframes orbit-spin-rev{from{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)))}to{transform:translate(-50%,-50%) rotate(calc(-1 * var(--a) - 360deg))}}
-    @keyframes orbit-pulse{0%,100%{opacity:.62;transform:scale(1)}50%{opacity:1;transform:scale(1.012)}}
-    @media (prefers-reduced-motion:reduce){.orbit-spin,.orbit-chip,.orbit-ring{animation:none}}
+    /* ── Slide 03 · Mission : 3 mots-clés flottants (gauche) -> fusion (logo) -> photo (droite) ── */
+    .mz{position:relative;width:1320px;max-width:100%;height:470px;margin:16px auto 0}
+    .mz-link{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+    .mz-wire{fill:none;stroke:#b3842c;stroke-width:2;opacity:.5;stroke-dasharray:5 6;vector-effect:non-scaling-stroke;animation:mzdash 16s linear infinite}
+    .mz-flow{opacity:.85;stroke-width:2.5}
+    .mz-dot{fill:#b3842c}
+    @keyframes mzdash{to{stroke-dashoffset:-220}}
+
+    .mz-card{position:absolute;left:0;width:432px;height:118px;z-index:2}
+    .mz-c1{top:8px} .mz-c2{top:176px} .mz-c3{top:344px}
+    .mz-in{height:100%;display:flex;align-items:center;gap:20px;
+      background:linear-gradient(180deg,#fffdf6,#fbf3e0);border:1px solid rgba(179,132,44,.28);border-left:5px solid var(--gold);
+      border-radius:16px;padding:0 26px;box-shadow:0 16px 34px -18px rgba(58,33,20,.6);animation:mzfloat 5.4s ease-in-out infinite}
+    .mz-ico{font-size:44px;line-height:1;flex:none}
+    .mz-tag{display:block;font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+    .mz-in b{font-family:var(--display);font-weight:700;font-size:25px;color:var(--ink);line-height:1.12;letter-spacing:.005em}
+    @keyframes mzfloat{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
+
+    .mz-fuse{position:absolute;left:546px;top:196px;width:78px;height:78px;z-index:3}
+    .mz-fuse img{width:78px;height:78px;border-radius:50%;box-shadow:0 10px 26px -8px rgba(0,0,0,.6),0 0 0 6px rgba(253,247,234,.75)}
+    .mz-fuse-lbl{position:absolute;top:-56px;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;
+      font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.05em;color:var(--ink2);line-height:1.25}
+    .mz-fuse-lbl b{font-family:var(--display);font-size:16px;color:var(--gold);letter-spacing:.02em}
+
+    .mz-photo{position:absolute;right:0;top:28px;width:620px;height:414px;margin:0;border-radius:18px;overflow:hidden;z-index:2;
+      border:4px solid var(--gold-b);box-shadow:0 22px 60px -14px rgba(58,33,20,.55),0 0 0 8px rgba(253,247,234,.5)}
+    .mz-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+    @media (prefers-reduced-motion:reduce){.mz-in,.mz-wire{animation:none}}
     </style>
   </div>
 </section>
@@ -2438,7 +2474,7 @@ body.js .slide.active .psd-pair [data-anim]{
 
     <div class="preco-cards">
       <div class="preco-card" role="button" tabindex="0" data-i="0" data-anim style="--d:.26s">
-        <div class="pc-top"><span class="pc-num">01</span><span class="pc-owner">Portée par Julie</span></div>
+        <div class="pc-top"><span class="pc-num">01</span></div>
         <h3>Prospection par vagues</h3>
         <p>Trois vagues de 500 contacts, un seul ICP à la fois. On qualifie en précision plutôt qu'en masse.</p>
         <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
@@ -2451,7 +2487,7 @@ body.js .slide.active .psd-pair [data-anim]{
       </div>
 
       <div class="preco-card" role="button" tabindex="0" data-i="1" data-anim style="--d:.34s">
-        <div class="pc-top"><span class="pc-num">02</span><span class="pc-owner">Porté par Tarek</span></div>
+        <div class="pc-top"><span class="pc-num">02</span></div>
         <h3>Le CRM, colonne vertébrale</h3>
         <p>La base devient un actif : chaque lead qualifié, daté, scoré. Le pipe visible qui crédibilise le projet.</p>
         <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
@@ -2464,7 +2500,7 @@ body.js .slide.active .psd-pair [data-anim]{
       </div>
 
       <div class="preco-card" role="button" tabindex="0" data-i="2" data-anim style="--d:.42s">
-        <div class="pc-top"><span class="pc-num">03</span><span class="pc-owner">Portée par Myriam</span></div>
+        <div class="pc-top"><span class="pc-num">03</span></div>
         <h3>Le CMN, clé maître</h3>
         <p>On ne candidate pas, on co-construit un pilote. Une relation-cadre = l'accès à 100+ monuments nationaux.</p>
         <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
@@ -2483,7 +2519,7 @@ body.js .slide.active .psd-pair [data-anim]{
   <div class="preco-overlay" id="precoOverlay" aria-hidden="true">
     <div class="preco-modal" role="dialog" aria-modal="true" aria-label="Détail de la préconisation">
       <button class="preco-close" id="precoClose" type="button" aria-label="Fermer">×</button>
-      <div class="pm-head"><span class="pm-num" id="pmNum">01</span><span class="pm-owner" id="pmOwner"></span></div>
+      <div class="pm-head"><span class="pm-num" id="pmNum">01</span></div>
       <h3 class="pm-title" id="pmTitle"></h3>
       <div class="pm-grid">
         <div class="pm-blk"><div class="pm-lab">Quoi</div><p id="pmQuoi"></p></div>
@@ -2563,7 +2599,6 @@ body.js .slide.active .psd-pair [data-anim]{
       cur=(i+cards.length)%cards.length;
       var c=cards[cur], f=c.querySelectorAll('.pc-f');
       document.getElementById('pmNum').textContent=c.querySelector('.pc-num').textContent;
-      document.getElementById('pmOwner').textContent=c.querySelector('.pc-owner').textContent;
       document.getElementById('pmTitle').textContent=c.querySelector('h3').textContent;
       document.getElementById('pmQuoi').textContent=f[0]?f[0].textContent:'';
       document.getElementById('pmComment').textContent=f[1]?f[1].textContent:'';
