@@ -2418,8 +2418,7 @@ body.js .slide.active .psd-pair [data-anim]{
     <div class="thx-mo-modal" role="dialog" aria-modal="true" aria-label="Making-of">
       <button class="thx-mo-close" id="moClose" type="button" aria-label="Fermer">×</button>
       <div class="thx-mo-stage">
-        <!-- VIDÉO MAKING-OF À INTÉGRER ICI (fournie ultérieurement) : remplacer ce bloc par <video controls autoplay src="/assets/video/making-of.mp4"></video> -->
-        <div class="thx-mo-ph">🎬<span>Making-of en cours de montage</span><small>Les coulisses de nos démarches, en amont du challenge — bientôt ici.</small></div>
+        <iframe class="thx-mo-frame" id="moFrame" title="Making Of — Lost Chapter" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </div>
@@ -2439,12 +2438,13 @@ body.js .slide.active .psd-pair [data-anim]{
   .thx-mo-btn:hover{transform:translateY(-2px);background:linear-gradient(135deg,var(--gold-s),var(--gold-b));color:#1f120a}
   .thx-mo-overlay{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(15,9,4,.82);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
   .thx-mo-overlay.open{opacity:1;visibility:visible}
-  .thx-mo-modal{position:relative;width:min(74%,880px);aspect-ratio:16/9;background:#0c0804;border:2px solid var(--gold-b);border-radius:16px;box-shadow:0 50px 120px rgba(0,0,0,.65);overflow:hidden;transform:scale(.92);transition:transform .4s var(--ease)}
+  .thx-mo-modal{position:relative;width:min(94%,1500px);aspect-ratio:16/9;background:#0c0804;border:2px solid var(--gold-b);border-radius:16px;box-shadow:0 50px 120px rgba(0,0,0,.65);overflow:hidden;transform:scale(.92);transition:transform .4s var(--ease)}
   .thx-mo-overlay.open .thx-mo-modal{transform:scale(1)}
   .thx-mo-close{position:absolute;top:10px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid rgba(200,162,76,.5);background:rgba(0,0,0,.45);color:#fff;font-size:20px;line-height:1;cursor:pointer}
   .thx-mo-close:hover{background:var(--gold);color:#1f120a}
   .thx-mo-stage{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
   .thx-mo-stage video{width:100%;height:100%;object-fit:cover;display:block}
+  .thx-mo-frame{width:100%;height:100%;border:0;display:block;background:#0c0804}
   .thx-mo-ph{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:50px}
   .thx-mo-ph span{font-family:var(--sans);font-size:22px;font-weight:700;color:#f0e1c2}
   .thx-mo-ph small{font-family:var(--serif);font-style:italic;font-size:14px;color:#b79a6a}
@@ -2454,8 +2454,9 @@ body.js .slide.active .psd-pair [data-anim]{
   <script>
   (function(){
     var ov=document.getElementById('moOverlay'); if(!ov) return;
-    function open(e){ if(e) e.stopPropagation(); ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); }
-    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); }
+    var frame=document.getElementById('moFrame');
+    function open(e){ if(e) e.stopPropagation(); if(frame) frame.src='/making-of'; ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); }
+    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); if(frame) frame.src='about:blank'; }
     var btn=document.getElementById('moBtn'), portal=document.getElementById('moPortal');
     if(portal) portal.addEventListener('click', open);
     if(btn) btn.addEventListener('click', open);
