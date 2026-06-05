@@ -14,5 +14,9 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+    /* Auto-skip de l'intro : clique le vrai bouton Passer/Entrer dès qu'il apparaît (sans toucher au moteur). */
+    (function(){var n=0,t=setInterval(function(){n++;var b=document.querySelectorAll('button');for(var i=0;i<b.length;i++){var x=(b[i].textContent||'').trim();if(x==='Passer'||x.indexOf('Entrer dans le ch')>=0){try{b[i].click();}catch(e){}}}if(n>28)clearInterval(t);},220);})();
+    </script>
   </body>
 </html>
