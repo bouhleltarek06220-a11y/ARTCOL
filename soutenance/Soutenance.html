@@ -2435,19 +2435,163 @@ body.js .slide.active .psd-pair [data-anim]{
   <div class="s-inner">
     <div class="kicker" data-anim><span class="dot"></span> Chapitre 8 <span class="ch">— Recommandations</span></div>
     <h1 class="title" data-anim style="--d:.08s">Nos <span class="u">préconisations</span></h1>
-    <div class="reco">
-      <div class="r" data-anim style="--d:.22s"><div class="nb">1</div><h4>Offre en 2–3 packs</h4><p>Pilote · signature · tournée — pour clarifier le discours et le prix.</p></div>
-      <div class="r" data-anim style="--d:.28s"><div class="nb">2</div><h4>Tunnels par ICP</h4><p>Un argumentaire lieux, un sponsors (ROI + fiscalité), un créateurs.</p></div>
-      <div class="r" data-anim style="--d:.34s"><div class="nb">3</div><h4>Scoring + pipeline</h4><p>Concentrer l'effort sur les leads &gt; 70/100, le reste en nurturing.</p></div>
-      <div class="r" data-anim style="--d:.4s"><div class="nb">4</div><h4>1 à 2 cas vitrines</h4><p>Réussir et documenter le Fort Carré : captation, audience, kit presse.</p></div>
-      <div class="r" data-anim style="--d:.46s"><div class="nb">5</div><h4>Industrialiser</h4><p>Prospection par vagues + routine hebdo multi-canal.</p></div>
-      <div class="r" data-anim style="--d:.52s"><div class="nb">6</div><h4>Le CMN, clé maître</h4><p>Une relation-cadre = l'accès à 110 monuments nationaux.</p></div>
+
+    <div class="preco-cards">
+      <div class="preco-card" role="button" tabindex="0" data-i="0" data-anim style="--d:.26s">
+        <div class="pc-top"><span class="pc-num">01</span><span class="pc-owner">Portée par Julie</span></div>
+        <h3>Prospection par vagues</h3>
+        <p>Trois vagues de 500 contacts, un seul ICP à la fois. On qualifie en précision plutôt qu'en masse.</p>
+        <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
+        <div class="pc-data" hidden>
+          <span class="pc-f">3 vagues successives de 500 contacts maximum, un seul ICP par vague (lieux, puis sponsors, puis créateurs).</span>
+          <span class="pc-f">Séquence rodée : Email J+0 → Relance J+4 → Appel ciblé J+8 → Dernier message J+14. 3 à 4 semaines entre chaque vague.</span>
+          <span class="pc-f">Vague 1 « lieux » lancée — 10 à 15 % d'ouverture, 2 à 4 RDV qualifiés.</span>
+          <span class="pc-f">S+1 — liste vague 1 nettoyée (prénom + fonction + email direct) et les 3 séquences email rédigées, prêtes à partir.</span>
+        </div>
+      </div>
+
+      <div class="preco-card" role="button" tabindex="0" data-i="1" data-anim style="--d:.34s">
+        <div class="pc-top"><span class="pc-num">02</span><span class="pc-owner">Porté par Tarek</span></div>
+        <h3>Le CRM, colonne vertébrale</h3>
+        <p>La base devient un actif : chaque lead qualifié, daté, scoré. Le pipe visible qui crédibilise le projet.</p>
+        <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
+        <div class="pc-data" hidden>
+          <span class="pc-f">La base passe de simple liste à actif commercial : chaque contact qualifié, daté, avec une prochaine action et un niveau de chaleur.</span>
+          <span class="pc-f">8 colonnes de suivi, code couleur chaud / tiède / froid, scoring &gt; 70/100 prioritaire, revue de pipe hebdo, 3 decks ICP distincts.</span>
+          <span class="pc-f">50+ contacts qualifiés, 20 à 40 leads chauds, dashboard partagé en accès lecture lors des RDV financeurs.</span>
+          <span class="pc-f">S+2 — CRM opérationnel avec scoring + code couleur, et accès lecture du pipe prêt à montrer en rendez-vous.</span>
+        </div>
+      </div>
+
+      <div class="preco-card" role="button" tabindex="0" data-i="2" data-anim style="--d:.42s">
+        <div class="pc-top"><span class="pc-num">03</span><span class="pc-owner">Portée par Myriam</span></div>
+        <h3>Le CMN, clé maître</h3>
+        <p>On ne candidate pas, on co-construit un pilote. Une relation-cadre = l'accès à 100+ monuments nationaux.</p>
+        <span class="pc-hint"><span class="pc-plus">+</span> Voir le détail</span>
+        <div class="pc-data" hidden>
+          <span class="pc-f">Ne pas démarcher le Centre des Monuments Nationaux comme un carnet d'adresses : se positionner en co-constructeur d'un pilote d'expérimentation.</span>
+          <span class="pc-f">« On ne candidate pas, on co-construit. » Protocole et KPIs définis ensemble, bilan d'expérimentation écrit et réutilisable par le CMN.</span>
+          <span class="pc-f">Email d'approche envoyé (objet : Proposition de pilote patrimonial — Lost Chapter x CMN), réponse ou RDV obtenu.</span>
+          <span class="pc-f">S+2 / S+3 — dossier pilote prêt à envoyer : protocole + KPIs convenus + format du bilan d'expérimentation.</span>
+        </div>
+      </div>
     </div>
-    <div class="feature" data-anim style="--d:.6s">
-      <div class="lbl">L'argument n°1</div>
-      <div class="ft">Mener avec le mécénat loi Aillagon — 60 % de réduction d'impôt — et sécuriser l'écosystème de marque.</div>
+
+    <div class="preco-arg" data-anim style="--d:.58s">
+      <div class="pa-label">L'argument n°1</div>
+      <div class="pa-text">Mener avec le mécénat — loi Aillagon, 60 % de réduction d'impôt — et sécuriser l'écosystème de marque.</div>
     </div>
   </div>
+
+  <!-- MODAL détail préconisation -->
+  <div class="preco-overlay" id="precoOverlay" aria-hidden="true">
+    <div class="preco-modal" role="dialog" aria-modal="true" aria-label="Détail de la préconisation">
+      <button class="preco-close" id="precoClose" type="button" aria-label="Fermer">×</button>
+      <div class="pm-head"><span class="pm-num" id="pmNum">01</span><span class="pm-owner" id="pmOwner"></span></div>
+      <h3 class="pm-title" id="pmTitle"></h3>
+      <div class="pm-grid">
+        <div class="pm-blk"><div class="pm-lab">Quoi</div><p id="pmQuoi"></p></div>
+        <div class="pm-blk"><div class="pm-lab">Comment</div><p id="pmComment"></p></div>
+        <div class="pm-blk"><div class="pm-lab">Objectif 4 semaines</div><p id="pmObj"></p></div>
+        <div class="pm-blk full"><div class="pm-lab">Prochaine action datée</div><p id="pmAction"></p></div>
+      </div>
+      <div class="pm-nav">
+        <button id="precoPrev" type="button" aria-label="Précédent">‹</button>
+        <button id="precoNext" type="button" aria-label="Suivant">›</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+  /* ── Slide 08 · Préconisations : 3 cartes (par membre) -> modal détail ── */
+  .preco-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:34px}
+  .preco-card{position:relative;text-align:left;font-family:inherit;color:inherit;cursor:pointer;
+    background:linear-gradient(180deg,#fffdf6,#fbf3e0);border:1px solid rgba(179,132,44,.22);border-radius:16px;
+    padding:30px 28px 26px;overflow:hidden;box-shadow:0 14px 30px rgba(60,36,9,.16),inset 0 1px 0 rgba(255,255,255,.7);
+    transition:transform .42s var(--ease),box-shadow .42s var(--ease),border-color .4s}
+  .preco-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:linear-gradient(180deg,var(--gold),var(--gold-b));transform:scaleY(0);transform-origin:top;transition:transform .45s var(--ease)}
+  .preco-card:hover,.preco-card:focus-visible{transform:translateY(-8px);
+    box-shadow:0 26px 50px rgba(60,36,9,.24),inset 0 1px 0 rgba(255,255,255,.85);border-color:rgba(179,132,44,.5)}
+  .preco-card:hover::after,.preco-card:focus-visible::after{transform:scaleY(1)}
+  .preco-card:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+  .pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .pc-num{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;
+    font-family:var(--display);font-weight:600;font-size:21px;color:var(--gold);flex:none}
+  .pc-owner{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);
+    background:rgba(179,132,44,.1);border:1px solid rgba(179,132,44,.28);padding:7px 13px;border-radius:30px;white-space:nowrap}
+  .preco-card h3{font-family:var(--sans);font-weight:700;font-size:21px;letter-spacing:.01em;color:var(--ink);text-transform:uppercase;line-height:1.18;margin:0 0 12px}
+  .preco-card p{font-size:15px;line-height:1.6;color:var(--ink2);font-weight:500;margin:0}
+  .pc-hint{margin-top:20px;display:flex;align-items:center;gap:9px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-b)}
+  .pc-plus{width:21px;height:21px;border-radius:50%;border:1px solid var(--gold-b);display:inline-flex;align-items:center;justify-content:center;font-size:13px;line-height:1;transition:transform .3s,background .3s,color .3s}
+  .preco-card:hover .pc-plus{transform:rotate(90deg);background:var(--gold-b);color:#fff}
+
+  .preco-arg{margin-top:26px;position:relative;background:linear-gradient(180deg,#fbf2dd,#f6ead0);
+    border:1px solid rgba(179,132,44,.26);border-left:5px solid var(--gold);border-radius:12px;padding:20px 32px;box-shadow:0 10px 24px rgba(60,36,9,.16)}
+  .pa-label{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+  .pa-text{font-family:var(--serif);font-style:italic;font-weight:600;font-size:24px;line-height:1.4;color:var(--ink)}
+
+  .preco-overlay{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+    background:rgba(22,12,5,.55);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+  .preco-overlay.open{opacity:1;visibility:visible}
+  .preco-modal{width:900px;max-width:86%;position:relative;
+    background:radial-gradient(120% 100% at 0% 0%,var(--paper),var(--paper2) 60%,#f3e7c8 100%);
+    border:1px solid rgba(179,132,44,.4);border-radius:18px;box-shadow:0 50px 120px rgba(0,0,0,.5);
+    padding:44px 50px 44px;transform:scale(.92) translateY(14px);opacity:0;transition:transform .4s var(--ease),opacity .4s}
+  .preco-modal::before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--gold-b) 60%,var(--gold-s));border-radius:18px 18px 0 0}
+  .preco-overlay.open .preco-modal{transform:scale(1) translateY(0);opacity:1}
+  .pm-head{display:flex;align-items:center;gap:16px;margin-bottom:4px}
+  .pm-num{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:600;font-size:19px;color:var(--gold);flex:none}
+  .pm-owner{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:rgba(179,132,44,.1);border:1px solid rgba(179,132,44,.3);padding:6px 13px;border-radius:30px}
+  .pm-title{font-family:var(--display);font-weight:700;font-size:29px;color:var(--ink);text-transform:uppercase;letter-spacing:.015em;line-height:1.1;margin:18px 0 24px}
+  .pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 34px}
+  .pm-lab{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;display:flex;align-items:center;gap:8px}
+  .pm-lab::before{content:"";width:14px;height:1.5px;background:var(--gold-b)}
+  .pm-blk p{font-size:15px;line-height:1.55;color:var(--ink);font-weight:500;margin:0}
+  .pm-blk.full{grid-column:1/-1;background:rgba(179,132,44,.07);border:1px solid rgba(179,132,44,.2);border-radius:10px;padding:15px 18px}
+  .pm-blk.full p{font-weight:600}
+  .preco-close{position:absolute;top:18px;right:20px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(179,132,44,.4);background:rgba(255,255,255,.5);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .25s,transform .25s}
+  .preco-close:hover{background:var(--gold);color:#fff;transform:rotate(90deg)}
+  .pm-nav{position:absolute;bottom:20px;right:24px;display:flex;gap:10px}
+  .pm-nav button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(179,132,44,.4);background:rgba(255,255,255,.5);color:var(--gold);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .25s,color .25s}
+  .pm-nav button:hover{background:var(--gold);color:#fff}
+  @media (prefers-reduced-motion:reduce){.preco-overlay,.preco-modal,.preco-card{transition:none}}
+  </style>
+
+  <script>
+  (function(){
+    var ov=document.getElementById('precoOverlay'); if(!ov) return;
+    var cards=Array.prototype.slice.call(document.querySelectorAll('.preco-card'));
+    var cur=0;
+    function show(i){
+      cur=(i+cards.length)%cards.length;
+      var c=cards[cur], f=c.querySelectorAll('.pc-f');
+      document.getElementById('pmNum').textContent=c.querySelector('.pc-num').textContent;
+      document.getElementById('pmOwner').textContent=c.querySelector('.pc-owner').textContent;
+      document.getElementById('pmTitle').textContent=c.querySelector('h3').textContent;
+      document.getElementById('pmQuoi').textContent=f[0]?f[0].textContent:'';
+      document.getElementById('pmComment').textContent=f[1]?f[1].textContent:'';
+      document.getElementById('pmObj').textContent=f[2]?f[2].textContent:'';
+      document.getElementById('pmAction').textContent=f[3]?f[3].textContent:'';
+      ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
+    }
+    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); }
+    cards.forEach(function(c){
+      c.addEventListener('click',function(e){e.stopPropagation();show(+c.dataset.i);});
+      c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();show(+c.dataset.i);}});
+    });
+    document.getElementById('precoClose').addEventListener('click',function(e){e.stopPropagation();close();});
+    document.getElementById('precoPrev').addEventListener('click',function(e){e.stopPropagation();show(cur-1);});
+    document.getElementById('precoNext').addEventListener('click',function(e){e.stopPropagation();show(cur+1);});
+    ov.addEventListener('click',function(e){e.stopPropagation();if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){
+      if(!ov.classList.contains('open')) return;
+      if(e.key==='Escape'){e.stopPropagation();close();}
+      else if(e.key==='ArrowRight'){e.stopPropagation();e.preventDefault();show(cur+1);}
+      else if(e.key==='ArrowLeft'){e.stopPropagation();e.preventDefault();show(cur-1);}
+    }, true);
+  })();
+  </script>
 </section>
 
 <!-- 13 · REMERCIEMENTS -->
