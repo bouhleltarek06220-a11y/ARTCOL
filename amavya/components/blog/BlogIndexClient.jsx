@@ -11,31 +11,31 @@ const BlogCosmos = dynamic(() => import("./BlogCosmos"), { ssr: false });
 const TEXT = {
   fr: {
     eyebrow: "Le Cosmos AMAVYA",
-    title: "Un voyage dans l'IA, planète par planète.",
+    title: "Un voyage dans l'IA, point par point.",
     description:
-      "Cliquez sur une planète pour explorer un article. Sur mobile, la galaxie devient une galerie.",
-    hint: "Survolez · cliquez · explorez",
-    toggle3D: "Mode 3D",
+      "Faites tourner la Terre, cliquez sur un point lumineux pour ouvrir l'article correspondant.",
+    hint: "Tournez la Terre · cliquez sur un point",
+    toggle3D: "Mode Globe",
     toggleGrid: "Mode grille",
     empty: "Le cosmos est vide pour l'instant. Le premier article arrive bientôt.",
   },
   en: {
     eyebrow: "The AMAVYA Cosmos",
-    title: "A journey into AI, planet by planet.",
+    title: "A journey into AI, point by point.",
     description:
-      "Click a planet to explore an article. On mobile, the galaxy becomes a gallery.",
-    hint: "Hover · click · explore",
-    toggle3D: "3D mode",
+      "Spin the Earth, click a glowing point to open the matching article.",
+    hint: "Spin the Earth · click a point",
+    toggle3D: "Globe mode",
     toggleGrid: "Grid mode",
     empty: "The cosmos is empty for now. The first article is coming soon.",
   },
   es: {
     eyebrow: "El Cosmos AMAVYA",
-    title: "Un viaje a la IA, planeta por planeta.",
+    title: "Un viaje a la IA, punto por punto.",
     description:
-      "Haga clic en un planeta para explorar un artículo. En móvil, la galaxia se convierte en una galería.",
-    hint: "Pase · haga clic · explore",
-    toggle3D: "Modo 3D",
+      "Gire la Tierra, haga clic en un punto luminoso para abrir el artículo correspondiente.",
+    hint: "Gire la Tierra · haga clic en un punto",
+    toggle3D: "Modo Globo",
     toggleGrid: "Modo cuadrícula",
     empty: "El cosmos está vacío por ahora. El primer artículo llega pronto.",
   },
@@ -76,11 +76,11 @@ export default function BlogIndexClient({ articles }) {
             {t.eyebrow}
           </span>
           <h1 className="text-balance text-4xl font-semibold leading-tight sm:text-5xl">
-            {t.title.split("planète").map((part, i, arr) =>
+            {t.title.split("point").map((part, i, arr) =>
               i < arr.length - 1 ? (
                 <span key={i}>
                   {part}
-                  <span className="text-gradient">planète</span>
+                  <span className="text-gradient">point</span>
                 </span>
               ) : (
                 part

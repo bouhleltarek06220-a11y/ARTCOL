@@ -1,44 +1,29 @@
 "use client";
 
-import { Suspense, useRef } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 
-const Canvas = dynamic(
-  () => import("@react-three/fiber").then((m) => m.Canvas),
-  { ssr: false },
-);
-
-/* Charge la planète seulement quand le composant est monté côté client. */
-const PlanetHero = dynamic(() => import("./PlanetHero"), { ssr: false });
+/* Charge le globe Terre côté client uniquement (canvas WebGL). */
+const GlobeCosmos = dynamic(() => import("./celestial/GlobeCosmos"), {
+  ssr: false,
+});
 
 export default function BlogArticleHero({ article }) {
   return (
-    <div className="relative h-[60vh] min-h-[420px] w-full overflow-hidden bg-[#050505]">
+    <div className="relative h-[65vh] min-h-[460px] w-full overflow-hidden bg-[#050505]">
       {/* Halo coloré derrière */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-3xl"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-3xl"
         style={{
           background: `radial-gradient(circle, ${article.planet.color}33, transparent 65%)`,
         }}
       />
-      {/* Planète 3D */}
-      <div className="absolute inset-0">
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 50 }}
-          dpr={[1, 1.5]}
-          gl={{ antialias: true, alpha: true }}
-        >
-          <Suspense fallback={null}>
-            <PlanetHero
-              color={article.planet.color}
-              size={article.planet.size * 1.4}
-              type={article.planet.type}
-              category={article.category}
-              seed={article.slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 50}
-            />
-          </Suspense>
-        </Canvas>
+
+      {/* Mini globe — marker pulsant cliquable du sujet de l'article */}
+      <div className="absolute inset-0 flex items-center justify-center pt-10">
+        <div className="w-[60vw] max-w-md">
+          <GlobeCosmos articles={[article]} size="md" />
+        </div>
       </div>
 
       {/* Voile + texte */}
@@ -52,8 +37,7 @@ export default function BlogArticleHero({ article }) {
         >
           <div className="text-xs uppercase tracking-[0.28em] text-gold-bright">
             {article.category.replace("-", " ")} ·{" "}
-            {new Date(article.date).toLocaleDateString()} · {article.readingTime}{" "}
-            min
+            {new Date(article.date).toLocaleDateString()} · {article.readingTime} min
           </div>
           <h1 className="mt-4 text-balance text-3xl font-semibold leading-tight sm:text-5xl">
             {article.title}
