@@ -50,25 +50,22 @@ export const metadata = {
     locale: "fr_FR",
     url: SITE_URL,
     siteName: "AMAVYA",
-    title: "AMAVYA — L'intelligence artificielle au service des entreprises modernes",
+    title: "AMAVYA — Quand l'IA travaille pour vous",
     description:
       "Solutions IA, SaaS et automatisations intelligentes pour transformer la prospection, la gestion et la productivité.",
-    images: [
-      {
-        url: "/logo.png",
-        width: 800,
-        height: 800,
-        alt: "AMAVYA — IA, SaaS & automatisations intelligentes",
-      },
-    ],
+    // L'image est servie automatiquement par app/opengraph-image.js (1200×630)
   },
   twitter: {
     card: "summary_large_image",
-    title: "AMAVYA — IA, SaaS & automatisations intelligentes",
+    title: "AMAVYA — Quand l'IA travaille pour vous",
     description:
       "Agents IA autonomes, CRM intelligents et automatisations métiers pour les entreprises modernes.",
-    creator: "@amavya",
-    images: ["/logo.png"],
+    // L'image est servie automatiquement par app/twitter-image.js
+  },
+  appleWebApp: {
+    title: "AMAVYA",
+    statusBarStyle: "black-translucent",
+    capable: true,
   },
   robots: {
     index: true,
@@ -94,6 +91,7 @@ const orgJsonLd = {
   "@type": "Organization",
   name: "AMAVYA",
   url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
   description:
     "SASU française spécialisée en intelligence artificielle, automatisation, SaaS, CRM et agents IA.",
   founder: {
@@ -112,6 +110,12 @@ const orgJsonLd = {
     "Agents IA",
     "Prospection intelligente",
   ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "contact@amavya.cloud",
+    contactType: "customer support",
+    availableLanguage: ["French", "English", "Spanish"],
+  },
 };
 
 export default function RootLayout({ children }) {
