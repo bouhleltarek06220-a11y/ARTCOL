@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 
 export default function SectionHeading({
@@ -23,8 +26,18 @@ export default function SectionHeading({
           {title}
         </h2>
       </Reveal>
+      {/* Trait fin doré qui s'étend sous le titre */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformOrigin: align === "center" ? "center" : "left" }}
+        className="h-px w-16 bg-[linear-gradient(90deg,transparent,rgba(240,210,122,0.7),transparent)]"
+      />
       {description && (
-        <Reveal delay={0.1}>
+        <Reveal delay={0.15}>
           <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
             {description}
           </p>

@@ -222,3 +222,36 @@
 ### Variables d'env requises
 
 - `ANTHROPIC_API_KEY` — Sensitive dans Vercel
+
+---
+
+## DEC-009 — Polissage visuel : style "Subtil & premium" + lot par lot
+
+**Date** : 2026-06-06
+**Étape** : 6
+
+**Décision** : Tarek a choisi (a) le découpage **lot par lot** (3 lots de 3 sections), (b) le style **subtil et premium** (esprit Linear/Vercel/Stripe — animations qu'on ne nomme pas mais qu'on ressent).
+
+**Pourquoi** :
+- Lot par lot = valide visuellement à chaque étape, on n'avance pas en aveugle
+- Subtil = cohérent avec la cible B2B premium d'AMAVYA (pas du "wow startup à paillettes")
+- Permet aussi de mesurer l'impact (analytics) de chaque lot
+
+### Lot 1 (cette PR) — Hero + Services + SectionHeading + bugfix ServiceDemos
+- **Hero** : halo doré subtil qui suit la souris (lerp 8%), cascade peaufinée (0 / 0.12 / 0.26 / 0.42s), reflet animé sur le titre highlight (14s de période, indétectable), respect `prefers-reduced-motion`
+- **Services** : vraie cascade `i * 0.07` (effet domino sur 6 cartes), bordure dorée qui s'allume au hover, halo coin haut-droit, icône qui tourne `+6deg` + scale au hover, flèche "En savoir plus" qui glisse de +1 (au lieu de +0.5)
+- **SectionHeading** : trait fin doré (gradient transparent→or→transparent) qui s'étend horizontalement à l'apparition — signature visuelle réutilisable sur toutes les sections
+- **ServiceDemos (bugfix)** : ajout des traductions `es:` dans la constante `TAG` (sinon le visiteur espagnol voyait les tags en français — `TAG[lang] || TAG.fr`)
+
+### Garde-fous appliqués
+- Aucune logique métier modifiée
+- Toutes les animations ont une durée < 1s (pas de bloat)
+- Le halo Hero est `hidden md:block` (pas sur mobile, économise CPU)
+- `prefers-reduced-motion` respecté (animation hero-sheen désactivée)
+
+### À tester par Tarek après merge
+- Au scroll : les cartes Services rentrent en cascade fluide
+- Au hover sur une carte : bordure dorée + icône qui pivote légèrement
+- Sur Hero : passe la souris → halo doré qui suit (desktop)
+- Sur les titres : le trait fin doré s'étend au reveal
+- En espagnol (drapeau ES) : ouvrir une démo de service → tags "El día a día / Con AMAVYA / El resultado"

@@ -271,6 +271,22 @@ h3,
   animation: ticker 2.4s ease-in-out infinite;
 }
 
+/* Reflet doré qui glisse très lentement sur les titres en gradient.
+   Pour activer : ajouter `bg-[length:200%_auto] [animation:hero-sheen_14s_ease-in-out_infinite]` au texte. */
+@keyframes hero-sheen {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [class*="hero-sheen"] {
+    animation: none !important;
+  }
+}
+
 /* Spotlight (composant Spline) */
 @keyframes spotlight {
   0% {
