@@ -278,3 +278,49 @@
   - Soulignement doré (gradient transparent→or→transparent) qui s'étend sous chaque lien au hover (signature visuelle réutilisée des Technologies)
   - Boutons sociaux refactorisés avec **couleur de marque au hover** (bleu LinkedIn, blanc-translucide X, gris GitHub)
   - Logo LinkedIn du copyright : scale 1.1 au hover
+
+---
+
+## DEC-010 — Blog "Cosmos AMAVYA" : MDX + index 3D + fallback grille
+
+**Date** : 2026-06-06
+**Étape** : 7
+
+**Décision** : créer un blog immersif où l'index `/blog` est un espace 3D semé de planètes-articles (style "Cosmos AMAVYA"), avec fallback grille 2D sur mobile / motion réduite. Les articles sont des fichiers MDX versionnés dans le repo.
+
+**Stack retenue** :
+- `next-mdx-remote` (RSC compatible) + `gray-matter` + `remark-gfm` — articles en MDX avec frontmatter et tableaux GFM
+- `@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing` (déjà installés) — Cosmos 3D
+- Pas de WebGPU (compatibilité encore inégale en 2026), pas de GSAP (framer-motion suffit)
+- Pas de CMS externe (gratuit, versionné Git, SEO statique)
+
+**Architecture** :
+- `lib/blog.js` — helpers serveur (Node fs/path), liste/lit les MDX
+- `lib/blog-cosmos.js` — helpers client-safe (placement des planètes en spirale dorée)
+- `content/blog/*.mdx` — articles avec frontmatter (title, description, date, category, planet)
+- `components/blog/BlogCosmos.jsx` — Canvas R3F : étoiles, dust doré, planètes-articles, OrbitControls, Bloom + Vignette
+- `components/blog/BlogGrid.jsx` — fallback 2D élégant (planète miniature en CSS)
+- `components/blog/BlogIndexClient.jsx` — switcher 3D/grille + détection mobile/motion réduite
+- `components/blog/BlogArticleHero.jsx` + `PlanetHero.jsx` — hero immersif d'un article (planète géante en rotation)
+- `components/blog/ArticleVideo.jsx` — slot pour vidéos Higgsfield/Kling (frontmatter `video`)
+- `components/blog/MDXComponents.jsx` — composants stylisés pour le rendu MDX
+- `app/blog/page.jsx` + `app/blog/[slug]/page.jsx` — pages serveur, sitemap auto, Schema.org Article
+
+**Détection mobile** : `window.matchMedia("(max-width: 767px)")` + `prefers-reduced-motion`. Sur petit écran ou motion réduite → grille 2D par défaut. Toggle 3D/grille disponible sur desktop.
+
+**Catégories** : automation, ai-agents, case-study, vision, crm, formation. Chaque catégorie a sa couleur de planète (cohérence visuelle dans le Cosmos).
+
+**SEO** :
+- `generateStaticParams` + `generateMetadata` par article
+- Schema.org `Article` avec author, publisher, dates
+- Sitemap dynamique (chaque article ajouté = nouvelle entrée auto)
+- URLs propres (`/blog/5-automatisations-pme`)
+
+**Navbar** : lien "Cosmos" ajouté FR/EN/ES. Les ancres `#xxx` sont préfixées par `/` quand on n'est pas sur la home (sinon clic depuis `/blog` ne ramène pas à la home).
+
+**Premier article publié** : "5 automatisations qui transforment une PME en 90 jours" (FR, automation, planète dorée, ~6 min de lecture). Cible la requête Google "automatisation IA PME".
+
+**Vidéos AI (Higgsfield/Kling/Lovable)** :
+- Slot prévu dans le frontmatter `video: "https://..."` → s'affiche en haut de l'article
+- Format recommandé : 16:9, 5-10s, planète qui tourne / réseau qui se construit / particules dorées
+- Sera intégré dans une PR suivante quand Tarek aura généré les vidéos
