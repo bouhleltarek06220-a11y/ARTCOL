@@ -30,8 +30,8 @@ function Card({ icon: Icon, title, desc, learnMore, index, onOpen }) {
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -6 }}
+      transition={{ duration: 0.65, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8 }}
       onClick={() => onOpen(index)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -42,12 +42,12 @@ function Card({ icon: Icon, title, desc, learnMore, index, onOpen }) {
       role="button"
       tabIndex={0}
       aria-label={title}
-      className="glow-ring group glass relative flex cursor-pointer flex-col gap-4 overflow-hidden rounded-2xl p-6 outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+      className="glow-ring group glass relative flex cursor-pointer flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 p-6 outline-none transition-[border-color,box-shadow] duration-500 hover:border-gold/40 hover:shadow-[0_20px_60px_-25px_rgba(212,175,55,0.45)] focus-visible:ring-2 focus-visible:ring-gold/60"
     >
-      {/* Lueur au hover */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.35),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+      {/* Halo doré qui apparaît au hover (suit le coin haut-droit) */}
+      <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.4),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/20 bg-[linear-gradient(135deg,rgba(168,127,46,0.28),rgba(212,175,55,0.18))] text-gold-bright transition-transform duration-500 group-hover:scale-110 group-hover:text-champagne">
+      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/20 bg-[linear-gradient(135deg,rgba(168,127,46,0.28),rgba(212,175,55,0.18))] text-gold-bright transition-all duration-500 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:text-champagne">
         <Icon width={24} height={24} />
       </div>
 
@@ -56,7 +56,7 @@ function Card({ icon: Icon, title, desc, learnMore, index, onOpen }) {
 
       <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-gold-bright opacity-70 transition-all duration-300 group-hover:opacity-100">
         {learnMore}
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-0.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
           <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>

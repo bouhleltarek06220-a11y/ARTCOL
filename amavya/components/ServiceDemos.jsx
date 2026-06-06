@@ -14,6 +14,7 @@ const SCENE_MS = 7500;
 const TAG = {
   fr: { pain: "Le quotidien", sol: "Avec AMAVYA", win: "Le résultat" },
   en: { pain: "Daily reality", sol: "With AMAVYA", win: "The result" },
+  es: { pain: "El día a día", sol: "Con AMAVYA", win: "El resultado" },
 };
 
 const tagStyle = {

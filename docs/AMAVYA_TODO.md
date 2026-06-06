@@ -7,7 +7,9 @@
 
 ## 🟢 En cours
 
-- [x] **Étape 5 — Chatbot IA AMAVYA** (code mergé, activation après ANTHROPIC_API_KEY dans Vercel)
+- [x] **Étape 6 — Polissage visuel (Lot 1/3)** : Hero + Services + SectionHeading + bugfix i18n ES sur ServiceDemos
+- [ ] Lot 2/3 : Vision + Technologies + Founder
+- [ ] Lot 3/3 : DashboardMockup + FinalCTA + Footer
 
 ---
 
@@ -60,6 +62,7 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## ✅ Récemment fait
 
+- [x] Étape 6 — Polissage visuel Lot 1 (Hero + Services + SectionHeading + bugfix ES ServiceDemos) (2026-06-06)
 - [x] Étape 5 — Chatbot IA AMAVYA (Claude Haiku 4.5 + streaming + i18n FR/EN/ES) (2026-06-06)
 - [x] Étape 3.1 — i18n client-side FR/EN/ES (ES ajouté + détection navigateur + 3e drapeau) (2026-06-06)
 - [x] Étape 2 — SEO + Open Graph : OG image dynamique, sitemap enrichi, robots durci, Schema.org +contactPoint (2026-06-06)
