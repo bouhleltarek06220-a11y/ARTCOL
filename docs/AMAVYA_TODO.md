@@ -7,7 +7,7 @@
 
 ## 🟢 En cours
 
-_(rien — étape 5 prête à démarrer)_
+- [x] **Étape 5 — Chatbot IA AMAVYA** (code mergé, activation après ANTHROPIC_API_KEY dans Vercel)
 
 ---
 
@@ -21,15 +21,14 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## 🔜 Prochaine étape
 
-### Étape 5 — Chatbot IA AMAVYA
+### Étape 6 — Polissage visuel des sections
 
-**Idée** : une bulle flottante en bas à droite. Le visiteur pose des questions sur AMAVYA, un agent IA répond avec ton positionnement, qualifie le besoin, propose un rendez-vous si pertinent. **Preuve par l'exemple** : tu vends de l'IA, ton site EN UTILISE.
+**Objectif** : rendu premium, micro-animations, cohérence typographique, espacements affinés sur Hero / Founder / Services / Démos / Experience / Contact / FinalCTA.
 
 **Avant de coder, à valider avec Tarek** :
-- [ ] Choix du LLM : Claude Haiku 4.5 (rapide, pas cher ~$0.001/conv) OU Claude Sonnet 4.6 (meilleur dialogue, ~$0.01/conv) ?
-- [ ] Tonalité du bot (professionnel chaleureux / direct / formel ?)
-- [ ] Périmètre des questions : seulement AMAVYA, ou aussi conseil IA général ?
-- [ ] Action quand le visiteur veut un RDV : ouvrir le formulaire de contact OU lien Calendly direct ?
+- [ ] Choisir 2-3 sections à polir en priorité (toutes d'un coup = trop dense)
+- [ ] Définir les petites améliorations souhaitées (animations, copy, layout)
+- [ ] Tests responsive mobile à faire après chaque section
 
 ---
 
@@ -61,6 +60,7 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## ✅ Récemment fait
 
+- [x] Étape 5 — Chatbot IA AMAVYA (Claude Haiku 4.5 + streaming + i18n FR/EN/ES) (2026-06-06)
 - [x] Étape 3.1 — i18n client-side FR/EN/ES (ES ajouté + détection navigateur + 3e drapeau) (2026-06-06)
 - [x] Étape 2 — SEO + Open Graph : OG image dynamique, sitemap enrichi, robots durci, Schema.org +contactPoint (2026-06-06)
 - [x] Étape 1 — Analytics Vercel + Speed Insights + docs/ (2026-06-06)

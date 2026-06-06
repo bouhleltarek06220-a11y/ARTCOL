@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import LangProvider from "@/components/LangProvider";
 import IntroGate from "@/components/IntroGate";
+import Chatbot from "@/components/Chatbot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -136,6 +137,7 @@ export default function RootLayout({ children }) {
         <LangProvider>
           {children}
           <IntroGate />
+          <Chatbot />
         </LangProvider>
         <Analytics />
         <SpeedInsights />
