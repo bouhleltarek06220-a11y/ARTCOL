@@ -20,7 +20,8 @@
 | 3.2 | i18n SEO (URLs `/en/` `/es/` + hreflang) | ⏳ À faire | — |
 | 4 | Page Pricing | ⏸️ **Stand by** (attend finalisation SASU) | 2026-06-06 |
 | 5 | Chatbot IA AMAVYA | ✅ Fait | 2026-06-06 |
-| 6 | **Polissage visuel (Lot 2/3)** | 🟢 **En cours** | 2026-06-06 |
+| 6 | Polissage visuel (Lots 1/2/3) | ✅ Fait | 2026-06-06 |
+| 7 | **Blog SEO** | 🟢 Prochaine | — |
 | 4 | Page Pricing | ⏳ À faire | — |
 | 5 | Chatbot IA AMAVYA | ⏳ À faire | — |
 | 6 | Polissage visuel des sections | ⏳ À faire | — |

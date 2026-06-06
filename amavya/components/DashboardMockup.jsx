@@ -233,10 +233,18 @@ export default function DashboardMockup() {
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="flex flex-col gap-4"
               >
-                {/* KPIs */}
+                {/* KPIs — légère élévation + bord doré au hover */}
                 <div className="grid grid-cols-3 gap-3">
                   {cur.kpis.map((kpi, i) => (
-                    <div key={kpi.label} className="glass rounded-xl p-3">
+                    <div
+                      key={kpi.label}
+                      className="glass group relative cursor-default overflow-hidden rounded-xl p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_8px_24px_-12px_rgba(240,210,122,0.5)]"
+                    >
+                      {/* Halo doré qui apparaît au coin haut-droit */}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-[radial-gradient(circle,rgba(240,210,122,0.4),transparent_70%)] opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100"
+                      />
                       <p className="truncate text-[10px] uppercase tracking-wide text-muted">{kpi.label}</p>
                       <p className="mt-1 text-base font-semibold tabular-nums text-paper sm:text-lg">
                         <AnimatedStat target={kpi.base + (live[i] || 0)} meta={kpi} locale={locale} />
@@ -258,7 +266,7 @@ export default function DashboardMockup() {
                       {cur.chart.range}
                     </span>
                   </div>
-                  <div className="flex h-28 items-end justify-between gap-2">
+                  <div className="group/chart flex h-28 items-end justify-between gap-2">
                     {cur.chart.bars.map((h, i) => {
                       const height = clamp(h + (jitter[i] || 0));
                       const isLast = i === cur.chart.bars.length - 1;
@@ -268,7 +276,7 @@ export default function DashboardMockup() {
                           initial={{ height: 0 }}
                           animate={{ height: `${height}%` }}
                           transition={{ duration: 0.7, delay: 0.05 * i, ease: [0.22, 1, 0.36, 1] }}
-                          className={`relative w-full rounded-t-md bg-[linear-gradient(to_top,#a87f2e,#f0d27a)] ${isLast ? "shadow-[0_0_16px_-2px_rgba(240,210,122,0.7)]" : ""}`}
+                          className={`relative w-full origin-bottom rounded-t-md bg-[linear-gradient(to_top,#a87f2e,#f0d27a)] transition-transform duration-500 hover:scale-y-110 ${isLast ? "shadow-[0_0_16px_-2px_rgba(240,210,122,0.7)]" : ""}`}
                         />
                       );
                     })}

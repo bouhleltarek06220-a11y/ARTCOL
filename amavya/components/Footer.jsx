@@ -7,16 +7,19 @@ const SOCIALS = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/tarek-bouhlel",
+    hoverBg: "rgba(10,102,194,0.18)",
     path: "M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3V21h-3zM10 8.5h2.9v1.7h.04c.4-.76 1.4-1.56 2.9-1.56 3.1 0 3.66 2 3.66 4.7V21h-3v-5.2c0-1.24-.02-2.84-1.74-2.84-1.74 0-2 1.36-2 2.76V21h-3z",
   },
   {
     label: "X",
     href: "#",
+    hoverBg: "rgba(240,240,240,0.10)",
     path: "M17.5 3h3l-6.6 7.5L21.7 21h-5.9l-4.3-5.6L6.3 21H3.3l7-8L2.6 3h6l3.9 5.2zM16.4 19.2h1.7L7.7 4.7H5.9z",
   },
   {
     label: "GitHub",
     href: "#",
+    hoverBg: "rgba(110,118,129,0.18)",
     path: "M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z",
   },
 ];
@@ -43,9 +46,14 @@ export default function Footer() {
                   aria-label={s.label}
                   target={s.href !== "#" ? "_blank" : undefined}
                   rel={s.href !== "#" ? "noopener noreferrer" : undefined}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-muted transition-all hover:-translate-y-0.5 hover:border-gold/40 hover:text-paper"
+                  className="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 text-muted transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:text-paper hover:shadow-[0_8px_24px_-10px_rgba(240,210,122,0.5)]"
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ background: s.hoverBg }}
+                  />
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="relative">
                     <path d={s.path} />
                   </svg>
                 </a>
@@ -53,7 +61,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Colonnes de liens */}
+          {/* Colonnes de liens — soulignement doré animé au hover */}
           {f.columns.map((col) => (
             <div key={col.title} className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold text-paper">{col.title}</h3>
@@ -62,9 +70,13 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-muted transition-colors hover:text-paper"
+                      className="group relative inline-block text-sm text-muted transition-colors hover:text-paper"
                     >
                       {link.label}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-0.5 left-0 h-px w-0 bg-[linear-gradient(90deg,transparent,#f0d27a,transparent)] transition-all duration-400 group-hover:w-full"
+                      />
                     </a>
                   </li>
                 ))}
@@ -80,9 +92,9 @@ export default function Footer() {
             href="https://www.linkedin.com/in/tarek-bouhlel"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 transition-colors hover:text-paper"
+            className="group flex items-center gap-2 transition-colors hover:text-paper"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="transition-transform duration-300 group-hover:scale-110">
               <path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3V21h-3zM10 8.5h2.9v1.7h.04c.4-.76 1.4-1.56 2.9-1.56 3.1 0 3.66 2 3.66 4.7V21h-3v-5.2c0-1.24-.02-2.84-1.74-2.84-1.74 0-2 1.36-2 2.76V21h-3z" />
             </svg>
             {f.developedBy}

@@ -266,3 +266,15 @@
   - Au survol du portrait : zoom léger 1.03 + zoom interne 1.05 sur la photo + un reflet doré qui traverse en 1s
   - Les facets (badges 20 ans, dev, business…) arrivent en cascade (delay 0.07s)
   - Boutons sociaux : élévation -1, ombre dorée + **couleur de marque au hover** (bleu LinkedIn, vert WhatsApp, doré Email)
+
+### Lot 3 — DashboardMockup + FinalCTA + Footer (étape 6 terminée)
+- **DashboardMockup** : KPIs avec élévation `-0.5px` + bordure dorée + halo coin haut-droit au hover ; les barres du graphe `scale-y-110` au hover (très subtile) avec `origin-bottom` (croissance depuis le sol)
+- **FinalCTA** :
+  - Parallaxe douce sur l'image de fond (`y: -8% → +8%`) au scroll
+  - Halo doré central qui **respire** (opacity 0.6→1, scale 0.92→1.08, 6s)
+  - Reflet doré qui glisse sur le titre highlight (animation `hero-sheen` 14s — réutilise le keyframe global)
+  - **Halo doré derrière le bouton** qui respire en parallèle (3.5s — plus rapide pour attirer l'œil)
+- **Footer** :
+  - Soulignement doré (gradient transparent→or→transparent) qui s'étend sous chaque lien au hover (signature visuelle réutilisée des Technologies)
+  - Boutons sociaux refactorisés avec **couleur de marque au hover** (bleu LinkedIn, blanc-translucide X, gris GitHub)
+  - Logo LinkedIn du copyright : scale 1.1 au hover
