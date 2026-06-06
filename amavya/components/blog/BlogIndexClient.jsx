@@ -10,30 +10,30 @@ const BlogCosmos = dynamic(() => import("./BlogCosmos"), { ssr: false });
 
 const TEXT = {
   fr: {
-    eyebrow: "Le Cosmos AMAVYA",
+    eyebrow: "Cosmos AMAVYA · Revue de presse mondiale",
     title: "Un voyage dans l'IA, point par point.",
     description:
-      "Tournez la Terre, cliquez sur un point lumineux pour ouvrir l'article correspondant.",
+      "Tournez la Terre, cliquez sur un point pour lire la presse mondiale sur l'IA — dans la langue du pays.",
     hint: "Tournez la Terre · cliquez sur un point",
     toggle3D: "Mode Globe",
     toggleGrid: "Mode grille",
     empty: "Le cosmos est vide pour l'instant. Le premier article arrive bientôt.",
   },
   en: {
-    eyebrow: "The AMAVYA Cosmos",
+    eyebrow: "AMAVYA Cosmos · World press review",
     title: "A journey into AI, point by point.",
     description:
-      "Spin the Earth, click a glowing point to open the matching article.",
+      "Spin the Earth, click a point to read world press coverage on AI — in the country's own language.",
     hint: "Spin the Earth · click a point",
     toggle3D: "Globe mode",
     toggleGrid: "Grid mode",
     empty: "The cosmos is empty for now. The first article is coming soon.",
   },
   es: {
-    eyebrow: "El Cosmos AMAVYA",
+    eyebrow: "Cosmos AMAVYA · Revista de prensa mundial",
     title: "Un viaje a la IA, punto por punto.",
     description:
-      "Gire la Tierra, haga clic en un punto luminoso para abrir el artículo correspondiente.",
+      "Gire la Tierra, haga clic en un punto para leer la prensa mundial sobre IA — en el idioma del país.",
     hint: "Gire la Tierra · haga clic en un punto",
     toggle3D: "Modo Globo",
     toggleGrid: "Modo cuadrícula",
