@@ -14,7 +14,7 @@ const TEXT = {
     title: "Un voyage dans l'IA, point par point.",
     description:
       "Tournez la Terre, cliquez sur un point pour lire la presse mondiale sur l'IA — dans la langue du pays.",
-    hint: "Tournez la Terre · cliquez sur un point",
+    hint: "Tournez · molette pour zoomer · cliquez sur un point",
     toggle3D: "Mode Globe",
     toggleGrid: "Mode grille",
     empty: "Le cosmos est vide pour l'instant. Le premier article arrive bientôt.",
@@ -24,7 +24,7 @@ const TEXT = {
     title: "A journey into AI, point by point.",
     description:
       "Spin the Earth, click a point to read world press coverage on AI — in the country's own language.",
-    hint: "Spin the Earth · click a point",
+    hint: "Spin · scroll to zoom · click a point",
     toggle3D: "Globe mode",
     toggleGrid: "Grid mode",
     empty: "The cosmos is empty for now. The first article is coming soon.",
@@ -34,7 +34,7 @@ const TEXT = {
     title: "Un viaje a la IA, punto por punto.",
     description:
       "Gire la Tierra, haga clic en un punto para leer la prensa mundial sobre IA — en el idioma del país.",
-    hint: "Gire la Tierra · haga clic en un punto",
+    hint: "Gire · rueda para zoom · haga clic en un punto",
     toggle3D: "Modo Globo",
     toggleGrid: "Modo cuadrícula",
     empty: "El cosmos está vacío por ahora. El primer artículo llega pronto.",
