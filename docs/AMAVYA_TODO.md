@@ -7,9 +7,7 @@
 
 ## 🟢 En cours
 
-- [x] **Étape 6 — Polissage visuel (Lot 1/3)** : Hero + Services + SectionHeading + bugfix i18n ES sur ServiceDemos
-- [x] **Étape 6 — Polissage visuel (Lot 2/3)** : Vision + Technologies + Founder
-- [ ] Lot 3/3 : DashboardMockup + FinalCTA + Footer
+_(rien — étape 6 terminée, étape 7 prête à démarrer)_
 
 ---
 
@@ -23,14 +21,15 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## 🔜 Prochaine étape
 
-### Étape 6 — Polissage visuel des sections
+### Étape 7 — Blog SEO
 
-**Objectif** : rendu premium, micro-animations, cohérence typographique, espacements affinés sur Hero / Founder / Services / Démos / Experience / Contact / FinalCTA.
+**Objectif** : créer une section `/blog` avec une structure pour publier des articles techniques (cas client, conseils IA pour PME, comparatifs). Chaque article = une porte d'entrée SEO supplémentaire pour `amavya.cloud`. Cumul à 3-6 mois = trafic organique qualifié.
 
 **Avant de coder, à valider avec Tarek** :
-- [ ] Choisir 2-3 sections à polir en priorité (toutes d'un coup = trop dense)
-- [ ] Définir les petites améliorations souhaitées (animations, copy, layout)
-- [ ] Tests responsive mobile à faire après chaque section
+- [ ] Choisir le format : MDX (markdown + composants React, idéal pour AMAVYA) OU CMS (Sanity / Contentful, plus lourd à brancher)
+- [ ] Définir 3-5 sujets d'articles "starter" à écrire ensemble
+- [ ] Décider : auteur unique (Tarek) ou plusieurs auteurs ?
+- [ ] Pour les images : un dossier `/public/blog/` ou un service externe (Cloudinary) ?
 
 ---
 
@@ -62,6 +61,8 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## ✅ Récemment fait
 
+- [x] **Étape 6 TERMINÉE** — Polissage visuel des 9 sections (Lots 1+2+3)
+- [x] Étape 6 — Polissage visuel Lot 3 (DashboardMockup + FinalCTA + Footer) (2026-06-06)
 - [x] Étape 6 — Polissage visuel Lot 2 (Vision + Technologies + Founder) (2026-06-06)
 - [x] Étape 6 — Polissage visuel Lot 1 (Hero + Services + SectionHeading + bugfix ES ServiceDemos) (2026-06-06)
 - [x] Étape 5 — Chatbot IA AMAVYA (Claude Haiku 4.5 + streaming + i18n FR/EN/ES) (2026-06-06)
