@@ -7,18 +7,18 @@
 
 ## 🟢 En cours
 
-- [x] **Étape 2 — SEO technique + Open Graph** (mergé, validation visuelle à faire)
+- [x] **Étape 3.1 — i18n client-side FR/EN/ES** (mergé, ES disponible, détection navigateur)
 
 ---
 
 ## 🔜 Prochaine étape
 
-### Étape 3 — Internationalisation FR / EN / ES
+### Étape 3.2 — i18n SEO (URLs `/en/` `/es/` + hreflang)
 
 **Avant de coder, à valider avec Tarek** :
-- [ ] Décider la stratégie d'URL : `/en/`, `/es/` (recommandé pour SEO) OU détection JS sans URL différente
-- [ ] Vérifier l'état actuel de `lib/i18n.js` (clés manquantes ?)
-- [ ] Choisir si on utilise `next-intl` (officiel, robuste) ou on garde la solution custom existante
+- [ ] Choisir entre Next.js i18n routing natif OU `next-intl` (plus puissant, plus de migration)
+- [ ] Décider si la racine `/` reste FR (avec `/fr/` qui redirige vers `/`) ou si tout passe en `/fr/` `/en/` `/es/`
+- [ ] Vérifier que la sitemap inclura les 3 versions de chaque page
 
 ---
 
@@ -50,6 +50,7 @@
 
 ## ✅ Récemment fait
 
+- [x] Étape 3.1 — i18n client-side FR/EN/ES (ES ajouté + détection navigateur + 3e drapeau) (2026-06-06)
 - [x] Étape 2 — SEO + Open Graph : OG image dynamique, sitemap enrichi, robots durci, Schema.org +contactPoint (2026-06-06)
 - [x] Étape 1 — Analytics Vercel + Speed Insights + docs/ (2026-06-06)
 - [x] Étape 0 — Domaine + mail pro `contact@amavya.cloud` (2026-06-06)

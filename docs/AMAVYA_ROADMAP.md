@@ -15,8 +15,9 @@
 |---|-------|--------|------|
 | 0 | Domaine + Mail pro `contact@amavya.cloud` | ✅ Fait | 2026-06-06 |
 | 1 | Analytics Vercel | ✅ Fait | 2026-06-06 |
-| 2 | **SEO technique + Open Graph** | 🟢 **En cours** | 2026-06-06 |
-| 3 | Internationalisation FR / EN / ES | ⏳ À faire | — |
+| 2 | SEO technique + Open Graph | ✅ Fait | 2026-06-06 |
+| 3 | **i18n FR/EN/ES (3.1 client-side)** | 🟢 **En cours** | 2026-06-06 |
+| 3.2 | i18n SEO (URLs `/en/` `/es/` + hreflang) | ⏳ À faire | — |
 | 4 | Page Pricing | ⏳ À faire | — |
 | 5 | Chatbot IA AMAVYA | ⏳ À faire | — |
 | 6 | Polissage visuel des sections | ⏳ À faire | — |

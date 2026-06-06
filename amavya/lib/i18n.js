@@ -1,9 +1,11 @@
 /**
- * Traductions bilingues FR / EN d'AMAVYA.
+ * Traductions trilingues FR / EN / ES d'AMAVYA.
  * Toutes les chaînes visibles de la landing page sont centralisées ici.
  * Structure par section : nav, hero, services, vision, technologies,
  * founder, cta, footer, contact, dashboard.
  */
+export const SUPPORTED_LANGS = ["fr", "en", "es"];
+
 export const translations = {
   fr: {
     nav: {
@@ -489,6 +491,249 @@ export const translations = {
       activeBadge: "Active",
       floatTitle: "3 agents online",
       floatSubtitle: "24/7 automation",
+    },
+  },
+  es: {
+    nav: {
+      links: [
+        { label: "Soluciones", href: "#services" },
+        { label: "Visión", href: "#vision" },
+        { label: "Tecnologías", href: "#technologies" },
+        { label: "Fundador", href: "#fondateur" },
+      ],
+      cta: "Reservar una demo",
+      openMenu: "Abrir el menú",
+    },
+    hero: {
+      badge: "Empresa francesa · IA · Automatización · SaaS",
+      titleLead: "Inteligencia artificial al servicio de las",
+      titleHighlight: "empresas modernas.",
+      paragraph:
+        "AMAVYA desarrolla soluciones de IA, productos SaaS y automatizaciones inteligentes que transforman la prospección, la gestión y la productividad.",
+      stats: [
+        { value: "24/7", label: "Agentes autónomos" },
+        { value: "+50 %", label: "Productividad objetivo" },
+        { value: "100 %", label: "A medida" },
+      ],
+    },
+    services: {
+      eyebrow: "Nuestras soluciones",
+      title: "Herramientas de IA diseñadas para escalar",
+      description:
+        "Una suite completa para automatizar, prospectar y dirigir su negocio con inteligencia artificial.",
+      learnMore: "Saber más",
+      featuresTitle: "Lo que obtiene",
+      videoSoon: "Vídeo demo próximamente",
+      modalCta: "Reservar una demo",
+      close: "Cerrar",
+      cards: [
+        {
+          title: "Agentes IA",
+          desc: "Agentes autónomos que ejecutan sus tareas empresariales, razonan y actúan 24/7.",
+          tagline: "Sus compañeros digitales autónomos",
+          long: "Agentes inteligentes que entienden sus procesos, toman decisiones y ejecutan tareas complejas sin intervención humana. Trabajan las 24 horas, se integran con sus herramientas y aprenden continuamente para ganar precisión.",
+          features: [
+            "Ejecución autónoma de tareas empresariales repetitivas o complejas",
+            "Razonamiento multietapa y toma de decisiones contextual",
+            "Integración con sus herramientas (email, CRM, API, bases de datos)",
+            "Disponibilidad 24/7, sin pausas ni olvidos",
+            "Aprendizaje continuo a partir de sus datos",
+          ],
+        },
+        {
+          title: "CRM inteligente",
+          desc: "Un CRM potenciado por IA que califica, prioriza y enriquece sus contactos de forma continua.",
+          tagline: "Un CRM que trabaja para usted",
+          long: "Mucho más que una agenda: un CRM aumentado por IA que califica automáticamente sus leads, prioriza las oportunidades de alto potencial y enriquece cada ficha de contacto en tiempo real.",
+          features: [
+            "Calificación y scoring automático de leads",
+            "Enriquecimiento de contactos (datos de empresa, cargo, redes)",
+            "Priorización inteligente de oportunidades",
+            "Seguimiento y recordatorios automatizados",
+            "Cuadros de mando claros para dirigir su actividad",
+          ],
+        },
+        {
+          title: "Automatización empresarial",
+          desc: "Conecte sus herramientas y automatice sus flujos repetitivos sin fricciones.",
+          tagline: "Elimine las tareas repetitivas",
+          long: "Conecte todas sus herramientas y automatice sus flujos de principio a fin. Adiós a los copiar-pegar y reintroducciones: sus procesos se ejecutan solos, sin errores y sin fricciones.",
+          features: [
+            "Conexión de sus aplicaciones (Gmail, Slack, Notion, Sheets…)",
+            "Automatización completa de flujos sin código",
+            "Disparadores inteligentes basados en sus eventos de negocio",
+            "Menos errores y tareas manuales",
+            "Ahorro de tiempo medible desde las primeras semanas",
+          ],
+        },
+        {
+          title: "Prospección automatizada",
+          desc: "Identificación, secuenciación y seguimiento de prospectos dirigidos por inteligencia artificial.",
+          tagline: "Llene su pipeline en piloto automático",
+          long: "Identifique sus prospectos ideales, lance secuencias personalizadas y haga seguimiento automáticamente — todo gestionado por IA. Su equipo comercial se concentra en cerrar, no en buscar.",
+          features: [
+            "Segmentación de prospectos según su cliente ideal",
+            "Secuencias multicanal personalizadas (email, LinkedIn)",
+            "Seguimientos automáticos en el momento adecuado",
+            "Mensajes generados y adaptados por IA",
+            "Análisis de rendimiento y optimización continua",
+          ],
+        },
+        {
+          title: "SaaS a medida",
+          desc: "Plataformas web y móviles diseñadas para su negocio, escalables y elegantes.",
+          tagline: "Su plataforma, hecha para usted",
+          long: "Diseñamos y desarrollamos plataformas web y móviles elegantes, de alto rendimiento y escalables, hechas a medida para su negocio — desde el primer prototipo hasta la puesta en producción.",
+          features: [
+            "Aplicaciones web y móviles a medida",
+            "Diseño premium y experiencia de usuario cuidada",
+            "Arquitectura escalable lista para crecer",
+            "IA integrada en el núcleo del producto",
+            "Acompañamiento desde el diseño hasta el despliegue",
+          ],
+        },
+        {
+          title: "Formación IA & Negocio",
+          desc: "Acompañamiento y capacitación para integrar la IA en sus equipos.",
+          tagline: "Capacite a sus equipos",
+          long: "Acompañamos a sus equipos para integrar la IA de forma concreta en su día a día: talleres prácticos, capacitación y despliegue de herramientas adaptadas a sus oficios.",
+          features: [
+            "Talleres prácticos adaptados a su negocio",
+            "Dominio de las herramientas de IA generativa",
+            "Casos de uso concretos aplicados a su actividad",
+            "Acompañamiento al cambio",
+            "Seguimiento y soporte post-formación",
+          ],
+        },
+      ],
+    },
+    vision: {
+      eyebrow: "Nuestra visión",
+      titleLead: "La IA para",
+      titleHighlight: "potenciar al ser humano",
+      titleTail: ", no para reemplazarlo.",
+      paragraph:
+        "Creemos que la inteligencia artificial debe potenciar a las personas, no reemplazarlas. AMAVYA construye herramientas inteligentes diseñadas para que las empresas trabajen más rápido, mejor y con más impacto.",
+      points: [
+        "Una IA al servicio de decisiones humanas informadas",
+        "Automatizaciones que liberan tiempo de alto valor",
+        "Una tecnología elegante, fiable y dominada",
+      ],
+    },
+    technologies: {
+      eyebrow: "Stack tecnológico",
+      title: "Construido sobre las mejores tecnologías del mercado",
+      description:
+        "AMAVYA se apoya en una base moderna, de alto rendimiento y probada para entregar productos fiables.",
+    },
+    founder: {
+      eyebrow: "El fundador",
+      name: "Tarek Bouhlel",
+      paragraphLead:
+        "Entre experiencia de campo, desarrollo tecnológico y visión de negocio, AMAVYA nace de una voluntad simple:",
+      paragraphHighlight: "crear herramientas de IA realmente útiles.",
+      facets: [
+        "20 años en el campo · corriente fuerte/débil",
+        "Desarrollo y arquitectura app & web",
+        "Business developer orientado a IA",
+      ],
+      contactLabel: "Contactar directamente",
+    },
+    cta: {
+      eyebrow: "Pase a la acción",
+      titleLead: "¿Listo para transformar su empresa con la ",
+      titleHighlight: "IA",
+      titleTail: "?",
+      paragraph:
+        "Hablemos de sus retos e identifiquemos juntos las automatizaciones de mayor impacto para su actividad.",
+      button: "Empezar ahora",
+    },
+    footer: {
+      description:
+        "Soluciones de IA, productos SaaS y automatizaciones inteligentes para empresas modernas. Empresa francesa.",
+      columns: [
+        {
+          title: "Soluciones",
+          links: [
+            { label: "Agentes IA", href: "#services" },
+            { label: "CRM inteligente", href: "#services" },
+            { label: "Automatización", href: "#services" },
+            { label: "Prospección", href: "#services" },
+          ],
+        },
+        {
+          title: "Empresa",
+          links: [
+            { label: "Visión", href: "#vision" },
+            { label: "Fundador", href: "#fondateur" },
+            { label: "Tecnologías", href: "#technologies" },
+            { label: "Contacto", href: "#contact" },
+          ],
+        },
+        {
+          title: "Legal",
+          links: [
+            { label: "Aviso legal", href: "/mentions-legales" },
+            { label: "Privacidad", href: "/confidentialite" },
+            { label: "Términos", href: "/cgu-cgv" },
+            { label: "Cookies", href: "/cookies" },
+          ],
+        },
+      ],
+      rights: "Todos los derechos reservados.",
+      developedBy: "Desarrollado por Tarek Bouhlel",
+    },
+    contact: {
+      eyebrow: "Pase a la acción",
+      title: "Contactar AMAVYA",
+      subtitle:
+        "Cuéntenos su necesidad — le responderemos rápidamente para hablar de ella.",
+      labels: {
+        fullName: "Nombre completo *",
+        company: "Empresa",
+        email: "Correo *",
+        phone: "Teléfono",
+        message: "Su necesidad *",
+      },
+      placeholders: {
+        fullName: "Su nombre",
+        company: "Su empresa",
+        email: "usted@ejemplo.com",
+        phone: "+34 600 12 34 56",
+        message:
+          "Háblenos de su proyecto, sus retos, las automatizaciones objetivo…",
+      },
+      errors: {
+        fullName: "Indique su nombre.",
+        email: "Correo inválido.",
+        message: "Describa brevemente su necesidad.",
+      },
+      submitError: {
+        lead: "Se ha producido un error. Inténtelo de nuevo o escríbanos a",
+        after: ".",
+      },
+      success: {
+        title: "Mensaje recibido",
+        text: "¡Gracias! Hemos recibido su solicitud y le responderemos muy pronto.",
+        close: "Cerrar",
+      },
+      submit: "Enviar mi solicitud",
+      submitting: "Enviando…",
+      closeAria: "Cerrar",
+      dialogAria: "Contactar AMAVYA",
+    },
+    dashboard: {
+      sidebar: ["Vista general", "Agentes IA", "Pipeline", "Prospección", "Analítica"],
+      kpis: [
+        { k: "Leads procesados", v: "12 480", d: "+24%" },
+        { k: "Tasa de respuesta", v: "38,5 %", d: "+11%" },
+        { k: "Tareas auto.", v: "1 932", d: "+57%" },
+      ],
+      chartTitle: "Rendimiento de los agentes",
+      chartRange: "Últimos 7 días",
+      activeBadge: "Activo",
+      floatTitle: "3 agentes en línea",
+      floatSubtitle: "Automatización 24/7",
     },
   },
 };
