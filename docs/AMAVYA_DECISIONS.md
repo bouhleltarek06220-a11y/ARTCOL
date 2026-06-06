@@ -255,3 +255,14 @@
 - Sur Hero : passe la souris → halo doré qui suit (desktop)
 - Sur les titres : le trait fin doré s'étend au reveal
 - En espagnol (drapeau ES) : ouvrir une démo de service → tags "El día a día / Con AMAVYA / El resultado"
+
+### Lot 2 — Vision + Technologies + Founder
+- **Vision** : les pastilles dorées des anneaux orbitaux pulsent doucement (3-5s, halo qui respire) ; les 3 points de la liste arrivent en cascade horizontale (`x: -16 → 0`) au scroll, avec hover sur l'icône (scale + rotation 8°)
+- **Technologies** : le marquee se met **en pause** au survol (permet la lecture) ; les pastilles dorées scale 1.5 + glow au hover ; un soulignement doré apparaît sous chaque nom de techno au survol
+- **Founder** :
+  - Parallaxe douce sur le portrait (-30px → +30px au scroll de la section)
+  - Halo doré du fond "respire" (opacity + scale, 7s)
+  - Halo doré autour du portrait pulse aussi (5s)
+  - Au survol du portrait : zoom léger 1.03 + zoom interne 1.05 sur la photo + un reflet doré qui traverse en 1s
+  - Les facets (badges 20 ans, dev, business…) arrivent en cascade (delay 0.07s)
+  - Boutons sociaux : élévation -1, ombre dorée + **couleur de marque au hover** (bleu LinkedIn, vert WhatsApp, doré Email)

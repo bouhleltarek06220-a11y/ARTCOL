@@ -33,15 +33,22 @@ export default function Vision() {
 
           <Reveal delay={0.15}>
             <ul className="flex flex-col gap-3 pt-2">
-              {v.points.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm text-paper/90">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#a87f2e,#d4af37)]">
+              {v.points.map((item, i) => (
+                <motion.li
+                  key={item}
+                  initial={{ opacity: 0, x: -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="group flex items-start gap-3 text-sm text-paper/90"
+                >
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#a87f2e,#d4af37)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[8deg]">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                       <path d="m5 12 5 5 9-9" stroke="#0a0a0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  {item}
-                </li>
+                  <span className="transition-colors duration-300 group-hover:text-paper">{item}</span>
+                </motion.li>
               ))}
             </ul>
           </Reveal>
@@ -62,9 +69,17 @@ export default function Vision() {
                 animate={{ rotate: ring % 2 === 0 ? 360 : -360 }}
                 transition={{ duration: 30 + ring * 12, repeat: Infinity, ease: "linear" }}
               >
-                <span
+                <motion.span
                   className="absolute h-2.5 w-2.5 rounded-full bg-gold-bright shadow-[0_0_18px_4px_rgba(240,210,122,0.6)]"
                   style={{ top: "-5px", left: "50%" }}
+                  animate={{
+                    boxShadow: [
+                      "0 0 18px 4px rgba(240,210,122,0.5)",
+                      "0 0 28px 8px rgba(240,210,122,0.8)",
+                      "0 0 18px 4px rgba(240,210,122,0.5)",
+                    ],
+                  }}
+                  transition={{ duration: 3 + ring * 0.7, repeat: Infinity, ease: "easeInOut" }}
                 />
               </motion.div>
             ))}
