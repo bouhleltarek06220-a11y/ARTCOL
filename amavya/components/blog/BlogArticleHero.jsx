@@ -30,7 +30,13 @@ export default function BlogArticleHero({ article }) {
           gl={{ antialias: true, alpha: true }}
         >
           <Suspense fallback={null}>
-            <PlanetHero color={article.planet.color} size={article.planet.size} />
+            <PlanetHero
+              color={article.planet.color}
+              size={article.planet.size * 1.4}
+              type={article.planet.type}
+              category={article.category}
+              seed={article.slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 50}
+            />
           </Suspense>
         </Canvas>
       </div>
