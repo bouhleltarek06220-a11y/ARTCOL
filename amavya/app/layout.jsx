@@ -1,4 +1,6 @@
 import { Inter, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import LangProvider from "@/components/LangProvider";
 import IntroGate from "@/components/IntroGate";
@@ -131,6 +133,8 @@ export default function RootLayout({ children }) {
           {children}
           <IntroGate />
         </LangProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
