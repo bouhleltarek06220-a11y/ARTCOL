@@ -10,18 +10,18 @@ const GlobeCosmos = dynamic(() => import("./celestial/GlobeCosmos"), {
 
 export default function BlogArticleHero({ article }) {
   return (
-    <div className="relative h-[65vh] min-h-[460px] w-full overflow-hidden bg-[#050505]">
+    <div className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden bg-[#020208]">
       {/* Halo coloré derrière */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-3xl"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl"
         style={{
           background: `radial-gradient(circle, ${article.planet.color}33, transparent 65%)`,
         }}
       />
 
-      {/* Mini globe — marker pulsant cliquable du sujet de l'article */}
-      <div className="absolute inset-0 flex items-center justify-center pt-10">
-        <div className="w-[60vw] max-w-md">
+      {/* Mini globe — marker pulsant du sujet de l'article */}
+      <div className="absolute inset-0 flex items-center justify-center pt-16">
+        <div className="w-[60vh] max-w-md">
           <GlobeCosmos articles={[article]} size="md" />
         </div>
       </div>

@@ -1,9 +1,26 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import * as THREE from "three";
+
+/* Caméra qui dérive doucement dans l'espace : on a l'impression de voyager. */
+function CameraDrift() {
+  const { camera } = useThree();
+  const base = useRef({ x: 0, y: 0, z: 50 });
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    // Orbite très lente autour du centre, légèrement ondulée.
+    const radius = 50;
+    camera.position.x = Math.cos(t * 0.04) * radius;
+    camera.position.z = Math.sin(t * 0.04) * radius;
+    camera.position.y = Math.sin(t * 0.07) * 4;
+    camera.lookAt(0, 0, 0);
+    base.current.x = camera.position.x;
+  });
+  return null;
+}
 
 /* Bande de poussière galactique : un disque incliné de particules colorées
    qui donne l'illusion de la voie lactée traversant le ciel. */
@@ -107,20 +124,25 @@ function NebulaPatch({ position, color, scale = 28 }) {
   );
 }
 
-export default function MilkyWay() {
+export default function MilkyWay({ drift = true }) {
   return (
     <group>
+      {drift && <CameraDrift />}
       {/* Couche d'étoiles standard (drei) — fond stellaire dense */}
-      <Stars radius={180} depth={80} count={8000} factor={5} fade speed={0.2} />
-      {/* Petites étoiles plus proches */}
-      <Stars radius={60} depth={30} count={2500} factor={2.5} fade speed={0.35} />
+      <Stars radius={180} depth={80} count={12000} factor={6} fade speed={0.2} />
+      {/* Étoiles intermédiaires */}
+      <Stars radius={90} depth={40} count={5000} factor={3.5} fade speed={0.3} />
+      {/* Petites étoiles proches */}
+      <Stars radius={40} depth={20} count={2500} factor={2} fade speed={0.4} />
       {/* La bande galactique inclinée */}
       <GalacticBand />
-      {/* Quelques nébuleuses colorées */}
-      <NebulaPatch position={[-60, 18, -90]} color="#a87f2e" scale={50} />
-      <NebulaPatch position={[80, -22, -110]} color="#5b3d99" scale={45} />
-      <NebulaPatch position={[-40, -30, 70]} color="#1e6fbe" scale={42} />
-      <NebulaPatch position={[40, 35, 80]} color="#c98144" scale={38} />
+      {/* Nébuleuses colorées qui parsèment l'espace */}
+      <NebulaPatch position={[-60, 18, -90]} color="#a87f2e" scale={55} />
+      <NebulaPatch position={[80, -22, -110]} color="#5b3d99" scale={48} />
+      <NebulaPatch position={[-40, -30, 70]} color="#1e6fbe" scale={45} />
+      <NebulaPatch position={[40, 35, 80]} color="#c98144" scale={40} />
+      <NebulaPatch position={[-100, 0, 30]} color="#7e3f9e" scale={38} />
+      <NebulaPatch position={[100, 50, -50]} color="#3b6ee5" scale={42} />
     </group>
   );
 }

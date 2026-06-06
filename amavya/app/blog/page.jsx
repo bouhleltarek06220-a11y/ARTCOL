@@ -1,7 +1,6 @@
 import { getAllArticles } from "@/lib/blog";
 import BlogIndexClient from "@/components/blog/BlogIndexClient";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Cosmos AMAVYA — Le blog de l'IA appliquée",
@@ -16,18 +15,15 @@ export const metadata = {
 };
 
 export default function BlogPage() {
-  // On expose tous les articles (toutes langues) ici : la sélection par langue
-  // se fera plus tard via i18n routing (étape 3.2). Pour l'instant on filtre
-  // côté client via le LangProvider si besoin.
   const articles = getAllArticles();
 
   return (
     <>
       <Navbar />
-      <main id="main">
+      {/* Pas de footer ici : le Cosmos est plein écran, le footer reste sur les articles */}
+      <main id="main" className="relative">
         <BlogIndexClient articles={articles} />
       </main>
-      <Footer />
     </>
   );
 }
