@@ -65,6 +65,8 @@ export function getArticleBySlug(slug) {
       color: planet.color || CATEGORY_COLORS[data.category] || "#f0d27a",
       size: planet.size || 1,
       type: planet.type || null,
+      lat: planet.lat != null ? Number(planet.lat) : null,
+      lng: planet.lng != null ? Number(planet.lng) : null,
     },
   };
 }
