@@ -79,20 +79,35 @@ export default function PressCard({ item, onClose }) {
               </svg>
             </button>
 
-            {/* Eyebrow : ville · pays · drapeau (en LTR pour le drapeau) */}
+            {/* DRAPEAU XL en haut centré */}
             <div
-              className="flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-gold-bright"
+              className="mb-4 flex flex-col items-center gap-2 text-center"
               dir="ltr"
             >
-              <span className="text-lg leading-none">{item.countryFlag}</span>
-              <span>
-                {item.city} · {item.country}
-              </span>
+              <div
+                aria-hidden="true"
+                className="text-6xl leading-none drop-shadow-[0_8px_24px_rgba(0,0,0,0.7)] sm:text-7xl"
+                style={{ filter: "drop-shadow(0 0 12px rgba(240,210,122,0.25))" }}
+              >
+                {item.countryFlag}
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.32em] text-gold-bright">
+                {t.eyebrow}
+              </div>
+            </div>
+
+            {/* Ville · pays */}
+            <div
+              className="text-center text-sm font-medium uppercase tracking-[0.18em] text-paper/90"
+              dir="ltr"
+            >
+              {item.city} · {item.country}
             </div>
 
             {/* Source + date */}
             <div
-              className={`mt-2 text-sm font-medium text-paper/85 ${isRTL ? "text-right" : ""}`}
+              className={`mt-1 text-center text-xs text-muted ${isRTL ? "" : ""}`}
+              dir="ltr"
             >
               {item.source} · {item.date}
             </div>
@@ -101,7 +116,7 @@ export default function PressCard({ item, onClose }) {
             <h2
               className={`mt-5 text-balance text-xl font-semibold leading-snug text-paper sm:text-2xl ${
                 isCJK ? "leading-relaxed" : ""
-              }`}
+              } ${isRTL ? "text-right" : ""}`}
             >
               {item.title}
             </h2>
@@ -110,7 +125,7 @@ export default function PressCard({ item, onClose }) {
             <p
               className={`mt-4 leading-relaxed text-muted ${
                 isCJK ? "text-sm leading-loose" : "text-sm"
-              }`}
+              } ${isRTL ? "text-right" : ""}`}
             >
               {item.summary}
             </p>

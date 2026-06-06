@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import createGlobe from "cobe";
 
 /**
@@ -9,14 +9,21 @@ import createGlobe from "cobe";
  * Props :
  * - markers: [{ id, location: [lat,lng], label, delay?, onClick }]
  * - size: "sm" | "md" | "lg"
+ * - enableZoom: bool (zoom à la molette, true par défaut)
  */
-export default function GlobeCosmos({ markers = [], size = "lg" }) {
+const ZOOM_MIN = 0.7;
+const ZOOM_MAX = 2.4;
+const ZOOM_STEP = 0.12;
+
+export default function GlobeCosmos({ markers = [], size = "lg", enableZoom = true }) {
+  const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   const pointerInteracting = useRef(null);
   const dragOffset = useRef({ phi: 0, theta: 0 });
   const phiOffsetRef = useRef(0);
   const thetaOffsetRef = useRef(0);
   const isPausedRef = useRef(false);
+  const [zoom, setZoom] = useState(1);
 
   const safeMarkers = useMemo(
     () =>
@@ -60,6 +67,23 @@ export default function GlobeCosmos({ markers = [], size = "lg" }) {
       window.removeEventListener("pointerup", handlePointerUp);
     };
   }, [handlePointerUp]);
+
+  // Zoom à la molette de la souris (non-passive pour preventDefault).
+  useEffect(() => {
+    if (!enableZoom) return;
+    const el = wrapperRef.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      e.preventDefault();
+      setZoom((z) => {
+        const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+        const next = z + delta;
+        return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, next));
+      });
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [enableZoom]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -127,7 +151,15 @@ export default function GlobeCosmos({ markers = [], size = "lg" }) {
     size === "sm" ? "max-w-sm" : size === "md" ? "max-w-md" : "max-w-2xl";
 
   return (
-    <div className={`relative mx-auto aspect-square w-full ${maxWidth} select-none`}>
+    <div
+      ref={wrapperRef}
+      className={`relative mx-auto aspect-square w-full ${maxWidth} select-none`}
+      style={{
+        transform: `scale(${zoom})`,
+        transformOrigin: "center",
+        transition: "transform 0.18s cubic-bezier(0.22,1,0.36,1)",
+      }}
+    >
       <style>{`
         @keyframes pulse-expand {
           0% { transform: scale(0.35); opacity: 0.85; }
