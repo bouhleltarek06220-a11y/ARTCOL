@@ -155,3 +155,26 @@
 - "Reservar una demo" (vs "Reserve una demo" Amérique LATAM) — neutre
 
 **Détection navigateur** : on lit `navigator.languages` (priorité aux langues préférées de l'utilisateur), puis `navigator.language`, puis fallback FR. Le choix manuel via les drapeaux **prime sur** la détection (stocké dans localStorage).
+
+---
+
+## DEC-007 — Page Pricing : STAND BY tant que la SASU n'est pas finalisée
+
+**Date** : 2026-06-06
+**Étape** : 4
+
+**Décision** : reporter l'étape 4 (Page Pricing) jusqu'à la **finalisation de l'immatriculation SASU AMAVYA**.
+
+**Raisons** :
+- Annoncer des prix publics sans entité capable de facturer = problème juridique (TVA, factures conformes)
+- Risque de devoir changer les tarifs après immatriculation → image abîmée
+- Mieux vaut **un site sans pricing qu'un pricing à refaire**
+- Décision prise par Tarek (fondateur)
+
+**Reprise prévue** :
+- Une fois SASU active (Kbis reçu, numéro TVA intracommunautaire OK)
+- À ce moment-là : revoir les 3 offres + prix + CTA (Stripe possible immédiatement après — étape 9)
+
+**En attendant** :
+- Le formulaire de contact existant reste le canal principal d'entrée
+- La page sera créée mais **non publiée** quand on sera prêts
