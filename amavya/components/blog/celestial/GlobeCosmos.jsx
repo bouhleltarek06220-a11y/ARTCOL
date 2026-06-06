@@ -2,44 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import createGlobe from "cobe";
-import { useRouter } from "next/navigation";
 
-/* Pool de capitales/grandes villes pour distribuer automatiquement les articles
-   qui n'ont pas de coords explicites dans leur frontmatter. */
-const DEFAULT_LOCATIONS = [
-  [48.8566, 2.3522], // Paris
-  [40.7128, -74.006], // New York
-  [35.6762, 139.6503], // Tokyo
-  [51.5074, -0.1278], // Londres
-  [1.3521, 103.8198], // Singapour
-  [-33.8688, 151.2093], // Sydney
-  [55.7558, 37.6173], // Moscou
-  [19.4326, -99.1332], // Mexico
-  [-23.5505, -46.6333], // São Paulo
-  [25.2048, 55.2708], // Dubaï
-];
-
-function hashSlug(slug) {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return h;
-}
-
-function locationFor(article, index) {
-  if (
-    article.planet?.lat != null &&
-    article.planet?.lng != null &&
-    !Number.isNaN(article.planet.lat) &&
-    !Number.isNaN(article.planet.lng)
-  ) {
-    return [article.planet.lat, article.planet.lng];
-  }
-  const seed = hashSlug(article.slug) + index;
-  return DEFAULT_LOCATIONS[seed % DEFAULT_LOCATIONS.length];
-}
-
-export default function GlobeCosmos({ articles, size = "lg" }) {
-  const router = useRouter();
+/**
+ * Globe Terre interactif (cobe) avec markers cliquables génériques.
+ *
+ * Props :
+ * - markers: [{ id, location: [lat,lng], label, delay?, onClick }]
+ * - size: "sm" | "md" | "lg"
+ */
+export default function GlobeCosmos({ markers = [], size = "lg" }) {
   const canvasRef = useRef(null);
   const pointerInteracting = useRef(null);
   const dragOffset = useRef({ phi: 0, theta: 0 });
@@ -47,15 +18,13 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
   const thetaOffsetRef = useRef(0);
   const isPausedRef = useRef(false);
 
-  const markers = useMemo(
+  const safeMarkers = useMemo(
     () =>
-      articles.map((a, i) => ({
-        id: `m-${a.slug}`,
-        article: a,
-        location: locationFor(a, i),
-        delay: (i * 0.45) % 2,
+      markers.map((m, i) => ({
+        ...m,
+        delay: m.delay != null ? m.delay : (i * 0.4) % 2,
       })),
-    [articles],
+    [markers],
   );
 
   const handlePointerDown = useCallback((e) => {
@@ -113,14 +82,11 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
         diffuse: 1.4,
         mapSamples: 18000,
         mapBrightness: 8,
-        // Palette AMAVYA : base terre chaude tirant vers le doré
         baseColor: [0.6, 0.55, 0.45],
-        // Cyan-bleu lumineux pour les pulses (les "points bleus")
-        markerColor: [0.2, 0.85, 0.95],
-        // Halo brun-doré subtil autour du globe
+        markerColor: [0.2, 0.85, 0.95], // cyan
         glowColor: [0.18, 0.14, 0.06],
         markerElevation: 0,
-        markers: markers.map((m) => ({
+        markers: safeMarkers.map((m) => ({
           location: m.location,
           size: 0.03,
           id: m.id,
@@ -155,9 +121,10 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
       if (animationId) cancelAnimationFrame(animationId);
       if (globe) globe.destroy();
     };
-  }, [markers]);
+  }, [safeMarkers]);
 
-  const maxWidth = size === "sm" ? "max-w-sm" : size === "md" ? "max-w-md" : "max-w-2xl";
+  const maxWidth =
+    size === "sm" ? "max-w-sm" : size === "md" ? "max-w-md" : "max-w-2xl";
 
   return (
     <div className={`relative mx-auto aspect-square w-full ${maxWidth} select-none`}>
@@ -180,14 +147,14 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
           touchAction: "none",
         }}
       />
-      {markers.map((m) => (
+      {safeMarkers.map((m) => (
         <button
           type="button"
           key={m.id}
-          aria-label={m.article.title}
+          aria-label={m.label || m.id}
           onClick={(e) => {
             e.stopPropagation();
-            router.push(`/blog/${m.article.slug}`);
+            if (typeof m.onClick === "function") m.onClick(m);
           }}
           className="group"
           style={{
@@ -212,7 +179,6 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
             transition: "opacity 0.4s, filter 0.4s",
           }}
         >
-          {/* 1er anneau pulsant */}
           <span
             aria-hidden="true"
             style={{
@@ -224,7 +190,6 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
               animation: `pulse-expand 2s ease-out infinite ${m.delay}s`,
             }}
           />
-          {/* 2e anneau décalé */}
           <span
             aria-hidden="true"
             style={{
@@ -236,7 +201,6 @@ export default function GlobeCosmos({ articles, size = "lg" }) {
               animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.55}s`,
             }}
           />
-          {/* Pastille centrale */}
           <span
             aria-hidden="true"
             style={{

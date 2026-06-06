@@ -3,18 +3,36 @@
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 
-/* Charge le globe Terre côté client uniquement (canvas WebGL). */
 const GlobeCosmos = dynamic(() => import("./celestial/GlobeCosmos"), {
   ssr: false,
 });
 
+function locationFor(article) {
+  if (
+    article.planet?.lat != null &&
+    article.planet?.lng != null &&
+    !Number.isNaN(article.planet.lat) &&
+    !Number.isNaN(article.planet.lng)
+  ) {
+    return [article.planet.lat, article.planet.lng];
+  }
+  return [48.8566, 2.3522]; // Paris par défaut
+}
+
 export default function BlogArticleHero({ article }) {
+  const heroMarker = {
+    id: `hero-${article.slug}`,
+    location: locationFor(article),
+    label: article.title,
+    onClick: () => {},
+  };
+
   return (
     <div className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden bg-[#020208]">
-      {/* Mini globe — marker pulsant du sujet de l'article */}
+      {/* Mini globe avec le marker de l'article */}
       <div className="absolute inset-0 flex items-center justify-center pt-16">
         <div className="w-[60vh] max-w-md">
-          <GlobeCosmos articles={[article]} size="md" />
+          <GlobeCosmos markers={[heroMarker]} size="md" />
         </div>
       </div>
 
