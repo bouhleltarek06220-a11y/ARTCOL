@@ -241,7 +241,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.7 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="group fixed bottom-5 right-5 z-[150] flex h-14 w-14 items-center justify-center rounded-full text-ink shadow-[0_12px_40px_-8px_rgba(212,175,55,0.65)] sm:bottom-7 sm:right-7"
+            className="group fixed bottom-5 left-5 z-[150] flex h-14 w-14 items-center justify-center rounded-full text-ink shadow-[0_12px_40px_-8px_rgba(212,175,55,0.65)] sm:bottom-7 sm:left-7"
             style={{
               background:
                 "linear-gradient(135deg, #a87f2e 0%, #f0d27a 55%, #d4af37 100%)",
@@ -251,28 +251,10 @@ export default function Chatbot() {
               aria-hidden="true"
               className="absolute inset-0 rounded-full bg-[#f0d27a]/60 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100"
             />
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-              className="relative"
-            >
-              <path
-                d="M4 5h16v10H7l-3 3V5z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                fill="none"
-              />
-              <circle cx="9" cy="10" r="1.1" fill="currentColor" />
-              <circle cx="12.5" cy="10" r="1.1" fill="currentColor" />
-              <circle cx="16" cy="10" r="1.1" fill="currentColor" />
-            </svg>
+            <RobotHead />
             <span
               aria-hidden="true"
-              className="absolute -top-1 right-0 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-black"
+              className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-black"
             />
           </motion.button>
         )}
@@ -286,7 +268,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-4 right-3 z-[150] flex w-[min(380px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-3xl border border-gold/30 bg-black/85 shadow-[0_28px_80px_-20px_rgba(212,175,55,0.55)] backdrop-blur-xl sm:bottom-6 sm:right-6"
+            className="fixed bottom-4 left-3 z-[150] flex w-[min(380px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-3xl border border-gold/30 bg-black/85 shadow-[0_28px_80px_-20px_rgba(212,175,55,0.55)] backdrop-blur-xl sm:bottom-6 sm:left-6"
             style={{ maxHeight: "min(640px, calc(100vh - 2rem))" }}
             role="dialog"
             aria-label={t.title}
@@ -423,6 +405,82 @@ function Bubble({ role, content }) {
         {content || "…"}
       </div>
     </div>
+  );
+}
+
+function RobotHead() {
+  return (
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden="true"
+      className="relative drop-shadow-sm"
+    >
+      {/* Antenne */}
+      <line
+        x1="16"
+        y1="2.5"
+        x2="16"
+        y2="6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <circle cx="16" cy="2.5" r="1.4" fill="currentColor" />
+      {/* Tête (capsule) */}
+      <rect
+        x="5"
+        y="6.5"
+        width="22"
+        height="18"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        fill="none"
+      />
+      {/* Yeux */}
+      <circle cx="11.5" cy="14.5" r="1.9" fill="currentColor" />
+      <circle cx="20.5" cy="14.5" r="1.9" fill="currentColor" />
+      {/* Sourire / bouche */}
+      <path
+        d="M12 19.2 Q16 21.4 20 19.2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Oreilles (capteurs) */}
+      <rect
+        x="2.5"
+        y="13"
+        width="2.5"
+        height="5"
+        rx="1"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      <rect
+        x="27"
+        y="13"
+        width="2.5"
+        height="5"
+        rx="1"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      {/* Cou */}
+      <rect
+        x="13"
+        y="24"
+        width="6"
+        height="2.5"
+        rx="0.8"
+        fill="currentColor"
+        opacity="0.55"
+      />
+    </svg>
   );
 }
 
