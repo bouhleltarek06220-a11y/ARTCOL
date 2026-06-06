@@ -1,19 +1,20 @@
 /**
- * Revue de presse mondiale AMAVYA : 10 vrais articles récents sur l'IA,
- * dans 10 pays, dans la langue locale du média source.
+ * Revue de presse mondiale AMAVYA : vrais articles récents sur l'IA,
+ * un par grand pays/région, dans la langue locale du média source.
  *
- * Chaque entrée est vérifiée : URL réelle de la source d'origine.
- * Les titres et extraits sont des paraphrases courtes — le lecteur est
- * invité à cliquer sur "Lire sur la source" pour accéder à l'article
- * complet sur le site du média.
- *
- * Mise à jour : juin 2026.
+ * Chaque entrée :
+ * - URL vérifiée (juin 2026)
+ * - countryCode : ISO 3166-1 alpha-2 (utilisé pour rendre le drapeau SVG
+ *   via flag-icons, qui fonctionne sur Windows/Linux/Mac partout —
+ *   contrairement aux emojis 🇫🇷 qui ne s'affichent pas sur tous les OS).
+ * - countryFlag : emoji conservé comme fallback secondaire
  */
 export const PRESS_COVERAGE = [
   {
     id: "press-paris",
     city: "Paris",
     country: "France",
+    countryCode: "fr",
     countryFlag: "🇫🇷",
     lat: 48.8566,
     lng: 2.3522,
@@ -30,13 +31,13 @@ export const PRESS_COVERAGE = [
     id: "press-bruxelles",
     city: "Bruxelles",
     country: "Belgique",
-    countryFlag: "🇪🇺",
+    countryCode: "be",
+    countryFlag: "🇧🇪",
     lat: 50.8503,
     lng: 4.3517,
     lang: "en",
     source: "Council of the European Union",
-    title:
-      "AI: Council and Parliament agree to simplify and streamline rules",
+    title: "AI: Council and Parliament agree to simplify and streamline rules",
     summary:
       "The EU Council and Parliament have reached an agreement to simplify and streamline AI rules, easing compliance for businesses while keeping safeguards on high-risk systems.",
     date: "7 May 2026",
@@ -47,6 +48,7 @@ export const PRESS_COVERAGE = [
     id: "press-london",
     city: "London",
     country: "United Kingdom",
+    countryCode: "gb",
     countryFlag: "🇬🇧",
     lat: 51.5074,
     lng: -0.1278,
@@ -63,6 +65,7 @@ export const PRESS_COVERAGE = [
     id: "press-madrid",
     city: "Madrid",
     country: "España",
+    countryCode: "es",
     countryFlag: "🇪🇸",
     lat: 40.4168,
     lng: -3.7038,
@@ -80,6 +83,7 @@ export const PRESS_COVERAGE = [
     id: "press-roma",
     city: "Roma",
     country: "Italia",
+    countryCode: "it",
     countryFlag: "🇮🇹",
     lat: 41.9028,
     lng: 12.4964,
@@ -97,12 +101,14 @@ export const PRESS_COVERAGE = [
     id: "press-tokyo",
     city: "東京 (Tokyo)",
     country: "日本 (Japon)",
+    countryCode: "jp",
     countryFlag: "🇯🇵",
     lat: 35.6762,
     lng: 139.6503,
     lang: "ja",
     source: "Generative AI Media",
-    title: "「人工知能基本計画」完全ガイド。2026年、日本のAI政策がビジネスを変える理由",
+    title:
+      "「人工知能基本計画」完全ガイド。2026年、日本のAI政策がビジネスを変える理由",
     summary:
       "2025年12月、日本政府は「人工知能基本計画」を閣議決定。AI法に基づく初の「法定計画」として、国の戦略・予算・各省庁の実行体制が示されている。",
     date: "2026",
@@ -113,6 +119,7 @@ export const PRESS_COVERAGE = [
     id: "press-beijing",
     city: "北京 (Beijing)",
     country: "中国 (Chine)",
+    countryCode: "cn",
     countryFlag: "🇨🇳",
     lat: 39.9042,
     lng: 116.4074,
@@ -130,6 +137,7 @@ export const PRESS_COVERAGE = [
     id: "press-cairo",
     city: "القاهرة (Le Caire)",
     country: "مصر (Égypte)",
+    countryCode: "eg",
     countryFlag: "🇪🇬",
     lat: 30.0444,
     lng: 31.2357,
@@ -146,6 +154,7 @@ export const PRESS_COVERAGE = [
     id: "press-delhi",
     city: "New Delhi",
     country: "India",
+    countryCode: "in",
     countryFlag: "🇮🇳",
     lat: 28.6139,
     lng: 77.209,
@@ -163,6 +172,7 @@ export const PRESS_COVERAGE = [
     id: "press-sydney",
     city: "Sydney",
     country: "Australia",
+    countryCode: "au",
     countryFlag: "🇦🇺",
     lat: -33.8688,
     lng: 151.2093,
@@ -179,7 +189,8 @@ export const PRESS_COVERAGE = [
   {
     id: "press-newyork",
     city: "New York",
-    country: "United States",
+    country: "United States of America",
+    countryCode: "us",
     countryFlag: "🇺🇸",
     lat: 40.7128,
     lng: -74.006,
@@ -194,26 +205,10 @@ export const PRESS_COVERAGE = [
     ctaText: "Read on CNBC",
   },
   {
-    id: "press-washington",
-    city: "Washington D.C.",
-    country: "United States",
-    countryFlag: "🇺🇸",
-    lat: 38.9072,
-    lng: -77.0369,
-    lang: "en",
-    source: "CNBC",
-    title:
-      "Trump admin moves further into AI oversight, will test Google, Microsoft and xAI models",
-    summary:
-      "The Center for AI Standards and Innovation announces agreements with Google DeepMind, Microsoft and xAI: the U.S. government will evaluate AI models before they ship publicly.",
-    date: "5 May 2026",
-    url: "https://www.cnbc.com/2026/05/05/ai-oversight-trump-google-microsoft-xai.html",
-    ctaText: "Read on CNBC",
-  },
-  {
     id: "press-ottawa",
     city: "Ottawa",
     country: "Canada",
+    countryCode: "ca",
     countryFlag: "🇨🇦",
     lat: 45.4215,
     lng: -75.6972,
@@ -231,6 +226,7 @@ export const PRESS_COVERAGE = [
     id: "press-moscow",
     city: "Москва (Moscou)",
     country: "Россия (Russie)",
+    countryCode: "ru",
     countryFlag: "🇷🇺",
     lat: 55.7558,
     lng: 37.6173,
@@ -248,6 +244,7 @@ export const PRESS_COVERAGE = [
     id: "press-capetown",
     city: "Cape Town",
     country: "South Africa",
+    countryCode: "za",
     countryFlag: "🇿🇦",
     lat: -33.9249,
     lng: 18.4241,
@@ -265,6 +262,7 @@ export const PRESS_COVERAGE = [
     id: "press-nairobi",
     city: "Nairobi",
     country: "Kenya",
+    countryCode: "ke",
     countryFlag: "🇰🇪",
     lat: -1.2921,
     lng: 36.8219,
@@ -282,6 +280,7 @@ export const PRESS_COVERAGE = [
     id: "press-bangkok",
     city: "กรุงเทพ (Bangkok)",
     country: "ไทย (Thaïlande)",
+    countryCode: "th",
     countryFlag: "🇹🇭",
     lat: 13.7563,
     lng: 100.5018,
@@ -293,6 +292,78 @@ export const PRESS_COVERAGE = [
     date: "2026",
     url: "https://www.bangkokpost.com/opinion/opinion/3246209/thailands-need-for-ai-sovereignty",
     ctaText: "Read on Bangkok Post",
+  },
+  {
+    id: "press-mexico",
+    city: "Ciudad de México",
+    country: "México",
+    countryCode: "mx",
+    countryFlag: "🇲🇽",
+    lat: 19.4326,
+    lng: -99.1332,
+    lang: "es",
+    source: "Infobae",
+    title:
+      "La inteligencia artificial promete hasta USD 1,7 billones en América Latina",
+    summary:
+      "Un análisis citado por Infobae anticipa hasta 1,7 billones de dólares de valor económico añadido por la IA en América Latina. México lidera en hubs de innovación junto con Argentina y Colombia.",
+    date: "Enero 2026",
+    url: "https://www.infobae.com/tecno/2026/01/21/la-inteligencia-artificial-promete-hasta-usd-17-billones-en-america-latina/",
+    ctaText: "Leer en Infobae",
+  },
+  {
+    id: "press-santiago",
+    city: "Santiago",
+    country: "Chile",
+    countryCode: "cl",
+    countryFlag: "🇨🇱",
+    lat: -33.4489,
+    lng: -70.6693,
+    lang: "es",
+    source: "CEPAL — ONU",
+    title:
+      "Índice Latinoamericano de IA: Chile, Brasil y Uruguay reafirman su liderazgo",
+    summary:
+      "El ILIA 2026 confirma a Chile, Brasil y Uruguay como países pioneros en infraestructura digital, talento, gobernanza e investigación en IA, marcando el ritmo regional.",
+    date: "2026",
+    url: "https://www.cepal.org/en/pressreleases/latin-american-artificial-intelligence-index-ilia-reconfirms-chile-brazil-and-uruguay",
+    ctaText: "Leer en CEPAL",
+  },
+  {
+    id: "press-saopaulo",
+    city: "São Paulo",
+    country: "Brasil",
+    countryCode: "br",
+    countryFlag: "🇧🇷",
+    lat: -23.5505,
+    lng: -46.6333,
+    lang: "es",
+    source: "CNN en Español",
+    title:
+      "¿Qué puede hacer la inteligencia artificial por América Latina?",
+    summary:
+      "Reportaje sobre los desafíos y oportunidades de la IA en la región. Brasil aprovecha sus matrices renovables (hidro/eólica/solar) para atraer infraestructura de centros de datos y aplicar IA en agricultura, salud y clima.",
+    date: "Marzo 2026",
+    url: "https://cnnespanol.cnn.com/2026/03/23/latinoamerica/inteligencia-artifical-america-latina-desafios-oportunidades-orix",
+    ctaText: "Leer en CNN Español",
+  },
+  {
+    id: "press-buenosaires",
+    city: "Buenos Aires",
+    country: "Argentina",
+    countryCode: "ar",
+    countryFlag: "🇦🇷",
+    lat: -34.6037,
+    lng: -58.3816,
+    lang: "es",
+    source: "Latin Human Capital",
+    title:
+      "Reclutamiento con IA en Latinoamérica 2026: selección sin sesgos y con factor humano",
+    summary:
+      "Argentina es uno de los hubs de innovación en IA de la región, con un foco creciente sobre el reclutamiento asistido por IA: evitar sesgos algorítmicos y conservar el discernimiento humano final.",
+    date: "2026",
+    url: "https://www.latinhumancapital.com/reclutamiento-inteligencia-artificial-latinoamerica-2026-ia-seleccion-talento-sesgos-factor-humano/",
+    ctaText: "Leer el análisis",
   },
 ];
 

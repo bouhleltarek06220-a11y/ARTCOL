@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import "flag-icons/css/flag-icons.min.css";
 import { useLang } from "@/components/LangProvider";
 import { PRESS_UI } from "@/lib/press-coverage";
 
@@ -79,42 +80,65 @@ export default function PressCard({ item, onClose }) {
               </svg>
             </button>
 
-            {/* DRAPEAU XL en haut centré */}
+            {/* DRAPEAU SVG XL (via flag-icons, fonctionne partout) */}
             <div
-              className="mb-4 flex flex-col items-center gap-2 text-center"
+              className="mb-5 flex flex-col items-center gap-3 text-center"
               dir="ltr"
             >
-              <div
-                aria-hidden="true"
-                className="text-6xl leading-none drop-shadow-[0_8px_24px_rgba(0,0,0,0.7)] sm:text-7xl"
-                style={{ filter: "drop-shadow(0 0 12px rgba(240,210,122,0.25))" }}
-              >
-                {item.countryFlag}
+              <div className="relative">
+                {/* Halo doré derrière le drapeau */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 -m-3 rounded-2xl bg-[radial-gradient(circle,rgba(240,210,122,0.35),transparent_70%)] blur-xl"
+                />
+                <span
+                  aria-label={item.country}
+                  className={`fi fi-${item.countryCode} fis relative block`}
+                  style={{
+                    width: "5.5rem",
+                    height: "5.5rem",
+                    borderRadius: "16px",
+                    boxShadow:
+                      "0 12px 32px -8px rgba(0,0,0,0.7), 0 0 0 1px rgba(240,210,122,0.3)",
+                    backgroundSize: "cover",
+                  }}
+                />
               </div>
               <div className="text-[10px] uppercase tracking-[0.32em] text-gold-bright">
                 {t.eyebrow}
               </div>
             </div>
 
-            {/* Ville · pays */}
+            {/* Nom COMPLET du pays (gros, dominant) */}
             <div
-              className="text-center text-sm font-medium uppercase tracking-[0.18em] text-paper/90"
+              className="text-center text-xl font-semibold tracking-tight text-paper sm:text-2xl"
               dir="ltr"
             >
-              {item.city} · {item.country}
+              {item.country}
+            </div>
+
+            {/* Ville (en sous-titre) */}
+            <div
+              className="mt-1 text-center text-sm uppercase tracking-[0.18em] text-paper/70"
+              dir="ltr"
+            >
+              {item.city}
             </div>
 
             {/* Source + date */}
             <div
-              className={`mt-1 text-center text-xs text-muted ${isRTL ? "" : ""}`}
+              className="mt-3 text-center text-xs text-muted"
               dir="ltr"
             >
               {item.source} · {item.date}
             </div>
 
+            {/* Trait fin doré séparateur */}
+            <div className="my-5 h-px bg-[linear-gradient(90deg,transparent,rgba(240,210,122,0.4),transparent)]" />
+
             {/* Titre dans la langue d'origine */}
             <h2
-              className={`mt-5 text-balance text-xl font-semibold leading-snug text-paper sm:text-2xl ${
+              className={`text-balance text-lg font-semibold leading-snug text-paper sm:text-xl ${
                 isCJK ? "leading-relaxed" : ""
               } ${isRTL ? "text-right" : ""}`}
             >
@@ -123,45 +147,44 @@ export default function PressCard({ item, onClose }) {
 
             {/* Résumé dans la langue d'origine */}
             <p
-              className={`mt-4 leading-relaxed text-muted ${
+              className={`mt-3 leading-relaxed text-muted ${
                 isCJK ? "text-sm leading-loose" : "text-sm"
               } ${isRTL ? "text-right" : ""}`}
             >
               {item.summary}
             </p>
 
-            {/* Trait fin doré */}
-            <div className="my-6 h-px bg-[linear-gradient(90deg,transparent,rgba(240,210,122,0.5),transparent)]" />
-
             {/* CTA vers la source originale */}
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              dir="ltr"
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-5 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-all hover:-translate-y-0.5"
-            >
-              {item.ctaText || t.defaultCta}
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="transition-transform duration-300 group-hover:translate-x-0.5"
+            <div className="mt-6 flex justify-center" dir="ltr">
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-all hover:-translate-y-0.5"
               >
-                <path
-                  d="M5 12h14M13 6l6 6-6 6"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
+                {item.ctaText || t.defaultCta}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                >
+                  <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
 
             {/* Mention légale courte */}
             <p
-              className={`mt-5 text-[10px] uppercase tracking-wider text-muted-soft ${isRTL ? "text-right" : ""}`}
+              className={`mt-4 text-center text-[10px] uppercase tracking-wider text-muted-soft`}
+              dir="ltr"
             >
               {t.legalNote}
             </p>
