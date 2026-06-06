@@ -5,15 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLang } from "./LangProvider";
 
 /**
- * Formulaire de contact AMAVYA. S'ouvre quand l'URL passe à #contact
- * (tous les boutons href="#contact" l'ouvrent). Les soumissions sont
- * envoyées dans Supabase (table partner_leads) → alimente le CRM.
- * La clé est une clé anon publique protégée par RLS (insertion seule).
+ * Formulaire de contact AMAVYA. S'ouvre quand l'URL passe à #contact.
+ * Les soumissions vont vers /api/contact qui : sauve le lead dans Supabase
+ * (CRM) ET envoie une notification email sur contact@amavya.cloud.
  */
-const SUPA_URL = "https://dmztalsmreugfwojsaar.supabase.co";
-const SUPA_ANON =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw";
-
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMPTY = { full_name: "", email: "", phone: "", company: "", message: "" };
 
@@ -97,28 +92,18 @@ export default function ContactModal() {
     if (!validate()) return;
     setStatus("loading");
     try {
-      const res = await fetch(SUPA_URL + "/rest/v1/partner_leads", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          apikey: SUPA_ANON,
-          Authorization: "Bearer " + SUPA_ANON,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          full_name: data.full_name.trim().slice(0, 120),
-          structure:
-            data.company.trim().length >= 2
-              ? data.company.trim().slice(0, 200)
-              : "Particulier",
-          email: data.email.trim().slice(0, 250),
-          phone: data.phone.trim().slice(0, 30),
-          support_type: "autre",
-          message: ("[AMAVYA — Contact site] " + data.message.trim()).slice(0, 3000),
-          honeypot_filled: hp.length > 0,
-          user_agent: navigator.userAgent.slice(0, 500),
-          page_url: location.href.slice(0, 500),
-          referrer: document.referrer.slice(0, 500),
+          full_name: data.full_name,
+          email: data.email,
+          phone: data.phone,
+          company: data.company,
+          message: data.message,
+          honeypot: hp,
+          page_url: location.href,
+          referrer: document.referrer,
         }),
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
