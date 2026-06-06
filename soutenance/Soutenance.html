@@ -2418,6 +2418,7 @@ body.js .slide.active .psd-pair [data-anim]{
     <div class="thx-mo-modal" role="dialog" aria-modal="true" aria-label="Lost Chapter — l'expérience">
       <button class="thx-mo-close" id="moClose" type="button" aria-label="Fermer">×</button>
       <div class="thx-mo-stage">
+        <audio id="moAudio" loop preload="auto"><source src="/assets/sound/coulisses-suspense.mp3" type="audio/mpeg"></audio>
         <iframe class="thx-mo-frame" id="moFrame" title="Lost Chapter — l'expérience" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </div>
     </div>
@@ -2457,9 +2458,13 @@ body.js .slide.active .psd-pair [data-anim]{
   <script>
   (function(){
     var ov=document.getElementById('moOverlay'); if(!ov) return;
-    var frame=document.getElementById('moFrame');
-    function open(e){ if(e) e.stopPropagation(); if(frame) frame.src='/experience-national'; ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); }
-    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); if(frame) frame.src='about:blank'; }
+    var frame=document.getElementById('moFrame'), audio=document.getElementById('moAudio');
+    function stopAudio(){ if(audio){ try{ audio.pause(); audio.currentTime=0; }catch(_){}} }
+    function open(e){ if(e) e.stopPropagation();
+      if(audio){ try{ audio.currentTime=0; audio.volume=0.85; var pr=audio.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(_){}}
+      if(frame) frame.src='/experience-national'; ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); }
+    function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); if(frame) frame.src='about:blank'; stopAudio(); }
+    if(frame) frame.addEventListener('load', function(){ try{ if(audio && frame.contentWindow && frame.contentWindow.location.pathname.indexOf('making-of')>=0){ audio.pause(); } }catch(_){} });
     var btn=document.getElementById('moBtn'), portal=document.getElementById('moPortal');
     if(btn) btn.addEventListener('click', open);
     if(portal) portal.addEventListener('click', open);
