@@ -45,15 +45,6 @@ export default function BlogCosmos({ articles, hint }) {
         </div>
       </div>
 
-      {/* Halo doré derrière le globe (donne du poids visuel) */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(240,210,122,0.22), transparent 65%)",
-        }}
-      />
-
       {/* Globe terre interactif au centre */}
       <div className="relative z-20 flex h-full items-center justify-center">
         <div className="w-[min(80vh,90vw)]">
