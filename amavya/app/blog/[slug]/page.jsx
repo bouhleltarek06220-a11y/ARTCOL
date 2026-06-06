@@ -104,21 +104,18 @@ export default function ArticlePage({ params }) {
                 <Link
                   key={a.slug}
                   href={`/blog/${a.slug}`}
-                  className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 transition-all hover:-translate-y-1 hover:border-gold/40"
+                  className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-black/30 p-5 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_18px_50px_-25px_rgba(212,175,55,0.45)]"
                 >
-                  <div
-                    className="h-12 w-12 rounded-full"
-                    style={{
-                      background: `radial-gradient(circle at 30% 30%, ${a.planet.color}, #1a1408 80%)`,
-                      boxShadow: `0 0 22px -2px ${a.planet.color}`,
-                    }}
-                  />
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.30),transparent_70%)] opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
                   <div className="text-[10px] uppercase tracking-[0.22em] text-gold-bright">
                     {a.category.replace("-", " ")}
                   </div>
                   <h3 className="text-base font-semibold leading-snug">
                     {a.title}
                   </h3>
+                  <p className="text-xs leading-relaxed text-muted line-clamp-2">
+                    {a.description}
+                  </p>
                 </Link>
               ))}
             </div>
