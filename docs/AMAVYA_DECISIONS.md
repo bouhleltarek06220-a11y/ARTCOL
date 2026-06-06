@@ -178,3 +178,47 @@
 **En attendant** :
 - Le formulaire de contact existant reste le canal principal d'entrée
 - La page sera créée mais **non publiée** quand on sera prêts
+
+---
+
+## DEC-008 — Chatbot AMAVYA : Claude Haiku 4.5 + streaming + périmètre strict
+
+**Date** : 2026-06-06
+**Étape** : 5
+
+**Décision** : implémenter le chatbot AMAVYA avec Claude Haiku 4.5, en streaming, périmètre strictement AMAVYA, tonalité professionnelle chaleureuse, RDV via formulaire de contact existant.
+
+### Choix techniques
+
+**Modèle** : `claude-haiku-4-5-20251001`
+- Rapide (~1 s pour la 1ère réponse, streaming derrière)
+- Quasi gratuit (~0,0003 € par message)
+- Qualité largement suffisante pour qualification + redirection RDV
+- Si plus tard on a besoin de plus profond → swap pour Sonnet 4.6 en 1 ligne
+
+**Streaming token-par-token** : effet "qui tape", très professionnel + perception de rapidité.
+
+**Rate limit** : 8 messages / 60 s par IP (in-memory). Best-effort (par instance Vercel), suffisant pour bloquer les abus sans gêner les vrais visiteurs.
+
+**Affichage conditionnel** : le composant `Chatbot` interroge `/api/chat` (GET) au montage pour savoir si `ANTHROPIC_API_KEY` est configurée. **Si non, la bulle n'apparaît pas** → le site reste 100% fonctionnel sans la clé. Évite d'avoir une bulle qui plante quand on déploie sans clé.
+
+**Mémoire** : `sessionStorage` (par onglet). Pas de BDD, pas de tracking persistant. RGPD-friendly.
+
+### Choix produit (validés par Tarek)
+
+- **Tonalité** : professionnel chaleureux (pas de tutoiement par défaut, peu d'emojis)
+- **Périmètre** : strictement AMAVYA — redirige poliment hors sujet
+- **Action RDV** : oriente vers le formulaire de contact (#contact), qui envoie sur `contact@amavya.cloud` (DEC-000)
+- **Multilingue** : FR / EN / ES selon `lang` du LangProvider (DEC-006)
+- **Pas de prix** : la SASU étant en cours de finalisation (DEC-007), le bot ne donne JAMAIS de prix précis — il propose un échange avec Tarek
+
+### Sécurité
+
+- Clé API jamais exposée côté client (route handler Node.js)
+- Rate limit IP
+- Historique sanitizé côté serveur (16 messages max, 2 000 chars/message)
+- Pas de logs d'IP côté Vercel (seulement la rate map en RAM)
+
+### Variables d'env requises
+
+- `ANTHROPIC_API_KEY` — Sensitive dans Vercel
