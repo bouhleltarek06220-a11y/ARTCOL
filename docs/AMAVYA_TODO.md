@@ -7,18 +7,29 @@
 
 ## 🟢 En cours
 
-- [x] **Étape 3.1 — i18n client-side FR/EN/ES** (mergé, ES disponible, détection navigateur)
+_(rien — étape 5 prête à démarrer)_
+
+---
+
+## ⏸️ Stand by
+
+### Étape 4 — Page Pricing
+**Raison** : attend la finalisation de l'immatriculation SASU AMAVYA (cf. DEC-007).
+Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ---
 
 ## 🔜 Prochaine étape
 
-### Étape 3.2 — i18n SEO (URLs `/en/` `/es/` + hreflang)
+### Étape 5 — Chatbot IA AMAVYA
+
+**Idée** : une bulle flottante en bas à droite. Le visiteur pose des questions sur AMAVYA, un agent IA répond avec ton positionnement, qualifie le besoin, propose un rendez-vous si pertinent. **Preuve par l'exemple** : tu vends de l'IA, ton site EN UTILISE.
 
 **Avant de coder, à valider avec Tarek** :
-- [ ] Choisir entre Next.js i18n routing natif OU `next-intl` (plus puissant, plus de migration)
-- [ ] Décider si la racine `/` reste FR (avec `/fr/` qui redirige vers `/`) ou si tout passe en `/fr/` `/en/` `/es/`
-- [ ] Vérifier que la sitemap inclura les 3 versions de chaque page
+- [ ] Choix du LLM : Claude Haiku 4.5 (rapide, pas cher ~$0.001/conv) OU Claude Sonnet 4.6 (meilleur dialogue, ~$0.01/conv) ?
+- [ ] Tonalité du bot (professionnel chaleureux / direct / formel ?)
+- [ ] Périmètre des questions : seulement AMAVYA, ou aussi conseil IA général ?
+- [ ] Action quand le visiteur veut un RDV : ouvrir le formulaire de contact OU lien Calendly direct ?
 
 ---
 
