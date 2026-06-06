@@ -121,3 +121,37 @@
 - Google utilise `contactPoint` pour les **Knowledge Panels** (encart à droite des résultats)
 - `logo` augmente les chances que le logo AMAVYA apparaisse dans les résultats Google
 - L'adresse SASU : à ajouter quand on aura tranché sur la confidentialité (domiciliation vs adresse réelle)
+
+---
+
+## DEC-006 — i18n : approche progressive (3.1 client-side, 3.2 URLs SEO)
+
+**Date** : 2026-06-06
+**Étape** : 3
+
+**Décision** : faire l'i18n en 2 temps.
+
+### Phase 3.1 (fait maintenant)
+- Étendre le système custom existant (`LangProvider` + `lib/i18n.js`) pour ajouter l'**espagnol**
+- Détection auto de la langue du navigateur au premier chargement
+- Sélecteur 3 drapeaux (FR · GB · ES)
+- Pas de changement d'URL : le contenu change côté client, l'URL reste `amavya.cloud`
+
+### Phase 3.2 (plus tard)
+- Migrer vers des **routes `/en/` et `/es/`** (Next.js i18n routing OU `next-intl`)
+- Ajouter les tags `hreflang` pour que Google indexe les 3 versions séparément
+- Trafic SEO international potentiel : 3x
+
+**Raisons de couper en 2** :
+- Phase 3.1 = 1h de travail, l'ES devient utilisable **immédiatement**
+- Phase 3.2 = refonte des routes (impact toutes les pages), à faire posément
+- Pas de mauvaise dette technique : la 3.2 réutilise tout ce qui a été fait en 3.1
+
+**Castellano neutre** : les traductions ES utilisent un castellano "international", compréhensible aussi bien en Espagne qu'en Amérique Latine (formes en "usted", lexique sans régionalismes).
+
+**Tonalité ES retenue** :
+- "Quand l'IA travaille pour vous" → pas encore traduit dans i18n (reste le slogan visuel OG)
+- "Soluciones IA, SaaS y automatizaciones inteligentes"
+- "Reservar una demo" (vs "Reserve una demo" Amérique LATAM) — neutre
+
+**Détection navigateur** : on lit `navigator.languages` (priorité aux langues préférées de l'utilisateur), puis `navigator.language`, puis fallback FR. Le choix manuel via les drapeaux **prime sur** la détection (stocké dans localStorage).

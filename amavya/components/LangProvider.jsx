@@ -1,27 +1,42 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { translations } from "@/lib/i18n";
+import { translations, SUPPORTED_LANGS } from "@/lib/i18n";
 
 const STORAGE_KEY = "amavya-lang";
+const DEFAULT_LANG = "fr";
 const LangContext = createContext(null);
 
-export default function LangProvider({ children }) {
-  const [lang, setLangState] = useState("fr");
+function detectBrowserLang() {
+  if (typeof navigator === "undefined") return DEFAULT_LANG;
+  const candidates = [
+    ...(Array.isArray(navigator.languages) ? navigator.languages : []),
+    navigator.language,
+  ].filter(Boolean);
+  for (const raw of candidates) {
+    const code = String(raw).toLowerCase().split("-")[0];
+    if (SUPPORTED_LANGS.includes(code)) return code;
+  }
+  return DEFAULT_LANG;
+}
 
-  // Lecture de la préférence au montage.
+export default function LangProvider({ children }) {
+  const [lang, setLangState] = useState(DEFAULT_LANG);
+
+  // 1er chargement : préférence sauvegardée > langue navigateur > FR.
   useEffect(() => {
+    let chosen = null;
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "fr" || stored === "en") {
-        setLangState(stored);
-      }
+      if (SUPPORTED_LANGS.includes(stored)) chosen = stored;
     } catch {
-      /* localStorage indisponible : on garde le défaut. */
+      /* localStorage indisponible */
     }
+    if (!chosen) chosen = detectBrowserLang();
+    if (chosen !== DEFAULT_LANG) setLangState(chosen);
   }, []);
 
-  // Persistance + mise à jour de l'attribut lang du document.
+  // Persistance + maj de l'attribut lang du document (a11y + SEO).
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, lang);
@@ -34,10 +49,10 @@ export default function LangProvider({ children }) {
   }, [lang]);
 
   const setLang = (next) => {
-    if (next === "fr" || next === "en") setLangState(next);
+    if (SUPPORTED_LANGS.includes(next)) setLangState(next);
   };
 
-  const value = { lang, setLang, t: translations[lang] };
+  const value = { lang, setLang, t: translations[lang] || translations[DEFAULT_LANG] };
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 }
@@ -46,7 +61,7 @@ export function useLang() {
   const ctx = useContext(LangContext);
   if (!ctx) {
     // Repli sûr si un composant est rendu hors provider.
-    return { lang: "fr", setLang: () => {}, t: translations.fr };
+    return { lang: DEFAULT_LANG, setLang: () => {}, t: translations[DEFAULT_LANG] };
   }
   return ctx;
 }
