@@ -2,13 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import Button from "./Button";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLang } from "./LangProvider";
 
+/* Préfixe les liens d'ancre par "/" quand on n'est pas sur la home,
+   pour qu'un clic sur "#services" ramène à la home et scrolle. */
+function resolveHref(href, pathname) {
+  if (!href.startsWith("#")) return href;
+  if (pathname === "/") return href;
+  return `/${href}`;
+}
+
 export default function Navbar() {
   const { t } = useLang();
+  const pathname = usePathname() || "/";
   const LINKS = t.nav.links;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -69,11 +79,14 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
           {LINKS.map((link) => {
-            const isActive = link.href === `#${activeId}`;
+            const isAnchor = link.href.startsWith("#");
+            const isActive =
+              (isAnchor && link.href === `#${activeId}`) ||
+              (!isAnchor && pathname.startsWith(link.href));
             return (
               <a
                 key={link.href}
-                href={link.href}
+                href={resolveHref(link.href, pathname)}
                 aria-current={isActive ? "page" : undefined}
                 className={`relative text-sm font-medium transition-colors ${isActive ? "text-paper" : "text-muted hover:text-paper"}`}
               >
@@ -133,11 +146,14 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-1">
               {LINKS.map((link) => {
-                const isActive = link.href === `#${activeId}`;
+                const isAnchor = link.href.startsWith("#");
+                const isActive =
+                  (isAnchor && link.href === `#${activeId}`) ||
+                  (!isAnchor && pathname.startsWith(link.href));
                 return (
                   <a
                     key={link.href}
-                    href={link.href}
+                    href={resolveHref(link.href, pathname)}
                     aria-current={isActive ? "page" : undefined}
                     onClick={() => setOpen(false)}
                     className={`rounded-xl px-4 py-3 text-sm font-medium transition-colors ${

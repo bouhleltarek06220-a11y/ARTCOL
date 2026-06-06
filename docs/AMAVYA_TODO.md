@@ -7,7 +7,7 @@
 
 ## 🟢 En cours
 
-_(rien — étape 6 terminée, étape 7 prête à démarrer)_
+- [x] **Étape 7 — Blog Cosmos AMAVYA (squelette + 1er article)** : MDX + index 3D + Cosmos + page article + SEO complet
 
 ---
 
@@ -61,6 +61,7 @@ Reprise dès que Kbis + TVA intracommunautaire sont OK.
 
 ## ✅ Récemment fait
 
+- [x] Étape 7 — Blog Cosmos AMAVYA squelette + 1er article "5 automatisations PME" (2026-06-06)
 - [x] **Étape 6 TERMINÉE** — Polissage visuel des 9 sections (Lots 1+2+3)
 - [x] Étape 6 — Polissage visuel Lot 3 (DashboardMockup + FinalCTA + Footer) (2026-06-06)
 - [x] Étape 6 — Polissage visuel Lot 2 (Vision + Technologies + Founder) (2026-06-06)
