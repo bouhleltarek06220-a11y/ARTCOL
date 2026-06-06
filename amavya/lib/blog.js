@@ -64,6 +64,7 @@ export function getArticleBySlug(slug) {
     planet: {
       color: planet.color || CATEGORY_COLORS[data.category] || "#f0d27a",
       size: planet.size || 1,
+      type: planet.type || null,
     },
   };
 }
