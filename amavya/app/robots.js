@@ -1,9 +1,13 @@
 export default function robots() {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+    ],
     sitemap: "https://amavya.cloud/sitemap.xml",
+    host: "https://amavya.cloud",
   };
 }

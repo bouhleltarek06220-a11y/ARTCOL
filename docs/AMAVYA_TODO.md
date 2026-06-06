@@ -7,25 +7,18 @@
 
 ## 🟢 En cours
 
-- [x] **Étape 1 — Analytics Vercel** (code mergé, données dispo ~24h après mise en prod)
+- [x] **Étape 2 — SEO technique + Open Graph** (mergé, validation visuelle à faire)
 
 ---
 
 ## 🔜 Prochaine étape
 
-### Étape 2 — SEO technique + Open Graph
+### Étape 3 — Internationalisation FR / EN / ES
 
 **Avant de coder, à valider avec Tarek** :
-- [ ] Concevoir l'image OG (1200×630) — design : logo + tagline AMAVYA sur fond doré/sombre
-- [ ] Décider si on enrichit Schema.org (Organization déjà OK → ajouter `LocalBusiness` ? `FAQPage` ?)
-- [ ] Vérifier qu'un favicon haute résolution existe pour tous les devices (Apple touch, Android)
-
-**Plan d'action prévu** :
-1. Générer une vraie image OG (sera un PNG dans `/public/og.png`)
-2. Mettre à jour `app/layout.jsx` → `openGraph.images` et `twitter.images` pour pointer dessus
-3. Audit Lighthouse → corriger ce qui manque
-4. Vérifier que `sitemap.xml` couvre bien toutes les pages publiques
-5. Test sur les outils : LinkedIn Post Inspector, Twitter Card Validator, Google Rich Results Test
+- [ ] Décider la stratégie d'URL : `/en/`, `/es/` (recommandé pour SEO) OU détection JS sans URL différente
+- [ ] Vérifier l'état actuel de `lib/i18n.js` (clés manquantes ?)
+- [ ] Choisir si on utilise `next-intl` (officiel, robuste) ou on garde la solution custom existante
 
 ---
 
@@ -57,4 +50,6 @@
 
 ## ✅ Récemment fait
 
+- [x] Étape 2 — SEO + Open Graph : OG image dynamique, sitemap enrichi, robots durci, Schema.org +contactPoint (2026-06-06)
+- [x] Étape 1 — Analytics Vercel + Speed Insights + docs/ (2026-06-06)
 - [x] Étape 0 — Domaine + mail pro `contact@amavya.cloud` (2026-06-06)

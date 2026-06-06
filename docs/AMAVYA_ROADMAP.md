@@ -14,8 +14,8 @@
 | # | Étape | Statut | Date |
 |---|-------|--------|------|
 | 0 | Domaine + Mail pro `contact@amavya.cloud` | ✅ Fait | 2026-06-06 |
-| 1 | **Analytics Vercel** | 🟢 **En cours** | 2026-06-06 |
-| 2 | SEO technique + Open Graph | ⏳ À faire | — |
+| 1 | Analytics Vercel | ✅ Fait | 2026-06-06 |
+| 2 | **SEO technique + Open Graph** | 🟢 **En cours** | 2026-06-06 |
 | 3 | Internationalisation FR / EN / ES | ⏳ À faire | — |
 | 4 | Page Pricing | ⏳ À faire | — |
 | 5 | Chatbot IA AMAVYA | ⏳ À faire | — |

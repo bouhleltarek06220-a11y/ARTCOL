@@ -3,6 +3,8 @@ export default function sitemap() {
   const now = new Date();
   return [
     { url: base, lastModified: now, changeFrequency: "monthly", priority: 1 },
+    { url: `${base}/matrix`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/experience`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/mentions-legales`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/confidentialite`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/cgu-cgv`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },

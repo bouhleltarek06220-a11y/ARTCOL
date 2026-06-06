@@ -54,3 +54,70 @@
 - Dashboard Analytics : `https://vercel.com/bouhleltarek06220-4609s-projects/artcol/analytics`
 - Dashboard Speed : `https://vercel.com/bouhleltarek06220-4609s-projects/artcol/speed-insights`
 - Premières données ~24h après merge en prod.
+
+---
+
+## DEC-002 — OG image générée dynamiquement par Next.js (`opengraph-image.js`)
+
+**Date** : 2026-06-06
+**Étape** : 2
+
+**Décision** : générer l'image Open Graph (et Twitter) **à la compilation** via `app/opengraph-image.js` + `ImageResponse` (runtime Edge), plutôt qu'un PNG statique.
+
+**Raisons** :
+- ✅ Pas de fichier binaire à versionner / re-uploader si on change le texte
+- ✅ Modification = 1 ligne de code (titre, tagline, couleurs)
+- ✅ Toujours net (vectorisé jusqu'au rendu final)
+- ✅ Permet plus tard de faire des **OG dynamiques par page** (`/pricing` aura son propre visuel sans rien dupliquer)
+- ✅ Format optimal 1200×630 (LinkedIn, Twitter, WhatsApp, Slack, Discord, etc.)
+
+**Charte de l'OG** :
+- Fond : `radial-gradient(ellipse at 50% 0%, #1a1408 0%, #050505 60%)` (sombre, légère lumière dorée en haut)
+- Titre : **AMAVYA** en dégradé doré `linear-gradient(110deg, #a87f2e, #f0d27a 55%, #d4af37)`
+- Tagline : **« Quand l'IA travaille pour vous »** (validé par Tarek)
+- Pied de page : `amavya.cloud` en lettres espacées, entre 2 points dorés
+
+**Validation finale** (après merge) :
+- LinkedIn Post Inspector : https://www.linkedin.com/post-inspector/
+- Twitter Card Validator : https://cards-dev.twitter.com/validator
+- Google Rich Results Test : https://search.google.com/test/rich-results
+
+---
+
+## DEC-003 — Tagline officielle AMAVYA : "Quand l'IA travaille pour vous"
+
+**Date** : 2026-06-06
+**Étape** : 2
+
+**Décision** : adopter "Quand l'IA travaille pour vous" comme tagline officielle pour OG, Twitter, et titres SEO.
+
+**Raisons** :
+- Positionnement **humain** (l'IA au service des humains, pas l'inverse)
+- Court (5 mots), mémorisable
+- Promesse claire (résultat business, pas techno-bavardage)
+- Choisi par Tarek parmi 3 options proposées
+
+---
+
+## DEC-004 — Twitter handle retiré (`@amavya` non actif)
+
+**Date** : 2026-06-06
+**Étape** : 2
+
+**Décision** : retirer `creator: "@amavya"` du metadata Twitter tant qu'aucun compte officiel n'existe.
+
+**Raisons** : un handle invalide nuit à la crédibilité (Twitter peut afficher un fallback dégradé). Quand un vrai compte sera créé, on remettra `creator` + `site`.
+
+---
+
+## DEC-005 — Schema.org : ajout de `contactPoint` (`contact@amavya.cloud`)
+
+**Date** : 2026-06-06
+**Étape** : 2
+
+**Décision** : enrichir le Schema.org `Organization` avec un `contactPoint` (email + langues), et ajouter le `logo` pour Google Knowledge Panel. Adresse SASU reportée à plus tard.
+
+**Raisons** :
+- Google utilise `contactPoint` pour les **Knowledge Panels** (encart à droite des résultats)
+- `logo` augmente les chances que le logo AMAVYA apparaisse dans les résultats Google
+- L'adresse SASU : à ajouter quand on aura tranché sur la confidentialité (domiciliation vs adresse réelle)
