@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Reveal from "./Reveal";
 import { useLang } from "./LangProvider";
 
@@ -84,21 +85,47 @@ export default function Vision() {
               </motion.div>
             ))}
 
-            {/* Noyau : logo AMAVYA dans l'orbe */}
+            {/* Noyau : logo AMAVYA dans l'orbe — cliquable, ouvre /vision */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="glass-strong relative flex h-40 w-40 items-center justify-center rounded-full"
+              <Link
+                href="/vision"
+                aria-label={t.vision.ctaAria || "Voir la vision AMAVYA en 60s"}
+                className="group relative"
               >
-                <div className="absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#a87f2e,#d4af37,#e6e9f0,#a87f2e)] opacity-30 blur-md animate-pulse-glow" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/logo-mark.png"
-                  alt="AMAVYA"
-                  className="relative z-10 h-28 w-28 rounded-full border border-white/10 object-cover shadow-[0_0_30px_-6px_rgba(240,210,122,0.5)]"
-                />
-              </motion.div>
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.1 }}
+                  className="glass-strong relative flex h-40 w-40 cursor-pointer items-center justify-center rounded-full transition-shadow duration-500 group-hover:shadow-[0_0_60px_8px_rgba(240,210,122,0.55)]"
+                >
+                  <div className="absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#a87f2e,#d4af37,#e6e9f0,#a87f2e)] opacity-30 blur-md animate-pulse-glow transition-opacity duration-500 group-hover:opacity-60" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/logo-mark.png"
+                    alt="AMAVYA"
+                    className="relative z-10 h-28 w-28 rounded-full border border-white/10 object-cover shadow-[0_0_30px_-6px_rgba(240,210,122,0.5)] transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Anneau d'invitation au clic, apparait au hover */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -inset-3 rounded-full border-2 border-gold/40 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  />
+                </motion.div>
+
+                {/* Indication "Cliquez pour découvrir notre vision en 60s" */}
+                <div className="pointer-events-none absolute left-1/2 top-full mt-5 -translate-x-1/2 whitespace-nowrap text-center">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-black/60 px-3.5 py-1.5 text-[10px] uppercase tracking-[0.22em] text-gold-bright backdrop-blur opacity-90 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-1">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-bright opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold-bright" />
+                    </span>
+                    {t.vision.ctaLabel || "Voir notre vision en 60s"}
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
             </div>
 
             {/* Particules flottantes */}

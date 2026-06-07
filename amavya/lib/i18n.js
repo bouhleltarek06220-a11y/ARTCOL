@@ -136,6 +136,8 @@ export const translations = {
         "Des automatisations qui libèrent du temps à forte valeur",
         "Une technologie élégante, fiable et maîtrisée",
       ],
+      ctaLabel: "Voir notre vision en 60s",
+      ctaAria: "Voir la vision AMAVYA en 60s",
     },
     technologies: {
       eyebrow: "Stack technologique",
@@ -382,6 +384,8 @@ export const translations = {
         "Automations that free up high-value time",
         "Elegant, reliable and well-mastered technology",
       ],
+      ctaLabel: "Watch our 60s vision",
+      ctaAria: "Watch the AMAVYA vision in 60 seconds",
     },
     technologies: {
       eyebrow: "Technology stack",
@@ -628,6 +632,8 @@ export const translations = {
         "Automatizaciones que liberan tiempo de alto valor",
         "Una tecnología elegante, fiable y dominada",
       ],
+      ctaLabel: "Ver nuestra visión en 60s",
+      ctaAria: "Ver la visión AMAVYA en 60 segundos",
     },
     technologies: {
       eyebrow: "Stack tecnológico",
