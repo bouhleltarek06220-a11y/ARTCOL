@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { SplineScene } from "@/components/ui/splite";
 import Navbar from "@/components/Navbar";
-import Button from "@/components/Button";
 import LabsCodeBackground from "./LabsCodeBackground";
 import ServiceDetailModal from "./ServiceDetailModal";
 import { LABS_SERVICES } from "@/lib/labs-services";
@@ -140,18 +139,6 @@ export default function MainframeHero() {
           className="pointer-events-none flex w-full flex-1 items-center px-6 pt-32 pb-12 sm:px-10 lg:pt-0"
         >
           <div className="pointer-events-auto w-full max-w-2xl lg:max-w-xl lg:ml-[4vw] xl:ml-[8vw]">
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55 }}
-            >
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-black/60 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-gold-bright backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
-                Sandbox AMAVYA
-              </div>
-            </motion.div>
-
             {/* Headline typewriter */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -243,13 +230,6 @@ export default function MainframeHero() {
                     </svg>
                   </motion.button>
                 ))}
-              </div>
-
-              {/* CTA général — bouton AMAVYA officiel */}
-              <div className="mt-8">
-                <Button href="/#contact" variant="primary">
-                  Réserver une démo
-                </Button>
               </div>
             </motion.div>
           </div>
