@@ -51,6 +51,68 @@ const SERVICE_OPTIONS = [
   "Formation",
 ];
 
+/**
+ * Humanoïde ancré à droite + tracking du curseur sur TOUT l'écran.
+ *
+ * Idée : le canvas Spline est positionné dans la moitié droite (figure
+ * naturellement centrée dans le canvas → visible à ~72% horizontal).
+ * Le conteneur a `pointer-events: none` pour ne pas bloquer les clics
+ * du formulaire. On écoute la souris au niveau de la fenêtre et on
+ * dispatch un PointerEvent synthétique sur le <canvas> avec la position
+ * réelle du curseur (clientX/Y inchangés). Spline calcule alors sa
+ * rotation par rapport à son bounding rect → la tête regarde dans la
+ * direction du curseur quel que soit l'endroit où il est sur l'écran.
+ */
+function SplineHumanoidRight({ scene }) {
+  const wrapperRef = useRef(null);
+  const frameRef = useRef(0);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const tryFindCanvas = () => {
+      const wrap = wrapperRef.current;
+      if (!wrap) return null;
+      return wrap.querySelector("canvas");
+    };
+
+    const dispatchSynthetic = (e) => {
+      if (!canvasRef.current) canvasRef.current = tryFindCanvas();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ev = new PointerEvent("pointermove", {
+        clientX: e.clientX,
+        clientY: e.clientY,
+        bubbles: false,
+        cancelable: true,
+        pointerType: "mouse",
+        isPrimary: true,
+      });
+      canvas.dispatchEvent(ev);
+    };
+
+    const onMove = (e) => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = requestAnimationFrame(() => dispatchSynthetic(e));
+    };
+
+    window.addEventListener("pointermove", onMove);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={wrapperRef}
+      className="pointer-events-none absolute inset-y-0 right-0 z-[2] hidden h-full w-[58vw] lg:block"
+      aria-hidden="true"
+    >
+      <SplineScene scene={scene} className="h-full w-full" />
+    </div>
+  );
+}
+
 export default function MainframeHero() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [services, setServices] = useState([]);
@@ -75,10 +137,9 @@ export default function MainframeHero() {
         className="pointer-events-none absolute inset-0 z-[1] hidden bg-black/55 lg:block"
       />
 
-      {/* ===== Humanoïde Spline (z-2) : pleine page, suit le curseur ===== */}
-      <div className="pointer-events-auto absolute inset-0 z-[2] hidden lg:block">
-        <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
-      </div>
+      {/* ===== Humanoïde Spline (z-2) : ancré à DROITE, suit le curseur global ===== */}
+      <SplineHumanoidRight scene={SPLINE_SCENE} />
+
 
       {/* Voile dégradé gauche pour le formulaire (z-3) — assombrit derrière
           le texte sans découper visuellement, l'humanoïde reste bien visible
