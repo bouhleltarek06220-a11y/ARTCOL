@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import BlurFade from "@/components/showreel/ui/BlurFade";
 import Sparkles from "@/components/showreel/ui/Sparkles";
 import Spotlight from "@/components/showreel/ui/Spotlight";
-import AnimatedGradientText from "@/components/showreel/ui/AnimatedGradientText";
 import ShimmerButton from "@/components/showreel/ui/ShimmerButton";
 
 export default function Scene7Finale({ t, onClose }) {
@@ -52,22 +51,35 @@ export default function Scene7Finale({ t, onClose }) {
           </h1>
         </BlurFade>
 
-        {/* Logo AMAVYA gigantesque */}
+        {/* Logo AMAVYA officiel — image vraie, plus pro */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7, filter: "blur(20px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.1, delay: 2.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12"
+          className="relative mt-10"
         >
-          <h2
-            className="text-[14vmin] font-bold leading-none tracking-tight"
+          {/* Halo doré qui respire derrière le logo */}
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -m-10 rounded-full"
             style={{
-              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
-              filter: "drop-shadow(0 18px 60px rgba(240,210,122,0.55))",
+              background:
+                "radial-gradient(circle, rgba(240,210,122,0.45), transparent 65%)",
+              filter: "blur(40px)",
             }}
-          >
-            <AnimatedGradientText durationS={6}>{t.s7.brand}</AnimatedGradientText>
-          </h2>
+            animate={{ opacity: [0.45, 0.85, 0.45], scale: [0.95, 1.1, 0.95] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt={t.s7.brand}
+            className="relative h-auto w-[40vmin] max-w-[460px]"
+            style={{
+              filter:
+                "drop-shadow(0 22px 70px rgba(240,210,122,0.65)) drop-shadow(0 0 40px rgba(240,210,122,0.45))",
+            }}
+          />
         </motion.div>
 
         <BlurFade delay={3.3} duration={0.9} yOffset={14}>
