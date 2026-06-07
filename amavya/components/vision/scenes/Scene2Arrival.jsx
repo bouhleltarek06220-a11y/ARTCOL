@@ -7,7 +7,6 @@ import { Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 import BlurFade from "@/components/showreel/ui/BlurFade";
-import AnimatedGradientText from "@/components/showreel/ui/AnimatedGradientText";
 
 /* Particules dorées qui convergent doucement vers le centre. */
 function ConvergingDust({ count = 1500 }) {
@@ -108,27 +107,23 @@ export default function Scene2Arrival({ t }) {
         transition={{ duration: 4.5, times: [0, 0.55, 1], ease: [0.85, 0, 0.15, 1] }}
       />
 
-      {/* Logo AMAVYA qui émerge */}
+      {/* Logo AMAVYA officiel qui émerge */}
       <motion.div
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
         initial={{ opacity: 0, scale: 0.6, filter: "blur(24px)" }}
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         transition={{ duration: 1.6, delay: 2.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <h1
-          className="text-[12vmin] font-bold leading-none tracking-tight"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo.png"
+          alt="AMAVYA"
+          className="h-auto w-[36vmin] max-w-[420px]"
           style={{
-            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
-            background:
-              "linear-gradient(110deg, #a87f2e, #f0d27a 50%, #d4af37)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
-            filter: "drop-shadow(0 12px 40px rgba(240,210,122,0.55))",
+            filter:
+              "drop-shadow(0 18px 60px rgba(240,210,122,0.6)) drop-shadow(0 0 30px rgba(240,210,122,0.4))",
           }}
-        >
-          <AnimatedGradientText durationS={6}>AMAVYA</AnimatedGradientText>
-        </h1>
+        />
       </motion.div>
 
       {/* Eyebrow et titre en bas */}
