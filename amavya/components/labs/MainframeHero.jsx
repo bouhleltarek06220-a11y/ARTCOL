@@ -37,10 +37,17 @@ function useTypewriter(text, speed = 38, startDelay = 600) {
   return { displayed, done };
 }
 
-const SERVICE_OPTIONS = ["Brand", "Digital", "Campaign", "Other"];
-/* À remplacer par TA vidéo MP4 (Higgsfield/Kling/CloudFront perso).
-   Mettre dans /public/labs/hero.mp4 puis pointer ici, ou passer une URL
-   complète. Laisser vide affiche un fond clair sans vidéo. */
+/* Les 6 vraies solutions AMAVYA. */
+const SERVICE_OPTIONS = [
+  "Agents IA",
+  "CRM intelligent",
+  "Automatisation",
+  "Prospection IA",
+  "SaaS sur mesure",
+  "Formation",
+];
+
+/* Vidéo de fond — à remplir avec ta vidéo (Higgsfield/Kling). */
 const VIDEO_URL = "";
 
 export default function MainframeHero() {
@@ -50,7 +57,7 @@ export default function MainframeHero() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [services, setServices] = useState([]);
 
-  const headline = "let's build\nyour next move.";
+  const headline = "parlons de\nvotre prochain palier.";
   const { displayed, done } = useTypewriter(headline, 38, 600);
 
   /* Scrubbing souris (desktop ≥ 1024). */
@@ -77,18 +84,11 @@ export default function MainframeHero() {
         /* ignore */
       }
     };
-    const onSeeked = () => {
-      /* hook synchro : confirme la position courante */
-    };
     window.addEventListener("mousemove", onMove);
-    video.addEventListener("seeked", onSeeked);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      video.removeEventListener("seeked", onSeeked);
-    };
+    return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  /* Mobile : autoplay normal car le scrubbing est désactivé. */
+  /* Mobile : autoplay normal. */
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -105,31 +105,45 @@ export default function MainframeHero() {
   };
 
   return (
-    <div className="relative bg-white text-neutral-900 font-sans selection:bg-[#EAECE9] selection:text-[#1C2E1E] antialiased overflow-x-hidden flex flex-col lg:block lg:min-h-screen">
+    <div className="relative bg-[#050505] text-paper font-sans selection:bg-gold/30 selection:text-paper antialiased overflow-x-hidden flex flex-col lg:block lg:min-h-screen">
       {/* Header / Navbar */}
-      <header className="fixed top-0 inset-x-0 z-10 px-5 sm:px-8 py-4 sm:py-5 flex flex-row justify-between items-center bg-transparent">
+      <header className="fixed top-0 inset-x-0 z-20 px-5 sm:px-8 py-4 sm:py-5 flex flex-row justify-between items-center bg-transparent">
         {/* Logo AMAVYA Labs */}
         <a href="/labs" className="flex flex-row items-center gap-3" aria-label="AMAVYA Labs">
-          <span className="text-[21px] sm:text-[26px] tracking-tight text-black font-medium select-none">
+          <span className="text-[21px] sm:text-[26px] tracking-tight text-paper font-medium select-none">
             AMAVYA Labs
           </span>
-          <span className="text-[25px] sm:text-[30px] text-black select-none tracking-[-0.02em] font-medium leading-none mb-1">
+          <span
+            className="text-[25px] sm:text-[30px] select-none tracking-[-0.02em] font-medium leading-none mb-1"
+            style={{
+              background:
+                "linear-gradient(110deg, #a87f2e, #f0d27a 55%, #d4af37)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
             &#10033;
           </span>
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex flex-row items-center text-[23px] text-black">
-          {["Labs", "Studio", "Openings", "Shop"].map((link, i, arr) => (
-            <span key={link} className="flex items-center">
+        <nav className="hidden md:flex flex-row items-center text-[18px] text-paper/85">
+          {[
+            { label: "Accueil", href: "/" },
+            { label: "Solutions", href: "/#services" },
+            { label: "Cosmos", href: "/blog" },
+            { label: "Showreel", href: "/showreel" },
+          ].map((link, i, arr) => (
+            <span key={link.href} className="flex items-center">
               <a
-                href="#"
-                className="hover:opacity-60 transition-opacity"
+                href={link.href}
+                className="hover:text-gold-bright transition-colors"
               >
-                {link}
+                {link.label}
               </a>
               {i < arr.length - 1 && (
-                <span className="opacity-40">,&nbsp;</span>
+                <span className="opacity-30">,&nbsp;</span>
               )}
             </span>
           ))}
@@ -137,32 +151,32 @@ export default function MainframeHero() {
 
         {/* Desktop CTA */}
         <a
-          href="#"
-          className="hidden md:inline text-[23px] text-black underline underline-offset-2 hover:opacity-60 transition-opacity"
+          href="/#contact"
+          className="hidden md:inline text-[18px] text-gold-bright underline underline-offset-4 decoration-gold/40 hover:decoration-gold transition-colors"
         >
-          Get in touch
+          Réserver une démo
         </a>
 
         {/* Mobile burger */}
         <button
           type="button"
-          aria-label="Open menu"
+          aria-label="Ouvrir le menu"
           aria-expanded={isMobileMenuOpen}
           onClick={() => setIsMobileMenuOpen((v) => !v)}
           className="md:hidden flex flex-col items-center justify-center gap-1.5 p-2"
         >
           <span
-            className={`block w-6 h-[2px] bg-black transition-all duration-300 ${
+            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
               isMobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""
             }`}
           />
           <span
-            className={`block w-6 h-[2px] bg-black transition-all duration-300 ${
+            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
               isMobileMenuOpen ? "opacity-0" : ""
             }`}
           />
           <span
-            className={`block w-6 h-[2px] bg-black transition-all duration-300 ${
+            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
               isMobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""
             }`}
           />
@@ -171,55 +185,111 @@ export default function MainframeHero() {
 
       {/* Mobile Nav Overlay */}
       <div
-        className={`md:hidden fixed inset-0 z-[9] bg-white/95 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`md:hidden fixed inset-0 z-[19] bg-black/95 backdrop-blur transition-opacity duration-300 ${
           isMobileMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
       >
-        <nav className="flex h-full flex-col items-center justify-center gap-8 text-3xl text-black">
-          {["Labs", "Studio", "Openings", "Shop", "Get in touch"].map((link) => (
+        <nav className="flex h-full flex-col items-center justify-center gap-8 text-2xl text-paper">
+          {[
+            { label: "Accueil", href: "/" },
+            { label: "Solutions", href: "/#services" },
+            { label: "Cosmos", href: "/blog" },
+            { label: "Showreel", href: "/showreel" },
+            { label: "Réserver une démo", href: "/#contact" },
+          ].map((link) => (
             <a
-              key={link}
-              href="#"
+              key={link.href}
+              href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:opacity-60 transition-opacity"
+              className="hover:text-gold-bright transition-colors"
             >
-              {link}
+              {link.label}
             </a>
           ))}
         </nav>
       </div>
 
-      {/* Background video */}
-      <div className="order-last lg:order-none relative lg:absolute lg:inset-0 lg:z-0 overflow-hidden pointer-events-none w-full aspect-square md:aspect-video lg:aspect-auto lg:h-full bg-neutral-50 lg:bg-transparent">
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video
-          ref={videoRef}
-          src={VIDEO_URL}
-          muted
-          playsInline
-          preload="auto"
-          className="w-full h-full object-cover object-right lg:object-right-bottom"
-        />
+      {/* Background : vidéo si fournie, sinon halo doré subtil */}
+      <div className="order-last lg:order-none relative lg:absolute lg:inset-0 lg:z-0 overflow-hidden pointer-events-none w-full aspect-square md:aspect-video lg:aspect-auto lg:h-full bg-[#050505]">
+        {VIDEO_URL ? (
+          // eslint-disable-next-line jsx-a11y/media-has-caption
+          <video
+            ref={videoRef}
+            src={VIDEO_URL}
+            muted
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover object-right lg:object-right-bottom"
+          />
+        ) : (
+          /* Placeholder élégant en attendant la vidéo : halo doré + grille */
+          <div className="relative h-full w-full">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 60% at 75% 50%, rgba(240,210,122,0.20), transparent 70%)",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 opacity-15"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(240,210,122,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(240,210,122,0.16) 1px, transparent 1px)",
+                backgroundSize: "80px 80px",
+              }}
+            />
+          </div>
+        )}
       </div>
 
+      {/* Voile sombre pour lisibilité texte sur fond vidéo */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.65) 45%, rgba(5,5,5,0) 75%)",
+        }}
+      />
+
       {/* Content layer */}
-      <div className="relative z-10 flex flex-col order-first lg:order-none w-full bg-white lg:bg-transparent pb-8 lg:pb-0 lg:min-h-screen">
+      <div className="relative z-10 flex flex-col order-first lg:order-none w-full bg-transparent pb-8 lg:pb-0 lg:min-h-screen">
         <main
-          id="spade-hero"
+          id="amavya-labs-hero"
           className="w-full max-w-7xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center"
         >
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+          >
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-gold-bright backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
+              Sandbox AMAVYA
+            </div>
+          </motion.div>
+
           {/* Headline avec typewriter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl md:text-6xl lg:text-[76px] font-normal tracking-tight text-black leading-[1.08] mb-8 select-none w-full whitespace-pre-wrap">
+            <h1
+              className="text-5xl md:text-6xl lg:text-[76px] font-normal tracking-tight text-paper leading-[1.05] mb-8 select-none w-full whitespace-pre-wrap"
+              style={{
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+              }}
+            >
               {displayed}
               {!done && (
-                <span className="inline-block w-[2px] h-[1.1em] bg-black align-middle ml-[2px] animate-blink" />
+                <span className="inline-block w-[3px] h-[1.1em] bg-gold-bright align-middle ml-[2px] animate-blink" />
               )}
             </h1>
           </motion.div>
@@ -230,10 +300,10 @@ export default function MainframeHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p className="text-lg md:text-xl text-[#5A635A] leading-relaxed font-normal mb-14 max-w-2xl">
-              Tell us about your business, your bottlenecks, your ambitions.
+            <p className="text-lg md:text-xl text-muted leading-relaxed font-light mb-14 max-w-2xl">
+              Présentez-nous votre activité, vos points de friction, vos ambitions.
               <br />
-              We&apos;ll come back with a concrete plan — usually within 24 hours.
+              Nous revenons avec un plan concret — généralement sous 24 heures.
             </p>
           </motion.div>
 
@@ -243,11 +313,16 @@ export default function MainframeHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h2 className="text-2xl font-medium tracking-tight mb-2">
-              What sort of service?
+            <h2
+              className="text-2xl font-medium tracking-tight mb-2 text-paper"
+              style={{
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+              }}
+            >
+              Quels sujets vous intéressent ?
             </h2>
-            <p className="opacity-85 text-[#738273] mb-8">
-              Select all that apply
+            <p className="text-muted-soft mb-8 text-sm">
+              Cochez tout ce qui s&apos;applique
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -261,8 +336,8 @@ export default function MainframeHero() {
                     whileTap={{ scale: 0.97 }}
                     className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
                       active
-                        ? "bg-[#1C2E1E] text-white shadow-md shadow-emerald-950/5 transform"
-                        : "bg-white text-[#1C2E1E] border border-[#F1F3F1] hover:bg-[#F1F3F1]/55"
+                        ? "bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)]"
+                        : "bg-white/5 text-paper border border-white/15 hover:border-gold/40 hover:bg-white/8"
                     }`}
                     aria-pressed={active}
                   >
@@ -293,13 +368,12 @@ export default function MainframeHero() {
                   <motion.p
                     key="empty"
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
+                    animate={{ opacity: 0.55 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="italic text-xs text-neutral-700"
-                    style={{ opacity: 0.5 }}
+                    className="italic text-xs text-muted-soft"
                   >
-                    Please click to select services above.
+                    Sélectionnez un ou plusieurs sujets ci-dessus.
                   </motion.p>
                 ) : (
                   <motion.div
@@ -310,20 +384,20 @@ export default function MainframeHero() {
                     transition={{ type: "spring", stiffness: 200, damping: 24 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-[#FAFBF9] border border-[#EAECE9] rounded-2xl p-5 flex items-center justify-between gap-4">
-                      <p className="text-sm text-[#1C2E1E]">
-                        Ready to inquire about:{" "}
-                        <span className="font-medium">
+                    <div className="bg-white/5 border border-gold/25 rounded-2xl p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                      <p className="text-sm text-paper">
+                        Sujet(s) sélectionné(s) :{" "}
+                        <span className="font-medium text-gold-bright">
                           {services.join(", ")}
                         </span>
                       </p>
-                      <button
-                        type="button"
-                        className="flex items-center gap-1.5 text-[#4D6D47] uppercase text-xs font-medium tracking-wider hover:opacity-70 transition-opacity"
+                      <a
+                        href="/#contact"
+                        className="flex items-center gap-1.5 self-start rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)] transition-transform duration-300 hover:-translate-y-0.5 sm:self-auto"
                       >
-                        Let&apos;s Go
+                        Demander un échange
                         <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                      </button>
+                      </a>
                     </div>
                   </motion.div>
                 )}
