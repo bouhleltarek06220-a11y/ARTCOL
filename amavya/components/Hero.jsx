@@ -133,6 +133,26 @@ export default function Hero() {
             <div className="hidden h-8 w-px bg-white/10 sm:block" />
             <Stat value={h.stats[2].value} label={h.stats[2].label} />
           </motion.div>
+
+          {/* Bouton showreel discret mais visible */}
+          <motion.div
+            variants={fadeUp(0.55)}
+            className="pt-3"
+          >
+            <a
+              href="/showreel"
+              className="group inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/5 px-5 py-2.5 text-xs uppercase tracking-[0.22em] text-gold-bright backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/10"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-bright opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-gold-bright" />
+              </span>
+              {h.showreelCta || "Voir AMAVYA en 60s"}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="transition-transform duration-300 group-hover:translate-x-0.5">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </a>
+          </motion.div>
         </motion.div>
 
         {/* Colonne visuelle — légère respiration */}
