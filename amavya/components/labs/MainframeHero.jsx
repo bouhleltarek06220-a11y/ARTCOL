@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
+import { SplineScene } from "@/components/ui/splite";
+import LabsCodeColumn from "./LabsCodeColumn";
+
+/* Même scène Spline que /matrix : humanoïde 3D qui suit le curseur. */
+const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
 
 /* Hook custom : tape une chaîne caractère par caractère.
    Retourne { displayed, done }. */
@@ -211,57 +216,76 @@ export default function MainframeHero() {
         </nav>
       </div>
 
-      {/* Background : vidéo si fournie, sinon halo doré subtil */}
-      <div className="order-last lg:order-none relative lg:absolute lg:inset-0 lg:z-0 overflow-hidden pointer-events-none w-full aspect-square md:aspect-video lg:aspect-auto lg:h-full bg-[#050505]">
-        {VIDEO_URL ? (
-          // eslint-disable-next-line jsx-a11y/media-has-caption
+      {/* Fond global : grille dorée + halo radial subtil */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 hidden lg:block"
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(240,210,122,0.12), transparent 75%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(240,210,122,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(240,210,122,0.18) 1px, transparent 1px)",
+            backgroundSize: "80px 80px",
+          }}
+        />
+      </div>
+
+      {/* Colonne de code coloré qui défile (gauche, desktop) */}
+      <LabsCodeColumn />
+
+      {/* Humanoïde Spline (droite, desktop) — suit le curseur */}
+      <div
+        className="pointer-events-auto absolute inset-y-0 right-0 z-[2] hidden h-full w-[36vw] lg:block"
+        style={{
+          maskImage:
+            "linear-gradient(to left, black 60%, transparent), linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to left, black 60%, transparent), linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "source-in",
+        }}
+      >
+        <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
+      </div>
+
+      {/* Voile sombre côté texte (priorité lisibilité) — desktop */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 z-[3] hidden w-1/2 lg:block"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.5) 60%, rgba(5,5,5,0) 100%)",
+        }}
+      />
+
+      {/* Vidéo de fond (mobile uniquement, si fournie) */}
+      {VIDEO_URL && (
+        <div className="order-last relative w-full aspect-square md:aspect-video bg-[#050505] lg:hidden">
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <video
             ref={videoRef}
             src={VIDEO_URL}
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover object-right lg:object-right-bottom"
+            className="h-full w-full object-cover object-center"
           />
-        ) : (
-          /* Placeholder élégant en attendant la vidéo : halo doré + grille */
-          <div className="relative h-full w-full">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 70% 60% at 75% 50%, rgba(240,210,122,0.20), transparent 70%)",
-              }}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 opacity-15"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(240,210,122,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(240,210,122,0.16) 1px, transparent 1px)",
-                backgroundSize: "80px 80px",
-              }}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Voile sombre pour lisibilité texte sur fond vidéo */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden lg:block"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.65) 45%, rgba(5,5,5,0) 75%)",
-        }}
-      />
+        </div>
+      )}
 
       {/* Content layer */}
       <div className="relative z-10 flex flex-col order-first lg:order-none w-full bg-transparent pb-8 lg:pb-0 lg:min-h-screen">
         <main
           id="amavya-labs-hero"
-          className="w-full max-w-7xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center"
+          className="w-full max-w-7xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center lg:pl-[28vw] lg:pr-[40vw]"
         >
           {/* Eyebrow */}
           <motion.div
