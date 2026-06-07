@@ -4,24 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLang } from "./LangProvider";
 
-/**
- * Player vidéo plein écran pour le showreel AMAVYA.
- *
- * Props
- * - src       : URL du MP4 (par défaut /showreel-amavya.mp4)
- * - vttSrc    : URL des sous-titres VTT (par défaut /showreel-amavya.vtt)
- * - srtLang   : langue des sous-titres
- * - onClose   : callback quand l'utilisateur ferme / la vidéo se termine
- * - showLogoCta : afficher l'écran "logo + Réserver une démo" à la fin
- *
- * Comportement :
- * - Autoplay muet (autorisé par les navigateurs), bouton son visible.
- * - Sous-titres affichés par défaut (track default).
- * - Bouton "Passer" et X pour fermer manuellement.
- * - Si la vidéo n'existe pas (404) → message graceful + bouton Skip.
- */
+// Player vidéo plein écran pour le showreel AMAVYA.
+// Le texte (typewriter) est déjà gravé dans le MP4 — pas de track VTT pour éviter le doublon.
 const DEFAULT_SRC = "/showreel-amavya.mp4";
-const DEFAULT_VTT = "/showreel-amavya.vtt";
 
 const LABELS = {
   fr: { skip: "Passer", mute: "Couper le son", unmute: "Activer le son", close: "Fermer", missing: "La vidéo arrive bientôt.", cta: "Réserver une démo" },
@@ -31,8 +16,6 @@ const LABELS = {
 
 export default function AmavyaShowreelVideo({
   src = DEFAULT_SRC,
-  vttSrc = DEFAULT_VTT,
-  srtLang = "fr",
   onClose,
 }) {
   const { lang } = useLang();
@@ -68,7 +51,7 @@ export default function AmavyaShowreelVideo({
 
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black">
-      {/* Vidéo en plein écran */}
+      {/* Vidéo en plein écran (sous-titres déjà gravés dans le montage) */}
       {!missing && (
         // eslint-disable-next-line jsx-a11y/media-has-caption
         <video
@@ -81,17 +64,7 @@ export default function AmavyaShowreelVideo({
           onError={() => setMissing(true)}
           onEnded={() => setEnded(true)}
           className="absolute inset-0 h-full w-full object-cover"
-        >
-          {vttSrc && (
-            <track
-              kind="subtitles"
-              src={vttSrc}
-              srcLang={srtLang}
-              label={srtLang.toUpperCase()}
-              default
-            />
-          )}
-        </video>
+        />
       )}
 
       {/* Fallback gracieux si la vidéo manque */}
