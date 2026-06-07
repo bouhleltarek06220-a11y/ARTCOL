@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 
-// L'expérience Matrix n'est chargée que lorsque l'intro doit s'afficher.
-const MatrixClient = dynamic(() => import("@/app/matrix/MatrixClient"), { ssr: false });
+/* La vidéo showreel AMAVYA — l'intro principale.
+   Le composant MatrixClient (rideau de code + humanoïde) reste accessible
+   sur /matrix en tant qu'expérience de réserve. */
+const AmavyaShowreelVideo = dynamic(
+  () => import("@/components/AmavyaShowreelVideo"),
+  { ssr: false },
+);
 
 const STORAGE_KEY = "amavya-intro-seen";
 
 /**
- * Intro "une fois" : au premier passage sur "/", l'expérience Matrix se
- * superpose au site. Quand le visiteur clique sur le logo, l'intro
- * s'estompe et ne se remontre plus (mémorisé dans localStorage). Le vrai
- * site est rendu en dessous pour préserver le SEO.
+ * Intro "une fois" : au premier passage sur "/", la vidéo showreel AMAVYA
+ * s'affiche en plein écran par-dessus le site. Quand la vidéo se termine
+ * OU que le visiteur clique sur Passer / X, l'intro s'estompe et ne se
+ * remontre plus (mémorisé dans localStorage). Le vrai site est rendu
+ * en dessous pour préserver le SEO.
  * Astuce dev : ?intro=1 force la relecture.
  */
 export default function IntroGate() {
@@ -58,7 +64,7 @@ export default function IntroGate() {
         leaving ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      <MatrixClient onEnter={enter} />
+      <AmavyaShowreelVideo onClose={enter} />
     </div>
   );
 }
