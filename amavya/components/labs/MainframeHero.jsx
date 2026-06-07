@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
 import { SplineScene } from "@/components/ui/splite";
-import LabsCodeColumn from "./LabsCodeColumn";
+import LabsCodeBackground from "./LabsCodeBackground";
 
 /* Même scène Spline que /matrix : humanoïde 3D qui suit le curseur. */
 const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
@@ -42,7 +42,6 @@ function useTypewriter(text, speed = 38, startDelay = 600) {
   return { displayed, done };
 }
 
-/* Les 6 vraies solutions AMAVYA. */
 const SERVICE_OPTIONS = [
   "Agents IA",
   "CRM intelligent",
@@ -52,56 +51,12 @@ const SERVICE_OPTIONS = [
   "Formation",
 ];
 
-/* Vidéo de fond — à remplir avec ta vidéo (Higgsfield/Kling). */
-const VIDEO_URL = "";
-
 export default function MainframeHero() {
-  const videoRef = useRef(null);
-  const prevXRef = useRef(null);
-  const targetTimeRef = useRef(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [services, setServices] = useState([]);
 
   const headline = "parlons de\nvotre prochain palier.";
   const { displayed, done } = useTypewriter(headline, 38, 600);
-
-  /* Scrubbing souris (desktop ≥ 1024). */
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const onMove = (e) => {
-      if (window.innerWidth < 1024) return;
-      const duration = video.duration;
-      if (!duration || Number.isNaN(duration)) return;
-      if (prevXRef.current == null) {
-        prevXRef.current = e.clientX;
-        return;
-      }
-      const delta = e.clientX - prevXRef.current;
-      prevXRef.current = e.clientX;
-      const seek = (delta / window.innerWidth) * 0.8 * duration;
-      let next = (targetTimeRef.current || video.currentTime) + seek;
-      next = Math.max(0, Math.min(duration, next));
-      targetTimeRef.current = next;
-      try {
-        video.currentTime = next;
-      } catch {
-        /* ignore */
-      }
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  /* Mobile : autoplay normal. */
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (window.innerWidth < 1024) {
-      video.autoplay = true;
-      video.play().catch(() => {});
-    }
-  }, []);
 
   const toggleService = (label) => {
     setServices((prev) =>
@@ -110,12 +65,37 @@ export default function MainframeHero() {
   };
 
   return (
-    <div className="relative bg-[#050505] text-paper font-sans selection:bg-gold/30 selection:text-paper antialiased overflow-x-hidden flex flex-col lg:block lg:min-h-screen">
-      {/* Header / Navbar */}
+    <div className="relative min-h-screen w-full bg-[#050505] text-paper font-sans selection:bg-gold/30 selection:text-paper antialiased overflow-x-hidden">
+      {/* ===== Fond global (z-0) : code coloré qui défile derrière TOUT ===== */}
+      <LabsCodeBackground />
+
+      {/* Voile noir global pour atténuer le code et garantir la lisibilité (z-1) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] hidden bg-black/55 lg:block"
+      />
+
+      {/* ===== Humanoïde Spline (z-2) : pleine page, suit le curseur ===== */}
+      <div className="pointer-events-auto absolute inset-0 z-[2] hidden lg:block">
+        <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
+      </div>
+
+      {/* Voile dégradé gauche pour le formulaire (z-3) — assombrit derrière
+          le texte sans découper visuellement, l'humanoïde reste bien visible
+          à droite. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[3] hidden lg:block"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.78) 28%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0) 75%)",
+        }}
+      />
+
+      {/* ===== Navbar (z-20) ===== */}
       <header className="fixed top-0 inset-x-0 z-20 px-5 sm:px-8 py-4 sm:py-5 flex flex-row justify-between items-center bg-transparent">
-        {/* Logo AMAVYA Labs */}
         <a href="/labs" className="flex flex-row items-center gap-3" aria-label="AMAVYA Labs">
-          <span className="text-[21px] sm:text-[26px] tracking-tight text-paper font-medium select-none">
+          <span className="text-[21px] sm:text-[26px] tracking-tight text-paper font-medium select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             AMAVYA Labs
           </span>
           <span
@@ -132,8 +112,7 @@ export default function MainframeHero() {
           </span>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex flex-row items-center text-[18px] text-paper/85">
+        <nav className="hidden md:flex flex-row items-center text-[18px] text-paper drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           {[
             { label: "Accueil", href: "/" },
             { label: "Solutions", href: "/#services" },
@@ -154,15 +133,13 @@ export default function MainframeHero() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
         <a
           href="/#contact"
-          className="hidden md:inline text-[18px] text-gold-bright underline underline-offset-4 decoration-gold/40 hover:decoration-gold transition-colors"
+          className="hidden md:inline text-[18px] text-gold-bright underline underline-offset-4 decoration-gold/40 hover:decoration-gold transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
         >
           Réserver une démo
         </a>
 
-        {/* Mobile burger */}
         <button
           type="button"
           aria-label="Ouvrir le menu"
@@ -188,7 +165,7 @@ export default function MainframeHero() {
         </button>
       </header>
 
-      {/* Mobile Nav Overlay */}
+      {/* Mobile Nav Overlay (z-19) */}
       <div
         className={`md:hidden fixed inset-0 z-[19] bg-black/95 backdrop-blur transition-opacity duration-300 ${
           isMobileMenuOpen
@@ -216,218 +193,164 @@ export default function MainframeHero() {
         </nav>
       </div>
 
-      {/* Fond global : grille dorée + halo radial subtil */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 hidden lg:block"
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(240,210,122,0.12), transparent 75%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(240,210,122,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(240,210,122,0.18) 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
-      </div>
-
-      {/* Colonne de code coloré qui défile (gauche, desktop) */}
-      <LabsCodeColumn />
-
-      {/* Humanoïde Spline (droite, desktop) — suit le curseur */}
-      <div
-        className="pointer-events-auto absolute inset-y-0 right-0 z-[2] hidden h-full w-[36vw] lg:block"
-        style={{
-          maskImage:
-            "linear-gradient(to left, black 60%, transparent), linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
-          WebkitMaskImage:
-            "linear-gradient(to left, black 60%, transparent), linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
-        }}
-      >
-        <SplineScene scene={SPLINE_SCENE} className="h-full w-full" />
-      </div>
-
-      {/* Voile sombre côté texte (priorité lisibilité) — desktop */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-[3] hidden w-1/2 lg:block"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.5) 60%, rgba(5,5,5,0) 100%)",
-        }}
-      />
-
-      {/* Vidéo de fond (mobile uniquement, si fournie) */}
-      {VIDEO_URL && (
-        <div className="order-last relative w-full aspect-square md:aspect-video bg-[#050505] lg:hidden">
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <video
-            ref={videoRef}
-            src={VIDEO_URL}
-            muted
-            playsInline
-            preload="auto"
-            className="h-full w-full object-cover object-center"
-          />
-        </div>
-      )}
-
-      {/* Content layer */}
-      <div className="relative z-10 flex flex-col order-first lg:order-none w-full bg-transparent pb-8 lg:pb-0 lg:min-h-screen">
+      {/* ===== Contenu (z-10) : formulaire à gauche, l'humanoïde derrière à droite reste bien visible ===== */}
+      <div className="relative z-10 flex min-h-screen w-full flex-col">
         <main
           id="amavya-labs-hero"
-          className="w-full max-w-7xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center lg:pl-[28vw] lg:pr-[40vw]"
+          className="pointer-events-none flex w-full flex-1 items-center px-6 pt-32 pb-12 sm:px-10 lg:pt-0"
         >
-          {/* Eyebrow */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55 }}
-          >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-gold-bright backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
-              Sandbox AMAVYA
-            </div>
-          </motion.div>
-
-          {/* Headline avec typewriter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1
-              className="text-5xl md:text-6xl lg:text-[76px] font-normal tracking-tight text-paper leading-[1.05] mb-8 select-none w-full whitespace-pre-wrap"
-              style={{
-                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
-              }}
+          <div className="pointer-events-auto w-full max-w-2xl lg:max-w-xl lg:ml-[4vw] xl:ml-[8vw]">
+            {/* Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55 }}
             >
-              {displayed}
-              {!done && (
-                <span className="inline-block w-[3px] h-[1.1em] bg-gold-bright align-middle ml-[2px] animate-blink" />
-              )}
-            </h1>
-          </motion.div>
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-black/60 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-gold-bright backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
+                Sandbox AMAVYA
+              </div>
+            </motion.div>
 
-          {/* Secondary description */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <p className="text-lg md:text-xl text-muted leading-relaxed font-light mb-14 max-w-2xl">
-              Présentez-nous votre activité, vos points de friction, vos ambitions.
-              <br />
-              Nous revenons avec un plan concret — généralement sous 24 heures.
-            </p>
-          </motion.div>
-
-          {/* Service pills */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h2
-              className="text-2xl font-medium tracking-tight mb-2 text-paper"
-              style={{
-                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
-              }}
+            {/* Headline typewriter */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              Quels sujets vous intéressent ?
-            </h2>
-            <p className="text-muted-soft mb-8 text-sm">
-              Cochez tout ce qui s&apos;applique
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              {SERVICE_OPTIONS.map((label) => {
-                const active = services.includes(label);
-                return (
-                  <motion.button
-                    key={label}
-                    type="button"
-                    onClick={() => toggleService(label)}
-                    whileTap={{ scale: 0.97 }}
-                    className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
-                      active
-                        ? "bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)]"
-                        : "bg-white/5 text-paper border border-white/15 hover:border-gold/40 hover:bg-white/8"
-                    }`}
-                    aria-pressed={active}
-                  >
-                    <AnimatePresence>
-                      {active && (
-                        <motion.span
-                          key="check"
-                          initial={{ scale: 0, y: -6, opacity: 0 }}
-                          animate={{ scale: 1, y: 0, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                          className="inline-flex"
-                        >
-                          <Check className="h-4 w-4" strokeWidth={2.5} />
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                    <span>{label}</span>
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* Feedback banner contingent */}
-            <div className="mt-8">
-              <AnimatePresence mode="wait">
-                {services.length === 0 ? (
-                  <motion.p
-                    key="empty"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.55 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="italic text-xs text-muted-soft"
-                  >
-                    Sélectionnez un ou plusieurs sujets ci-dessus.
-                  </motion.p>
-                ) : (
-                  <motion.div
-                    key="active"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 24 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="bg-white/5 border border-gold/25 rounded-2xl p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                      <p className="text-sm text-paper">
-                        Sujet(s) sélectionné(s) :{" "}
-                        <span className="font-medium text-gold-bright">
-                          {services.join(", ")}
-                        </span>
-                      </p>
-                      <a
-                        href="/#contact"
-                        className="flex items-center gap-1.5 self-start rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)] transition-transform duration-300 hover:-translate-y-0.5 sm:self-auto"
-                      >
-                        Demander un échange
-                        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                      </a>
-                    </div>
-                  </motion.div>
+              <h1
+                className="text-4xl md:text-5xl lg:text-[64px] font-normal tracking-tight text-paper leading-[1.05] mb-7 select-none w-full whitespace-pre-wrap"
+                style={{
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+                  textShadow: "0 4px 24px rgba(0,0,0,0.85)",
+                }}
+              >
+                {displayed}
+                {!done && (
+                  <span className="inline-block w-[3px] h-[1.05em] bg-gold-bright align-middle ml-[2px] animate-blink" />
                 )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
+              </h1>
+            </motion.div>
+
+            {/* Description */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <p
+                className="text-base md:text-lg text-paper/85 leading-relaxed font-light mb-10 max-w-xl"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}
+              >
+                Présentez-nous votre activité, vos points de friction, vos
+                ambitions.
+                <br />
+                Nous revenons avec un plan concret — généralement sous 24 heures.
+              </p>
+            </motion.div>
+
+            {/* Service pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h2
+                className="text-xl md:text-2xl font-medium tracking-tight mb-2 text-paper"
+                style={{
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+                  textShadow: "0 2px 12px rgba(0,0,0,0.85)",
+                }}
+              >
+                Quels sujets vous intéressent ?
+              </h2>
+              <p
+                className="text-muted-soft mb-6 text-sm"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}
+              >
+                Cochez tout ce qui s&apos;applique
+              </p>
+
+              <div className="flex flex-wrap gap-2.5">
+                {SERVICE_OPTIONS.map((label) => {
+                  const active = services.includes(label);
+                  return (
+                    <motion.button
+                      key={label}
+                      type="button"
+                      onClick={() => toggleService(label)}
+                      whileTap={{ scale: 0.97 }}
+                      className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium backdrop-blur transition-colors ${
+                        active
+                          ? "bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)]"
+                          : "bg-black/60 text-paper border border-white/15 hover:border-gold/40 hover:bg-black/75"
+                      }`}
+                      aria-pressed={active}
+                    >
+                      <AnimatePresence>
+                        {active && (
+                          <motion.span
+                            key="check"
+                            initial={{ scale: 0, y: -6, opacity: 0 }}
+                            animate={{ scale: 1, y: 0, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            className="inline-flex"
+                          >
+                            <Check className="h-4 w-4" strokeWidth={2.5} />
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                      <span>{label}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-6">
+                <AnimatePresence mode="wait">
+                  {services.length === 0 ? (
+                    <motion.p
+                      key="empty"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.6 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="italic text-xs text-paper/70"
+                      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85)" }}
+                    >
+                      Sélectionnez un ou plusieurs sujets ci-dessus.
+                    </motion.p>
+                  ) : (
+                    <motion.div
+                      key="active"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 24 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="bg-black/70 backdrop-blur border border-gold/30 rounded-2xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+                        <p className="text-sm text-paper">
+                          Sujet(s) sélectionné(s) :{" "}
+                          <span className="font-medium text-gold-bright">
+                            {services.join(", ")}
+                          </span>
+                        </p>
+                        <a
+                          href="/#contact"
+                          className="flex items-center gap-1.5 self-start rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)] transition-transform duration-300 hover:-translate-y-0.5 sm:self-auto"
+                        >
+                          Demander un échange
+                          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                        </a>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </div>
         </main>
       </div>
     </div>
