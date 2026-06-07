@@ -9,9 +9,9 @@ import { useLang } from "./LangProvider";
 const DEFAULT_SRC = "/showreel-amavya.mp4";
 
 const LABELS = {
-  fr: { skip: "Passer", mute: "Couper le son", unmute: "Activer le son", close: "Fermer", missing: "La vidéo arrive bientôt.", cta: "Réserver une démo" },
-  en: { skip: "Skip", mute: "Mute", unmute: "Unmute", close: "Close", missing: "Video coming soon.", cta: "Book a demo" },
-  es: { skip: "Saltar", mute: "Silenciar", unmute: "Activar sonido", close: "Cerrar", missing: "El vídeo llega pronto.", cta: "Reservar una demo" },
+  fr: { skip: "Passer", enter: "Entrer sur AMAVYA", mute: "Couper le son", unmute: "Activer le son", close: "Fermer", missing: "La vidéo arrive bientôt.", cta: "Réserver une démo" },
+  en: { skip: "Skip", enter: "Enter AMAVYA", mute: "Mute", unmute: "Unmute", close: "Close", missing: "Video coming soon.", cta: "Book a demo" },
+  es: { skip: "Saltar", enter: "Entrar a AMAVYA", mute: "Silenciar", unmute: "Activar sonido", close: "Cerrar", missing: "El vídeo llega pronto.", cta: "Reservar una demo" },
 };
 
 export default function AmavyaShowreelVideo({
@@ -46,15 +46,23 @@ export default function AmavyaShowreelVideo({
     }
   }, []);
 
-  // Stop la musique quand la vidéo se termine
-  useEffect(() => {
-    if (!ended) return;
-    const a = audioRef.current;
-    if (a) {
-      a.pause();
-      a.currentTime = 0;
+  // Fin de vidéo : on gèle sur la toute dernière image (poignée de main)
+  // — pas de coupe brutale, pas de retour au noir. La musique continue
+  // de tourner en boucle douce jusqu'à ce que l'utilisateur clique.
+  const handleEnded = () => {
+    const v = videoRef.current;
+    if (v) {
+      try {
+        v.pause();
+        if (Number.isFinite(v.duration)) {
+          v.currentTime = Math.max(0, v.duration - 0.05);
+        }
+      } catch {
+        /* ignore */
+      }
     }
-  }, [ended]);
+    setEnded(true);
+  };
 
   const toggleMute = () => {
     const v = videoRef.current;
@@ -78,7 +86,7 @@ export default function AmavyaShowreelVideo({
           playsInline
           preload="auto"
           onError={() => setMissing(true)}
-          onEnded={() => setEnded(true)}
+          onEnded={handleEnded}
           className="absolute inset-0 h-full w-full object-cover"
         />
       )}
@@ -160,17 +168,23 @@ export default function AmavyaShowreelVideo({
         </button>
       )}
 
-      {/* Bouton Skip (bas-centre) */}
-      {!missing && !ended && (
+      {/* Bouton bas-centre — "Passer" pendant la vidéo, "Entrer" sur la dernière image */}
+      {!missing && (
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 rounded-full border border-white/15 bg-black/60 px-5 py-2 text-xs uppercase tracking-[0.3em] text-paper/85 backdrop-blur transition-colors hover:border-gold/50 hover:text-gold-bright"
+          className={`absolute bottom-6 left-1/2 z-20 -translate-x-1/2 rounded-full px-5 py-2 text-xs uppercase tracking-[0.3em] backdrop-blur transition-all ${
+            ended
+              ? "border border-gold/60 bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] hover:-translate-x-1/2 hover:-translate-y-0.5"
+              : "border border-white/15 bg-black/60 text-paper/85 hover:border-gold/50 hover:text-gold-bright"
+          }`}
         >
-          {t.skip}
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="ml-2 inline">
-            <path d="M6 5l8 7-8 7zM16 5h2v14h-2z" />
-          </svg>
+          {ended ? t.enter : t.skip}
+          {!ended && (
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="ml-2 inline">
+              <path d="M6 5l8 7-8 7zM16 5h2v14h-2z" />
+            </svg>
+          )}
         </button>
       )}
 
