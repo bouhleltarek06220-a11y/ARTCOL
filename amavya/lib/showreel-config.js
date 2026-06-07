@@ -1,5 +1,5 @@
 /**
- * Configuration du showreel AMAVYA — 6 actes × 10s = 60s exact.
+ * Configuration du showreel AMAVYA — 4 actes × 10s + CTA = 40s actif + invitation.
  * Le dernier acte (CTA) reste affiché jusqu'à action utilisateur.
  */
 export const SHOWREEL_SCENES = [
@@ -7,11 +7,10 @@ export const SHOWREEL_SCENES = [
   { id: "cosmos", durationMs: 10000 },
   { id: "solutions", durationMs: 10000 },
   { id: "agent", durationMs: 10000 },
-  { id: "world", durationMs: 10000 },
   { id: "cta", durationMs: Infinity },
 ];
 
-export const SHOWREEL_TOTAL_MS = 60000;
+export const SHOWREEL_TOTAL_MS = 40000;
 
 export const SHOWREEL_TEXT = {
   fr: {
@@ -23,8 +22,7 @@ export const SHOWREEL_TEXT = {
       cosmos: "02 · COSMOS",
       solutions: "03 · SOLUTIONS",
       agent: "04 · L'AGENT",
-      world: "05 · LE MONDE",
-      cta: "06 · L'INVITATION",
+      cta: "05 · L'INVITATION",
     },
     close: "Quitter",
     replay: "Rejouer",
@@ -104,8 +102,7 @@ export const SHOWREEL_TEXT = {
       cosmos: "02 · COSMOS",
       solutions: "03 · SOLUTIONS",
       agent: "04 · THE AGENT",
-      world: "05 · THE WORLD",
-      cta: "06 · THE INVITATION",
+      cta: "05 · THE INVITATION",
     },
     close: "Close",
     replay: "Replay",
@@ -184,8 +181,7 @@ export const SHOWREEL_TEXT = {
       cosmos: "02 · COSMOS",
       solutions: "03 · SOLUCIONES",
       agent: "04 · EL AGENTE",
-      world: "05 · EL MUNDO",
-      cta: "06 · LA INVITACIÓN",
+      cta: "05 · LA INVITACIÓN",
     },
     close: "Cerrar",
     replay: "Reproducir",

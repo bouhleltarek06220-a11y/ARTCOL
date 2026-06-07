@@ -30,7 +30,7 @@ export const translations = {
         { value: "+50 %", label: "Productivité visée" },
         { value: "100 %", label: "Sur mesure" },
       ],
-      showreelCta: "Voir AMAVYA en 60s",
+      showreelCta: "Voir AMAVYA en 40s",
     },
     services: {
       eyebrow: "Nos solutions",
@@ -275,7 +275,7 @@ export const translations = {
         { value: "+50%", label: "Targeted productivity" },
         { value: "100%", label: "Fully tailored" },
       ],
-      showreelCta: "Watch AMAVYA in 60s",
+      showreelCta: "Watch AMAVYA in 40s",
     },
     services: {
       eyebrow: "Our solutions",
@@ -520,7 +520,7 @@ export const translations = {
         { value: "+50 %", label: "Productividad objetivo" },
         { value: "100 %", label: "A medida" },
       ],
-      showreelCta: "Ver AMAVYA en 60s",
+      showreelCta: "Ver AMAVYA en 40s",
     },
     services: {
       eyebrow: "Nuestras soluciones",

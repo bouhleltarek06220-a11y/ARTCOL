@@ -14,10 +14,9 @@ import Act1Genesis from "./scenes/Act1Genesis";
 import Act2Cosmos from "./scenes/Act2Cosmos";
 import Act3Solutions from "./scenes/Act3Solutions";
 import Act4Agent from "./scenes/Act4Agent";
-import Act5World from "./scenes/Act5World";
 import Act6CTA from "./scenes/Act6CTA";
 
-const ACTS = [Act1Genesis, Act2Cosmos, Act3Solutions, Act4Agent, Act5World, Act6CTA];
+const ACTS = [Act1Genesis, Act2Cosmos, Act3Solutions, Act4Agent, Act6CTA];
 
 export default function ShowreelClient() {
   const router = useRouter();
