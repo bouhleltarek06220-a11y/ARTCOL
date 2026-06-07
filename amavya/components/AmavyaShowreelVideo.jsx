@@ -16,11 +16,13 @@ const LABELS = {
 
 export default function AmavyaShowreelVideo({
   src = DEFAULT_SRC,
+  audioSrc = "/ambient.mp3",
   onClose,
 }) {
   const { lang } = useLang();
   const t = LABELS[lang] || LABELS.fr;
   const videoRef = useRef(null);
+  const audioRef = useRef(null);
   const [muted, setMuted] = useState(true);
   const [missing, setMissing] = useState(false);
   const [ended, setEnded] = useState(false);
@@ -34,18 +36,32 @@ export default function AmavyaShowreelVideo({
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // Lecture forcée (best-effort) — le navigateur permet l'autoplay si muet
+  // Lecture forcée vidéo + audio (best-effort) — autoplay autorisé si muet
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.play().catch(() => {});
+    videoRef.current?.play().catch(() => {});
+    const a = audioRef.current;
+    if (a) {
+      a.volume = 0.55;
+      a.play().catch(() => {});
+    }
   }, []);
+
+  // Stop la musique quand la vidéo se termine
+  useEffect(() => {
+    if (!ended) return;
+    const a = audioRef.current;
+    if (a) {
+      a.pause();
+      a.currentTime = 0;
+    }
+  }, [ended]);
 
   const toggleMute = () => {
     const v = videoRef.current;
-    if (!v) return;
-    const next = !v.muted;
-    v.muted = next;
+    const a = audioRef.current;
+    const next = !(v?.muted ?? muted);
+    if (v) v.muted = next;
+    if (a) a.muted = next;
     setMuted(next);
   };
 
@@ -64,6 +80,18 @@ export default function AmavyaShowreelVideo({
           onError={() => setMissing(true)}
           onEnded={() => setEnded(true)}
           className="absolute inset-0 h-full w-full object-cover"
+        />
+      )}
+
+      {/* Piste musicale (même son que la page Vision) */}
+      {!missing && audioSrc && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          loop
+          muted={muted}
+          preload="auto"
+          playsInline
         />
       )}
 
