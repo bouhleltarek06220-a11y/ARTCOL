@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Check, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { SplineScene } from "@/components/ui/splite";
+import Navbar from "@/components/Navbar";
+import Button from "@/components/Button";
 import LabsCodeBackground from "./LabsCodeBackground";
+import ServiceDetailModal from "./ServiceDetailModal";
+import { LABS_SERVICES } from "@/lib/labs-services";
 
-/* Même scène Spline que /matrix : humanoïde 3D qui suit le curseur. */
 const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
 
-/* Hook custom : tape une chaîne caractère par caractère.
-   Retourne { displayed, done }. */
+/* Hook custom : tape une chaîne caractère par caractère. */
 function useTypewriter(text, speed = 38, startDelay = 600) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
@@ -42,26 +43,12 @@ function useTypewriter(text, speed = 38, startDelay = 600) {
   return { displayed, done };
 }
 
-const SERVICE_OPTIONS = [
-  "Agents IA",
-  "CRM intelligent",
-  "Automatisation",
-  "Prospection IA",
-  "SaaS sur mesure",
-  "Formation",
-];
-
 /**
  * Humanoïde ancré à droite + tracking du curseur sur TOUT l'écran.
- *
- * Idée : le canvas Spline est positionné dans la moitié droite (figure
- * naturellement centrée dans le canvas → visible à ~72% horizontal).
- * Le conteneur a `pointer-events: none` pour ne pas bloquer les clics
- * du formulaire. On écoute la souris au niveau de la fenêtre et on
- * dispatch un PointerEvent synthétique sur le <canvas> avec la position
- * réelle du curseur (clientX/Y inchangés). Spline calcule alors sa
- * rotation par rapport à son bounding rect → la tête regarde dans la
- * direction du curseur quel que soit l'endroit où il est sur l'écran.
+ * Le canvas est positionné à droite, pointer-events: none.
+ * Un listener window pointermove dispatche des événements synthétiques
+ * sur le <canvas> pour que la tête suive le curseur quel que soit
+ * l'endroit où il est sur l'écran.
  */
 function SplineHumanoidRight({ scene }) {
   const wrapperRef = useRef(null);
@@ -114,36 +101,26 @@ function SplineHumanoidRight({ scene }) {
 }
 
 export default function MainframeHero() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [services, setServices] = useState([]);
+  const [openService, setOpenService] = useState(null);
 
   const headline = "parlons de\nvotre prochain palier.";
   const { displayed, done } = useTypewriter(headline, 38, 600);
 
-  const toggleService = (label) => {
-    setServices((prev) =>
-      prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label],
-    );
-  };
-
   return (
     <div className="relative min-h-screen w-full bg-[#050505] text-paper font-sans selection:bg-gold/30 selection:text-paper antialiased overflow-x-hidden">
-      {/* ===== Fond global (z-0) : code coloré qui défile derrière TOUT ===== */}
+      {/* z-0 : code coloré qui défile en fond global */}
       <LabsCodeBackground />
 
-      {/* Voile noir global pour atténuer le code et garantir la lisibilité (z-1) */}
+      {/* z-1 : voile noir 55% pour atténuer le code */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[1] hidden bg-black/55 lg:block"
       />
 
-      {/* ===== Humanoïde Spline (z-2) : ancré à DROITE, suit le curseur global ===== */}
+      {/* z-2 : humanoïde Spline à droite, suit le curseur global */}
       <SplineHumanoidRight scene={SPLINE_SCENE} />
 
-
-      {/* Voile dégradé gauche pour le formulaire (z-3) — assombrit derrière
-          le texte sans découper visuellement, l'humanoïde reste bien visible
-          à droite. */}
+      {/* z-3 : voile dégradé gauche pour la lisibilité du formulaire */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[3] hidden lg:block"
@@ -153,108 +130,10 @@ export default function MainframeHero() {
         }}
       />
 
-      {/* ===== Navbar (z-20) ===== */}
-      <header className="fixed top-0 inset-x-0 z-20 px-5 sm:px-8 py-4 sm:py-5 flex flex-row justify-between items-center bg-transparent">
-        <a href="/labs" className="flex flex-row items-center gap-3" aria-label="AMAVYA Labs">
-          <span className="text-[21px] sm:text-[26px] tracking-tight text-paper font-medium select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-            AMAVYA Labs
-          </span>
-          <span
-            className="text-[25px] sm:text-[30px] select-none tracking-[-0.02em] font-medium leading-none mb-1"
-            style={{
-              background:
-                "linear-gradient(110deg, #a87f2e, #f0d27a 55%, #d4af37)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
-          >
-            &#10033;
-          </span>
-        </a>
+      {/* z-50 : Navbar officielle AMAVYA (Logo, Langue, CTA Réserver une démo) */}
+      <Navbar />
 
-        <nav className="hidden md:flex flex-row items-center text-[18px] text-paper drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-          {[
-            { label: "Accueil", href: "/" },
-            { label: "Solutions", href: "/#services" },
-            { label: "Cosmos", href: "/blog" },
-            { label: "Showreel", href: "/showreel" },
-          ].map((link, i, arr) => (
-            <span key={link.href} className="flex items-center">
-              <a
-                href={link.href}
-                className="hover:text-gold-bright transition-colors"
-              >
-                {link.label}
-              </a>
-              {i < arr.length - 1 && (
-                <span className="opacity-30">,&nbsp;</span>
-              )}
-            </span>
-          ))}
-        </nav>
-
-        <a
-          href="/#contact"
-          className="hidden md:inline text-[18px] text-gold-bright underline underline-offset-4 decoration-gold/40 hover:decoration-gold transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
-        >
-          Réserver une démo
-        </a>
-
-        <button
-          type="button"
-          aria-label="Ouvrir le menu"
-          aria-expanded={isMobileMenuOpen}
-          onClick={() => setIsMobileMenuOpen((v) => !v)}
-          className="md:hidden flex flex-col items-center justify-center gap-1.5 p-2"
-        >
-          <span
-            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
-              isMobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
-              isMobileMenuOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-[2px] bg-paper transition-all duration-300 ${
-              isMobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""
-            }`}
-          />
-        </button>
-      </header>
-
-      {/* Mobile Nav Overlay (z-19) */}
-      <div
-        className={`md:hidden fixed inset-0 z-[19] bg-black/95 backdrop-blur transition-opacity duration-300 ${
-          isMobileMenuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <nav className="flex h-full flex-col items-center justify-center gap-8 text-2xl text-paper">
-          {[
-            { label: "Accueil", href: "/" },
-            { label: "Solutions", href: "/#services" },
-            { label: "Cosmos", href: "/blog" },
-            { label: "Showreel", href: "/showreel" },
-            { label: "Réserver une démo", href: "/#contact" },
-          ].map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-gold-bright transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      </div>
-
-      {/* ===== Contenu (z-10) : formulaire à gauche, l'humanoïde derrière à droite reste bien visible ===== */}
+      {/* z-10 : Contenu (formulaire à gauche) */}
       <div className="relative z-10 flex min-h-screen w-full flex-col">
         <main
           id="amavya-labs-hero"
@@ -304,13 +183,12 @@ export default function MainframeHero() {
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}
               >
                 Présentez-nous votre activité, vos points de friction, vos
-                ambitions.
-                <br />
-                Nous revenons avec un plan concret — généralement sous 24 heures.
+                ambitions. Nous revenons avec un plan concret — généralement
+                sous 24 heures.
               </p>
             </motion.div>
 
-            {/* Service pills */}
+            {/* Pills services — CLIC = ouvre la modale détaillée */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -323,97 +201,66 @@ export default function MainframeHero() {
                   textShadow: "0 2px 12px rgba(0,0,0,0.85)",
                 }}
               >
-                Quels sujets vous intéressent ?
+                Cliquez pour découvrir nos solutions
               </h2>
               <p
                 className="text-muted-soft mb-6 text-sm"
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}
               >
-                Cochez tout ce qui s&apos;applique
+                Chaque solution s&apos;adapte à votre secteur d&apos;activité.
               </p>
 
               <div className="flex flex-wrap gap-2.5">
-                {SERVICE_OPTIONS.map((label) => {
-                  const active = services.includes(label);
-                  return (
-                    <motion.button
-                      key={label}
-                      type="button"
-                      onClick={() => toggleService(label)}
-                      whileTap={{ scale: 0.97 }}
-                      className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium backdrop-blur transition-colors ${
-                        active
-                          ? "bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)]"
-                          : "bg-black/60 text-paper border border-white/15 hover:border-gold/40 hover:bg-black/75"
-                      }`}
-                      aria-pressed={active}
+                {LABS_SERVICES.map((service) => (
+                  <motion.button
+                    key={service.id}
+                    type="button"
+                    onClick={() => setOpenService(service)}
+                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ y: -2 }}
+                    className="group relative flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-4 py-2 text-sm font-medium text-paper backdrop-blur transition-all hover:border-gold/50 hover:bg-black/75 hover:shadow-[0_8px_24px_-10px_rgba(240,210,122,0.5)]"
+                  >
+                    {/* Pastille pulsante dorée pour signaler "cliquable" */}
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-bright opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold-bright" />
+                    </span>
+                    <span>{service.label}</span>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="text-gold-bright transition-transform duration-300 group-hover:translate-x-0.5"
                     >
-                      <AnimatePresence>
-                        {active && (
-                          <motion.span
-                            key="check"
-                            initial={{ scale: 0, y: -6, opacity: 0 }}
-                            animate={{ scale: 1, y: 0, opacity: 1 }}
-                            exit={{ scale: 0, opacity: 0 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                            className="inline-flex"
-                          >
-                            <Check className="h-4 w-4" strokeWidth={2.5} />
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                      <span>{label}</span>
-                    </motion.button>
-                  );
-                })}
+                      <path
+                        d="M5 12h14M13 6l6 6-6 6"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </motion.button>
+                ))}
               </div>
 
-              <div className="mt-6">
-                <AnimatePresence mode="wait">
-                  {services.length === 0 ? (
-                    <motion.p
-                      key="empty"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.6 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="italic text-xs text-paper/70"
-                      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85)" }}
-                    >
-                      Sélectionnez un ou plusieurs sujets ci-dessus.
-                    </motion.p>
-                  ) : (
-                    <motion.div
-                      key="active"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 24 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="bg-black/70 backdrop-blur border border-gold/30 rounded-2xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-                        <p className="text-sm text-paper">
-                          Sujet(s) sélectionné(s) :{" "}
-                          <span className="font-medium text-gold-bright">
-                            {services.join(", ")}
-                          </span>
-                        </p>
-                        <a
-                          href="/#contact"
-                          className="flex items-center gap-1.5 self-start rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-ink shadow-[0_8px_28px_-10px_rgba(240,210,122,0.7)] transition-transform duration-300 hover:-translate-y-0.5 sm:self-auto"
-                        >
-                          Demander un échange
-                          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                        </a>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              {/* CTA général — bouton AMAVYA officiel */}
+              <div className="mt-8">
+                <Button href="/#contact" variant="primary">
+                  Réserver une démo
+                </Button>
               </div>
             </motion.div>
           </div>
         </main>
       </div>
+
+      {/* Modale détaillée du service cliqué */}
+      <ServiceDetailModal
+        service={openService}
+        onClose={() => setOpenService(null)}
+      />
     </div>
   );
 }
