@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 
 /**
- * Rideau de code HTML coloré qui défile lentement vers le haut.
- * Reprend la palette néon du CodeCarpet /matrix mais en pur DOM/CSS
- * pour rester léger et lisible en 2D.
+ * Fond animé pleine page : plusieurs colonnes de code coloré qui défilent
+ * doucement vers le haut. Pas de découpe visible — tout le décor est code.
+ * Pur DOM/CSS, léger, désactivé en mobile.
  */
 
 const CODE = [
@@ -52,8 +52,6 @@ const KW = new Set([
   "from", "async", "true", "false",
 ]);
 
-/* Tokeniseur léger : reprend la logique de CodeCarpet (HTML-ish), retourne
-   un tableau d'objets { t, c } convertibles en <span>. */
 function tokenize(line) {
   const tokens = [];
   const re =
@@ -96,7 +94,7 @@ function CodeLine({ line }) {
           key={i}
           style={{
             color: tok.c,
-            textShadow: `0 0 8px ${tok.c}55`,
+            textShadow: `0 0 8px ${tok.c}44`,
           }}
         >
           {tok.t}
@@ -106,20 +104,51 @@ function CodeLine({ line }) {
   );
 }
 
-export default function LabsCodeColumn() {
-  // On duplique le bloc pour permettre une boucle de défilement infinie
+/* Une colonne verticale infinie, vitesse + délai paramétrables. */
+function CodeColumn({ durationS, delayS = 0 }) {
   const loop = useMemo(() => [...CODE, ...CODE], []);
   return (
+    <div className="relative overflow-hidden">
+      <div
+        className="px-3 font-mono text-[12px] leading-[1.65] tracking-tight opacity-90"
+        style={{
+          animation: `amavya-code-scroll ${durationS}s linear infinite`,
+          animationDelay: `-${delayS}s`,
+        }}
+      >
+        {loop.map((line, i) => (
+          <CodeLine key={i} line={line || " "} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function LabsCodeBackground() {
+  /* 6 colonnes parallèles, chacune avec sa vitesse, son décalage de
+     démarrage, et son opacity globale, pour un effet rideau riche
+     sans look "uniforme". */
+  const columns = useMemo(
+    () => [
+      { durationS: 42, delayS: 0, opacity: 0.7 },
+      { durationS: 56, delayS: 14, opacity: 0.55 },
+      { durationS: 36, delayS: 6, opacity: 0.85 },
+      { durationS: 64, delayS: 22, opacity: 0.45 },
+      { durationS: 48, delayS: 10, opacity: 0.75 },
+      { durationS: 52, delayS: 28, opacity: 0.5 },
+    ],
+    [],
+  );
+
+  return (
     <div
-      className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden h-full w-[24vw] overflow-hidden lg:block"
+      className="pointer-events-none absolute inset-0 z-0 hidden h-full w-full overflow-hidden lg:block"
       aria-hidden="true"
       style={{
         maskImage:
-          "linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, black 60%, transparent)",
+          "linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)",
         WebkitMaskImage:
-          "linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, black 60%, transparent)",
-        maskComposite: "intersect",
-        WebkitMaskComposite: "source-in",
+          "linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)",
       }}
     >
       <style>{`
@@ -128,14 +157,15 @@ export default function LabsCodeColumn() {
           to   { transform: translateY(-50%); }
         }
       `}</style>
-      <div
-        className="px-6 font-mono text-[13px] leading-[1.6] tracking-tight"
-        style={{
-          animation: "amavya-code-scroll 38s linear infinite",
-        }}
-      >
-        {loop.map((line, i) => (
-          <CodeLine key={i} line={line || " "} />
+      <div className="grid h-full w-full grid-cols-6">
+        {columns.map((col, i) => (
+          <div
+            key={i}
+            className="h-full overflow-hidden"
+            style={{ opacity: col.opacity }}
+          >
+            <CodeColumn durationS={col.durationS} delayS={col.delayS} />
+          </div>
         ))}
       </div>
     </div>
