@@ -251,47 +251,53 @@ const ACTIVITY = [
 /* ----------------------------------------------------------------
    Hexagone (cellule cliquable, flat-top, glow doré)
    ---------------------------------------------------------------- */
-function HexCell({ cell, active, onHover }) {
+function HexCell({ cell, active, onHover, delay = 0 }) {
   if (cell.hidden) return null;
   const isActive = active === cell.id;
   return (
-    <motion.button
-      type="button"
-      onMouseEnter={() => onHover(cell.id)}
-      onMouseLeave={() => onHover(null)}
-      initial={{ opacity: 0, scale: 0.6 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.2, type: "spring", stiffness: 120, damping: 14 }}
-      className="hex-cell group absolute left-1/2 top-1/2 grid place-items-center"
-      style={{
-        width: 132,
-        height: 150,
-        transform: `translate(-50%,-50%) translate(${cell.x}px, ${cell.y}px)`,
-        clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-        background: isActive
-          ? `linear-gradient(160deg, ${cell.color}33, rgba(7,17,31,.85))`
-          : "linear-gradient(160deg, rgba(255,255,255,.05), rgba(7,17,31,.7))",
-        border: `1px solid ${cell.color}55`,
-        boxShadow: isActive
-          ? `0 0 38px ${cell.color}66, inset 0 0 22px ${cell.color}22`
-          : `inset 0 0 18px rgba(0,0,0,.4)`,
-        transition: "box-shadow .35s, background .35s",
-        backdropFilter: "blur(6px)",
-      }}
+    // Wrapper : positionnement uniquement (transform non touché par Motion)
+    <div
+      className="absolute left-1/2 top-1/2"
+      style={{ transform: `translate(-50%,-50%) translate(${cell.x}px, ${cell.y}px)` }}
     >
-      <span className="flex flex-col items-center gap-1.5 px-2 text-center">
-        <span style={{ color: cell.color }}>
-          <cell.icon width={26} height={26} />
+      <motion.button
+        type="button"
+        onMouseEnter={() => onHover(cell.id)}
+        onMouseLeave={() => onHover(null)}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.06 }}
+        transition={{ delay, type: "spring", stiffness: 140, damping: 15 }}
+        className="group grid place-items-center"
+        style={{
+          width: 130,
+          height: 148,
+          clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+          background: isActive
+            ? `linear-gradient(160deg, ${cell.color}40, rgba(7,17,31,.85))`
+            : `linear-gradient(160deg, ${cell.color}1f, rgba(10,20,34,.82))`,
+          border: `1.5px solid ${cell.color}${isActive ? "" : "aa"}`,
+          boxShadow: isActive
+            ? `0 0 42px ${cell.color}77, inset 0 0 26px ${cell.color}33`
+            : `0 0 16px ${cell.color}33, inset 0 0 16px rgba(0,0,0,.35)`,
+          transition: "box-shadow .35s, background .35s, border-color .35s",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        <span className="flex flex-col items-center gap-1.5 px-2 text-center">
+          <span style={{ color: cell.color }} className="drop-shadow-[0_0_8px_currentColor]">
+            <cell.icon width={26} height={26} />
+          </span>
+          <span className="text-[10px] font-semibold tracking-wider text-paper">
+            {cell.label}
+          </span>
+          <span className="flex items-center gap-1 text-[8px] font-semibold tracking-widest text-emerald-400">
+            <span className="h-1 w-1 rounded-full bg-emerald-400" />
+            ACTIF
+          </span>
         </span>
-        <span className="text-[10px] font-semibold tracking-wider text-paper">
-          {cell.label}
-        </span>
-        <span className="flex items-center gap-1 text-[8px] font-semibold tracking-widest text-emerald-400">
-          <span className="h-1 w-1 rounded-full bg-emerald-400" />
-          ACTIF
-        </span>
-      </span>
-    </motion.button>
+      </motion.button>
+    </div>
   );
 }
 
@@ -510,30 +516,35 @@ export default function CommandCenterPage() {
               <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/10 animate-pulse-glow" />
 
               {/* cellules satellites */}
-              {HIVE.map((cell) => (
-                <HexCell key={cell.id} cell={cell} active={hover} onHover={setHover} />
+              {HIVE.map((cell, i) => (
+                <HexCell key={cell.id} cell={cell} active={hover} onHover={setHover} delay={0.15 + i * 0.07} />
               ))}
 
-              {/* cœur central — abeille dorée */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", stiffness: 120, damping: 12 }}
-                className="absolute left-1/2 top-1/2 grid place-items-center animate-float-slow"
-                style={{
-                  width: 140,
-                  height: 158,
-                  transform: "translate(-50%,-50%)",
-                  clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                  background: "linear-gradient(160deg, rgba(240,210,122,.28), rgba(7,17,31,.6))",
-                  border: "1.5px solid rgba(240,210,122,.7)",
-                  boxShadow: "0 0 60px rgba(240,210,122,.55), inset 0 0 30px rgba(240,210,122,.3)",
-                }}
-              >
-                <span className="text-gold-bright drop-shadow-[0_0_18px_rgba(240,210,122,.9)]">
-                  <Icon.bee width={58} height={58} />
-                </span>
-              </motion.div>
+              {/* cœur central — abeille dorée
+                  (3 niveaux : positionnement → flottaison → scale, pour
+                   éviter que Motion n'écrase le transform de centrage) */}
+              <div className="absolute left-1/2 top-1/2" style={{ transform: "translate(-50%,-50%)" }}>
+                <div className="animate-float-slow">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 120, damping: 12 }}
+                    className="grid place-items-center"
+                    style={{
+                      width: 138,
+                      height: 156,
+                      clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+                      background: "linear-gradient(160deg, rgba(240,210,122,.3), rgba(7,17,31,.6))",
+                      border: "1.5px solid rgba(240,210,122,.8)",
+                      boxShadow: "0 0 60px rgba(240,210,122,.55), inset 0 0 30px rgba(240,210,122,.3)",
+                    }}
+                  >
+                    <span className="text-gold-bright drop-shadow-[0_0_18px_rgba(240,210,122,.9)]">
+                      <Icon.bee width={56} height={56} />
+                    </span>
+                  </motion.div>
+                </div>
+              </div>
             </div>
           </section>
 
