@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lost Chapter — Soutenance · Équipe Jupiter</title>
+<meta name="description" content="Lost Chapter — Réveillez l'Histoire. Soutenance de stratégie d'acquisition, Play Azur Production. Équipe Jupiter · Rocket School, Promotion Apollo 186, Challenge 3.">
+<meta property="og:title" content="Lost Chapter — Soutenance · Équipe Jupiter">
+<meta property="og:description" content="Réveillez l'Histoire. Découvrez notre soutenance de stratégie d'acquisition — Play Azur Production.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --display:'Cinzel',Georgia,'Times New Roman',serif;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --gold:#b3842c;--gold-b:#c8a24c;--gold-l:#f6e8bd;--gold-d:#8a5e1e;
+    --ink:#f1e4c9;--ink2:#c4ad82;--line:rgba(200,162,76,.32);
+  }
+  html,body{min-height:100%}
+  body{font-family:var(--sans);color:var(--ink);position:relative;overflow-x:hidden;
+    background:radial-gradient(125% 90% at 50% 12%, #2c1c0a 0%, #170e05 52%, #090501 100%) fixed;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:46px 18px}
+  .glow{position:fixed;top:5%;left:50%;width:min(720px,92vw);height:min(720px,92vw);transform:translateX(-50%);
+    background:radial-gradient(circle, rgba(205,150,60,.30), rgba(205,150,60,0) 62%);pointer-events:none;z-index:0;
+    animation:breathe 7s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:.72;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.07)}}
+  .embers{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .ember{position:absolute;bottom:-14px;border-radius:50%;opacity:0;
+    background:radial-gradient(circle,#ffe2a3,#cf9740 60%,rgba(200,140,50,0));box-shadow:0 0 7px rgba(255,205,115,.6);
+    animation-name:rise;animation-timing-function:ease-in;animation-iteration-count:infinite}
+  @keyframes rise{0%{opacity:0;transform:translateY(0) translateX(0) scale(.7)}12%{opacity:.92}82%{opacity:.5}100%{opacity:0;transform:translateY(-88vh) translateX(var(--drift)) scale(1.05)}}
+
+  .card{position:relative;z-index:2;width:min(880px,100%);text-align:center;backdrop-filter:blur(3px);
+    background:linear-gradient(180deg, rgba(30,19,8,.84), rgba(17,10,4,.92));
+    border:1px solid rgba(200,162,76,.5);border-radius:24px;
+    padding:clamp(34px,5vw,62px) clamp(24px,5.4vw,68px);
+    box-shadow:0 60px 130px -32px rgba(0,0,0,.85), inset 0 0 0 1px rgba(246,232,189,.07), inset 0 0 70px rgba(120,70,20,.14)}
+  .card::after{content:"";position:absolute;inset:11px;border:1px solid rgba(200,162,76,.20);border-radius:15px;pointer-events:none}
+  .corner{position:absolute;width:30px;height:30px;border:2px solid var(--gold-b);opacity:.85;z-index:3}
+  .corner.tl{top:17px;left:17px;border-right:0;border-bottom:0;border-radius:9px 0 0 0}
+  .corner.tr{top:17px;right:17px;border-left:0;border-bottom:0;border-radius:0 9px 0 0}
+  .corner.bl{bottom:17px;left:17px;border-right:0;border-top:0;border-radius:0 0 0 9px}
+  .corner.br{bottom:17px;right:17px;border-left:0;border-top:0;border-radius:0 0 9px 0}
+
+  .an{opacity:0;animation:appear .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0s)}
+  @keyframes appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .seal-wrap{width:clamp(118px,17vw,150px);margin:0 auto 16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.55))}
+  .seal{width:100%;height:auto;display:block}
+  .seal-ring{fill:none;stroke:var(--gold-b);stroke-width:1.4}
+  .tick{stroke:rgba(200,162,76,.55);stroke-width:1}
+  .tickM{stroke:var(--gold-l);stroke-width:2}
+  .seal-star{fill:var(--gold-l)}
+  .seal-mono{font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:2px}
+  .seal-sub{fill:var(--ink2);font-family:var(--display);font-weight:600;font-size:8.5px;letter-spacing:3px}
+
+  .kicker{font-family:var(--sans);font-weight:700;font-size:clamp(10.5px,1.9vw,12.5px);letter-spacing:.34em;text-transform:uppercase;color:var(--ink2)}
+  .title{font-family:var(--display);font-weight:800;font-size:clamp(46px,9.2vw,94px);line-height:1.02;letter-spacing:.03em;margin:8px 0 0;
+    background:linear-gradient(100deg,#7a5417 0%,#c8a24c 22%,#f8edc6 40%,#c8a24c 56%,#8a5e1e 72%,#ead79c 88%,#b3842c 100%);
+    background-size:230% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    animation:foil 7s linear infinite;filter:drop-shadow(0 3px 12px rgba(180,130,40,.35))}
+  @keyframes foil{to{background-position:230% 0}}
+  .tagline{font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(20px,3.7vw,31px);color:var(--gold-l);margin-top:8px;letter-spacing:.01em}
+
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:24px auto;max-width:330px;color:var(--gold-b)}
+  .divider span{height:1px;flex:1}
+  .divider span:first-child{background:linear-gradient(90deg,transparent,var(--gold-b))}
+  .divider span:last-child{background:linear-gradient(90deg,var(--gold-b),transparent)}
+  .divider i{font-style:normal;font-size:13px;transform:rotate(45deg)}
+
+  .quote{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(17px,2.8vw,24px);line-height:1.5;color:var(--ink);max-width:640px;margin:0 auto}
+
+  .stats{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(16px,5vw,46px);margin:30px auto 6px}
+  .stat b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(23px,3.6vw,32px);color:var(--gold-l);line-height:1}
+  .stat span{font-family:var(--sans);font-weight:600;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink2);margin-top:5px;display:block}
+
+  .cta{position:relative;display:inline-flex;align-items:center;gap:12px;text-decoration:none;overflow:hidden;cursor:pointer;
+    font-family:var(--sans);font-weight:700;font-size:clamp(15px,2.3vw,18.5px);letter-spacing:.03em;color:#1c1206;
+    background:linear-gradient(180deg,#f8edc6,#c8a24c 55%,#a9802f);border:1px solid var(--gold-l);border-radius:42px;
+    padding:17px 40px;margin:30px 0 20px;
+    box-shadow:0 20px 44px -16px rgba(140,90,20,.85),0 0 0 6px rgba(200,162,76,.08),inset 0 1px 0 rgba(255,255,255,.55);
+    transition:transform .3s,box-shadow .3s}
+  .cta:hover{transform:translateY(-3px);box-shadow:0 30px 60px -16px rgba(170,115,30,.95),0 0 0 9px rgba(200,162,76,.15),inset 0 1px 0 rgba(255,255,255,.65)}
+  .cta::before{content:"";position:absolute;top:0;left:-120%;width:55%;height:100%;transform:skewX(-18deg);
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transition:left .65s}
+  .cta:hover::before{left:135%}
+  .cta .ar{transition:transform .3s}
+  .cta:hover .ar{transform:translateX(6px)}
+
+  .linkrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+  .lbl{width:100%;font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:2px}
+  .url{font-family:'Courier New',ui-monospace,monospace;font-size:clamp(10.5px,1.7vw,13px);letter-spacing:.01em;color:var(--gold-b);
+    text-decoration:none;word-break:break-all;background:rgba(200,162,76,.08);border:1px solid var(--line);border-radius:11px;padding:10px 15px;
+    transition:color .25s,background .25s,border-color .25s}
+  .url:hover{color:var(--gold-l);background:rgba(200,162,76,.16);border-color:var(--gold-b)}
+  .copy{flex:none;font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);
+    background:transparent;border:1px solid var(--line);border-radius:11px;padding:10px 14px;cursor:pointer;transition:color .25s,border-color .25s}
+  .copy:hover{color:var(--gold-l);border-color:var(--gold-b)}
+  .copy.ok{color:#a9d9a0;border-color:#a9d9a0}
+
+  .meta{font-family:var(--sans);font-weight:600;font-size:clamp(11px,1.9vw,13px);letter-spacing:.03em;color:var(--ink2);line-height:1.95;margin:30px auto 0}
+  .meta b{color:var(--ink)}
+  .meta .s{color:var(--gold);margin:0 7px}
+  .foot{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--ink2);margin-top:22px;letter-spacing:.02em}
+  .foot b{color:var(--gold-l);font-style:normal;font-weight:600}
+
+  @media (prefers-reduced-motion:reduce){
+    .glow,.ember,.title{animation:none!important}
+    .an{opacity:1!important;animation:none!important;transform:none!important}
+    .title{background-position:0 0}
+  }
+  @media (max-width:560px){ .cta{width:100%;justify-content:center} }
+</style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="embers" aria-hidden="true"><span class="ember" style="left:33.1%;width:3.0px;height:3.0px;animation-duration:12.2s;animation-delay:0.9s;--drift:5px"></span><span class="ember" style="left:37.1%;width:2.6px;height:2.6px;animation-duration:11.1s;animation-delay:0.5s;--drift:-9px"></span><span class="ember" style="left:8.7%;width:2.8px;height:2.8px;animation-duration:10.4s;animation-delay:10.7s;--drift:-53px"></span><span class="ember" style="left:23.4%;width:5.0px;height:5.0px;animation-duration:14.6s;animation-delay:7.5s;--drift:-14px"></span><span class="ember" style="left:95.7%;width:2.6px;height:2.6px;animation-duration:13.9s;animation-delay:3.8s;--drift:-50px"></span><span class="ember" style="left:13.3%;width:3.7px;height:3.7px;animation-duration:13.5s;animation-delay:2.3s;--drift:11px"></span><span class="ember" style="left:63.3%;width:4.0px;height:4.0px;animation-duration:11.4s;animation-delay:0.8s;--drift:-62px"></span><span class="ember" style="left:21.8%;width:5.3px;height:5.3px;animation-duration:10.4s;animation-delay:4.1s;--drift:12px"></span><span class="ember" style="left:45.5%;width:3.7px;height:3.7px;animation-duration:13.4s;animation-delay:9.1s;--drift:-36px"></span><span class="ember" style="left:57.1%;width:4.6px;height:4.6px;animation-duration:14.0s;animation-delay:9.5s;--drift:-30px"></span><span class="ember" style="left:96.1%;width:2.9px;height:2.9px;animation-duration:10.3s;animation-delay:9.8s;--drift:-49px"></span><span class="ember" style="left:48.9%;width:2.6px;height:2.6px;animation-duration:12.3s;animation-delay:9.9s;--drift:10px"></span><span class="ember" style="left:86.0%;width:3.7px;height:3.7px;animation-duration:12.6s;animation-delay:7.7s;--drift:11px"></span><span class="ember" style="left:45.8%;width:5.9px;height:5.9px;animation-duration:14.6s;animation-delay:6.2s;--drift:23px"></span><span class="ember" style="left:7.8%;width:5.3px;height:5.3px;animation-duration:12.2s;animation-delay:12.9s;--drift:45px"></span><span class="ember" style="left:29.3%;width:4.0px;height:4.0px;animation-duration:12.3s;animation-delay:0.3s;--drift:-5px"></span><span class="ember" style="left:18.1%;width:2.9px;height:2.9px;animation-duration:7.5s;animation-delay:10.0s;--drift:-52px"></span><span class="ember" style="left:25.8%;width:4.0px;height:4.0px;animation-duration:14.0s;animation-delay:1.0s;--drift:-7px"></span><span class="ember" style="left:54.7%;width:6.1px;height:6.1px;animation-duration:13.6s;animation-delay:11.2s;--drift:-31px"></span><span class="ember" style="left:41.9%;width:3.9px;height:3.9px;animation-duration:14.1s;animation-delay:12.5s;--drift:-49px"></span><span class="ember" style="left:18.9%;width:3.4px;height:3.4px;animation-duration:8.9s;animation-delay:6.3s;--drift:12px"></span><span class="ember" style="left:27.2%;width:2.4px;height:2.4px;animation-duration:10.4s;animation-delay:4.8s;--drift:9px"></span></div>
+
+  <main class="card">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+
+    <div class="seal-wrap an" style="--d:.05s">
+      <svg viewBox="0 0 200 200" class="seal" role="img" aria-label="Sceau Lost Chapter">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f8edc6"/><stop offset=".5" stop-color="#c8a24c"/><stop offset="1" stop-color="#8a5e1e"/>
+        </linearGradient></defs>
+        <circle cx="100" cy="100" r="94" class="seal-ring"/>
+        <circle cx="100" cy="100" r="72" class="seal-ring" style="opacity:.6"/>
+        <line x1="177.0" y1="100.0" x2="190.0" y2="100.0" class="tickM"/><line x1="178.8" y1="113.9" x2="185.7" y2="115.1" class="tick"/><line x1="175.2" y1="127.4" x2="181.8" y2="129.8" class="tick"/><line x1="169.3" y1="140.0" x2="175.3" y2="143.5" class="tick"/><line x1="161.3" y1="151.4" x2="166.6" y2="155.9" class="tick"/><line x1="151.4" y1="161.3" x2="155.9" y2="166.6" class="tick"/><line x1="140.0" y1="169.3" x2="143.5" y2="175.3" class="tick"/><line x1="127.4" y1="175.2" x2="129.8" y2="181.8" class="tick"/><line x1="113.9" y1="178.8" x2="115.1" y2="185.7" class="tick"/><line x1="100.0" y1="177.0" x2="100.0" y2="190.0" class="tickM"/><line x1="86.1" y1="178.8" x2="84.9" y2="185.7" class="tick"/><line x1="72.6" y1="175.2" x2="70.2" y2="181.8" class="tick"/><line x1="60.0" y1="169.3" x2="56.5" y2="175.3" class="tick"/><line x1="48.6" y1="161.3" x2="44.1" y2="166.6" class="tick"/><line x1="38.7" y1="151.4" x2="33.4" y2="155.9" class="tick"/><line x1="30.7" y1="140.0" x2="24.7" y2="143.5" class="tick"/><line x1="24.8" y1="127.4" x2="18.2" y2="129.8" class="tick"/><line x1="21.2" y1="113.9" x2="14.3" y2="115.1" class="tick"/><line x1="23.0" y1="100.0" x2="10.0" y2="100.0" class="tickM"/><line x1="21.2" y1="86.1" x2="14.3" y2="84.9" class="tick"/><line x1="24.8" y1="72.6" x2="18.2" y2="70.2" class="tick"/><line x1="30.7" y1="60.0" x2="24.7" y2="56.5" class="tick"/><line x1="38.7" y1="48.6" x2="33.4" y2="44.1" class="tick"/><line x1="48.6" y1="38.7" x2="44.1" y2="33.4" class="tick"/><line x1="60.0" y1="30.7" x2="56.5" y2="24.7" class="tick"/><line x1="72.6" y1="24.8" x2="70.2" y2="18.2" class="tick"/><line x1="86.1" y1="21.2" x2="84.9" y2="14.3" class="tick"/><line x1="100.0" y1="23.0" x2="100.0" y2="10.0" class="tickM"/><line x1="113.9" y1="21.2" x2="115.1" y2="14.3" class="tick"/><line x1="127.4" y1="24.8" x2="129.8" y2="18.2" class="tick"/><line x1="140.0" y1="30.7" x2="143.5" y2="24.7" class="tick"/><line x1="151.4" y1="38.7" x2="155.9" y2="33.4" class="tick"/><line x1="161.3" y1="48.6" x2="166.6" y2="44.1" class="tick"/><line x1="169.3" y1="60.0" x2="175.3" y2="56.5" class="tick"/><line x1="175.2" y1="72.6" x2="181.8" y2="70.2" class="tick"/><line x1="178.8" y1="86.1" x2="185.7" y2="84.9" class="tick"/>
+        <polygon points="100,40 104.5,49 113.5,52 104.5,55 100,64 95.5,55 86.5,52 95.5,49" class="seal-star"/>
+        <text x="100" y="97" text-anchor="middle" class="seal-mono" fill="url(#sg)">LC</text>
+        <text x="100" y="122" text-anchor="middle" class="seal-sub">MMXXVI</text>
+      </svg>
+    </div>
+
+    <p class="kicker an" style="--d:.12s">Soutenance · Stratégie d'acquisition</p>
+    <h1 class="title an" style="--d:.20s">Lost Chapter</h1>
+    <p class="tagline an" style="--d:.28s">Réveillez l'Histoire</p>
+
+    <div class="divider an" style="--d:.34s"><span></span><i>◆</i><span></span></div>
+
+    <p class="quote an" style="--d:.40s">« Et si un monument oublié redevenait, le temps d'une journée, le théâtre vivant de sa propre légende&nbsp;? »</p>
+
+    <div class="stats an" style="--d:.48s">
+      <div class="stat"><b>8 M+</b><span>Vues cumulées</span></div>
+      <div class="stat"><b>75+</b><span>Créateurs partenaires</span></div>
+      <div class="stat"><b>24 k</b><span>Visiteurs / an</span></div>
+    </div>
+
+    <a class="cta an" style="--d:.56s" href="https://lostchapter-git-claude-48b214-bouhleltarek06220-4609s-projects.vercel.app/Soutenance" target="_blank" rel="noopener">
+      <span aria-hidden="true">📜</span> Découvrir notre soutenance <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <div class="linkrow an" style="--d:.64s">
+      <span class="lbl">Lien direct vers la présentation</span>
+      <a class="url" id="lnk" href="https://lostchapter-git-claude-48b214-bouhleltarek06220-4609s-projects.vercel.app/Soutenance" target="_blank" rel="noopener">https://lostchapter-git-claude-48b214-bouhleltarek06220-4609s-projects.vercel.app/Soutenance</a>
+      <button class="copy" id="cp" type="button">Copier</button>
+    </div>
+
+    <p class="meta an" style="--d:.72s">
+      <b>Rocket School</b><span class="s">·</span>Promotion Apollo 186<span class="s">·</span>Challenge 3<br>
+      Équipe <b>Jupiter</b> — Tarek<span class="s">·</span>Julie<span class="s">·</span>Myriam<br>
+      Nice<span class="s">·</span>9 juin 2026
+    </p>
+
+    <p class="foot an" style="--d:.80s">✦ &nbsp;Une expérience signée <b>Play Azur Production</b>&nbsp; ✦</p>
+  </main>
+
+  <script>
+  (function(){
+    var cp=document.getElementById('cp'), lnk=document.getElementById('lnk');
+    if(!cp||!lnk) return;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      cp.addEventListener('click',function(){
+        navigator.clipboard.writeText(lnk.href).then(function(){
+          cp.textContent='Copié ✓'; cp.classList.add('ok');
+          setTimeout(function(){ cp.textContent='Copier'; cp.classList.remove('ok'); },2000);
+        }).catch(function(){});
+      });
+    } else { cp.style.display='none'; }
+  })();
+  </script>
+</body>
+</html>
