@@ -8,6 +8,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Logo from "@/components/Logo";
 
 const ico = {
   width: 18,
@@ -89,9 +90,7 @@ export default function LoginPage() {
           style={{ background: "linear-gradient(160deg, rgba(217,164,65,.14), rgba(7,17,31,.6))" }}
         >
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-xl border border-gold/40 bg-gold/10 text-gold-bright animate-float-slow">
-              <Bee width={26} height={26} />
-            </div>
+            <Logo size={48} showWordmark={false} />
             <div className="leading-none">
               <div className="text-lg font-bold tracking-[0.2em] text-gradient">AMAVYA</div>
               <div className="mt-1 text-[8px] tracking-[0.25em] text-muted">

@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
+import Logo from "@/components/Logo";
 
 /* ---- icônes inline ---- */
 const ico = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" };
@@ -174,7 +175,7 @@ export default function ReseauPage() {
       {/* NAV */}
       <header className="relative z-20 mx-auto flex max-w-[1500px] items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-lg border border-gold/40 bg-gold/10 text-gold-bright"><Icon.bee width={24} height={24} /></div>
+          <Logo size={42} showWordmark={false} />
           <div className="text-lg font-bold tracking-[0.2em] text-gradient">AMAVYA</div>
         </Link>
         <nav className="hidden items-center gap-7 text-[12px] font-medium tracking-wide text-silver lg:flex">

@@ -8,6 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import Logo from "@/components/Logo";
 
 /* ----------------------------------------------------------------
    Icônes inline (stroke, style ligne) — pas de dépendance externe
@@ -379,9 +380,7 @@ export default function CommandCenterPage() {
       {/* ============ NAV ============ */}
       <header className="relative z-20 flex items-center justify-between border-b border-white/5 px-6 py-4 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-lg border border-gold/40 bg-gold/10 text-gold-bright">
-            <Icon.bee width={24} height={24} />
-          </div>
+          <Logo size={42} showWordmark={false} />
           <div className="leading-none">
             <div className="text-lg font-bold tracking-[0.2em] text-gradient">AMAVYA</div>
             <div className="mt-0.5 text-[8px] tracking-[0.25em] text-muted">
