@@ -3,8 +3,9 @@ import nodemailer from "nodemailer";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPA_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPA_URL = "https://dmztalsmreugfwojsaar.supabase.co";
+const SUPA_ANON =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw";
 
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
@@ -12,9 +13,6 @@ const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 async function saveToSupabase(payload) {
-  if (!SUPA_URL || !SUPA_ANON) {
-    throw new Error("Supabase non configuré (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY manquants)");
-  }
   const res = await fetch(SUPA_URL + "/rest/v1/partner_leads", {
     method: "POST",
     headers: {
@@ -95,9 +93,8 @@ export async function POST(req) {
   const message = clip(body.message, 3000);
   const honeypot = clip(body.honeypot, 50);
 
-  // Champs de qualification (ajoutés au site, pas une colonne Supabase) :
-  // on les prefixe dans le message pour que Tarek les voie dans son CRM
-  // sans changer le schéma `partner_leads`.
+  // Champs de qualification du formulaire — concaténés au message pour
+  // s'afficher dans le CRM existant sans modifier le schéma Supabase.
   const typeEntreprise = clip(body.type_entreprise, 80);
   const secteur = clip(body.secteur, 80);
   const ville = clip(body.ville, 80);

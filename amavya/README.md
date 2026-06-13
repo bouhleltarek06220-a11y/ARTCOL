@@ -42,7 +42,7 @@ amavya/
     ├── Logo.jsx              # Logo vectoriel AMAVYA (à remplacer par le fichier de marque)
     ├── AnimatedBackground.jsx
     ├── Navbar.jsx
-    ├── Hero.jsx
+    ├── Hero.jsx / DashboardMockup.jsx
     ├── Services.jsx / Icons.jsx
     ├── Vision.jsx
     ├── Technologies.jsx

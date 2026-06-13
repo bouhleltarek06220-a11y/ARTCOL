@@ -10,7 +10,7 @@ export const translations = {
   fr: {
     nav: {
       links: [
-        { label: "Solutions", href: "#autres-expertises" },
+        { label: "Solutions", href: "#services" },
         { label: "Vision", href: "#vision" },
         { label: "Technologies", href: "#technologies" },
         { label: "Fondateur", href: "#fondateur" },
@@ -174,10 +174,10 @@ export const translations = {
         {
           title: "Solutions",
           links: [
-            { label: "Agents IA", href: "#autres-expertises" },
-            { label: "CRM intelligent", href: "#autres-expertises" },
-            { label: "Automatisation", href: "#autres-expertises" },
-            { label: "Prospection", href: "#autres-expertises" },
+            { label: "Agents IA", href: "#services" },
+            { label: "CRM intelligent", href: "#services" },
+            { label: "Automatisation", href: "#services" },
+            { label: "Prospection", href: "#services" },
           ],
         },
         {
@@ -242,23 +242,23 @@ export const translations = {
       dialogAria: "Contacter AMAVYA",
     },
     dashboard: {
-      sidebar: ["Prospects", "Messages", "Réponses", "Leads qualifiés", "Activité agent"],
+      sidebar: ["Vue d'ensemble", "Agents IA", "Pipeline", "Prospection", "Analytics"],
       kpis: [
-        { k: "Prospects identifiés", v: "142", d: "+18 cette semaine" },
-        { k: "Taux de réponse", v: "13,3 %", d: "Cold outreach" },
-        { k: "Leads qualifiés", v: "14", d: "Prêts à rappeler" },
+        { k: "Leads traités", v: "12 480", d: "+24%" },
+        { k: "Taux réponse", v: "38,5 %", d: "+11%" },
+        { k: "Tâches auto.", v: "1 932", d: "+57%" },
       ],
-      chartTitle: "Activité de l'agent",
+      chartTitle: "Performance des agents",
       chartRange: "7 derniers jours",
       activeBadge: "Actif",
-      floatTitle: "Agent en prospection",
-      floatSubtitle: "Veille active 24/7 · 06 · 83 · 13",
+      floatTitle: "3 agents en ligne",
+      floatSubtitle: "Automatisation 24/7",
     },
   },
   en: {
     nav: {
       links: [
-        { label: "Solutions", href: "#autres-expertises" },
+        { label: "Solutions", href: "#services" },
         { label: "Vision", href: "#vision" },
         { label: "Technologies", href: "#technologies" },
         { label: "Founder", href: "#fondateur" },
@@ -422,10 +422,10 @@ export const translations = {
         {
           title: "Solutions",
           links: [
-            { label: "AI Agents", href: "#autres-expertises" },
-            { label: "Intelligent CRM", href: "#autres-expertises" },
-            { label: "Automation", href: "#autres-expertises" },
-            { label: "Prospecting", href: "#autres-expertises" },
+            { label: "AI Agents", href: "#services" },
+            { label: "Intelligent CRM", href: "#services" },
+            { label: "Automation", href: "#services" },
+            { label: "Prospecting", href: "#services" },
           ],
         },
         {
@@ -490,23 +490,23 @@ export const translations = {
       dialogAria: "Contact AMAVYA",
     },
     dashboard: {
-      sidebar: ["Prospects", "Messages", "Replies", "Qualified leads", "Agent activity"],
+      sidebar: ["Overview", "AI Agents", "Pipeline", "Prospecting", "Analytics"],
       kpis: [
-        { k: "Prospects identified", v: "142", d: "+18 this week" },
-        { k: "Reply rate", v: "13.3%", d: "Cold outreach" },
-        { k: "Qualified leads", v: "14", d: "Ready to call" },
+        { k: "Leads processed", v: "12,480", d: "+24%" },
+        { k: "Response rate", v: "38.5%", d: "+11%" },
+        { k: "Auto. tasks", v: "1,932", d: "+57%" },
       ],
-      chartTitle: "Agent activity",
+      chartTitle: "Agent performance",
       chartRange: "Last 7 days",
       activeBadge: "Active",
-      floatTitle: "Agent prospecting",
-      floatSubtitle: "24/7 watch · 06 · 83 · 13",
+      floatTitle: "3 agents online",
+      floatSubtitle: "24/7 automation",
     },
   },
   es: {
     nav: {
       links: [
-        { label: "Soluciones", href: "#autres-expertises" },
+        { label: "Soluciones", href: "#services" },
         { label: "Visión", href: "#vision" },
         { label: "Tecnologías", href: "#technologies" },
         { label: "Fundador", href: "#fondateur" },
@@ -670,10 +670,10 @@ export const translations = {
         {
           title: "Soluciones",
           links: [
-            { label: "Agentes IA", href: "#autres-expertises" },
-            { label: "CRM inteligente", href: "#autres-expertises" },
-            { label: "Automatización", href: "#autres-expertises" },
-            { label: "Prospección", href: "#autres-expertises" },
+            { label: "Agentes IA", href: "#services" },
+            { label: "CRM inteligente", href: "#services" },
+            { label: "Automatización", href: "#services" },
+            { label: "Prospección", href: "#services" },
           ],
         },
         {
@@ -738,17 +738,17 @@ export const translations = {
       dialogAria: "Contactar AMAVYA",
     },
     dashboard: {
-      sidebar: ["Prospectos", "Mensajes", "Respuestas", "Leads cualificados", "Actividad del agente"],
+      sidebar: ["Vista general", "Agentes IA", "Pipeline", "Prospección", "Analítica"],
       kpis: [
-        { k: "Prospectos detectados", v: "142", d: "+18 esta semana" },
-        { k: "Tasa de respuesta", v: "13,3 %", d: "Cold outreach" },
-        { k: "Leads cualificados", v: "14", d: "Listos para llamar" },
+        { k: "Leads procesados", v: "12 480", d: "+24%" },
+        { k: "Tasa de respuesta", v: "38,5 %", d: "+11%" },
+        { k: "Tareas auto.", v: "1 932", d: "+57%" },
       ],
-      chartTitle: "Actividad del agente",
+      chartTitle: "Rendimiento de los agentes",
       chartRange: "Últimos 7 días",
       activeBadge: "Activo",
-      floatTitle: "Agente prospectando",
-      floatSubtitle: "Vigilancia 24/7 · 06 · 83 · 13",
+      floatTitle: "3 agentes en línea",
+      floatSubtitle: "Automatización 24/7",
     },
   },
 };

@@ -136,7 +136,7 @@ function ServiceModal({ service, Icon, labels, demo, onClose }) {
           ))}
         </ul>
 
-        <Button href="/reserver" variant="primary" onClick={onClose} className="mt-7 w-full">
+        <Button href="#contact" variant="primary" onClick={onClose} className="mt-7 w-full">
           {labels.modalCta}
         </Button>
       </motion.div>

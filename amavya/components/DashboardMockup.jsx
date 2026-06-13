@@ -39,157 +39,100 @@ function AnimatedStat({ target, meta, locale }) {
   return <>{fmt(v, meta, locale)}</>;
 }
 
-/* ---------------------------------------------------------------------------
-   Vues de l'Agent de Prospection IA AMAVYA.
-   Chiffres dimensionnés pour un artisan / TPE / PME (échelle locale 06·83·13),
-   pas pour une grosse boîte — pour que le visuel reste crédible.
-   --------------------------------------------------------------------------- */
+/* Vues du tableau de bord (bilingue) */
 const DASH = {
   fr: [
-    // 1. Prospects identifiés cette semaine
     {
       kpis: [
-        { label: "Prospects identifiés", base: 142, decimals: 0, delta: "+18 cette semaine" },
-        { label: "Zones couvertes", base: 3, decimals: 0, delta: "06 · 83 · 13" },
-        { label: "Pertinence moy.", base: 87, decimals: 0, suffix: " %", delta: "+4 pts" },
+        { label: "Leads traités", base: 12480, decimals: 0, delta: "+24%" },
+        { label: "Taux réponse", base: 38.5, decimals: 1, suffix: " %", delta: "+11%" },
+        { label: "Tâches auto.", base: 1932, decimals: 0, delta: "+57%" },
       ],
-      chart: { title: "Prospects ajoutés · 7 jours", range: "7 derniers jours", bars: [12, 22, 18, 28, 24, 32, 26] },
-      status: { text: "L'agent ratisse votre zone · 06 / 83 / 13", badge: "En veille" },
+      chart: { title: "Activité globale", range: "7 derniers jours", bars: [42, 68, 55, 88, 73, 95, 61] },
+      status: { text: "Système opérationnel · tout est synchronisé", badge: "Live" },
     },
-    // 2. Messages envoyés
     {
       kpis: [
-        { label: "Messages envoyés", base: 286, decimals: 0, delta: "+42 cette semaine" },
-        { label: "Personnalisés", base: 100, decimals: 0, suffix: " %", delta: "1 message = 1 prospect" },
-        { label: "Heure d'envoi", base: 9, decimals: 0, suffix: "h-18h", delta: "Tranche optimale" },
+        { label: "Agents actifs", base: 12, decimals: 0, delta: "+3" },
+        { label: "Auto-résolu", base: 92, decimals: 0, suffix: " %", delta: "+6%" },
+        { label: "Tâches / agent", base: 161, decimals: 0, delta: "+57%" },
       ],
-      chart: { title: "Envois quotidiens", range: "7 derniers jours", bars: [38, 42, 36, 48, 44, 52, 40] },
-      status: { text: "L'agent rédige des messages adaptés à votre métier", badge: "Actif" },
+      chart: { title: "Performance des agents", range: "7 derniers jours", bars: [60, 72, 50, 84, 66, 92, 78] },
+      status: { text: "3 agents en ligne · raisonnement en cours", badge: "Actif" },
     },
-    // 3. Réponses reçues
     {
       kpis: [
-        { label: "Réponses reçues", base: 38, decimals: 0, delta: "+9 cette semaine" },
-        { label: "Taux de réponse", base: 13.3, decimals: 1, suffix: " %", delta: "Cold outreach" },
-        { label: "Réponses chaudes", base: 12, decimals: 0, delta: "Intentionnistes" },
+        { label: "Opportunités", base: 248, decimals: 0, delta: "+12%" },
+        { label: "Valeur pipe", base: 1.2, decimals: 1, suffix: " M€", delta: "+15%" },
+        { label: "Taux closing", base: 34, decimals: 0, suffix: " %", delta: "+9%" },
       ],
-      chart: { title: "Réponses · 7 jours", range: "7 derniers jours", bars: [4, 6, 5, 8, 7, 9, 6] },
-      status: { text: "3 prospects ont répondu dans les 2 dernières heures", badge: "Live" },
+      chart: { title: "Évolution du pipeline", range: "30 derniers jours", bars: [30, 45, 52, 60, 68, 80, 92] },
+      status: { text: "Pipeline mis à jour · 6 deals à relancer", badge: "Sync" },
     },
-    // 4. Leads qualifiés à rappeler
     {
       kpis: [
-        { label: "Leads qualifiés", base: 14, decimals: 0, delta: "Prêts à rappeler" },
-        { label: "Score moyen", base: 82, decimals: 0, suffix: "/100", delta: "+6 vs sem. dernière" },
-        { label: "À recontacter", base: 5, decimals: 0, delta: "Sous 24h" },
+        { label: "Emails envoyés", base: 4510, decimals: 0, delta: "+40%" },
+        { label: "Réponses", base: 1128, decimals: 0, delta: "+22%" },
+        { label: "RDV pris", base: 86, decimals: 0, delta: "+31%" },
       ],
-      chart: { title: "Qualification · 7 jours", range: "7 derniers jours", bars: [1, 3, 2, 4, 3, 5, 4] },
-      status: { text: "Nouveau lead chaud · Plomberie Var · à rappeler ce matin", badge: "Priorité" },
+      chart: { title: "Réponses par jour", range: "7 derniers jours", bars: [80, 55, 70, 48, 85, 62, 90] },
+      status: { text: "Séquences actives · relances automatiques", badge: "En cours" },
     },
-    // 5. Activité de l'agent
     {
       kpis: [
-        { label: "Veille active", base: 24, decimals: 0, suffix: "h/24", delta: "Sans pause" },
-        { label: "Relances auto.", base: 47, decimals: 0, delta: "Cette semaine" },
-        { label: "Économisé", base: 11, decimals: 0, suffix: " h/sem.", delta: "Sur votre agenda" },
+        { label: "Revenu", base: 92, decimals: 0, suffix: " k€", delta: "+28%" },
+        { label: "ROI", base: 4.3, decimals: 1, suffix: "x", delta: "+19%" },
+        { label: "Coût / lead", base: 3.2, decimals: 1, suffix: " €", delta: "-14%" },
       ],
-      chart: { title: "Activité de l'agent", range: "7 derniers jours", bars: [62, 70, 58, 78, 66, 82, 74] },
-      status: { text: "L'agent prospecte pendant que vous êtes sur le terrain", badge: "24/7" },
+      chart: { title: "Tendance revenus", range: "12 derniers mois", bars: [50, 58, 66, 62, 78, 86, 99] },
+      status: { text: "Rapport généré · objectifs dépassés", badge: "À jour" },
     },
   ],
-  // EN / ES : on garde la structure, traduction minimale (le marché cible est FR)
   en: [
     {
       kpis: [
-        { label: "Prospects identified", base: 142, decimals: 0, delta: "+18 this week" },
-        { label: "Areas covered", base: 3, decimals: 0, delta: "06 · 83 · 13" },
-        { label: "Avg. relevance", base: 87, decimals: 0, suffix: "%", delta: "+4 pts" },
+        { label: "Leads processed", base: 12480, decimals: 0, delta: "+24%" },
+        { label: "Response rate", base: 38.5, decimals: 1, suffix: "%", delta: "+11%" },
+        { label: "Auto. tasks", base: 1932, decimals: 0, delta: "+57%" },
       ],
-      chart: { title: "Prospects added · 7 days", range: "Last 7 days", bars: [12, 22, 18, 28, 24, 32, 26] },
-      status: { text: "Agent scanning your area · 06 / 83 / 13", badge: "Scanning" },
+      chart: { title: "Global activity", range: "Last 7 days", bars: [42, 68, 55, 88, 73, 95, 61] },
+      status: { text: "System operational · everything in sync", badge: "Live" },
     },
     {
       kpis: [
-        { label: "Messages sent", base: 286, decimals: 0, delta: "+42 this week" },
-        { label: "Personalised", base: 100, decimals: 0, suffix: "%", delta: "1 msg = 1 prospect" },
-        { label: "Send window", base: 9, decimals: 0, suffix: "h-6pm", delta: "Optimal slot" },
+        { label: "Active agents", base: 12, decimals: 0, delta: "+3" },
+        { label: "Auto-resolved", base: 92, decimals: 0, suffix: "%", delta: "+6%" },
+        { label: "Tasks / agent", base: 161, decimals: 0, delta: "+57%" },
       ],
-      chart: { title: "Daily sends", range: "Last 7 days", bars: [38, 42, 36, 48, 44, 52, 40] },
-      status: { text: "Agent writes messages tailored to your trade", badge: "Active" },
+      chart: { title: "Agent performance", range: "Last 7 days", bars: [60, 72, 50, 84, 66, 92, 78] },
+      status: { text: "3 agents online · reasoning in progress", badge: "Active" },
     },
     {
       kpis: [
-        { label: "Replies received", base: 38, decimals: 0, delta: "+9 this week" },
-        { label: "Reply rate", base: 13.3, decimals: 1, suffix: "%", delta: "Cold outreach" },
-        { label: "Hot replies", base: 12, decimals: 0, delta: "Intent signal" },
+        { label: "Opportunities", base: 248, decimals: 0, delta: "+12%" },
+        { label: "Pipe value", base: 1.2, decimals: 1, suffix: "M€", delta: "+15%" },
+        { label: "Close rate", base: 34, decimals: 0, suffix: "%", delta: "+9%" },
       ],
-      chart: { title: "Replies · 7 days", range: "Last 7 days", bars: [4, 6, 5, 8, 7, 9, 6] },
-      status: { text: "3 prospects replied in the last 2 hours", badge: "Live" },
+      chart: { title: "Pipeline trend", range: "Last 30 days", bars: [30, 45, 52, 60, 68, 80, 92] },
+      status: { text: "Pipeline updated · 6 deals to follow up", badge: "Sync" },
     },
     {
       kpis: [
-        { label: "Qualified leads", base: 14, decimals: 0, delta: "Ready to call" },
-        { label: "Avg. score", base: 82, decimals: 0, suffix: "/100", delta: "+6 vs last week" },
-        { label: "To recontact", base: 5, decimals: 0, delta: "Within 24h" },
+        { label: "Emails sent", base: 4510, decimals: 0, delta: "+40%" },
+        { label: "Replies", base: 1128, decimals: 0, delta: "+22%" },
+        { label: "Meetings", base: 86, decimals: 0, delta: "+31%" },
       ],
-      chart: { title: "Qualified · 7 days", range: "Last 7 days", bars: [1, 3, 2, 4, 3, 5, 4] },
-      status: { text: "New hot lead · Plumbing Var · callback this morning", badge: "Priority" },
+      chart: { title: "Replies per day", range: "Last 7 days", bars: [80, 55, 70, 48, 85, 62, 90] },
+      status: { text: "Active sequences · automatic follow-ups", badge: "Running" },
     },
     {
       kpis: [
-        { label: "Always on", base: 24, decimals: 0, suffix: "h/24", delta: "No breaks" },
-        { label: "Auto follow-ups", base: 47, decimals: 0, delta: "This week" },
-        { label: "Saved", base: 11, decimals: 0, suffix: " h/wk", delta: "On your calendar" },
+        { label: "Revenue", base: 92, decimals: 0, suffix: "k€", delta: "+28%" },
+        { label: "ROI", base: 4.3, decimals: 1, suffix: "x", delta: "+19%" },
+        { label: "Cost / lead", base: 3.2, decimals: 1, suffix: "€", delta: "-14%" },
       ],
-      chart: { title: "Agent activity", range: "Last 7 days", bars: [62, 70, 58, 78, 66, 82, 74] },
-      status: { text: "The agent prospects while you're on site", badge: "24/7" },
-    },
-  ],
-  es: [
-    {
-      kpis: [
-        { label: "Prospectos detectados", base: 142, decimals: 0, delta: "+18 esta semana" },
-        { label: "Zonas cubiertas", base: 3, decimals: 0, delta: "06 · 83 · 13" },
-        { label: "Relevancia media", base: 87, decimals: 0, suffix: " %", delta: "+4 pts" },
-      ],
-      chart: { title: "Prospectos añadidos · 7 días", range: "Últimos 7 días", bars: [12, 22, 18, 28, 24, 32, 26] },
-      status: { text: "El agente explora tu zona · 06 / 83 / 13", badge: "Activo" },
-    },
-    {
-      kpis: [
-        { label: "Mensajes enviados", base: 286, decimals: 0, delta: "+42 esta semana" },
-        { label: "Personalizados", base: 100, decimals: 0, suffix: " %", delta: "1 msj = 1 prospecto" },
-        { label: "Franja de envío", base: 9, decimals: 0, suffix: "h-18h", delta: "Tramo óptimo" },
-      ],
-      chart: { title: "Envíos diarios", range: "Últimos 7 días", bars: [38, 42, 36, 48, 44, 52, 40] },
-      status: { text: "El agente redacta mensajes adaptados a tu oficio", badge: "Activo" },
-    },
-    {
-      kpis: [
-        { label: "Respuestas recibidas", base: 38, decimals: 0, delta: "+9 esta semana" },
-        { label: "Tasa de respuesta", base: 13.3, decimals: 1, suffix: " %", delta: "Cold outreach" },
-        { label: "Respuestas calientes", base: 12, decimals: 0, delta: "Con intención" },
-      ],
-      chart: { title: "Respuestas · 7 días", range: "Últimos 7 días", bars: [4, 6, 5, 8, 7, 9, 6] },
-      status: { text: "3 prospectos respondieron en las últimas 2 horas", badge: "Live" },
-    },
-    {
-      kpis: [
-        { label: "Leads cualificados", base: 14, decimals: 0, delta: "Listos para llamar" },
-        { label: "Puntuación media", base: 82, decimals: 0, suffix: "/100", delta: "+6 vs sem. anterior" },
-        { label: "Recontactar", base: 5, decimals: 0, delta: "En 24h" },
-      ],
-      chart: { title: "Cualificación · 7 días", range: "Últimos 7 días", bars: [1, 3, 2, 4, 3, 5, 4] },
-      status: { text: "Nuevo lead caliente · Fontanería Var · llamar esta mañana", badge: "Prioridad" },
-    },
-    {
-      kpis: [
-        { label: "Vigilancia activa", base: 24, decimals: 0, suffix: "h/24", delta: "Sin pausas" },
-        { label: "Reactivaciones auto.", base: 47, decimals: 0, delta: "Esta semana" },
-        { label: "Ahorrado", base: 11, decimals: 0, suffix: " h/sem.", delta: "En tu agenda" },
-      ],
-      chart: { title: "Actividad del agente", range: "Últimos 7 días", bars: [62, 70, 58, 78, 66, 82, 74] },
-      status: { text: "El agente prospecta mientras estás en el terreno", badge: "24/7" },
+      chart: { title: "Revenue trend", range: "Last 12 months", bars: [50, 58, 66, 62, 78, 86, 99] },
+      status: { text: "Report generated · targets exceeded", badge: "Updated" },
     },
   ],
 };
@@ -199,30 +142,31 @@ const clamp = (n) => Math.max(8, Math.min(100, n));
 export default function DashboardMockup() {
   const { t, lang } = useLang();
   const d = t.dashboard;
-  const locale = lang === "fr" ? "fr-FR" : lang === "es" ? "es-ES" : "en-US";
+  const locale = lang === "fr" ? "fr-FR" : "en-US";
   const views = DASH[lang] || DASH.fr;
 
   const [view, setView] = useState(0);
-  const [live, setLive] = useState([0, 0, 0]);
-  const [jitter, setJitter] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [live, setLive] = useState([0, 0, 0]); // micro-incréments KPI
+  const [jitter, setJitter] = useState([0, 0, 0, 0, 0, 0, 0]); // variation graphe
 
   // Défilement automatique des vues
   useEffect(() => {
-    const id = setInterval(() => setView((v) => (v + 1) % views.length), 5500);
+    const id = setInterval(() => setView((v) => (v + 1) % views.length), 5000);
     return () => clearInterval(id);
   }, [views.length]);
 
+  // Reset des variations live à chaque changement de vue
   useEffect(() => {
     setLive([0, 0, 0]);
     setJitter([0, 0, 0, 0, 0, 0, 0]);
   }, [view]);
 
-  // Pulsations légères pour donner l'impression de "live"
+  // Pouls "temps réel" : les chiffres montent et le graphe respire
   useEffect(() => {
     const id = setInterval(() => {
-      setLive((p) => p.map((x, i) => (i === 1 ? x : x + Math.round(Math.random() * 2))));
-      setJitter(() => Array.from({ length: 7 }, () => (Math.random() - 0.5) * 8));
-    }, 2200);
+      setLive((p) => p.map((x, i) => (i === 1 ? x : x + Math.round(Math.random() * 6))));
+      setJitter(() => Array.from({ length: 7 }, () => (Math.random() - 0.5) * 12));
+    }, 1900);
     return () => clearInterval(id);
   }, []);
 
@@ -246,7 +190,7 @@ export default function DashboardMockup() {
           <span className="h-3 w-3 rounded-full bg-[#28c840]/80" />
           <div className="ml-3 flex items-center gap-2 rounded-md bg-white/5 px-3 py-1 text-[11px] text-muted">
             <span className="h-1.5 w-1.5 rounded-full bg-gold-bright animate-ticker" />
-            agent-prospection.amavya.cloud
+            console.amavya.ai
           </div>
         </div>
 
@@ -278,7 +222,7 @@ export default function DashboardMockup() {
             })}
           </div>
 
-          {/* Contenu principal */}
+          {/* Contenu principal (transition entre vues) */}
           <div className="col-span-12 sm:col-span-9">
             <AnimatePresence mode="wait">
               <motion.div
@@ -289,13 +233,14 @@ export default function DashboardMockup() {
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="flex flex-col gap-4"
               >
-                {/* KPIs */}
+                {/* KPIs — légère élévation + bord doré au hover */}
                 <div className="grid grid-cols-3 gap-3">
                   {cur.kpis.map((kpi, i) => (
                     <div
                       key={kpi.label}
                       className="glass group relative cursor-default overflow-hidden rounded-xl p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_8px_24px_-12px_rgba(240,210,122,0.5)]"
                     >
+                      {/* Halo doré qui apparaît au coin haut-droit */}
                       <span
                         aria-hidden="true"
                         className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-[radial-gradient(circle,rgba(240,210,122,0.4),transparent_70%)] opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100"
@@ -309,7 +254,7 @@ export default function DashboardMockup() {
                   ))}
                 </div>
 
-                {/* Graphe */}
+                {/* Graphe vivant */}
                 <div className="glass rounded-xl p-4">
                   <div className="mb-3 flex items-center justify-between">
                     <p className="text-[11px] font-medium text-paper">{cur.chart.title}</p>
@@ -338,7 +283,7 @@ export default function DashboardMockup() {
                   </div>
                 </div>
 
-                {/* Bandeau statut */}
+                {/* Statut / activité live */}
                 <div className="glass flex items-center gap-3 rounded-xl p-3">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[linear-gradient(135deg,#a87f2e,#d4af37)] text-xs font-bold text-ink">
                     IA
@@ -358,7 +303,7 @@ export default function DashboardMockup() {
         </div>
       </div>
 
-      {/* Carte flottante : agent toujours actif */}
+      {/* Carte flottante "agent en ligne" */}
       <motion.div
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}

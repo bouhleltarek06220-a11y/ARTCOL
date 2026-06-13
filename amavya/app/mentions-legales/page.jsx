@@ -17,11 +17,11 @@ export default function MentionsLegales() {
       <ul>
         <li>Dénomination sociale : <strong>AMAVYA</strong></li>
         <li>Forme juridique : SASU</li>
-        <li>
-          Statut : <strong>en cours d'immatriculation</strong> au RCS d'Antibes.
-          Les informations d'immatriculation (capital social, SIREN/SIRET, n° TVA,
-          adresse du siège) seront publiées sur cette page dès leur attribution.
-        </li>
+        <li>Capital social : <span className="todo">[capital social à compléter]</span> €</li>
+        <li>SIREN / SIRET : <span className="todo">[SIREN / SIRET à compléter]</span></li>
+        <li>RCS : <span className="todo">[ville d'immatriculation à compléter]</span></li>
+        <li>N° TVA intracommunautaire : <span className="todo">[n° TVA à compléter]</span></li>
+        <li>Siège social : <span className="todo">[adresse du siège à compléter]</span></li>
         <li>Email : <a href="mailto:contact@amavya.cloud">contact@amavya.cloud</a></li>
         <li>Président : <strong>Tarek Bouhlel</strong></li>
       </ul>
