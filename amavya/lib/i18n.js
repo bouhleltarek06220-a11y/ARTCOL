@@ -10,7 +10,7 @@ export const translations = {
   fr: {
     nav: {
       links: [
-        { label: "Solutions", href: "#services" },
+        { label: "Solutions", href: "#autres-expertises" },
         { label: "Vision", href: "#vision" },
         { label: "Technologies", href: "#technologies" },
         { label: "Fondateur", href: "#fondateur" },
@@ -174,10 +174,10 @@ export const translations = {
         {
           title: "Solutions",
           links: [
-            { label: "Agents IA", href: "#services" },
-            { label: "CRM intelligent", href: "#services" },
-            { label: "Automatisation", href: "#services" },
-            { label: "Prospection", href: "#services" },
+            { label: "Agents IA", href: "#autres-expertises" },
+            { label: "CRM intelligent", href: "#autres-expertises" },
+            { label: "Automatisation", href: "#autres-expertises" },
+            { label: "Prospection", href: "#autres-expertises" },
           ],
         },
         {
@@ -258,7 +258,7 @@ export const translations = {
   en: {
     nav: {
       links: [
-        { label: "Solutions", href: "#services" },
+        { label: "Solutions", href: "#autres-expertises" },
         { label: "Vision", href: "#vision" },
         { label: "Technologies", href: "#technologies" },
         { label: "Founder", href: "#fondateur" },
@@ -422,10 +422,10 @@ export const translations = {
         {
           title: "Solutions",
           links: [
-            { label: "AI Agents", href: "#services" },
-            { label: "Intelligent CRM", href: "#services" },
-            { label: "Automation", href: "#services" },
-            { label: "Prospecting", href: "#services" },
+            { label: "AI Agents", href: "#autres-expertises" },
+            { label: "Intelligent CRM", href: "#autres-expertises" },
+            { label: "Automation", href: "#autres-expertises" },
+            { label: "Prospecting", href: "#autres-expertises" },
           ],
         },
         {
@@ -506,7 +506,7 @@ export const translations = {
   es: {
     nav: {
       links: [
-        { label: "Soluciones", href: "#services" },
+        { label: "Soluciones", href: "#autres-expertises" },
         { label: "Visión", href: "#vision" },
         { label: "Tecnologías", href: "#technologies" },
         { label: "Fundador", href: "#fondateur" },
@@ -670,10 +670,10 @@ export const translations = {
         {
           title: "Soluciones",
           links: [
-            { label: "Agentes IA", href: "#services" },
-            { label: "CRM inteligente", href: "#services" },
-            { label: "Automatización", href: "#services" },
-            { label: "Prospección", href: "#services" },
+            { label: "Agentes IA", href: "#autres-expertises" },
+            { label: "CRM inteligente", href: "#autres-expertises" },
+            { label: "Automatización", href: "#autres-expertises" },
+            { label: "Prospección", href: "#autres-expertises" },
           ],
         },
         {

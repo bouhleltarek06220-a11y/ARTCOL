@@ -1,10 +1,13 @@
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Services from "@/components/Services";
+import Probleme from "@/components/sections/Probleme";
+import Solution from "@/components/sections/Solution";
+import Offre from "@/components/sections/Offre";
 import Vision from "@/components/Vision";
-import Technologies from "@/components/Technologies";
 import Founder from "@/components/Founder";
+import Technologies from "@/components/Technologies";
+import OtherExpertises from "@/components/sections/OtherExpertises";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
@@ -21,10 +24,13 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
-        <Services />
+        <Probleme />
+        <Solution />
+        <Offre />
         <Vision />
-        <Technologies />
         <Founder />
+        <Technologies />
+        <OtherExpertises />
         <FinalCTA />
       </main>
       <Footer />
