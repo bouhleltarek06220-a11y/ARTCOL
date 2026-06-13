@@ -93,10 +93,23 @@ export async function POST(req) {
   const message = clip(body.message, 3000);
   const honeypot = clip(body.honeypot, 50);
 
+  // Champs de qualification du formulaire — concaténés au message pour
+  // s'afficher dans le CRM existant sans modifier le schéma Supabase.
+  const typeEntreprise = clip(body.type_entreprise, 80);
+  const secteur = clip(body.secteur, 80);
+  const ville = clip(body.ville, 80);
+  const codePostal = clip(body.code_postal, 10);
+
   if (honeypot) return Response.json({ ok: true }); // bot silencieux
   if (full_name.length < 2) return Response.json({ ok: false, error: "name" }, { status: 400 });
   if (!EMAIL_RX.test(email)) return Response.json({ ok: false, error: "email" }, { status: 400 });
   if (message.length < 2) return Response.json({ ok: false, error: "message" }, { status: 400 });
+
+  const qualif = [];
+  if (typeEntreprise) qualif.push(`Type: ${typeEntreprise}`);
+  if (secteur) qualif.push(`Secteur: ${secteur}`);
+  if (ville || codePostal) qualif.push(`Lieu: ${[codePostal, ville].filter(Boolean).join(" ")}`);
+  const qualifLine = qualif.length ? `[Qualif: ${qualif.join(" | ")}]\n` : "";
 
   const lead = {
     full_name,
@@ -104,7 +117,7 @@ export async function POST(req) {
     email,
     phone,
     support_type: "autre",
-    message: `[AMAVYA — Contact site] ${message}`,
+    message: `[AMAVYA — Contact site]\n${qualifLine}${message}`,
     honeypot_filled: false,
     user_agent: clip(req.headers.get("user-agent"), 500),
     page_url: clip(body.page_url, 500),
