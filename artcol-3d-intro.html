@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ARTCOL — Entrée 3D</title>
+  <meta name="description" content="ARTCOL — entrez dans une galerie d'art en 3D immersive." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Poiret+One&display=swap" rel="stylesheet" />
+
+  <!-- Three.js en module ES (CDN) -->
+  <script type="importmap">
+  { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+  </script>
+
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { ink:'#09090B', primary:'#18181B', secondary:'#27272A', paper:'#FAFAFA', chalk:'#F8FAFC' },
+        fontFamily: { display:['"Poiret One"','sans-serif'], body:['"Didact Gothic"','sans-serif'] },
+      } },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family:'Didact Gothic',system-ui,sans-serif; margin:0; background:#050505; }
+    .font-display { font-family:'Poiret One',system-ui,sans-serif; }
+
+    #scene { position:fixed; inset:0; display:block; z-index:0; }
+    /* Vignette cinématographique */
+    #vignette { position:fixed; inset:0; z-index:1; pointer-events:none;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.75) 100%); }
+    #flash { position:fixed; inset:0; z-index:60; background:#fff; opacity:0; pointer-events:none; }
+
+    .intro-title { font-size: clamp(3.5rem, 16vw, 13rem); letter-spacing:-0.06em; line-height:.85; }
+    .fade { transition: opacity .8s ease-out, transform .8s ease-out; }
+
+    /* Le site (révélé après l'entrée) */
+    #site { display:none; position:relative; z-index:5; background:#FAFAFA; color:#09090B; }
+    #site.visible { display:block; animation: rise 1s ease-out both; }
+    @keyframes rise { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none} }
+
+    .masonry { column-gap:1.5rem; }
+    .masonry > * { break-inside:avoid; margin-bottom:1.5rem; }
+    @media (min-width:640px){ .masonry{column-count:2} }
+    @media (min-width:1024px){ .masonry{column-count:3} }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto} .fade{transition:none} #site.visible{animation:none}
+    }
+  </style>
+</head>
+
+<body class="text-paper antialiased">
+
+  <!-- ================= ÉCRAN D'ENTRÉE 3D ================= -->
+  <section id="intro" aria-label="Entrée de la galerie">
+    <canvas id="scene"></canvas>
+    <div id="vignette"></div>
+
+    <!-- Chargement -->
+    <div id="loader" class="fixed inset-0 z-40 grid place-items-center bg-black">
+      <div class="text-center">
+        <p class="font-display text-3xl tracking-widest">ARTCOL</p>
+        <p class="mt-4 text-xs uppercase tracking-[0.5em] text-white/40">Chargement de la galerie…</p>
+      </div>
+    </div>
+
+    <!-- Overlay HUD -->
+    <div id="hud" class="fade fixed inset-0 z-30 flex flex-col items-center justify-center px-6 text-center opacity-0">
+      <p class="mb-4 text-xs uppercase tracking-[0.5em] text-white/50">Galerie d'art contemporain</p>
+      <h1 class="intro-title font-display">ARTCOL</h1>
+      <p class="mt-6 max-w-md text-base text-white/60 sm:text-lg">
+        Franchissez le seuil. Entrez dans un espace où seule l'œuvre existe.
+      </p>
+
+      <button id="enter"
+        class="group mt-12 inline-flex cursor-pointer items-center gap-4 rounded-full border border-white/30 bg-white/5 px-10 py-4 text-sm font-medium uppercase tracking-[0.3em] text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+        Entrer
+        <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button id="skip" class="mt-8 cursor-pointer text-xs uppercase tracking-widest text-white/35 underline-offset-4 transition-colors hover:text-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+        Passer l'intro
+      </button>
+
+      <p class="pointer-events-none absolute bottom-8 text-[11px] uppercase tracking-[0.4em] text-white/25">
+        Bougez la souris pour explorer
+      </p>
+    </div>
+  </section>
+
+  <div id="flash"></div>
+
+  <!-- ================= SITE (galerie) ================= -->
+  <div id="site">
+    <header class="fixed inset-x-4 top-4 z-40">
+      <nav aria-label="Navigation principale" class="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-ink/10 bg-paper/80 px-5 py-3 backdrop-blur-md sm:px-7">
+        <a href="#" class="font-display text-xl tracking-tight cursor-pointer">ARTCOL</a>
+        <ul class="hidden items-center gap-8 text-sm uppercase tracking-widest md:flex">
+          <li><a href="#galerie" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Galerie</a></li>
+          <li><a href="#philosophie" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Philosophie</a></li>
+          <li><a href="#contact" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Contact</a></li>
+        </ul>
+        <button id="replay" class="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper transition-colors duration-200 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+          Revoir l'intro
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="mx-auto max-w-7xl px-4 pt-40 pb-24 sm:px-6 lg:px-8 lg:pt-56">
+        <p class="mb-6 text-sm uppercase tracking-[0.4em] text-ink/50">Bienvenue dans la collection</p>
+        <h2 class="font-display tracking-tight" style="font-size:clamp(3rem,12vw,10rem);letter-spacing:-0.05em;line-height:.9;">L'art,<br/>sans bruit.</h2>
+        <div class="mt-12 flex flex-col gap-6 border-t border-ink/10 pt-8 sm:flex-row sm:items-end sm:justify-between">
+          <p class="max-w-md text-lg leading-relaxed text-secondary">ARTCOL réunit artistes et collectionneurs autour d'œuvres contemporaines, dans un espace neutre pensé pour laisser la création parler.</p>
+          <a href="#galerie" class="group inline-flex w-fit cursor-pointer items-center gap-3 text-lg font-medium uppercase tracking-widest transition-colors duration-200 hover:text-ink/50">
+            Explorer
+            <svg class="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <section id="galerie" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8" aria-label="Œuvres">
+        <div class="masonry">
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-[3/4] bg-gradient-to-br from-zinc-800 via-zinc-600 to-zinc-900" role="img" aria-label="Silence I, peinture"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Silence I</span><span class="text-sm uppercase tracking-widest text-paper/70">Peinture · 2024</span></figcaption></figure>
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-square bg-gradient-to-tr from-stone-300 via-stone-100 to-stone-400" role="img" aria-label="Forme nue, sculpture"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Forme nue</span><span class="text-sm uppercase tracking-widest text-paper/70">Sculpture · 2023</span></figcaption></figure>
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-[4/5] bg-gradient-to-b from-neutral-900 to-neutral-700" role="img" aria-label="Nocturne, photographie"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Nocturne</span><span class="text-sm uppercase tracking-widest text-paper/70">Photographie · 2024</span></figcaption></figure>
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-[3/4] bg-gradient-to-tl from-amber-200 via-rose-100 to-stone-300" role="img" aria-label="Aube, technique mixte"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Aube</span><span class="text-sm uppercase tracking-widest text-paper/70">Technique mixte · 2022</span></figcaption></figure>
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-square bg-gradient-to-br from-indigo-950 via-zinc-800 to-black" role="img" aria-label="Flux, art numérique"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Flux</span><span class="text-sm uppercase tracking-widest text-paper/70">Numérique · 2025</span></figcaption></figure>
+          <figure class="group relative cursor-pointer overflow-hidden rounded-sm"><div class="aspect-[4/5] bg-gradient-to-t from-zinc-200 to-white" role="img" aria-label="Vide habité, peinture"></div><figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"><span class="font-display text-2xl text-paper">Vide habité</span><span class="text-sm uppercase tracking-widest text-paper/70">Peinture · 2024</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section id="philosophie" class="border-y border-ink/10 bg-chalk">
+        <div class="mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-32">
+          <h2 class="font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">Moins d'écran.<br/>Plus d'œuvre.</h2>
+          <div class="flex flex-col gap-6 text-lg leading-relaxed text-secondary">
+            <p>Nous croyons que l'art mérite un espace dépouillé. Pas d'effets superflus — seulement l'œuvre, la lumière et le blanc qui l'entoure.</p>
+            <dl class="mt-4 grid grid-cols-3 gap-6 border-t border-ink/10 pt-8">
+              <div><dt class="font-display text-4xl">240+</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Œuvres</dd></div>
+              <div><dt class="font-display text-4xl">60</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Artistes</dd></div>
+              <div><dt class="font-display text-4xl">12</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Pays</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="mx-auto max-w-7xl px-4 py-28 text-center sm:px-6 lg:px-8 lg:py-40">
+        <h2 class="font-display tracking-tight" style="font-size:clamp(2.5rem,9vw,7rem);letter-spacing:-0.04em;line-height:.95;">Exposez avec nous.</h2>
+        <a href="mailto:hello@artcol.art" class="mt-12 inline-flex cursor-pointer items-center gap-3 rounded-full bg-ink px-8 py-4 text-base font-medium uppercase tracking-widest text-paper transition-colors duration-200 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+          Nous écrire
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </section>
+    </main>
+
+    <footer class="border-t border-ink/10">
+      <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+        <span class="font-display text-2xl tracking-tight">ARTCOL</span>
+        <p class="text-sm uppercase tracking-widest text-ink/50">© 2026 — Galerie d'art contemporain</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ================= 3D ENGINE ================= -->
+  <script type="module">
+    import * as THREE from 'three';
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvas = document.getElementById('scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#060608');
+    scene.fog = new THREE.Fog('#060608', 8, 34);
+
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 120);
+    camera.position.set(0, 1.4, 14);
+
+    // ---- Lumières ----
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const key = new THREE.PointLight(0xffffff, 120, 80); key.position.set(0, 6, 6); scene.add(key);
+    const portalLight = new THREE.PointLight(0xffffff, 200, 60); portalLight.position.set(0, 2, -22); scene.add(portalLight);
+
+    // ---- Sol grille (vibe jeu vidéo) ----
+    const grid = new THREE.GridHelper(120, 120, 0x444444, 0x1c1c1f);
+    grid.position.y = -0.01; scene.add(grid);
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(120, 120),
+      new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.4, metalness: 0.6 })
+    );
+    floor.rotation.x = -Math.PI / 2; floor.position.y = -0.02; scene.add(floor);
+
+    // ---- Œuvres flottantes le long du couloir ----
+    const artColors = [0xf5f5f4, 0x52525b, 0xfecdd3, 0x312e81, 0xe7e5e4, 0x18181b, 0xfde68a, 0x71717a];
+    const frames = [];
+    const COUNT = 8;
+    for (let i = 0; i < COUNT; i++) {
+      const side = i % 2 === 0 ? -1 : 1;
+      const z = 2 - i * 3.2;
+      const g = new THREE.Group();
+      // cadre
+      const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(2.4, 3.1, 0.08),
+        new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x222222, roughness: 0.5 })
+      );
+      // toile
+      const canvasMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.1, 2.8),
+        new THREE.MeshStandardMaterial({ color: artColors[i % artColors.length], roughness: 0.7, emissive: artColors[i % artColors.length], emissiveIntensity: 0.12 })
+      );
+      canvasMesh.position.z = 0.05;
+      g.add(frame, canvasMesh);
+      g.position.set(side * 4.2, 1.8, z);
+      g.rotation.y = -side * 0.5;
+      g.userData.baseY = g.position.y;
+      g.userData.phase = i * 0.7;
+      scene.add(g); frames.push(g);
+    }
+
+    // ---- Portail (anneau lumineux) ----
+    const portal = new THREE.Mesh(
+      new THREE.TorusGeometry(2.6, 0.12, 24, 80),
+      new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 1.6 })
+    );
+    portal.position.set(0, 2.2, -22); scene.add(portal);
+    const portalDisc = new THREE.Mesh(
+      new THREE.CircleGeometry(2.5, 64),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.06 })
+    );
+    portalDisc.position.copy(portal.position); scene.add(portalDisc);
+
+    // ---- Particules (poussière) ----
+    const PN = prefersReduced ? 250 : 700;
+    const pPos = new Float32Array(PN * 3);
+    for (let i = 0; i < PN; i++) {
+      pPos[i*3]   = (Math.random() - 0.5) * 30;
+      pPos[i*3+1] = Math.random() * 12;
+      pPos[i*3+2] = (Math.random() - 0.5) * 50 - 8;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.045, transparent: true, opacity: 0.55 }));
+    scene.add(particles);
+
+    // ---- Interaction souris (parallaxe) ----
+    const pointer = { x: 0, y: 0 };
+    addEventListener('pointermove', (e) => {
+      pointer.x = (e.clientX / innerWidth) * 2 - 1;
+      pointer.y = (e.clientY / innerHeight) * 2 - 1;
+    });
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    // ---- État / transitions ----
+    let state = 'idle';            // idle | entering | done
+    let enterT = 0;
+    const clock = new THREE.Clock();
+    const hud = document.getElementById('hud');
+    const flash = document.getElementById('flash');
+    const site = document.getElementById('site');
+    const loader = document.getElementById('loader');
+    const intro = document.getElementById('intro');
+    let rafId;
+
+    function showSite() {
+      site.classList.add('visible');
+      document.body.style.background = '#FAFAFA';
+      cancelAnimationFrame(rafId);            // stop le rendu 3D → économise la batterie/CPU
+      intro.style.display = 'none';
+    }
+
+    function startEnter() {
+      if (state !== 'idle') return;
+      if (prefersReduced) { showSite(); return; }   // pas d'animation lourde si motion réduit
+      state = 'entering'; enterT = 0;
+      hud.style.opacity = '0';
+      hud.style.transform = 'scale(1.08)';
+    }
+
+    document.getElementById('enter').addEventListener('click', startEnter);
+    document.getElementById('skip').addEventListener('click', showSite);
+    document.getElementById('replay').addEventListener('click', () => location.reload());
+
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+    function animate() {
+      rafId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      // œuvres : flottement doux
+      for (const g of frames) {
+        if (!prefersReduced) g.position.y = g.userData.baseY + Math.sin(t * 0.8 + g.userData.phase) * 0.18;
+        g.rotation.z = Math.sin(t * 0.4 + g.userData.phase) * 0.02;
+      }
+      // portail : pulsation + rotation lente
+      portal.rotation.z = t * 0.3;
+      portal.material.emissiveIntensity = 1.3 + Math.sin(t * 2) * 0.4;
+      portalDisc.material.opacity = 0.05 + (Math.sin(t * 2) * 0.5 + 0.5) * 0.06;
+      // particules : dérive verticale
+      const arr = pGeo.attributes.position.array;
+      for (let i = 0; i < PN; i++) {
+        arr[i*3+1] += 0.006;
+        if (arr[i*3+1] > 12) arr[i*3+1] = 0;
+      }
+      pGeo.attributes.position.needsUpdate = true;
+
+      if (state === 'idle') {
+        // caméra : sway idle + parallaxe souris
+        const sway = prefersReduced ? 0 : Math.sin(t * 0.5) * 0.3;
+        camera.position.x += ((pointer.x * 1.6 + sway) - camera.position.x) * 0.04;
+        camera.position.y += ((1.4 - pointer.y * 0.6) - camera.position.y) * 0.04;
+        camera.lookAt(0, 1.8, -22);
+      } else if (state === 'entering') {
+        enterT += 1 / 60;
+        const p = Math.min(enterT / 2.2, 1);
+        const e = easeOut(p);
+        // fly-through : on fonce vers le portail
+        camera.position.z = 14 + (-24 - 14) * e;
+        camera.position.x += (0 - camera.position.x) * 0.1;
+        camera.position.y += (2.2 - camera.position.y) * 0.1;
+        camera.fov = 60 + 45 * e;                 // effet "warp"
+        camera.updateProjectionMatrix();
+        camera.lookAt(0, 2.2, -24);
+        if (p > 0.78) flash.style.opacity = String((p - 0.78) / 0.22);
+        if (p >= 1) { state = 'done'; showSite();
+          // fondu du flash
+          requestAnimationFrame(() => { flash.style.transition = 'opacity .6s ease-out'; flash.style.opacity = '0'; });
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Démarrage : on cache le loader et on révèle le HUD une fois les polices/CDN prêts
+    function boot() {
+      loader.style.transition = 'opacity .6s ease-out';
+      loader.style.opacity = '0';
+      setTimeout(() => loader.style.display = 'none', 600);
+      hud.style.opacity = '1';
+      animate();
+    }
+    if (document.fonts && document.fonts.ready) {
+      Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]).then(boot);
+    } else { setTimeout(boot, 400); }
+  </script>
+</body>
+</html>
