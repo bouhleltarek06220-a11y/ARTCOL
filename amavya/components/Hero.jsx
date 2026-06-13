@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import DashboardMockup from "./DashboardMockup";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -70,11 +71,12 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 text-center">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.05fr_1fr]">
+        {/* Colonne texte */}
         <motion.div
           initial="hidden"
           animate="show"
-          className="flex flex-col items-center gap-7"
+          className="flex flex-col items-start gap-7 text-left"
         >
           <motion.span
             variants={fadeUp(0)}
@@ -96,7 +98,7 @@ export default function Hero() {
 
           <motion.p
             variants={fadeUp(0.26)}
-            className="max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
+            className="max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
           >
             AMAVYA installe un Agent de Prospection IA qui identifie vos prospects,
             rédige des messages personnalisés et relance automatiquement — pendant
@@ -104,25 +106,16 @@ export default function Hero() {
             PME de la région PACA.
           </motion.p>
 
-          {/* CTA principal + secondaire */}
-          <motion.div
-            variants={fadeUp(0.42)}
-            className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:gap-4"
-          >
-            <a
-              href="/agent-prospection"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              Voir l'agent en action
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-            </a>
+          {/* CTA unique : on récupère les leads via le formulaire, pas via démo live */}
+          <motion.div variants={fadeUp(0.42)} className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:gap-4">
             <a
               href="/reserver"
-              className="inline-flex items-center justify-center rounded-full border border-gold/40 bg-white/5 px-6 py-3 text-sm font-semibold text-paper backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:bg-gold/10"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#a87f2e,#f0d27a_55%,#d4af37)] px-6 py-3 text-sm font-semibold text-ink shadow-[0_8px_40px_-12px_rgba(212,175,55,0.7)] transition-transform duration-300 hover:-translate-y-0.5"
             >
               Réserver ma démo (audit gratuit)
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </a>
           </motion.div>
 
@@ -135,7 +128,7 @@ export default function Hero() {
           </motion.p>
 
           {/* Bouton showreel discret */}
-          <motion.div variants={fadeUp(0.65)} className="pt-2">
+          <motion.div variants={fadeUp(0.65)} className="pt-1">
             <a
               href="/showreel"
               className="group inline-flex items-center gap-3 rounded-full border border-gold/20 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-gold-bright/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 hover:text-gold-bright"
@@ -150,6 +143,16 @@ export default function Hero() {
               </svg>
             </a>
           </motion.div>
+        </motion.div>
+
+        {/* Colonne visuelle : aperçu de l'Agent de Prospection IA */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2, ease: EASE }}
+          className="relative"
+        >
+          <DashboardMockup />
         </motion.div>
       </div>
     </section>
