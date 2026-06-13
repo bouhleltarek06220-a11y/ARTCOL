@@ -105,7 +105,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-4 md:flex">
           <LanguageSwitcher />
-          <Button href="#contact" variant="primary" className="px-5 py-2.5">
+          <Button href="/reserver" variant="primary" className="px-5 py-2.5">
             {t.nav.cta}
           </Button>
         </div>
@@ -166,7 +166,7 @@ export default function Navbar() {
                   </a>
                 );
               })}
-              <Button href="#contact" variant="primary" className="mt-2 w-full">
+              <Button href="/reserver" variant="primary" className="mt-2 w-full">
                 {t.nav.cta}
               </Button>
               <div className="mt-3 flex justify-center">

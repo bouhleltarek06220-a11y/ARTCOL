@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import DashboardMockup from "./DashboardMockup";
 import { useLang } from "./LangProvider";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -91,12 +90,11 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.05fr_1fr]">
-        {/* Colonne texte */}
+      <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 text-center">
         <motion.div
           initial="hidden"
           animate="show"
-          className="flex flex-col items-start gap-7"
+          className="flex flex-col items-center gap-7"
         >
           <motion.span
             variants={fadeUp(0)}
@@ -118,14 +116,14 @@ export default function Hero() {
 
           <motion.p
             variants={fadeUp(0.26)}
-            className="max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
+            className="max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
           >
             {h.paragraph}
           </motion.p>
 
           <motion.div
             variants={fadeUp(0.42)}
-            className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-4 text-sm text-muted-soft"
+            className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 pt-4 text-sm text-muted-soft"
           >
             <Stat value={h.stats[0].value} label={h.stats[0].label} />
             <div className="hidden h-8 w-px bg-white/10 sm:block" />
@@ -153,16 +151,6 @@ export default function Hero() {
               </svg>
             </a>
           </motion.div>
-        </motion.div>
-
-        {/* Colonne visuelle — légère respiration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: EASE }}
-          className="relative"
-        >
-          <DashboardMockup />
         </motion.div>
       </div>
     </section>

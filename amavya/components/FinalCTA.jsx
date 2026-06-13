@@ -77,7 +77,7 @@ export default function FinalCTA() {
                   animate={{ opacity: [0.5, 0.9, 0.5], scale: [0.95, 1.15, 0.95] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <Button href="#contact" variant="primary">
+                <Button href="/reserver" variant="primary">
                   {c.button}
                 </Button>
               </div>

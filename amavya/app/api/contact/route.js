@@ -3,9 +3,8 @@ import nodemailer from "nodemailer";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const SUPA_URL = "https://dmztalsmreugfwojsaar.supabase.co";
-const SUPA_ANON =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw";
+const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPA_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
@@ -13,6 +12,9 @@ const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 async function saveToSupabase(payload) {
+  if (!SUPA_URL || !SUPA_ANON) {
+    throw new Error("Supabase non configuré (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY manquants)");
+  }
   const res = await fetch(SUPA_URL + "/rest/v1/partner_leads", {
     method: "POST",
     headers: {
