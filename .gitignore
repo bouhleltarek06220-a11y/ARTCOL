@@ -26,3 +26,6 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Standalone sub-repos (have their own GitHub origin, not part of ARTCOL)
+amavya-crm/
