@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ARTCOL — Galerie & Collection d'art</title>
+  <meta name="description" content="ARTCOL — galerie en ligne pour découvrir, exposer et collectionner des œuvres d'art contemporain." />
+
+  <!-- Tailwind Play CDN (démo uniquement) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Typographie recommandée par le skill : Poiret One (titres) / Didact Gothic (corps) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Poiret+One&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#09090B',        // Text
+            primary: '#18181B',    // Primary
+            secondary: '#27272A',  // Secondary
+            paper: '#FAFAFA',      // Background
+            chalk: '#F8FAFC',      // CTA / light
+          },
+          fontFamily: {
+            display: ['"Poiret One"', 'system-ui', 'sans-serif'],
+            body: ['"Didact Gothic"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Didact Gothic', system-ui, sans-serif; }
+    .font-display { font-family: 'Poiret One', system-ui, sans-serif; }
+
+    /* Exaggerated Minimalism : typo surdimensionnée + tracking serré */
+    .hero-type {
+      font-size: clamp(3rem, 14vw, 12rem);
+      font-weight: 400;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+    }
+
+    /* Masonry léger via colonnes CSS (chargement instantané, aucune dépendance image) */
+    .masonry { column-gap: 1.5rem; }
+    .masonry > * { break-inside: avoid; margin-bottom: 1.5rem; }
+    @media (min-width: 640px)  { .masonry { column-count: 2; } }
+    @media (min-width: 1024px) { .masonry { column-count: 3; } }
+
+    /* Respect de prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-paper text-ink antialiased selection:bg-ink selection:text-paper">
+
+  <!-- Skip link (accessibilité clavier) -->
+  <a href="#galerie"
+     class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-5 focus:py-2 focus:text-paper">
+    Aller à la galerie
+  </a>
+
+  <!-- Nav flottante minimale -->
+  <header class="fixed inset-x-4 top-4 z-40">
+    <nav aria-label="Navigation principale"
+         class="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-ink/10 bg-paper/80 px-5 py-3 backdrop-blur-md sm:px-7">
+      <a href="#" class="font-display text-xl tracking-tight cursor-pointer">ARTCOL</a>
+      <ul class="hidden items-center gap-8 text-sm uppercase tracking-widest md:flex">
+        <li><a href="#galerie" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Galerie</a></li>
+        <li><a href="#philosophie" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Philosophie</a></li>
+        <li><a href="#contact" class="cursor-pointer transition-colors duration-200 hover:text-ink/50">Contact</a></li>
+      </ul>
+      <a href="#contact"
+         class="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper transition-transform duration-200 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+        Exposer
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="mx-auto max-w-7xl px-4 pt-40 pb-24 sm:px-6 lg:px-8 lg:pt-56">
+      <p class="mb-6 text-sm uppercase tracking-[0.4em] text-ink/50">Galerie &amp; collection d'art</p>
+      <h1 class="hero-type font-display">
+        L'art,<br />sans<br />bruit.
+      </h1>
+      <div class="mt-12 flex flex-col gap-6 border-t border-ink/10 pt-8 sm:flex-row sm:items-end sm:justify-between">
+        <p class="max-w-md text-lg leading-relaxed text-secondary">
+          ARTCOL réunit artistes et collectionneurs autour d'œuvres contemporaines.
+          Un espace neutre, pensé pour laisser la création parler d'elle-même.
+        </p>
+        <a href="#galerie"
+           class="group inline-flex w-fit cursor-pointer items-center gap-3 text-lg font-medium uppercase tracking-widest transition-colors duration-200 hover:text-ink/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+          Explorer la collection
+          <svg class="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Filtres par catégorie -->
+    <section class="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8" aria-label="Filtrer par catégorie">
+      <div class="flex flex-wrap gap-3">
+        <button type="button" aria-pressed="true"
+          class="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm uppercase tracking-widest text-paper transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">Tout</button>
+        <button type="button" aria-pressed="false"
+          class="cursor-pointer rounded-full border border-ink/15 px-5 py-2 text-sm uppercase tracking-widest transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">Peinture</button>
+        <button type="button" aria-pressed="false"
+          class="cursor-pointer rounded-full border border-ink/15 px-5 py-2 text-sm uppercase tracking-widest transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">Sculpture</button>
+        <button type="button" aria-pressed="false"
+          class="cursor-pointer rounded-full border border-ink/15 px-5 py-2 text-sm uppercase tracking-widest transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">Photographie</button>
+        <button type="button" aria-pressed="false"
+          class="cursor-pointer rounded-full border border-ink/15 px-5 py-2 text-sm uppercase tracking-widest transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">Numérique</button>
+      </div>
+    </section>
+
+    <!-- GALERIE (Portfolio Grid / masonry, hover overlay info) -->
+    <section id="galerie" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8" aria-label="Œuvres">
+      <div class="masonry">
+        <!-- Chaque "œuvre" est un dégradé (placeholder autonome, chargement instantané) -->
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-[3/4] w-full bg-gradient-to-br from-zinc-800 via-zinc-600 to-zinc-900" role="img" aria-label="Œuvre : Silence I, huile sur toile"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Silence I</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Peinture · 2024</span>
+          </figcaption>
+        </figure>
+
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-square w-full bg-gradient-to-tr from-stone-300 via-stone-100 to-stone-400" role="img" aria-label="Œuvre : Forme nue, sculpture marbre"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Forme nue</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Sculpture · 2023</span>
+          </figcaption>
+        </figure>
+
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-[4/5] w-full bg-gradient-to-b from-neutral-900 to-neutral-700" role="img" aria-label="Œuvre : Nocturne, photographie argentique"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Nocturne</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Photographie · 2024</span>
+          </figcaption>
+        </figure>
+
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-[3/4] w-full bg-gradient-to-tl from-amber-200 via-rose-100 to-stone-300" role="img" aria-label="Œuvre : Aube, technique mixte"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Aube</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Technique mixte · 2022</span>
+          </figcaption>
+        </figure>
+
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-square w-full bg-gradient-to-br from-indigo-950 via-zinc-800 to-black" role="img" aria-label="Œuvre : Flux, art numérique génératif"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Flux</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Numérique · 2025</span>
+          </figcaption>
+        </figure>
+
+        <figure class="group relative cursor-pointer overflow-hidden rounded-sm">
+          <div class="aspect-[4/5] w-full bg-gradient-to-t from-zinc-200 to-white" role="img" aria-label="Œuvre : Vide habité, huile sur lin"></div>
+          <figcaption class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/80 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span class="font-display text-2xl text-paper">Vide habité</span>
+            <span class="text-sm uppercase tracking-widest text-paper/70">Peinture · 2024</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHIE / About -->
+    <section id="philosophie" class="border-y border-ink/10 bg-chalk">
+      <div class="mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-32">
+        <h2 class="font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+          Moins d'écran.<br />Plus d'œuvre.
+        </h2>
+        <div class="flex flex-col gap-6 text-lg leading-relaxed text-secondary">
+          <p>
+            Nous croyons que l'art mérite un espace dépouillé. Pas d'effets superflus,
+            pas de bruit visuel — seulement l'œuvre, la lumière et le blanc qui l'entoure.
+          </p>
+          <p>
+            ARTCOL accompagne les artistes émergents et les collectionneurs exigeants,
+            de la première exposition à l'acquisition.
+          </p>
+          <dl class="mt-4 grid grid-cols-3 gap-6 border-t border-ink/10 pt-8">
+            <div><dt class="font-display text-4xl">240+</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Œuvres</dd></div>
+            <div><dt class="font-display text-4xl">60</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Artistes</dd></div>
+            <div><dt class="font-display text-4xl">12</dt><dd class="text-sm uppercase tracking-widest text-ink/50">Pays</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT / CTA -->
+    <section id="contact" class="mx-auto max-w-7xl px-4 py-28 text-center sm:px-6 lg:px-8 lg:py-40">
+      <h2 class="font-display tracking-tight" style="font-size: clamp(2.5rem, 9vw, 7rem); letter-spacing: -0.04em; line-height: 0.95;">
+        Exposez avec nous.
+      </h2>
+      <p class="mx-auto mt-8 max-w-xl text-lg text-secondary">
+        Vous êtes artiste ou collectionneur ? Rejoignez une galerie pensée pour l'essentiel.
+      </p>
+      <a href="mailto:hello@artcol.art"
+         class="mt-12 inline-flex cursor-pointer items-center gap-3 rounded-full bg-ink px-8 py-4 text-base font-medium uppercase tracking-widest text-paper transition-colors duration-200 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+        Nous écrire
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <footer class="border-t border-ink/10">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+      <span class="font-display text-2xl tracking-tight">ARTCOL</span>
+      <p class="text-sm uppercase tracking-widest text-ink/50">© 2026 — Galerie d'art contemporain</p>
+      <div class="flex gap-5">
+        <a href="#" aria-label="Instagram" class="cursor-pointer text-ink/60 transition-colors duration-200 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+          </svg>
+        </a>
+        <a href="#" aria-label="X (Twitter)" class="cursor-pointer text-ink/60 transition-colors duration-200 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.9 2H22l-7.6 8.7L23 22h-6.9l-5.4-7-6.2 7H1.4l8.1-9.3L1 2h7.1l4.9 6.4L18.9 2Zm-2.4 18h1.9L7.6 4H5.6l10.9 16Z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

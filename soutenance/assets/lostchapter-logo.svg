@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#3D2418"/>
+      <stop offset="100%" stop-color="#1A0F08"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E5C788"/>
+      <stop offset="50%" stop-color="#C99B5C"/>
+      <stop offset="100%" stop-color="#A07840"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="124" fill="url(#bg)"/>
+  <g transform="translate(128 128)">
+    <g fill="url(#gold)">
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(45)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(90)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(135)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(180)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(225)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(270)"/>
+      <path d="M 0 -100 L 12 -25 L 0 0 L -12 -25 Z" transform="rotate(315)"/>
+    </g>
+    <g fill="#A07840" opacity="0.7">
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(22.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(67.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(112.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(157.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(202.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(247.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(292.5)"/>
+      <path d="M 0 -60 L 6 -20 L 0 0 L -6 -20 Z" transform="rotate(337.5)"/>
+    </g>
+    <circle cx="0" cy="0" r="34" fill="#1A0F08" stroke="url(#gold)" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#C99B5C" stroke-width="0.8" stroke-opacity="0.5"/>
+    <text x="0" y="14" font-family="'Cinzel', serif" font-size="44" font-weight="700"
+          fill="url(#gold)" text-anchor="middle">LC</text>
+  </g>
+  <circle cx="128" cy="128" r="122" fill="none" stroke="#C99B5C" stroke-width="1" stroke-opacity="0.4"/>
+</svg>
