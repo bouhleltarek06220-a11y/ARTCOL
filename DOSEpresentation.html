@@ -37,7 +37,7 @@ body{font-family:var(--font-b);background:var(--ink);color:var(--paper);overflow
 .nav a:hover .lab{opacity:1}
 
 /* ---------- SECTIONS ---------- */
-section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:13vh 7vw 9vh;position:relative;z-index:1;border-bottom:1px solid var(--line);background:rgba(11,11,13,.64)}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:13vh 7vw 9vh;position:relative;z-index:1;border-bottom:1px solid var(--line);background:rgba(11,11,13,.48)}
 .kick{font-family:var(--font-b);font-weight:800;font-size:clamp(.66rem,1.2vw,.8rem);letter-spacing:.32em;text-transform:uppercase;color:var(--red);margin-bottom:1.4rem}
 h1{font-family:var(--font-d);font-size:clamp(3rem,9.5vw,8.5rem);line-height:.86;text-transform:uppercase;letter-spacing:.01em}
 h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;text-transform:uppercase;margin-bottom:1.1rem}
@@ -51,7 +51,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
 
 /* ---------- HERO ---------- */
-#hero{background:radial-gradient(120% 90% at 75% 20%,rgba(26,6,6,.34),rgba(11,11,13,.56))}
+#hero{background:radial-gradient(120% 90% at 75% 20%,rgba(26,6,6,.22),rgba(11,11,13,.4))}
 #hero h1{font-size:clamp(1.8rem,4.4vw,3.4rem);line-height:1.04;max-width:18ch;letter-spacing:.01em;text-shadow:0 2px 30px rgba(0,0,0,.55)}
 #hero .sub{text-shadow:0 2px 20px rgba(0,0,0,.5)}
 .hero-stats{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,72px);margin-top:3rem}
@@ -107,7 +107,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
 @media(max-width:760px){.cmp{grid-template-columns:1fr}.cmp .win{transform:none}}
 
 /* ---------- PERSONA ---------- */
-#persona{background:rgba(11,11,13,.6)}
+#persona{background:rgba(11,11,13,.42)}
 .persona{display:grid;grid-template-columns:300px 1fr;gap:clamp(24px,4vw,56px);margin-top:2rem;align-items:start;max-width:1020px}
 .pcard{position:relative;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,#17171d,#0e0e12);padding:18px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
 .pcard svg{width:100%;height:auto;display:block;border-radius:14px;background:radial-gradient(120% 100% at 50% 0%,#23232c,#0c0c10)}
@@ -157,7 +157,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
 
 /* ---------- KPI ---------- */
-#kpi{background:rgba(11,11,13,.6)}
+#kpi{background:rgba(11,11,13,.42)}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2.4rem;max-width:1000px}
 .kpi{border:1.5px solid var(--line);border-radius:18px;padding:1.6rem 1.4rem;background:var(--ink2);position:relative;overflow:hidden}
 .kpi:before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:var(--red)}
@@ -171,7 +171,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
 @media(max-width:560px){.kpis{grid-template-columns:1fr}}
 
 /* ---------- FIN ---------- */
-#fin{background:radial-gradient(120% 90% at 50% 30%,rgba(26,6,6,.32),rgba(11,11,13,.6));text-align:center;align-items:center}
+#fin{background:radial-gradient(120% 90% at 50% 30%,rgba(26,6,6,.22),rgba(11,11,13,.42));text-align:center;align-items:center}
 #fin h2{max-width:18ch}
 .fin-sub{margin-top:1.4rem;font-size:clamp(1rem,1.8vw,1.25rem);color:#cfcdc6;max-width:620px}
 .stamp{margin-top:2.6rem;display:inline-block;font-family:var(--font-d);text-transform:uppercase;font-size:clamp(1.4rem,3.4vw,2.4rem);color:var(--red);border:3px solid var(--red);padding:.5rem 1.4rem;border-radius:10px;transform:rotate(-4deg);letter-spacing:.03em}
@@ -212,6 +212,60 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
 .pmodal .close{position:absolute;top:-14px;right:-12px;width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.5)}
 .pmodal .close:hover{background:var(--red-d)}
 
+
+/* ---------- LISIBILITÉ PROJECTION ---------- */
+h1,h2{text-shadow:0 3px 26px rgba(0,0,0,.62)}
+.kick,.sub,.badge,.fin-sub{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+
+/* ---------- FUNNEL MÉTHODE — version animée ---------- */
+.step .bx{opacity:0;transform:translateX(-28px) scale(.97);transition:transform .6s cubic-bezier(.2,.9,.3,1.25),opacity .6s,border-color .3s,box-shadow .35s}
+.step.in .bx{opacity:1;transform:none}
+.step .bx:hover{transform:translateX(6px) scale(1.025);border-color:var(--red);box-shadow:-7px 0 0 -2px var(--red),0 16px 34px rgba(0,0,0,.45)}
+.step .ln{background:linear-gradient(180deg,var(--red),#e2231a22 35%,var(--red) 50%,#e2231a22 65%,var(--red));background-size:100% 300%}
+.step.in .ln{animation:flowline 1.8s linear infinite}
+@keyframes flowline{from{background-position:0 0}to{background-position:0 -300%}}
+.step.in .dot{animation:dotpulse 2s ease-in-out infinite}
+@keyframes dotpulse{0%,100%{box-shadow:0 0 0 5px #e2231a22}50%{box-shadow:0 0 0 10px #e2231a14,0 0 18px 3px var(--red)}}
+.step.last .bx{background:linear-gradient(160deg,#1c0707,var(--ink2));border-color:var(--red)}
+.step.last .s{color:var(--red)}
+.step.last .dot{background:var(--red);box-shadow:0 0 0 6px #e2231a33,0 0 22px 4px var(--red)!important}
+
+/* ---------- SECTION MARCHÉ & ZMOT ---------- */
+#marche{background:rgba(11,11,13,.46)}
+.mtable{margin-top:2.2rem;max-width:1000px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;-webkit-overflow-scrolling:touch}
+.mtable table{border-collapse:collapse;width:100%;min-width:680px;font-size:.84rem}
+.mtable th,.mtable td{padding:.78rem 1rem;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+.mtable thead th{font-family:var(--font-d);text-transform:uppercase;letter-spacing:.03em;font-size:.82rem;color:#fff;background:var(--ink2)}
+.mtable td:first-child{color:var(--muted);font-weight:600}
+.mtable th.dose,.mtable td.dose{background:#e2231a16;color:#fff}
+.mtable thead th.dose{color:var(--red);border-bottom:2px solid var(--red)}
+.mtable tr:last-child td{border-bottom:none}
+.zchain{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:2.4rem;max-width:1020px}
+.zstep{border:1.5px solid var(--line);border-radius:14px;padding:1.1rem;background:var(--ink2);position:relative;transition:.3s}
+.zstep:hover{transform:translateY(-4px)}
+.zstep.win{border-color:var(--red);background:linear-gradient(160deg,#1c0707,var(--ink2))}
+.zstep .zn{font-family:var(--font-d);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.zstep.win .zn{color:var(--red)}
+.zstep .zt{font-family:var(--font-d);text-transform:uppercase;font-size:1.05rem;margin:.25rem 0 .45rem}
+.zstep .zx{font-size:.79rem;color:#bdbbb4;line-height:1.42}
+@media(max-width:760px){.zchain{grid-template-columns:1fr 1fr}}
+.bars{margin-top:2.4rem;max-width:780px}
+.brow{margin-bottom:1.05rem}
+.brow .bl{font-size:.84rem;color:#cfcdc6;margin-bottom:.42rem;display:flex;justify-content:space-between;gap:10px}
+.brow .bl b{color:#fff;font-weight:700;white-space:nowrap}
+.btrack{position:relative;height:11px;border-radius:8px;background:#ffffff12;overflow:hidden;margin-bottom:5px}
+.bfill{height:100%;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.bfill.d{background:linear-gradient(90deg,#e2231a,#ff7a6e)}
+.bfill.c{background:#6b6b73}
+.rv.in .bfill{width:var(--w)}
+.blegend{display:flex;gap:20px;font-size:.76rem;color:var(--muted);margin-top:.7rem}
+.blegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.reco{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:2.4rem;max-width:1020px}
+.reco .r{border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:1rem 1.2rem;background:var(--ink2)}
+.reco .r b{display:block;font-family:var(--font-d);text-transform:uppercase;font-size:.92rem;margin-bottom:.32rem}
+.reco .r p{font-size:.81rem;color:#bdbbb4;line-height:1.42}
+@media(max-width:760px){.reco{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -228,6 +282,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
   <a href="#methode" data-l="Méthode"><span class="lab">Méthode</span></a>
   <a href="#biais" data-l="Biais"><span class="lab">Biais</span></a>
   <a href="#kpi" data-l="KPI"><span class="lab">KPI</span></a>
+  <a href="#marche" data-l="Marché"><span class="lab">Marché</span></a>
   <a href="#fin" data-l="Conclusion"><span class="lab">Conclusion</span></a>
 </nav>
 
@@ -290,9 +345,9 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
   </div>
 
   <div class="cmp">
-    <div class="c rv d2"><span class="em">😋</span><div class="t">Soda classique</div><div class="x">Bon goût. Bourré de sucre.</div></div>
-    <div class="c rv d3"><span class="em">😴</span><div class="t">Healthy classique</div><div class="x">Sain. Mais ennuyeux.</div></div>
-    <div class="c win rv d4"><span class="em">🔥</span><div class="t">DOSE</div><div class="x">Sain <b>ET</b> désirable.</div></div>
+    <div class="c rv d2"><div class="t">Soda classique</div><div class="x">Bon goût. Bourré de sucre.</div></div>
+    <div class="c rv d3"><div class="t">Healthy classique</div><div class="x">Sain. Mais ennuyeux.</div></div>
+    <div class="c win rv d4"><div class="t">DOSE</div><div class="x">Sain <b>ET</b> désirable.</div></div>
   </div>
 
   <div class="badge rv d4">Une boisson healthy. Une com' de cartel.</div>
@@ -324,7 +379,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
     <div class="step rv d2"><span class="dot"></span><span class="ln"></span><div class="bx"><div class="s">Bouche-à-oreille</div><div class="p">On en parle au boulot, en soirée.</div></div></div>
     <div class="step rv d3"><span class="dot"></span><span class="ln"></span><div class="bx"><div class="s">Test produit</div><div class="p">Micro-trottoir, dégustation gratuite.</div></div></div>
     <div class="step rv d4"><span class="dot"></span><span class="ln"></span><div class="bx"><div class="s">Achat Carrefour</div><div class="p">1,75€. En rayon, déjà connu.</div></div></div>
-    <div class="step rv d5"><span class="dot"></span><span class="ln"></span><div class="bx"><div class="s">Le Cartel</div><div class="p">Le client devient dealer.</div></div></div>
+    <div class="step last rv d5"><span class="dot"></span><span class="ln"></span><div class="bx"><div class="s">Le Cartel</div><div class="p">Le client devient dealer.</div></div></div>
   </div>
   <div class="zmot rv d3"><b>ZMOT</b> — Zero Moment of Truth<p>Le consommateur choisit DOSE <b>avant même d'entrer en magasin</b>. La décision se joue sur le feed, pas dans le rayon.</p></div>
 </section>
@@ -376,9 +431,66 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
   <div class="legend rv d3"><span><b class="v">✓ Vérifié</b> — source indépendante</span><span><b class="c">● Revendiqué</b> — chiffre annoncé par la marque</span></div>
 </section>
 
+<!-- 6 · MARCHÉ & ZMOT -->
+<section id="marche">
+  <div class="kick rv">06 · Le marché &amp; l'étude ZMOT</div>
+  <h2 class="rv">Gagner au <span class="red">ZMOT</span>, avant le rayon.</h2>
+  <p class="sub rv d1">Le marché français des boissons sans alcool est un <b>duopole Coca-Cola / PepsiCo</b>. DOSE n'attaque pas le cola de front&nbsp;: il occupe un <b>océan bleu</b> (0 sucre <b>ET</b> 0 édulcorant) et gagne la bataille <b>en ligne, avant l'achat</b>.</p>
+
+  <div class="hero-stats rv d2" style="margin-top:2.2rem">
+    <div class="stat"><div class="n"><span data-to="7" data-suf=" Md€">0</span></div><div class="l">Marché BRSA France</div></div>
+    <div class="stat"><div class="n"><span data-pre="&gt;" data-to="90" data-suf="%">0</span></div><div class="l">Part Coca sur les colas</div></div>
+    <div class="stat"><div class="n"><span data-to="22" data-suf="%">0</span></div><div class="l">Sodas déjà sans sucre</div></div>
+    <div class="stat"><div class="n"><span data-to="65" data-suf="/100">0</span></div><div class="l">Score Yuka « Good »</div></div>
+  </div>
+
+  <div class="mtable rv d2">
+    <table>
+      <thead><tr><th>Critère</th><th class="dose">DOSE TUE</th><th>Coca Zéro</th><th>Vitaminwater</th><th>Volvic Vitamin+</th></tr></thead>
+      <tbody>
+        <tr><td>Sucre / 100 ml</td><td class="dose">0 g</td><td>0 g</td><td>~4–5 g</td><td>0 g</td></tr>
+        <tr><td>Édulcorant</td><td class="dose">Aucun</td><td>Aspartame / acé-K</td><td>Aucun (mais sucré)</td><td>Aucun</td></tr>
+        <tr><td>Positionnement</td><td class="dose">Beauté / clean label</td><td>Plaisir mass-market</td><td>« Santé » (sucré)</td><td>Hydratation fonct.</td></tr>
+        <tr><td>Distribution</td><td class="dose">DNVB + GMS sélective</td><td>Ultra-massive</td><td>Réintroduite</td><td>GMS large</td></tr>
+        <tr><td>Prix</td><td class="dose">Premium ~2–3 €</td><td>Bas</td><td>Moyen</td><td>Moyen</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="badge rv d2">Vitaminwater (Coca) a échoué en France&nbsp;: « santé » mais 4–5 g de sucre. La faille que DOSE exploite.</div>
+
+  <h2 class="rv" style="margin-top:3.4rem;font-size:clamp(1.8rem,4.4vw,3rem)">La chaîne <span class="red">ZMOT</span> de DOSE</h2>
+  <p class="sub rv d1">Modèle Google&nbsp;: <b>Stimulus → ZMOT → FMOT → SMOT</b>. Le ZMOT, c'est le moment où le client vérifie en ligne, <b>avant d'acheter</b>.</p>
+  <div class="zchain">
+    <div class="zstep rv"><div class="zn">01 · Stimulus</div><div class="zt">Le feed</div><div class="zx">Micro-trottoirs gratuits &amp; émotionnels. Des noms pattern-interrupt&nbsp;: « Pommicide », « Speedberry ».</div></div>
+    <div class="zstep win rv d1"><div class="zn">02 · ZMOT ★</div><div class="zt">Le scan</div><div class="zx">Yuka 65/100, 0 sucre + preuve sociale TikTok. <b>La promesse résiste à la vérification.</b></div></div>
+    <div class="zstep rv d2"><div class="zn">03 · FMOT</div><div class="zt">Le rayon</div><div class="zx">Point faible&nbsp;: distribution sélective. Compensé par des stops visuels tranchants en GMS.</div></div>
+    <div class="zstep rv d3"><div class="zn">04 · SMOT</div><div class="zt">Après l'achat</div><div class="zx">Le goût nourrit l'UGC, qui ré-alimente le ZMOT du prospect suivant&nbsp;: <b>boucle vertueuse</b>.</div></div>
+  </div>
+  <div class="zmot rv d2" style="margin-top:1.8rem"><b>L'INVERSION</b><p>DOSE <b>gagne au ZMOT, perd au FMOT</b>. Il rend le ZMOT si favorable (preuve Yuka + preuve sociale) que le client <b>cherche activement</b> le produit malgré une distribution faible.</p></div>
+
+  <h2 class="rv" style="margin-top:3.4rem;font-size:clamp(1.8rem,4.4vw,3rem)">Où DOSE <span class="red">gagne</span>, où DOSE perd</h2>
+  <div class="bars rv d1">
+    <div class="brow"><div class="bl"><span>Clean label</span><b>DOSE 9,5 · Coca 5</b></div><div class="btrack"><div class="bfill d" style="--w:95%"></div></div><div class="btrack"><div class="bfill c" style="--w:50%"></div></div></div>
+    <div class="brow"><div class="bl"><span>Buzz social</span><b>DOSE 9 · Coca 6</b></div><div class="btrack"><div class="bfill d" style="--w:90%"></div></div><div class="btrack"><div class="bfill c" style="--w:60%"></div></div></div>
+    <div class="brow"><div class="bl"><span>Validation Yuka</span><b>DOSE 8,5 · Coca 4</b></div><div class="btrack"><div class="bfill d" style="--w:85%"></div></div><div class="btrack"><div class="bfill c" style="--w:40%"></div></div></div>
+    <div class="brow"><div class="bl"><span>Notoriété</span><b>DOSE 5 · Coca 10</b></div><div class="btrack"><div class="bfill d" style="--w:50%"></div></div><div class="btrack"><div class="bfill c" style="--w:100%"></div></div></div>
+    <div class="brow"><div class="bl"><span>Prix accessible</span><b>DOSE 4 · Coca 9</b></div><div class="btrack"><div class="bfill d" style="--w:40%"></div></div><div class="btrack"><div class="bfill c" style="--w:90%"></div></div></div>
+    <div class="brow"><div class="bl"><span>Distribution</span><b>DOSE 3 · Coca 10</b></div><div class="btrack"><div class="bfill d" style="--w:30%"></div></div><div class="btrack"><div class="bfill c" style="--w:100%"></div></div></div>
+    <div class="blegend"><span><i style="background:#e2231a"></i>DOSE TUE</span><span><i style="background:#6b6b73"></i>Coca-Cola</span></div>
+  </div>
+
+  <h2 class="rv" style="margin-top:3.4rem;font-size:clamp(1.8rem,4.4vw,3rem)">3 leviers <span class="red">stratégiques</span></h2>
+  <div class="reco">
+    <div class="r rv"><b>Scan-as-proof</b><p>Mettre le score Yuka au cœur de la com'&nbsp;: transformer la preuve d'un tiers en argument de vente.</p></div>
+    <div class="r rv d1"><b>Neutraliser l'objection</b><p>Expliquer pédagogiquement la stévia (E960), seul angle faible du ZMOT, pour rassurer les exigeants.</p></div>
+    <div class="r rv d2"><b>Accélérer la distrib'</b><p>La fenêtre océan bleu se referme&nbsp;: sécuriser vite des référencements GMS avant les géants.</p></div>
+  </div>
+  <div class="badge rv d2">Le vrai danger n'est pas Coca — c'est <span class="red">Volvic Vitamin+</span>, qui a déjà la distribution <b>ET</b> le 0 sucre.</div>
+</section>
+
 <!-- 7 · FIN -->
 <section id="fin">
-  <div class="kick rv">06 · Ce qu'on retient</div>
+  <div class="kick rv">07 · Ce qu'on retient</div>
   <h2 class="rv d1">DOSE ne vend pas une boisson.<br><span class="red">DOSE vend une identité.</span></h2>
   <p class="fin-sub rv d2">Produit sain&nbsp;+ ton transgressif&nbsp;+ communauté&nbsp;+ distribution de masse. La recette qui rend le healthy <b style="color:#fff">culturellement désirable</b>.</p>
   <div class="stamp rv d3">Pecho ta dose.</div>
@@ -398,7 +510,7 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
     +'n+=sin(uv.x*35.0-time*2.0)*cos(uv.y*25.0+time*1.2)*0.5;'
     +'vec3 c=mix(color1,color2,n*0.5+0.5);'
     +'c=mix(c,vec3(1.0),pow(abs(n),2.0)*intensity);'
-    +'float g=1.0-length(uv-0.5)*1.35;g=pow(max(g,0.0),2.2);'
+    +'float g=1.0-length(uv-0.5)*0.92;g=pow(max(g,0.0),1.25);g=0.42+0.58*g;'
     +'gl_FragColor=vec4(c*g,1.0);}';
   function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   const prog=gl.createProgram();
@@ -412,8 +524,8 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
   const uT=gl.getUniformLocation(prog,'time'),uR=gl.getUniformLocation(prog,'res'),
         uI=gl.getUniformLocation(prog,'intensity'),uC1=gl.getUniformLocation(prog,'color1'),
         uC2=gl.getUniformLocation(prog,'color2');
-  gl.uniform3f(uC1,0.52,0.06,0.05);   // rouge DOSE profond
-  gl.uniform3f(uC2,0.03,0.015,0.02);  // presque noir
+  gl.uniform3f(uC1,0.92,0.16,0.13);   // rouge DOSE vif
+  gl.uniform3f(uC2,0.16,0.10,0.12);  // charbon (plus visible)
   function size(){
     const dpr=Math.min(window.devicePixelRatio||1,1.5);
     cv.width=Math.floor(innerWidth*dpr); cv.height=Math.floor(innerHeight*dpr);
@@ -424,11 +536,11 @@ h2{font-family:var(--font-d);font-size:clamp(2.2rem,6.2vw,5rem);line-height:.9;t
   function frame(t){
     const tt=t*0.001;
     gl.uniform1f(uT,tt);
-    gl.uniform1f(uI,0.10+Math.sin(tt*2.0)*0.03);
+    gl.uniform1f(uI,0.26+Math.sin(tt*2.0)*0.07);
     gl.drawArrays(gl.TRIANGLES,0,3);
     if(!reduceM) requestAnimationFrame(frame);
   }
-  if(reduceM){ gl.uniform1f(uT,0.0); gl.uniform1f(uI,0.10); gl.drawArrays(gl.TRIANGLES,0,3); }
+  if(reduceM){ gl.uniform1f(uT,0.0); gl.uniform1f(uI,0.26); gl.drawArrays(gl.TRIANGLES,0,3); }
   else requestAnimationFrame(frame);
 })();
 
