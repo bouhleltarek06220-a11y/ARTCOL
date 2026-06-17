@@ -347,6 +347,13 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .pil-n{font-family:var(--serif);font-size:28px;color:var(--orange)}
 .pillar h3{font-family:var(--serif);font-size:25px;font-weight:400;margin:16px 0 14px}
 .pillar p{font-size:13px;line-height:1.7;color:var(--creme-dim)}
+.director{max-width:820px;margin:46px auto 0;text-align:center;border:1px solid rgba(232,89,12,.4);background:rgba(232,89,12,.07);padding:28px 34px;border-radius:4px}
+.dir-k{display:inline-block;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--orange-soft);margin-bottom:12px}
+.director p{font-size:clamp(14px,1.6vw,17px);line-height:1.65;color:var(--on-dark)}
+.director b{color:#fff;font-weight:500}
+.objection{max-width:820px;margin:24px auto 0;text-align:left;border-left:2px solid rgba(255,250,242,.3);padding:6px 0 6px 24px}
+.objection h4{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--on-dark);margin-bottom:8px}
+.objection p{font-size:13.5px;line-height:1.7;color:var(--on-dark-dim)}
 
 /* =====================================================
    S11 · PARCOURS
@@ -364,11 +371,25 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .status-note h3{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);font-weight:400;margin-bottom:16px}
 .status-note p{font-size:14px;line-height:1.75;color:var(--creme-dim)}
 .status-note b{color:var(--creme);font-weight:500}
+.roadmap{max-width:var(--maxw);margin:0 auto 44px;width:100%}
+.roadmap h3{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);font-weight:400;text-align:center;margin-bottom:30px}
+.rm-track{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);position:relative}
+.rm-wave{background:var(--noir);padding:28px 26px 32px;position:relative}
+.rm-wave::before{content:'';position:absolute;top:0;left:0;height:3px;width:100%;background:linear-gradient(90deg,var(--cuir),var(--orange))}
+.rm-wave:nth-child(2)::before{opacity:.7}.rm-wave:nth-child(3)::before{opacity:.45}
+.rm-t{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.rm-wave p{font-size:13px;line-height:1.65;color:var(--creme-dim)}
+.rm-wave b{color:var(--creme);font-weight:500}
+.rm-foot{text-align:center;margin-top:20px;font-size:12px;color:var(--creme-dim)}
 
 /* =====================================================
    S12 · DASHBOARD
    ===================================================== */
 .dash{background:linear-gradient(180deg,var(--noir),var(--noir-2))}
+.director-kpi{max-width:var(--maxw);margin:0 auto 24px;width:100%;border:1px solid rgba(232,89,12,.4);background:rgba(232,89,12,.06);padding:24px 30px;border-radius:4px;display:flex;flex-direction:column;gap:8px}
+.director-kpi .dir-k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--orange)}
+.director-kpi p{font-size:clamp(14px,1.5vw,16px);line-height:1.6;color:var(--creme)}
+.director-kpi b{color:var(--orange);font-weight:600}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);max-width:var(--maxw);margin:0 auto 50px;width:100%}
 .kpi{background:var(--noir);padding:38px 26px;text-align:center}
 .k-num{font-family:var(--serif);font-size:clamp(40px,5vw,66px);font-weight:300;color:var(--creme);line-height:1;display:flex;align-items:baseline;justify-content:center;gap:4px}

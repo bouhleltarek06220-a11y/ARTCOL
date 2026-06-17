@@ -10,49 +10,49 @@
   /* ---------- DATA ---------- */
   const PESTEL = {
     P:  { key:'Politique', title:'Une transformation pilotée par l’État',
-          body:'Vision 2030 fait de la diversification économique une priorité nationale. Les mégaprojets luxe — NEOM, Red Sea Project, Diriyah, Qiddiya — sont valorisés à plus de 63,2 milliards de dollars, créant un écosystème premium inédit.',
+          body:'Avec Vision 2030, lancée en 2016, l’État réoriente toute l’économie hors pétrole. Plus de 1 300 milliards de dollars sont déjà engagés dans les mégaprojets — NEOM, Red Sea, Diriyah, Qiddiya — sur plus de 3 000 milliards prévus d’ici la fin de la décennie.',
           tag:'<span class="tag tag-fait">Fait</span>' },
-    E:  { key:'Économique', title:'Un marché du luxe en pleine accélération',
-          body:'Le marché du luxe saoudien passe de 10,1 milliards de dollars (2024) à 23,3 milliards projetés en 2033, soit un CAGR de 9,7 %. Le nombre de millionnaires devrait être multiplié par huit entre 2024 et 2025.',
+    E:  { key:'Économique', title:'Un marché du luxe qui accélère',
+          body:'Le luxe saoudien passe de 10,1 à 23,3 milliards de dollars entre 2024 et 2033 (+9,7 % par an). Le nombre de millionnaires y est multiplié par huit en un an : de 300 en 2024 à environ 2 400 attendus en 2025. Et le pays ne pèse encore que 18 % du luxe régional — la marge devant lui est énorme.',
           tag:'<span class="tag tag-fait">Fait</span>' },
-    S:  { key:'Sociétal', title:'Les femmes, moteur de la consommation',
-          body:'La participation des femmes au marché du travail est passée de 23,2 % (2016) à 34,5 % (2023). Elles constituent le plus gros segment de consommation luxe, avec des dépenses 55 % supérieures à celles des hommes. C’est le facteur le plus fort.',
+    S:  { key:'Sociétal', title:'Les femmes, vrai moteur de la consommation',
+          body:'C’est notre signal le plus fort. La part des femmes au travail est passée de 23,2 % (2016) à 34,5 % (2023). Dans le Golfe, elles dépensent 55 % de plus que les hommes en beauté et lifestyle. Et le tabou de la seconde main s’efface vite, porté par la Gen Z : l’Arabie Saoudite domine déjà le marché du luxe d’occasion du Golfe.',
           tag:'<span class="tag tag-fait">Fait</span>' },
-    T:  { key:'Technologique', title:'Aucune friction d’infrastructure',
-          body:'Les paiements électroniques représentent 79 % des transactions retail en 2024, 85 % en 2025 (source : Banque centrale saoudienne). Le terrain est mûr pour une plateforme 100 % digitale.',
+    T:  { key:'Technologique', title:'Aucun frein d’infrastructure',
+          body:'85 % des paiements en magasin sont électroniques en 2025 (79 % en 2024), d’après la banque centrale saoudienne. Pour une plateforme 100 % digitale de rachat et de revente, le terrain est prêt.',
           tag:'<span class="tag tag-fait">Fait</span>' },
-    EN: { key:'Écologique', title:'L’upcycling déjà légitimé par l’État',
-          body:'L’upcycling textile est activement promu par la Fashion Commission (Ministère de la Culture), avec des partenariats internationaux existants (Kering Generation Awards). L’angle upcycling n’est donc pas plaqué — il s’inscrit dans une dynamique nationale.',
+    EN: { key:'Écologique', title:'L’upcycling, déjà porté par l’État',
+          body:'Notre angle upcycling n’est pas plaqué : le Royaume le pousse déjà. La Fashion Commission (ministère de la Culture) finance des initiatives dédiées et s’associe aux Kering Generation Awards. On s’inscrit dans une dynamique nationale en cours.',
           tag:'<span class="tag tag-fait">Fait</span>' },
-    L:  { key:'Légal', title:'Un cadre favorable au vendeur particulier',
-          body:'Taxe à l’import sur le luxe jusqu’à 15 %, tarif douanier commun CCG de 5 % minimum, TVA à 15 % pour l’entreprise. Mais le particulier qui revend une pièce d’occasion n’a aucune charge fiscale ni formalité — vérifié, ce n’est pas un point de friction côté vendeur.',
+    L:  { key:'Légal', title:'Un cadre qui n’entrave pas le vendeur',
+          body:'L’import de luxe est taxé jusqu’à 15 %, plus 5 % de tarif douanier CCG, et la TVA entreprise est à 15 %. Mais côté vendeur, rien : un particulier qui revend une pièce d’occasion n’a aucune charge ni formalité. Vérifié — ce n’est pas un point de friction.',
           tag:'<span class="tag tag-fait">Fait</span>' }
   };
 
   const COMPETITORS = [
-    { wm:'Vestiaire<br>Collective', sans:true, cat:'Revente C2C', group:'Indépendant',
-      focus:'Marketplace mondiale de seconde main multi-marques, modèle C2C/B2C.',
-      edge:'Aucune autorité d’authentification sur les pièces Hermès — elle reste un tiers.' },
-    { wm:'THE REALREAL', sans:true, cat:'Revente luxe consignée', group:'Indépendant (coté)',
-      focus:'Consignation de luxe, authentification interne, fort volume US.',
-      edge:'Authentifie « de l’extérieur » ; ni restauration ni création, contrairement à la maison.' },
+    { wm:'THE LUXURY<br>CLOSET', sans:true, cat:'Revente luxe · Dubaï', group:'Indépendant (Dubaï)',
+      focus:'Plateforme née à Dubaï, leader aux Émirats, qui cible explicitement l’Arabie Saoudite et le Koweït dans son expansion.',
+      edge:'C’est le fil rouge Dubaï → Arabie : la menace de substitution n°1, déjà en marche.' },
+    { wm:'VESTIAIRE<br>COLLECTIVE', sans:true, cat:'Revente C2C mondiale', group:'Indépendant',
+      focus:'Marketplace mondiale ; a annoncé son intention de se déployer en Arabie. Opère le « Resale-as-a-Service » de Burberry.',
+      edge:'Modèle de partenariat externalisé — précisément ce qu’Hermès refuse, pour garder data et authentification.' },
     { wm:'ROLEX', sans:false, cat:'Certified Pre-Owned', group:'Indépendant (fondation)',
-      focus:'Programme CPO officiel : garantie maison sur les montres d’occasion.',
-      edge:'Modèle inspirant — mais sur l’horlogerie, pas sur la maroquinerie ni l’upcycling.' },
-    { wm:'BURBERRY', sans:true, cat:'Programme de marque', group:'Indépendant',
-      focus:'Initiatives de reprise/circularité portées par la marque.',
-      edge:'Désirabilité et savoir-faire de restauration sans commune mesure avec Hermès.' },
-    { wm:'GUCCI', sans:false, cat:'Re-commerce', group:'Groupe Kering',
-      focus:'Expériences de revente (ex. Gucci Vault) — re-commerce de marque.',
-      edge:'Appartient à un groupe concurrent ; Hermès reste indépendante et maîtresse de sa rareté.' }
+      focus:'Programme officiel de rachat-revente certifié, lancé en 2022 (~600 M$ de ventes).',
+      edge:'La preuve que le rachat en marque propre marche — mais sur l’horlogerie, pas la maroquinerie ni l’upcycling.' },
+    { wm:'COACH', sans:false, cat:'Rachat en marque propre', group:'Groupe Tapestry',
+      focus:'Programme (Re)Loved : reprise et revente des pièces directement par la marque.',
+      edge:'Coup d’avance opérationnel sur le rachat — sans le savoir-faire de restauration artisanale d’Hermès.' },
+    { wm:'Philip Karto', sans:false, cat:'Upcycling de bases Hermès', group:'Tiers non autorisé',
+      focus:'Upcycle déjà des pièces Hermès authentiques en exemplaires uniques, dans son propre atelier, hors contrôle de la maison.',
+      edge:'La preuve que la demande existe — et l’urgence : un tiers occupe déjà le créneau upcycling.' }
   ];
 
   const PORTER = [
-    { t:'Nouveaux entrants',       lvl:'Faible', cls:'faible', pct:24, note:'Légitimité & authentification que seule Hermès possède sur ses pièces.' },
-    { t:'Pouvoir des vendeurs',    lvl:'Moyen',  cls:'moyen',  pct:50, note:'Faible côté fiscal/administratif, sensible côté confiance et prix proposé.' },
-    { t:'Pouvoir des acheteurs',   lvl:'Moyen',  cls:'moyen',  pct:46, note:'Faible sur l’upcycling (pièce unique), plus élevé sur la revente restaurée.' },
-    { t:'Produits de substitution',lvl:'Élevé',  cls:'eleve',  pct:82, note:'Circuits informels déjà ancrés culturellement — le vrai risque identifié.' },
-    { t:'Intensité concurrentielle',lvl:'Moyen', cls:'moyen',  pct:44, note:'Faible sur l’upcycling (non réplicable), moyenne sur la revente classique.' }
+    { t:'Nouveaux entrants',       lvl:'Moyen', cls:'moyen', pct:55, note:'Le terrain n’est pas vierge : Rolex CPO (~600 M$), Coach (Re)Loved et des horlogers suisses rachètent déjà en propre. Et Philip Karto upcycle déjà des Hermès.' },
+    { t:'Pouvoir des vendeurs',    lvl:'Moyen', cls:'moyen', pct:50, note:'Aucune friction fiscale : tout se joue sur la confiance et le prix face aux circuits informels. Cadrage Bain : ~500 Md$ de luxe dorment dans les penderies, vs ~300 Md$ d’achats neufs/an.' },
+    { t:'Pouvoir des acheteurs',   lvl:'Faible à moyen', cls:'moyen', pct:42, note:'Sur l’upcycling, pricing power fort (pièces uniques) — nuance : Philip Karto crée déjà un comparable hors circuit. Sur la revente restaurée, des comparables existent sur les plateformes tierces.' },
+    { t:'Produits de substitution',lvl:'Moyen à élevé', cls:'eleve', pct:85, note:'Le vrai risque. The Luxury Closet (née à Dubaï) cible l’Arabie ; Vestiaire Collective a annoncé son intention. Le fil Dubaï → diffusion régionale est déjà engagé.' },
+    { t:'Intensité concurrentielle',lvl:'Moyenne', cls:'moyen', pct:55, note:'L’Arabie domine déjà le luxe d’occasion du Golfe : terrain actif, pas vierge. Sur l’upcycling, encore peu structuré — une vraie fenêtre si Hermès agit vite.' }
   ];
 
   /* ============================================================
@@ -428,13 +428,13 @@
   function initSwot() {
     const items = [
       { ix:'S', badge:'Forces', title:'Forces', sub:'Strengths', bg:POSTERS[1],
-        body:'<ul class="cs-list"><li>Savoir-faire de restauration &amp; d’authentification inimitable</li><li>Capital de désirabilité déjà fort dans le Golfe</li><li>Intégration verticale : la maison fabrique, donc elle sait réparer</li></ul>' },
+        body:'<ul class="cs-list"><li>Autorité finale sur l’authentification (codes date + artisan depuis les années 1940) — d’autres savent les lire, Hermès reste seule à trancher</li><li>Savoir-faire de restauration et d’upcycling en interne</li><li>Désirabilité déjà forte dans le Golfe</li></ul>' },
       { ix:'W', badge:'Faiblesses', title:'Faiblesses', sub:'Weaknesses', bg:POSTERS[0],
-        body:'<ul class="cs-list"><li>Aucune expérience opérationnelle du rachat à grande échelle</li><li>Risque de confusion d’image si mal exécuté</li></ul>' },
+        body:'<ul class="cs-list"><li>Aucune expérience du rachat à grande échelle — Rolex et Coach ont un coup d’avance opérationnel</li><li>Risque de confusion avec le neuf si le dispositif est mal différencié</li></ul>' },
       { ix:'O', badge:'Opportunités', title:'Opportunités', sub:'Opportunities', bg:POSTERS[3],
-        body:'<ul class="cs-list"><li>Base de clientes fortunées en forte croissance</li><li>Revente structurée encore peu développée localement</li><li>Fenêtre de premier entrant</li></ul>' },
+        body:'<ul class="cs-list"><li>Base de détentrices fortunées en forte croissance</li><li>Fenêtre de premier entrant institutionnel en Arabie (avant Dubaï)</li><li>Gen Z + millennials favorables à la seconde main</li><li>Upcycling porté par l’État (Fashion Commission)</li></ul>' },
       { ix:'T', badge:'Menaces', title:'Menaces', sub:'Threats', bg:POSTERS[2],
-        body:'<ul class="cs-list"><li>Circuits informels déjà ancrés</li><li>Taxation à l’import (≤ 15 %)</li><li>Sensibilité culturelle à « l’occasion » <span class="tag tag-hyp">Hypothèse</span></li></ul>' }
+        body:'<ul class="cs-list"><li>Concurrence déjà engagée : Rolex, Coach, et Philip Karto sur l’upcycling Hermès</li><li>Plateformes tierces en expansion vers l’Arabie (The Luxury Closet, Vestiaire)</li><li>Circuits informels ancrés <span class="tag tag-hyp">Hypothèse</span></li><li>Import taxé jusqu’à 15 %</li></ul>' }
     ];
     cardStack('#swotStack', items, { spreadDeg: 22 });
   }
