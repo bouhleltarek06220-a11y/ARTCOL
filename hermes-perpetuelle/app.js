@@ -30,11 +30,21 @@
   };
 
   const COMPETITORS = [
-    { name:'Vestiaire Collective', cat:'Revente C2C',         short:'Vestiaire' },
-    { name:'The RealReal',         cat:'Revente luxe',         short:'The RealReal' },
-    { name:'Rolex CPO',            cat:'Certified Pre-Owned',  short:'Rolex CPO' },
-    { name:'Burberry',             cat:'Programme marque',     short:'Burberry' },
-    { name:'Gucci',                cat:'Re-commerce',          short:'Gucci' }
+    { wm:'Vestiaire<br>Collective', sans:true, cat:'Revente C2C', group:'Indépendant',
+      focus:'Marketplace mondiale de seconde main multi-marques, modèle C2C/B2C.',
+      edge:'Aucune autorité d’authentification sur les pièces Hermès — elle reste un tiers.' },
+    { wm:'THE REALREAL', sans:true, cat:'Revente luxe consignée', group:'Indépendant (coté)',
+      focus:'Consignation de luxe, authentification interne, fort volume US.',
+      edge:'Authentifie « de l’extérieur » ; ni restauration ni création, contrairement à la maison.' },
+    { wm:'ROLEX', sans:false, cat:'Certified Pre-Owned', group:'Indépendant (fondation)',
+      focus:'Programme CPO officiel : garantie maison sur les montres d’occasion.',
+      edge:'Modèle inspirant — mais sur l’horlogerie, pas sur la maroquinerie ni l’upcycling.' },
+    { wm:'BURBERRY', sans:true, cat:'Programme de marque', group:'Indépendant',
+      focus:'Initiatives de reprise/circularité portées par la marque.',
+      edge:'Désirabilité et savoir-faire de restauration sans commune mesure avec Hermès.' },
+    { wm:'GUCCI', sans:false, cat:'Re-commerce', group:'Groupe Kering',
+      focus:'Expériences de revente (ex. Gucci Vault) — re-commerce de marque.',
+      edge:'Appartient à un groupe concurrent ; Hermès reste indépendante et maîtresse de sa rareté.' }
   ];
 
   const PORTER = [
@@ -180,32 +190,47 @@
   /* ============================================================
      PESTEL SPHERE
      ============================================================ */
-  function initPestel() {
-    const sphere = $('#pestelSphere');
-    const detail = $('#pestelDetail');
-    const tabsWrap = $('#pestelTabs');
-    const facets = $$('.facet', sphere);
-    const order = ['P','E','S','T','EN','L'];
-    detail.innerHTML = '<div class="pd-empty">Sélectionnez une facette →</div>';
+  const PESTEL_ICONS = {
+    P:'<path d="M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6M9 21v-7h6v7"/>',
+    E:'<path d="M3 17l6-6 4 4 7-7M15 8h5v5"/>',
+    S:'<circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3.3 2.5-6 5.5-6s5.5 2.7 5.5 6M16.5 5.2A3 3 0 0117 11M20.5 20c0-2.4-1.4-4.5-3.5-5.5"/>',
+    T:'<rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+    EN:'<path d="M11 20A7 7 0 014 13C4 8 10 4 20 3c0 9-4 16-9 17zM4.5 20.5c2.5-3 5.5-5 8.5-6"/>',
+    L:'<path d="M12 3v18M5.5 21h13M12 5l-6.5 2 3.2 5.3a3 3 0 01-6.4 0L5.5 7M12 5l6.5 2-3.2 5.3a3 3 0 006.4 0L18.5 7"/>'
+  };
 
-    // build reliable tab controls
-    order.forEach(k => {
+  function initPestel() {
+    const orbit = $('#pestelOrbit');
+    const detail = $('#pestelDetail');
+    const order = ['P','E','S','T','EN','L'];
+    detail.innerHTML = '<div class="pd-empty">Cliquez une icône pour ouvrir l’analyse →</div>';
+
+    const R = 39; // % radius
+    const cards = order.map((k, i) => {
+      const ang = (-90 + i * 60) * Math.PI / 180;
+      const x = 50 + Math.cos(ang) * R, y = 50 + Math.sin(ang) * R;
       const b = document.createElement('button');
-      b.className = 'p-tab';
-      b.dataset.key = k;
-      b.innerHTML = '<span>' + (k === 'EN' ? 'E' : k) + '</span><small>' + PESTEL[k].key + '</small>';
+      b.className = 'po-card'; b.dataset.key = k;
+      b.style.left = x + '%'; b.style.top = y + '%';
+      b.setAttribute('aria-label', PESTEL[k].key);
+      b.innerHTML =
+        '<div class="po-inner">' +
+          '<div class="po-face po-front"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">' + PESTEL_ICONS[k] + '</svg>' +
+            '<span class="po-letter">' + (k === 'EN' ? 'E' : k) + '</span><span class="po-name">' + PESTEL[k].key + '</span></div>' +
+          '<div class="po-face po-back"><span class="po-letter">' + (k === 'EN' ? 'E' : k) + '</span><small>ouvrir</small></div>' +
+        '</div>';
       b.addEventListener('click', () => select(k));
-      tabsWrap.appendChild(b);
+      orbit.appendChild(b);
+      return b;
     });
 
     function select(key) {
-      facets.forEach(x => x.classList.toggle('active', x.dataset.key === key));
-      $$('.p-tab', tabsWrap).forEach(x => x.classList.toggle('active', x.dataset.key === key));
+      cards.forEach(c => c.classList.toggle('active', c.dataset.key === key));
       const d = PESTEL[key];
       detail.style.opacity = 0;
       setTimeout(() => {
         detail.innerHTML =
-          '<div class="pd-key">' + d.key + '</div>' +
+          '<div class="pd-key"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">' + PESTEL_ICONS[key] + '</svg>' + d.key + '</div>' +
           '<h3>' + d.title + '</h3>' +
           '<p>' + d.body + '</p>' +
           '<div class="pd-tags">' + d.tag + '</div>';
@@ -214,98 +239,215 @@
       }, 200);
     }
 
-    facets.forEach(f => f.addEventListener('click', () => select(f.dataset.key)));
-
-    // pause spin on hover so facets are clickable; resume on leave
-    sphere.addEventListener('mouseenter', () => sphere.style.animationPlayState = 'paused');
-    sphere.addEventListener('mouseleave', () => sphere.style.animationPlayState = 'running');
+    // scatter -> circle reveal
+    if (!reduce && window.gsap) {
+      cards.forEach((c, i) => {
+        gsap.from(c, {
+          x: (Math.random() - 0.5) * 420, y: (Math.random() - 0.5) * 320,
+          rotation: (Math.random() - 0.5) * 120, opacity: 0, scale: 0.4,
+          duration: 1.1, ease: 'power3.out', delay: 0.1 + i * 0.08,
+          scrollTrigger: { trigger: '#s5', start: 'top 60%' }
+        });
+      });
+    }
   }
 
   /* ============================================================
      ARENA (concurrence)
      ============================================================ */
   function initArena() {
-    const arena = $('#arena');
+    const ring = $('#arRing');
     const n = COMPETITORS.length;
-    COMPETITORS.forEach((c, i) => {
-      const ang = (-90 + i * (360 / n)) * Math.PI / 180;
-      const r = 42; // % radius
-      const x = 50 + Math.cos(ang) * r;
-      const y = 50 + Math.sin(ang) * r;
+    const radius = 300;
+    const nodes = COMPETITORS.map((c, i) => {
+      const ang = i * (360 / n);
       const el = document.createElement('div');
-      el.className = 'comp';
-      el.style.left = x + '%';
-      el.style.top = y + '%';
-      el.innerHTML = '<div class="c-bubble">' + c.short + '</div>' +
-                     '<div class="c-name">' + c.name + '</div>' +
-                     '<div class="c-cat">' + c.cat + '</div>';
-      arena.appendChild(el);
-      gsap.from(el, { opacity:0, scale:0.4, duration:0.8, ease:'back.out(1.6)',
-        scrollTrigger:{ trigger:'#s6', start:'top 70%' }, delay:0.1+i*0.1 });
-    });
-  }
-
-  /* ============================================================
-     SWOT CUBE (rotate + drag)
-     ============================================================ */
-  function initSwot() {
-    const cube = $('#swotCube');
-    const rots = { S:{x:-14,y:0}, O:{x:-14,y:-90}, W:{x:-14,y:-180}, T:{x:-14,y:90} };
-    let rx = -14, ry = 0;
-    function apply(){ cube.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`; }
-    $$('.cube-ctrl button').forEach(b => {
-      b.addEventListener('click', () => {
-        $$('.cube-ctrl button').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active');
-        const r = rots[b.dataset.rot]; rx = r.x; ry = r.y;
-        cube.style.transition='transform 1s var(--ease)'; apply();
-      });
-    });
-    // drag
-    let down=false, sx=0, sy=0, brx=0, bry=0;
-    const start=e=>{down=true;cube.classList.add('drag');const p=e.touches?e.touches[0]:e;sx=p.clientX;sy=p.clientY;brx=rx;bry=ry;};
-    const move=e=>{if(!down)return;const p=e.touches?e.touches[0]:e;ry=bry+(p.clientX-sx)*0.5;rx=brx-(p.clientY-sy)*0.5;apply();};
-    const end=()=>{down=false;cube.classList.remove('drag');};
-    cube.addEventListener('mousedown',start);window.addEventListener('mousemove',move);window.addEventListener('mouseup',end);
-    cube.addEventListener('touchstart',start,{passive:true});window.addEventListener('touchmove',move,{passive:true});window.addEventListener('touchend',end);
-    // intro spin
-    gsap.from(cube,{duration:1.4,ease:'power3.out',onUpdate:function(){const p=this.progress();cube.style.transform=`rotateX(${-14}deg) rotateY(${ -160 + p*160 }deg)`;},
-      scrollTrigger:{trigger:'#s7',start:'top 60%',once:true}});
-  }
-
-  /* ============================================================
-     PORTER
-     ============================================================ */
-  function initPorter() {
-    const stage = $('#porterStage');
-    const svg = $('#porterLines');
-    const n = PORTER.length;
-    PORTER.forEach((f, i) => {
-      const ang = (-90 + i * (360 / n)) * Math.PI / 180;
-      const r = 38;
-      const x = 50 + Math.cos(ang) * r;
-      const y = 50 + Math.sin(ang) * r;
-      const el = document.createElement('div');
-      el.className = 'force';
-      el.style.left = x + '%';
-      el.style.top = y + '%';
+      el.className = 'ar-node';
+      el.dataset.ang = ang;
       el.innerHTML =
-        '<div class="f-card"><h4>' + f.t + '</h4>' +
-        '<div class="f-meter"><i data-pct="' + f.pct + '"></i></div>' +
-        '<div class="f-lvl lvl-' + f.cls + '">Intensité ' + f.lvl + '</div></div>';
-      stage.appendChild(el);
-      // connection line
-      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('x1',50);line.setAttribute('y1',50);
-      line.setAttribute('x2',x);line.setAttribute('y2',y);
-      line.style.animationDelay=(i*0.12)+'s';
-      svg.appendChild(line);
-      gsap.from(el,{opacity:0,scale:0.6,duration:0.7,ease:'back.out(1.5)',delay:0.15+i*0.1,
-        scrollTrigger:{trigger:'#s8',start:'top 65%'}});
+        '<div class="ar-card">' +
+          '<div class="ar-wm' + (c.sans ? ' sans' : '') + '">' + c.wm + '</div>' +
+          '<div class="ar-cat">' + c.cat + '</div>' +
+        '</div>';
+      el.querySelector('.ar-card').addEventListener('click', e => { e.stopPropagation(); openModal(c); });
+      ring.appendChild(el);
+      return el;
     });
-    // animate meters
-    ScrollTrigger.create({ trigger:'#s8', start:'top 55%', once:true,
-      onEnter:()=>$$('.f-meter i').forEach(b=>{ b.style.width=b.dataset.pct+'%'; }) });
+
+    let rotY = 0, vel = 0, down = false, lastX = 0, dragMoved = false, auto = true;
+    function place() {
+      nodes.forEach(el => {
+        const a = parseFloat(el.dataset.ang) + rotY;
+        // each card sits on a horizontal ring, facing outward; counter-rotate to face camera
+        el.style.transform = 'rotateY(' + a + 'deg) translateZ(' + radius + 'px) rotateY(' + (-a) + 'deg)';
+        const rad = a * Math.PI / 180;
+        const depth = Math.cos(rad); // -1 (back) .. 1 (front)
+        const card = el.firstChild;
+        card.style.opacity = (0.45 + 0.55 * (depth + 1) / 2).toFixed(3);
+        el.style.zIndex = Math.round(100 + depth * 100);
+        card.style.filter = depth < 0 ? 'blur(.4px)' : 'none';
+      });
+    }
+    function loop() {
+      if (!down) { if (auto) vel += 0.02; rotY += vel; vel *= 0.94; if (Math.abs(vel) < 0.002) vel = 0; }
+      place(); requestAnimationFrame(loop);
+    }
+    const start = e => { down = true; auto = false; dragMoved = false; ring.classList.add('grab');
+      lastX = (e.touches ? e.touches[0] : e).clientX; vel = 0; };
+    const move = e => { if (!down) return; const x = (e.touches ? e.touches[0] : e).clientX;
+      const dx = x - lastX; if (Math.abs(dx) > 3) dragMoved = true; rotY += dx * 0.35; vel = dx * 0.35; lastX = x; };
+    const end = () => { if (!down) return; down = false; ring.classList.remove('grab');
+      setTimeout(() => { auto = true; }, 2500); };
+    ring.addEventListener('mousedown', start); window.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+    ring.addEventListener('touchstart', start, { passive: true }); window.addEventListener('touchmove', move, { passive: true }); window.addEventListener('touchend', end);
+    place(); loop();
+
+    // modal
+    let modal = $('#arModal');
+    if (!modal) {
+      modal = document.createElement('div'); modal.id = 'arModal'; modal.className = 'ar-modal';
+      modal.innerHTML = '<div class="ar-modal-box"><button class="ar-close" aria-label="Fermer">&times;</button><div class="m-content"></div></div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e => { if (e.target === modal || e.target.classList.contains('ar-close')) modal.classList.remove('open'); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
+    }
+    function openModal(c) {
+      $('.m-content', modal).innerHTML =
+        '<div class="m-wm">' + c.wm.replace('<br>', ' ') + '</div>' +
+        '<div class="m-cat">' + c.cat + '</div>' +
+        '<div class="m-row"><span class="m-k">Groupe</span><span class="m-v">' + c.group + '</span></div>' +
+        '<div class="m-row"><span class="m-k">Positionnement</span><span class="m-v">' + c.focus + '</span></div>' +
+        '<div class="m-row"><span class="m-k">L’avantage d’Hermès</span><span class="m-v m-edge">' + c.edge + '</span></div>';
+      modal.classList.add('open');
+    }
+
+    if (!reduce && window.gsap) {
+      gsap.from(nodes, { opacity: 0, scale: 0.5, duration: 0.8, ease: 'back.out(1.5)', stagger: 0.08,
+        scrollTrigger: { trigger: '#s6', start: 'top 65%' } });
+    }
+  }
+
+  /* ============================================================
+     CARDSTACK (fan carousel) — vanilla port, used by SWOT & Porter
+     ============================================================ */
+  function cardStack(rootSel, items, opts) {
+    opts = opts || {};
+    const root = $(rootSel); if (!root) return;
+    const len = items.length;
+    const maxOffset = opts.maxOffset || 2;
+    const spreadDeg = opts.spreadDeg != null ? opts.spreadDeg : 26;
+    const depth = opts.depth || 130;
+    const stage = document.createElement('div'); stage.className = 'cs-stage'; stage.tabIndex = 0;
+    root.appendChild(stage);
+    const dots = document.createElement('div'); dots.className = 'cs-dots';
+    root.appendChild(dots);
+
+    let active = 0, cw = 480, ch = 320, spacing = 250;
+    function measure() {
+      const w = root.clientWidth || 900;
+      cw = Math.min(480, Math.max(260, w * 0.40));
+      ch = Math.round(cw * 0.66);
+      spacing = Math.round(cw * 0.52);
+      stage.style.height = (ch + 90) + 'px';
+    }
+
+    const cards = items.map((it, i) => {
+      const c = document.createElement('article');
+      c.className = 'cs-card';
+      c.innerHTML =
+        (it.bg ? '<img class="cs-bg" src="' + it.bg + '" alt="" draggable="false"/>' : '') +
+        '<div class="cs-veil"></div>' +
+        '<div class="cs-body">' +
+          '<span class="cs-ix">' + it.ix + '</span>' +
+          (it.badge ? '<span class="cs-badge">' + it.badge + '</span>' : '') +
+          '<h3 class="cs-title">' + it.title + '</h3>' +
+          (it.sub ? '<div class="cs-sub">' + it.sub + '</div>' : '') +
+          it.body +
+        '</div>';
+      c.addEventListener('click', () => { if (i !== active) go(i); });
+      stage.appendChild(c);
+      const d = document.createElement('button'); d.setAttribute('aria-label', it.title);
+      d.addEventListener('click', () => go(i)); dots.appendChild(d);
+      return c;
+    });
+    const dotEls = $$('button', dots);
+
+    function signed(i) {
+      let raw = i - active;
+      const alt = raw > 0 ? raw - len : raw + len;
+      return Math.abs(alt) < Math.abs(raw) ? alt : raw;
+    }
+    function layout() {
+      cards.forEach((c, i) => {
+        const off = signed(i), abs = Math.abs(off), vis = abs <= maxOffset;
+        c.style.display = vis ? '' : 'none';
+        if (!vis) return;
+        c.style.width = cw + 'px'; c.style.height = ch + 'px';
+        const isA = off === 0;
+        const x = off * spacing, y = abs * 12 - (isA ? 16 : 0);
+        const rot = off * (spreadDeg / maxOffset);
+        const sc = isA ? 1.04 : 0.9;
+        c.style.zIndex = 100 - abs;
+        c.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,${-abs*depth}px) rotateZ(${rot}deg) scale(${sc})`;
+        c.style.opacity = abs === maxOffset ? 0.55 : 1;
+        c.classList.toggle('is-active', isA);
+        if (isA) { const m = $('.cs-meter i', c); if (m) m.style.width = m.dataset.pct + '%'; }
+      });
+      dotEls.forEach((d, i) => d.classList.toggle('on', i === active));
+    }
+    function go(i) { active = ((i % len) + len) % len; layout(); }
+    function next() { go(active + 1); } function prev() { go(active - 1); }
+
+    stage.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next();
+    });
+    // drag / swipe on stage
+    let down = false, sx = 0;
+    const ds = e => { down = true; sx = (e.touches ? e.touches[0] : e).clientX; };
+    const de = e => {
+      if (!down) return; down = false;
+      const ex = (e.changedTouches ? e.changedTouches[0] : e).clientX;
+      const dx = ex - sx;
+      if (dx > 50) prev(); else if (dx < -50) next();
+    };
+    stage.addEventListener('mousedown', ds); window.addEventListener('mouseup', de);
+    stage.addEventListener('touchstart', ds, { passive: true }); stage.addEventListener('touchend', de);
+
+    measure(); layout();
+    window.addEventListener('resize', () => { measure(); layout(); });
+    // reveal
+    if (!reduce && window.gsap) {
+      gsap.from(cards, { opacity: 0, y: 60, duration: 0.9, ease: 'power3.out', stagger: 0.06,
+        scrollTrigger: { trigger: root, start: 'top 70%' }, onComplete: layout });
+    }
+    return { go, next, prev };
+  }
+
+  const POSTERS = ['assets/img/leather.jpg','assets/img/atelier.jpg','assets/img/clasp.jpg','assets/img/hero-bag.jpg'];
+
+  function initSwot() {
+    const items = [
+      { ix:'S', badge:'Forces', title:'Forces', sub:'Strengths', bg:POSTERS[1],
+        body:'<ul class="cs-list"><li>Savoir-faire de restauration &amp; d’authentification inimitable</li><li>Capital de désirabilité déjà fort dans le Golfe</li><li>Intégration verticale : la maison fabrique, donc elle sait réparer</li></ul>' },
+      { ix:'W', badge:'Faiblesses', title:'Faiblesses', sub:'Weaknesses', bg:POSTERS[0],
+        body:'<ul class="cs-list"><li>Aucune expérience opérationnelle du rachat à grande échelle</li><li>Risque de confusion d’image si mal exécuté</li></ul>' },
+      { ix:'O', badge:'Opportunités', title:'Opportunités', sub:'Opportunities', bg:POSTERS[3],
+        body:'<ul class="cs-list"><li>Base de clientes fortunées en forte croissance</li><li>Revente structurée encore peu développée localement</li><li>Fenêtre de premier entrant</li></ul>' },
+      { ix:'T', badge:'Menaces', title:'Menaces', sub:'Threats', bg:POSTERS[2],
+        body:'<ul class="cs-list"><li>Circuits informels déjà ancrés</li><li>Taxation à l’import (≤ 15 %)</li><li>Sensibilité culturelle à « l’occasion » <span class="tag tag-hyp">Hypothèse</span></li></ul>' }
+    ];
+    cardStack('#swotStack', items, { spreadDeg: 22 });
+  }
+
+  function initPorter() {
+    const items = PORTER.map((f, i) => ({
+      ix: String(i + 1), badge: 'Intensité ' + f.lvl, title: f.t, sub: 'Force ' + (i + 1) + ' / 5',
+      bg: POSTERS[i % POSTERS.length],
+      body: '<p class="cs-desc">' + f.note + '</p>' +
+            '<div class="cs-meter"><i data-pct="' + f.pct + '"></i></div>' +
+            '<div class="cs-lvl lvl-' + f.cls + '">Intensité ' + f.lvl + '</div>'
+    }));
+    cardStack('#porterStack', items, { spreadDeg: 26 });
   }
 
   /* ============================================================
@@ -385,8 +527,8 @@
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
     const sprite = makeSprite();
-    const mat = new THREE.PointsMaterial({ size:0.5, map:sprite, transparent:true, opacity:0.7,
-      depthWrite:false, blending:THREE.AdditiveBlending, color:0xf2a45c });
+    const mat = new THREE.PointsMaterial({ size:0.42, map:sprite, transparent:true, opacity:0.5,
+      depthWrite:false, blending:THREE.NormalBlending, color:0xb98a52 });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
@@ -415,7 +557,7 @@
     function makeSprite(){
       const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
       const g=x.createRadialGradient(32,32,0,32,32,32);
-      g.addColorStop(0,'rgba(255,220,160,1)');g.addColorStop(.3,'rgba(242,140,60,.6)');g.addColorStop(1,'rgba(242,104,28,0)');
+      g.addColorStop(0,'rgba(150,110,60,.9)');g.addColorStop(.35,'rgba(176,118,63,.45)');g.addColorStop(1,'rgba(176,118,63,0)');
       x.fillStyle=g;x.fillRect(0,0,64,64);
       const t=new THREE.Texture(c);t.needsUpdate=true;return t;
     }
