@@ -468,9 +468,8 @@ em{font-style:italic;color:var(--orange);font-weight:400}
    ===================================================== */
 .emblem-outro{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;background:var(--noir);padding:60px 24px}
 .emblem-video{width:min(46vmin,420px);height:min(46vmin,420px);object-fit:contain;mix-blend-mode:multiply;filter:saturate(1.05)}
-.emblem-line{margin-top:18px;font-family:var(--serif);font-weight:300;font-size:clamp(20px,3.4vw,40px);line-height:1.2;color:var(--creme);max-width:760px}
-.emblem-line em{font-style:italic;color:var(--orange)}
-.emblem-sub{margin-top:20px;font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--creme-dim)}
+.emblem-merci{margin-top:24px;font-family:var(--serif);font-weight:300;font-size:clamp(56px,11vw,140px);line-height:1;color:var(--creme);letter-spacing:-.01em}
+.emblem-sub{margin-top:22px;font-size:12px;letter-spacing:.5em;text-transform:uppercase;color:var(--creme-dim)}
 
 /* =====================================================
    DARK CINEMATIC SCENES (hero · reveal · conclusion) — light text
