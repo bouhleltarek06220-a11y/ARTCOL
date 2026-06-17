@@ -465,6 +465,10 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .hero .kicker{color:var(--beige)}
 .hero .hl{color:var(--on-dark)}
 .hero .hero-q{color:var(--on-dark-dim)}
+.adn{color:var(--on-dark)}
+.adn .stat .num{color:var(--on-dark)}
+.adn .stat .lab{color:var(--on-dark-dim)}
+.adn .adn-foot{color:var(--on-dark-dim)}
 .conclu{color:var(--on-dark)}
 .reveal-sec{background:radial-gradient(ellipse at 50% 28%,rgba(232,89,12,.16),var(--noir-deep) 62%);color:var(--on-dark)}
 .reveal-sec .reveal-title{color:var(--on-dark)}
