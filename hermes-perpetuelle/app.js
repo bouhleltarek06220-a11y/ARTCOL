@@ -483,6 +483,22 @@
   }
 
   /* ============================================================
+     3D TILT (cartes Problème)
+     ============================================================ */
+  function initTilt() {
+    if (reduce) return;
+    $$('.prob-card.tilt').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'rotateX(' + (-py * 11).toFixed(2) + 'deg) rotateY(' + (px * 11).toFixed(2) + 'deg)';
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
+    });
+  }
+
+  /* ============================================================
      SOURCE TOOLTIPS
      ============================================================ */
   function initTooltips() {
@@ -580,6 +596,7 @@
     initTSS();
     initJourney();
     initConclu();
+    initTilt();
     initTooltips();
     ScrollTrigger.refresh();
   }
