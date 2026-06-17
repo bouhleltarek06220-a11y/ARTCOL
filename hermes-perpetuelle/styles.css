@@ -130,20 +130,25 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 
 /* 3D image marquee — galerie Hermès en perspective */
-.marquee3d{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;background:var(--noir-deep);overflow:hidden}
-.m3d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px);width:135vmax;height:135vmax;transform:rotateX(48deg) rotateZ(46deg) scale(1.05);transform-origin:center;filter:brightness(.82) saturate(1.04)}
+.marquee3d{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;background:#1a1206;overflow:hidden}
+.m3d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px);width:140vmax;height:140vmax;transform:rotateX(46deg) rotateZ(44deg) scale(1.08);transform-origin:center;filter:brightness(1.05) saturate(1.12) contrast(1.02)}
 .m3d-col{display:flex;flex-direction:column;gap:clamp(14px,2vw,26px);will-change:transform}
-.m3d-col:nth-child(1){animation:m3dUp 26s ease-in-out infinite}
-.m3d-col:nth-child(2){animation:m3dDown 32s ease-in-out infinite}
-.m3d-col:nth-child(3){animation:m3dUp 29s ease-in-out infinite}
-.m3d-col img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,.55);display:block}
-@keyframes m3dUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-7%)}}
-@keyframes m3dDown{0%,100%{transform:translateY(-7%)}50%{transform:translateY(0)}}
+.m3d-col:nth-child(1){animation:m3dScrollUp 38s linear infinite}
+.m3d-col:nth-child(2){animation:m3dScrollDown 46s linear infinite}
+.m3d-col:nth-child(3){animation:m3dScrollUp 52s linear infinite}
+.m3d-col img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,.45);display:block}
+@keyframes m3dScrollUp{from{transform:translateY(0)} to{transform:translateY(-50%)}}
+@keyframes m3dScrollDown{from{transform:translateY(-50%)} to{transform:translateY(0)}}
 
 .hero-veil{position:absolute;inset:0;z-index:1;background:
   radial-gradient(ellipse at 50% 58%,rgba(11,8,5,.42) 0%,rgba(11,8,5,.72) 55%,rgba(11,8,5,.97) 100%),
   linear-gradient(180deg,rgba(11,8,5,.82) 0%,rgba(11,8,5,.5) 28%,rgba(11,8,5,.5) 60%,rgba(11,8,5,.94) 100%)}
 .hero-veil.dark{background:radial-gradient(ellipse at 50% 50%,rgba(11,8,5,.4),rgba(11,8,5,.92))}
+
+/* Voile plus leger pour la section ADN : laisser respirer les photos */
+.adn .hero-veil{background:
+  radial-gradient(ellipse at 50% 50%,rgba(11,8,5,.55) 0%,rgba(11,8,5,.28) 45%,rgba(11,8,5,.08) 75%,rgba(11,8,5,0) 100%),
+  linear-gradient(180deg,rgba(11,8,5,.45) 0%,rgba(11,8,5,.1) 18%,rgba(11,8,5,.1) 82%,rgba(11,8,5,.55) 100%)}
 .hero{align-items:center;text-align:center;overflow:hidden}
 .hero-content{position:relative;z-index:2;max-width:1000px}
 .kicker{font-size:10px;letter-spacing:.5em;text-transform:uppercase;color:var(--beige);margin-bottom:40px}
@@ -466,9 +471,11 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .hero .hl{color:var(--on-dark)}
 .hero .hero-q{color:var(--on-dark-dim)}
 .adn{color:var(--on-dark)}
-.adn .stat .num{color:var(--on-dark)}
-.adn .stat .lab{color:var(--on-dark-dim)}
-.adn .adn-foot{color:var(--on-dark-dim)}
+.adn .stat .num{color:var(--on-dark);text-shadow:0 2px 18px rgba(0,0,0,.65),0 0 28px rgba(0,0,0,.5)}
+.adn .stat .lab{color:var(--on-dark-dim);text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.adn .adn-foot{color:var(--on-dark-dim);text-shadow:0 1px 10px rgba(0,0,0,.65)}
+.adn .sec-head h2{text-shadow:0 2px 22px rgba(0,0,0,.7)}
+.adn .eyebrow{text-shadow:0 1px 8px rgba(0,0,0,.7)}
 .conclu{color:var(--on-dark)}
 .reveal-sec{background:radial-gradient(ellipse at 50% 28%,rgba(232,89,12,.16),var(--noir-deep) 62%);color:var(--on-dark)}
 .reveal-sec .reveal-title{color:var(--on-dark)}
