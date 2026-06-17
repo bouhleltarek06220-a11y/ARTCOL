@@ -454,9 +454,11 @@
      TAM / SAM / SOM
      ============================================================ */
   function initTSS() {
-    const circles = $$('#tssCircles .circle');
-    ScrollTrigger.create({ trigger:'#s9', start:'top 60%', once:true,
-      onEnter:()=>circles.forEach((c,i)=>setTimeout(()=>c.classList.add('in'), i*350)) });
+    if (reduce || !window.gsap) return;
+    gsap.from('#tssTunnel .t3-frame', { opacity: 0, scale: 0.6, duration: 1, ease: 'power3.out', stagger: 0.18,
+      scrollTrigger: { trigger: '#s9', start: 'top 62%', once: true } });
+    gsap.from('#tssTunnel .t3-legend li', { opacity: 0, x: 20, duration: 0.7, ease: 'power2.out', stagger: 0.12,
+      scrollTrigger: { trigger: '.t3-legend', start: 'top 88%', once: true } });
   }
 
   /* ============================================================
