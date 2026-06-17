@@ -485,6 +485,47 @@
   }
 
   /* ============================================================
+     CINEMA Dubaï → Riyad (S4) — captions + dots synchronisés
+     ============================================================ */
+  function initCinema() {
+    const vid  = $('#cinemaVid');
+    if (!vid) return;
+    const caps = $$('#cinemaCaps .cap');
+    const dots = $$('#cinemaProg i');
+    if (!caps.length) return;
+
+    const segs = caps.map(c => ({
+      el: c,
+      in:  parseFloat(c.dataset.in),
+      out: parseFloat(c.dataset.out)
+    }));
+
+    let raf = 0, active = -1;
+    function tick() {
+      const t = vid.currentTime;
+      let next = -1;
+      for (let i = 0; i < segs.length; i++) {
+        if (t >= segs[i].in && t < segs[i].out) { next = i; break; }
+      }
+      if (next !== active) {
+        caps.forEach((c, i) => c.classList.toggle('show', i === next));
+        dots.forEach((d, i) => d.classList.toggle('on', next >= 0 && i <= next));
+        active = next;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    ScrollTrigger.create({
+      trigger: '#cinema',
+      start: 'top 80%',
+      onEnter:    () => { vid.play().catch(()=>{}); if (!raf) tick(); },
+      onEnterBack:() => { vid.play().catch(()=>{}); if (!raf) tick(); },
+      onLeave:    () => { vid.pause(); cancelAnimationFrame(raf); raf = 0; },
+      onLeaveBack:() => { vid.pause(); cancelAnimationFrame(raf); raf = 0; }
+    });
+  }
+
+  /* ============================================================
      3D TILT (cartes Problème)
      ============================================================ */
   function initTilt() {
@@ -597,6 +638,7 @@
     initPorter();
     initTSS();
     initJourney();
+    initCinema();
     initConclu();
     initTilt();
     initTooltips();
