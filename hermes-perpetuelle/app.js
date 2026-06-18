@@ -623,6 +623,40 @@
   }
 
   /* ============================================================
+     TRAILER MODAL · LANCER LE FILM
+     ============================================================ */
+  function initTrailerModal() {
+    const openBtn = document.getElementById('trailerOpen');
+    const closeBtn = document.getElementById('trailerClose');
+    const modal = document.getElementById('trailerModal');
+    const video = document.getElementById('trailerVideo');
+    if (!openBtn || !modal || !video) return;
+
+    const open = () => {
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      try { video.currentTime = 0; video.muted = false; video.volume = 1; } catch (e) {}
+      const p = video.play();
+      if (p && p.catch) p.catch(() => { video.muted = true; video.play(); });
+    };
+    const close = () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      try { video.pause(); video.currentTime = 0; } catch (e) {}
+    };
+
+    openBtn.addEventListener('click', open);
+    closeBtn && closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+    video.addEventListener('ended', close);
+  }
+
+  /* ============================================================
      BOOT
      ============================================================ */
   function boot() {
@@ -642,6 +676,7 @@
     initConclu();
     initTilt();
     initTooltips();
+    initTrailerModal();
     ScrollTrigger.refresh();
   }
 

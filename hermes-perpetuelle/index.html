@@ -482,6 +482,20 @@
     </div>
   </section>
 
+  <!-- ═══════════ TRAILER · LANCER LE FILM ═══════════ -->
+  <section class="sec trailer-cta" id="trailer" data-name="Le film">
+    <div class="trailer-cta-inner">
+      <span class="trailer-kicker reveal-up">L'instant cinéma</span>
+      <h2 class="trailer-title reveal-up">Dubaï <em>→</em> Riyad</h2>
+      <p class="trailer-sub reveal-up">Un voyage de 60 secondes. Voix off, musique, plans cinéma.</p>
+      <button class="trailer-btn reveal-up" id="trailerOpen" type="button" aria-label="Lancer le film">
+        <span class="trailer-btn-ico" aria-hidden="true">▶</span>
+        <span class="trailer-btn-label">Lancer le film</span>
+        <span class="trailer-btn-meta">60 s · son ON</span>
+      </button>
+    </div>
+  </section>
+
   <!-- ═══════════ OUTRO · EMBLÈME ═══════════ -->
   <section class="sec emblem-outro" id="emblem" data-name="Signature">
     <video class="emblem-video" autoplay muted loop playsinline poster="assets/img/emblem.jpg">
@@ -492,6 +506,14 @@
   </section>
 
 </main>
+
+<!-- ═══════════ TRAILER · MODALE PLEIN ÉCRAN ═══════════ -->
+<div class="trailer-modal" id="trailerModal" aria-hidden="true" role="dialog" aria-label="Trailer Hermès Perpétuelle">
+  <button class="trailer-close" id="trailerClose" type="button" aria-label="Fermer">✕</button>
+  <video class="trailer-video" id="trailerVideo" playsinline preload="metadata" controls>
+    <source src="assets/video/trailer.mp4" type="video/mp4" />
+  </video>
+</div>
 
 <div class="src-tooltip" id="srcTooltip" role="tooltip"></div>
 
