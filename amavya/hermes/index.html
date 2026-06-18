@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Hermès Perpétuelle — Étude stratégique : seconde main, circularité & upcycling en Arabie Saoudite. Cabinet d'intelligence marché." />
+<title>HERMÈS · PERPÉTUELLE — La valeur ne se perd pas, elle se transmet</title>
+<link rel="preload" href="assets/lib/fonts/cormorant-400.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/lib/fonts/jost-400.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ░░░░░░░░░░ PRELOADER ░░░░░░░░░░ -->
+<div id="preloader" aria-hidden="true">
+  <div class="pre-inner">
+    <div class="pre-logo">
+      <span class="pre-h">H</span>
+      <span class="pre-line"></span>
+    </div>
+    <div class="pre-word">HERMÈS · PERPÉTUELLE</div>
+    <div class="pre-bar"><i></i></div>
+    <div class="pre-pct">0</div>
+  </div>
+</div>
+
+<!-- ░░░░░░░░░░ AMBIENT 3D CANVAS (golden dust) ░░░░░░░░░░ -->
+<canvas id="dust"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ░░░░░░░░░░ FIXED UI ░░░░░░░░░░ -->
+<div class="ui-top">
+  <div class="brand">
+    <span class="brand-mark">HERMÈS</span>
+    <span class="brand-sub">PARIS · cellule d'intelligence marché</span>
+  </div>
+  <button id="legendToggle" class="legend-toggle" aria-label="Légende des sources">
+    <span class="leg ico-fait"></span>Fait
+    <span class="leg ico-est"></span>Estimation
+    <span class="leg ico-hyp"></span>Hypothèse
+  </button>
+</div>
+
+<div id="progress" class="progress"><i></i></div>
+
+<nav id="dots" class="dots" aria-label="Navigation sections"></nav>
+
+<div class="scroll-hint" id="scrollHint">
+  <span>défiler</span><i></i>
+</div>
+
+<main id="scroll">
+
+  <!-- ═══════════ S1 · HERO ═══════════ -->
+  <section class="sec hero" id="s1" data-name="Ouverture">
+    <video class="bg-video" autoplay muted loop playsinline poster="assets/img/hero-bag.jpg">
+      <source src="assets/video/hero-bag.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-veil"></div>
+    <div class="hero-content">
+      <div class="kicker reveal-up">ÉTUDE STRATÉGIQUE · ARABIE SAOUDITE · 2026</div>
+      <div class="hero-lines">
+        <h1 class="hl" data-line="0">Hermès ne vend pas des sacs.</h1>
+        <h1 class="hl" data-line="1">Hermès vend du <em>temps</em>.</h1>
+        <h1 class="hl" data-line="2">Hermès vend de la <em>rareté</em>.</h1>
+        <h1 class="hl" data-line="3">Hermès vend un <em>héritage</em>.</h1>
+      </div>
+      <p class="hero-q reveal-up">Pourquoi la maison devrait-elle bâtir sa propre plateforme<br/>de rachat, revente certifiée &amp; upcycling dans le Golfe&nbsp;?</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ S2 · ADN ═══════════ -->
+  <section class="sec adn" id="s2" data-name="ADN Hermès">
+    <div class="marquee3d" aria-hidden="true">
+      <div class="m3d-grid">
+        <div class="m3d-col">
+          <img src="assets/img/marquee/m1.webp" alt=""/><img src="assets/img/marquee/m4.webp" alt=""/><img src="assets/img/marquee/m7.webp" alt=""/>
+          <img src="assets/img/marquee/m1.webp" alt=""/><img src="assets/img/marquee/m4.webp" alt=""/><img src="assets/img/marquee/m7.webp" alt=""/>
+        </div>
+        <div class="m3d-col">
+          <img src="assets/img/marquee/m3.webp" alt=""/><img src="assets/img/marquee/m5.webp" alt=""/><img src="assets/img/marquee/m8.webp" alt=""/>
+          <img src="assets/img/marquee/m3.webp" alt=""/><img src="assets/img/marquee/m5.webp" alt=""/><img src="assets/img/marquee/m8.webp" alt=""/>
+        </div>
+        <div class="m3d-col">
+          <img src="assets/img/marquee/m2.webp" alt=""/><img src="assets/img/marquee/m6.webp" alt=""/><img src="assets/img/marquee/m9.webp" alt=""/>
+          <img src="assets/img/marquee/m2.webp" alt=""/><img src="assets/img/marquee/m6.webp" alt=""/><img src="assets/img/marquee/m9.webp" alt=""/>
+        </div>
+      </div>
+    </div>
+    <div class="hero-veil"></div>
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE I · L'ADN</span>
+      <h2>Une maison bâtie pour durer</h2>
+    </div>
+    <div class="adn-grid">
+      <div class="stat" data-count="1837" data-suffix=""><div class="num">1837</div><div class="lab">Fondation, sellier-harnacheur à Paris</div></div>
+      <div class="stat" data-count="26000" data-suffix=""><div class="num">0</div><div class="lab">Collaborateurs dans le monde</div></div>
+      <div class="stat" data-count="300" data-suffix=""><div class="num">0</div><div class="lab">Boutiques en propre</div></div>
+      <div class="stat" data-count="45" data-suffix=""><div class="num">0</div><div class="lab">Pays</div></div>
+      <div class="stat" data-count="63" data-suffix=""><div class="num">0</div><div class="lab">Sites de production</div></div>
+    </div>
+    <p class="adn-foot reveal-up">Une intégration verticale rare&nbsp;: <em>la maison fabrique, donc elle sait réparer.</em><span class="ref" data-src="Données corporate Hermès (ordre de grandeur 2023). À dater en annexe méthodologique.">i</span></p>
+  </section>
+
+  <!-- ═══════════ S3 · PROBLÈME ═══════════ -->
+  <section class="sec probleme" id="s3" data-name="Le problème">
+    <div class="sec-head">
+      <span class="eyebrow">CHAPITRE II · LA SITUATION</span>
+      <h2>Le marché existe déjà.<br/>Mais il échappe à la maison.</h2>
+    </div>
+    <div class="prob-grid">
+      <article class="prob-card tilt reveal-up" style="background-image:url('assets/img/leather.jpg')">
+        <span class="pc-media"></span><span class="pc-veil"></span>
+        <div class="pc-inner"><div class="pc-top"><span class="pc-n">01</span><span class="pc-arrow">↗</span></div>
+          <div class="pc-bot"><h3>Marché gris</h3><p>Une part de la valeur des produits Hermès se joue sur des plateformes que la maison ne contrôle pas.</p></div></div>
+      </article>
+      <article class="prob-card tilt reveal-up" style="background-image:url('assets/img/depot.jpg')">
+        <span class="pc-media"></span><span class="pc-veil"></span>
+        <div class="pc-inner"><div class="pc-top"><span class="pc-n">02</span><span class="pc-arrow">↗</span></div>
+          <div class="pc-bot"><h3>Revente informelle</h3><p>Cercles privés, réseaux sociaux, transactions de gré à gré&nbsp;: un circuit ancré, surtout dans le Golfe.</p></div></div>
+      </article>
+      <article class="prob-card tilt reveal-up" style="background-image:url('assets/img/clasp.jpg')">
+        <span class="pc-media"></span><span class="pc-veil"></span>
+        <div class="pc-inner"><div class="pc-top"><span class="pc-n">03</span><span class="pc-arrow">↗</span></div>
+          <div class="pc-bot"><h3>Contrefaçon</h3><p>Sans canal d'authentification officiel, le faux prospère et dilue la confiance.</p></div></div>
+      </article>
+      <article class="prob-card tilt reveal-up" style="background-image:url('assets/img/hero-bag.jpg')">
+        <span class="pc-media"></span><span class="pc-veil"></span>
+        <div class="pc-inner"><div class="pc-top"><span class="pc-n">04</span><span class="pc-arrow">↗</span></div>
+          <div class="pc-bot"><h3>Perte de contrôle</h3><p>Prix, expérience, récit&nbsp;: tout se décide ailleurs. La valeur fuit hors de la maison.</p></div></div>
+      </article>
+    </div>
+    <blockquote class="pull reveal-up">«&nbsp;La revente du luxe croît structurellement. Une part de la valeur des produits Hermès se joue déjà sur des plateformes que la maison ne contrôle pas.&nbsp;»<cite>— Brief stratégique, Hermès</cite></blockquote>
+  </section>
+
+  <!-- ═══════════ S4 · OPPORTUNITÉ ═══════════ -->
+  <section class="sec golfe" id="s4" data-name="L'opportunité">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE III · LE TERRAIN</span>
+      <h2>Le Golfe se réinvente.<br/>L'Arabie Saoudite, prochain épicentre.</h2>
+      <p class="lede reveal-up">Nous lisons le potentiel saoudien à travers la trajectoire de Dubaï&nbsp;(1990→2020)&nbsp;: une grille analytique, pas une promesse.</p>
+    </div>
+    <div class="strat-wrap" id="stratMap">
+      <img class="strat-bg" src="assets/img/strategic_map.jpg" alt="" />
+      <div class="strat-veil"></div>
+      <div class="strat-grain"></div>
+      <div class="strat-title">
+        <span class="strat-eyebrow">HERMÈS · HÉRITAGE</span>
+        <span class="strat-sub">Plateforme de rachat, revente certifiée &amp; upcycling</span>
+      </div>
+      <svg class="strat-flows" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="flowGold" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#caa15a" stop-opacity="0"/>
+            <stop offset="22%" stop-color="#caa15a" stop-opacity=".9"/>
+            <stop offset="78%" stop-color="#caa15a" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#caa15a" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="flowOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e8590c" stop-opacity="0"/>
+            <stop offset="25%" stop-color="#e8590c" stop-opacity=".85"/>
+            <stop offset="75%" stop-color="#e8590c" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#e8590c" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="flowWhite" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f6e7c8" stop-opacity="0"/>
+            <stop offset="30%" stop-color="#f6e7c8" stop-opacity=".7"/>
+            <stop offset="70%" stop-color="#f6e7c8" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="#f6e7c8" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- DUBAI(20,38) → RIYAD(52,53) — or -->
+        <path class="flow flow-gold"   d="M20,38 Q 38,12 52,53" />
+        <!-- ABU DHABI(15,42) → RIYAD(52,53) — orange -->
+        <path class="flow flow-orange" d="M15,42 Q 30,20 52,53" />
+        <!-- DUBAI(20,38) → NEOM(36,17) — blanc -->
+        <path class="flow flow-white"  d="M20,38 Q 24,22 36,17" />
+      </svg>
+
+      <div class="strat-city strat-prio" style="--x:52%;--y:53%">
+        <span class="strat-pin"><i></i></span>
+        <span class="strat-lab">
+          <span class="strat-name">RIYAD</span>
+          <span class="strat-cap">Capitale · marché prioritaire</span>
+        </span>
+      </div>
+      <div class="strat-city strat-hub" style="--x:20%;--y:38%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab">
+          <span class="strat-name">DUBAÏ</span>
+          <span class="strat-cap">Hub régional du luxe</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:15%;--y:42%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab strat-lab-left">
+          <span class="strat-name">ABU DHABI</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:36%;--y:17%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab">
+          <span class="strat-name">NEOM</span>
+          <span class="strat-cap">Mégaprojet Vision 2030</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:28%;--y:72%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab strat-lab-left">
+          <span class="strat-name">JEDDAH</span>
+        </span>
+      </div>
+
+      <div class="strat-legend">
+        <span><i class="lg-or"></i>Flux de luxe</span>
+        <span><i class="lg-orange"></i>Investissement</span>
+        <span><i class="lg-white"></i>Clientèle premium</span>
+      </div>
+    </div>
+    <div class="golfe-stats">
+      <div class="gstat reveal-up"><div class="gnum"><span data-count="10.1" data-dec="1">0</span><small>Mds&nbsp;$</small></div><div class="glab">Marché du luxe saoudien, périmètre large (voyage, auto, hôtellerie incl.) — 2024 <span class="tag tag-est">Estimation</span><span class="ref" data-src="IMARC Group — marché du luxe au sens large (10,1 Md$ 2024 → 23,3 Md$ 2033). NB : les biens de luxe personnels = 5,3 Md$ (2025), cf. TAM section dimensionnement.">i</span></div></div>
+      <div class="gstat reveal-up"><div class="gnum"><span data-count="23.3" data-dec="1">0</span><small>Mds&nbsp;$</small></div><div class="glab">Projection 2033 — CAGR&nbsp;<b>9,7&nbsp;%</b> <span class="tag tag-fait">Fait</span><span class="ref" data-src="Projection de marché — Lot A. Source datée en annexe.">i</span></div></div>
+      <div class="gstat reveal-up"><div class="gnum"><span data-count="8" data-dec="0">0</span><small>×</small></div><div class="glab">Millionnaires&nbsp;: de 300 (2024) à ≈ 2 400 attendus (2025) <span class="tag tag-fait">Fait</span><span class="ref" data-src="PS Market Research, 2025 (consulté 06/2026).">i</span></div></div>
+      <div class="gstat reveal-up"><div class="gnum"><span data-count="1300" data-dec="0">0</span><small>Mds&nbsp;$+</small></div><div class="glab">Déjà engagés dans les mégaprojets (NEOM, Red&nbsp;Sea, Diriyah, Qiddiya) — sur 3&nbsp;000 projetés <span class="tag tag-fait">Fait</span><span class="ref" data-src="Vision 2030 / sources publiques recoupées. NB : chiffre corrigé en phase 2 — l'ancien « 63,2 Md$ » provenait d'une source générée par IA, écartée.">i</span></div></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ S5 · PESTEL ═══════════ -->
+  <section class="sec pestel" id="s5" data-name="PESTEL">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE IV · L'ENVIRONNEMENT</span>
+      <h2>PESTEL — Arabie Saoudite</h2>
+      <p class="lede">Six facteurs. Cliquez une icône pour ouvrir l'analyse.</p>
+    </div>
+    <div class="pestel-stage">
+      <div class="pestel-orbit" id="pestelOrbit">
+        <div class="po-center"><span>PESTEL</span><small>Arabie Saoudite</small></div>
+      </div>
+      <div class="pestel-detail" id="pestelDetail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ S6 · CONCURRENCE ═══════════ -->
+  <section class="sec arene" id="s6" data-name="Concurrence">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE V · LA VEILLE</span>
+      <h2>L'arène concurrentielle</h2>
+      <p class="lede">Aucun acteur du même groupe qu'Hermès. La maison reste indépendante&nbsp;— et seule à pouvoir authentifier ses propres pièces.</p>
+    </div>
+    <div class="arena3d" id="arena3d">
+      <div class="ar-center"><span>HERMÈS</span><small>Perpétuelle</small></div>
+      <div class="ar-ring" id="arRing"><!-- logos injected by JS --></div>
+    </div>
+    <p class="ar-hint">Glissez pour faire tourner · cliquez un acteur pour le détail</p>
+    <div class="arena-adv reveal-up">
+      <h3>L'avantage qu'aucun ne réplique</h3>
+      <ul>
+        <li><b>Authentification native</b> — seule Hermès connaît ses pièces de l'intérieur.</li>
+        <li><b>Restauration en atelier</b> — un savoir-faire propriétaire, pas un service tiers.</li>
+        <li><b>Upcycling exclusif</b> — une pièce unique impossible à copier ni à comparer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════ S7 · SWOT ═══════════ -->
+  <section class="sec swot" id="s7" data-name="SWOT">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE VI · LA SYNTHÈSE</span>
+      <h2>SWOT — position spécifique</h2>
+      <p class="lede">Cliquez une carte, glissez, ou utilisez les flèches. Quatre dimensions.</p>
+    </div>
+    <div class="cardstack" id="swotStack"></div>
+  </section>
+
+  <!-- ═══════════ S8 · PORTER ═══════════ -->
+  <section class="sec porter" id="s8" data-name="5 forces de Porter">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE VII · L'INTENSITÉ</span>
+      <h2>Les 5 forces de Porter</h2>
+      <p class="lede">Appliquées au modèle plateforme propriétaire + rachat + upcycling. Cliquez chaque force.</p>
+    </div>
+    <div class="cardstack" id="porterStack"></div>
+  </section>
+
+  <!-- ═══════════ S9 · TAM SAM SOM ═══════════ -->
+  <section class="sec tss" id="s9" data-name="TAM · SAM · SOM">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE VIII · LE DIMENSIONNEMENT</span>
+      <h2>TAM · SAM · SOM</h2>
+      <p class="lede">Méthode explicite, du marché total à la cible captable. Le fait, l'estimation et l'hypothèse sont distingués.</p>
+    </div>
+    <div class="tss-stage">
+      <div class="tss-tunnel" id="tssChart">
+        <div class="c3">
+          <div class="c3-deck">
+            <div class="c3-bar" style="--w:72px;--h:248px;--c1:#d8b07f;--c2:#8a5a2b;--delay:0s">
+              <span class="c3-val">5,3&nbsp;Md$</span>
+              <div class="c3-col"><i class="cf front"></i><i class="cf back"></i><i class="cf right"></i><i class="cf left"></i><i class="cf top"></i></div>
+              <span class="c3-name">TAM</span>
+            </div>
+            <div class="c3-bar" style="--w:72px;--h:142px;--c1:#c9a24b;--c2:#8a6a1f;--delay:.25s">
+              <span class="c3-val">617&nbsp;M$</span>
+              <div class="c3-col"><i class="cf front"></i><i class="cf back"></i><i class="cf right"></i><i class="cf left"></i><i class="cf top"></i></div>
+              <span class="c3-name">SAM</span>
+            </div>
+            <div class="c3-bar" style="--w:72px;--h:74px;--c1:#ff7a33;--c2:#c2410c;--delay:.5s">
+              <span class="c3-val">≈ 135&nbsp;M$</span>
+              <div class="c3-col"><i class="cf front"></i><i class="cf back"></i><i class="cf right"></i><i class="cf left"></i><i class="cf top"></i></div>
+              <span class="c3-name">SOM</span>
+            </div>
+          </div>
+          <p class="c3-scale">Hauteurs illustratives — échelle non linéaire pour la lisibilité.</p>
+        </div>
+        <ul class="t3-legend">
+          <li class="lg-tam"><b>TAM</b> Biens de luxe personnels, Arabie Saoudite (IMARC, 2025) · <strong>5,3&nbsp;Md$</strong> <i class="tag tag-est">Estimation tierce</i></li>
+          <li class="lg-sam"><b>SAM</b> Seconde main du luxe, GCC (IMARC, 2024) · <strong>617&nbsp;M$</strong> → 1,5&nbsp;Md$ en 2033 <i class="tag tag-est">Estimation tierce</i></li>
+          <li class="lg-som"><b>SOM</b> Captable au Moyen-Orient, plateforme propriétaire · <strong>≈ 120–150&nbsp;M$</strong> <i class="tag tag-hyp">Hypothèse</i></li>
+        </ul>
+      </div>
+      <div class="tss-method reveal-up">
+        <h3>Notre raisonnement</h3>
+        <ol>
+          <li><b>TAM</b> — biens de luxe <em>personnels</em> en Arabie Saoudite&nbsp;: <b>5,3&nbsp;Md$ (IMARC, 2025)</b>. Périmètre choisi car le plus proche du catalogue Hermès — à distinguer du marché «&nbsp;large&nbsp;» (10,1&nbsp;Md$, incluant voyage, auto, hôtellerie).</li>
+          <li><b>SAM</b> — marché de la <b>seconde main du luxe dans le Golfe</b>&nbsp;: 617&nbsp;M$ (2024), projeté à 1,5&nbsp;Md$ en 2033 ; l'Arabie Saoudite y est dominante.</li>
+          <li><b>SOM</b> — 20–25&nbsp;% de ce marché GCC captés par une plateforme propriétaire, hors Birkin/Kelly. <em>Hypothèse de travail, conditionnée au choix stratégique.</em></li>
+        </ol>
+        <p class="disclaimer">Les estimations du luxe saoudien divergent fortement selon le périmètre (1,97&nbsp;à&nbsp;19,2&nbsp;Md$)&nbsp;: nous l'assumons et citons le périmètre le plus comparable. Birkin &amp; Kelly volontairement exclus — préserver la rareté, ne pas créer de marché secondaire officiel sur l'icône.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ S10 · HERMÈS PERPÉTUELLE ═══════════ -->
+  <section class="sec reveal-sec" id="s10" data-name="Hermès Perpétuelle">
+    <div class="reveal-veil"></div>
+    <div class="reveal-inner">
+      <span class="eyebrow center-b">LA RECOMMANDATION</span>
+      <h2 class="reveal-title">HERMÈS<br/><em>Perpétuelle</em></h2>
+      <p class="reveal-sub reveal-up">On ne crée pas une activité de seconde main. On fait d’Hermès le gardien du cycle de vie complet de ses créations — d’une logique de transaction à une logique d’écosystème.</p>
+      <div class="pillars">
+        <div class="pillar reveal-up"><span class="pil-n">I</span><h3>Reprise officielle</h3><p>Rachat direct aux particuliers, hors Birkin et Kelly. La maison reprend la main sur le premier maillon.</p></div>
+        <div class="pillar reveal-up"><span class="pil-n">II</span><h3>Revente certifiée</h3><p>Restauration en atelier, authentification maison, certification. La confiance redevient un actif d’Hermès, pas d’un tiers.</p></div>
+        <div class="pillar reveal-up"><span class="pil-n">III</span><h3>Upcycling via Petit&nbsp;h</h3><p>L’atelier de recréation d’Hermès (depuis 2010, déjà à Dubaï en 2022) transforme la matière en pièces uniques. Zéro comparable, désirabilité intacte.</p></div>
+      </div>
+      <div class="director reveal-up">
+        <span class="dir-k">Indicateur directeur</span>
+        <p>Le succès se mesure d’abord au <b>volume de créations qui reviennent dans l’écosystème Hermès</b> — pas au chiffre d’affaires. Le programme ne se justifie pas par ce qu’il rapporte, mais par ce qu’il empêche de perdre.</p>
+      </div>
+      <div class="objection reveal-up">
+        <h4>Pourquoi pas un partenariat, comme Burberry × Vestiaire&nbsp;?</h4>
+        <p>Externaliser, c’est confier à un tiers la donnée client, l’authentification et la définition même d’une pièce Hermès digne d’être revendue. Une plateforme propriétaire coûte plus cher — mais elle seule garde la maison maîtresse de la donnée, du geste de restauration et de Petit&nbsp;h.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ S11 · PARCOURS CLIENT ═══════════ -->
+  <section class="sec parcours" id="s11" data-name="Parcours client">
+    <div class="sec-head center">
+      <span class="eyebrow">L'EXPÉRIENCE</span>
+      <h2>Une seconde vie, orchestrée</h2>
+    </div>
+    <div class="journey" id="journey">
+      <div class="j-line"><i></i></div>
+      <div class="j-step reveal-up has-media"><span class="j-n">1</span><h3>Dépôt</h3><p>La cliente confie sa pièce en boutique ou par enlèvement privé — remise gantée, comme un objet précieux.</p>
+        <video class="j-vid" muted loop playsinline poster="assets/img/depot.jpg"><source src="assets/video/depot.mp4" type="video/mp4"/></video></div>
+      <div class="j-step reveal-up has-media"><span class="j-n">2</span><h3>Authentification</h3><p>Expertise native du fermoir au point sellier.</p>
+        <video class="j-vid" muted loop playsinline poster="assets/img/clasp.jpg"><source src="assets/video/clasp.mp4" type="video/mp4"/></video></div>
+      <div class="j-step reveal-up has-media"><span class="j-n">3</span><h3>Restauration</h3><p>Les artisans redonnent vie au cuir, à la couture, à la patine.</p>
+        <video class="j-vid" muted loop playsinline poster="assets/img/atelier.jpg"><source src="assets/video/atelier.mp4" type="video/mp4"/></video></div>
+      <div class="j-step reveal-up"><span class="j-n">4</span><h3>Certification</h3><p>Un passeport Hermès, gage d'authenticité et de provenance.</p></div>
+      <div class="j-step reveal-up"><span class="j-n">5</span><h3>Revente</h3><p>Mise en lumière sur la plateforme propriétaire, au juste prix de la maison.</p></div>
+      <div class="j-step reveal-up"><span class="j-n">6</span><h3>Nouvelle vie</h3><p>La pièce repart — ou renaît, upcyclée, en exemplaire unique.</p></div>
+    </div>
+    <div class="roadmap reveal-up">
+      <h3>Un déploiement test &amp; learn, sur 24 mois</h3>
+      <div class="rm-track">
+        <div class="rm-wave"><span class="rm-t">Vague 1 · mois 1–6</span><p>Rachat &amp; restauration sur la <b>soie</b>, boutique de Riyadh Park. Statut testé sur très peu de clientes. Pas encore d'upcycling.</p></div>
+        <div class="rm-wave"><span class="rm-t">Vague 2 · mois 7–14</span><p>Extension à la petite maroquinerie et à la bijouterie (hors Birkin/Kelly). Premières pièces upcyclées à partir de la matière collectée. Le statut s'active pleinement.</p></div>
+        <div class="rm-wave"><span class="rm-t">Vague 3 · mois 15–24</span><p>Décision d'extension&nbsp;: autres marchés du Golfe, horlogerie, ou ajustement du dispositif.</p></div>
+      </div>
+      <p class="rm-foot">Risque encadré&nbsp;: limité à Riyad, hors pièces iconiques, ajustable à chaque vague. <span class="tag tag-hyp">Séquencement proposé</span></p>
+    </div>
+    <div class="status-note reveal-up">
+      <h3>Préserver la rareté&nbsp;: le levier «&nbsp;vendeurs&nbsp;»</h3>
+      <p>Pour les particulières qui confient leurs pièces, un <b>statut discrétionnaire et qualitatif</b>&nbsp;: accès anticipé, invitations fermées, et la possibilité de commander une pièce upcyclée à partir de sa propre matière recirculée. <b>Non cumulable, non public</b>&nbsp;— attribué par décision interne, jamais par accumulation. Un privilège, pas un programme de points.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ S12 · DASHBOARD & VEILLE ═══════════ -->
+  <section class="sec dash" id="s12" data-name="Pilotage & Veille">
+    <div class="sec-head center">
+      <span class="eyebrow">CHAPITRE IX · LE PILOTAGE</span>
+      <h2>Indicateurs &amp; dispositif de veille</h2>
+      <p class="lede">L'ordre est volontaire&nbsp;: on mesure d'abord le retour des créations dans l'écosystème, avant la qualité opérationnelle. Le chiffre d'affaires n'apparaît délibérément pas.</p>
+    </div>
+    <div class="director-kpi reveal-up">
+      <span class="dir-k">Indicateur directeur</span>
+      <p><b>Volume détourné des circuits informels</b> — la part des créations Hermès qui reviennent transiter par la maison. Seuil de vigilance&nbsp;: absence de hausse après 12 mois = objectif premier manqué.</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi reveal-up"><div class="k-num"><span data-count="95" data-dec="0">0</span><small>%</small></div><div class="k-lab">Taux de rachat accepté (authentification) <i class="tag tag-hyp">Cible</i></div></div>
+      <div class="kpi reveal-up"><div class="k-num"><span data-count="21" data-dec="0">0</span><small>j</small></div><div class="k-lab">Délai moyen de restauration <i class="tag tag-hyp">Cible</i></div></div>
+      <div class="kpi reveal-up"><div class="k-num"><span data-count="100" data-dec="0">0</span><small>%</small></div><div class="k-lab">Pièces upcycling sans comparable de prix <i class="tag tag-hyp">Cible</i></div></div>
+      <div class="kpi reveal-up"><div class="k-num"><span data-count="0" data-dec="0">0</span><small>fuite</small></div><div class="k-lab">Confidentialité du statut préservée <i class="tag tag-hyp">Cible</i></div></div>
+    </div>
+    <div class="veille reveal-up">
+      <h3>Dispositif de veille concurrentielle</h3>
+      <table class="veille-table">
+        <thead><tr><th>Cibles</th><th>Sources</th><th>Outils</th><th>Fréquence</th><th>Restitution</th></tr></thead>
+        <tbody>
+          <tr><td>The Luxury Closet, Vestiaire Collective</td><td>Catalogues, prix affichés, annonces d'expansion</td><td>Scraping / alertes</td><td>Hebdomadaire</td><td>Tableau de bord prix</td></tr>
+          <tr><td>Philip Karto (upcycling Hermès)</td><td>Site, réseaux, nouvelles pièces</td><td>Veille produit</td><td>Mensuelle</td><td>Note de positionnement</td></tr>
+          <tr><td>Programmes en marque propre (Rolex CPO, Coach)</td><td>Communiqués, sites de marque</td><td>Veille presse</td><td>Mensuelle</td><td>Benchmark trimestriel</td></tr>
+          <tr><td>Circuits informels (réseaux sociaux, cercles privés)</td><td>Plateformes sociales, groupes fermés</td><td>Social listening</td><td>Continu</td><td>Note de tendance</td></tr>
+          <tr><td>Cadre réglementaire KSA (douane, TVA, ZATCA)</td><td>Sources officielles, SAMA</td><td>Veille juridique</td><td>Trimestrielle</td><td>Note de conformité</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ S13 · CONCLUSION ═══════════ -->
+  <section class="sec conclu" id="s13" data-name="Conclusion">
+    <video class="bg-video" muted loop playsinline poster="assets/img/hero-bag.jpg">
+      <source src="assets/video/hero-bag.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-veil dark"></div>
+    <div class="conclu-content">
+      <div class="sign cl3">
+        <span class="sign-mark">HERMÈS · PERPÉTUELLE</span>
+        <span class="sign-sub">La valeur ne se perd pas. Elle se transmet.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ ANNEXE / SOURCES ═══════════ -->
+  <footer class="annexe" id="annexe">
+    <div class="annexe-inner">
+      <span class="eyebrow">ANNEXE MÉTHODOLOGIQUE</span>
+      <h3>Sources &amp; rigueur</h3>
+      <div class="legend-full">
+        <div><span class="leg ico-fait"></span><b>Fait</b> — donnée publique sourcée et datée (détail en annexe écrite).</div>
+        <div><span class="leg ico-est"></span><b>Estimation</b> — calcul transparent à partir de faits, marge assumée.</div>
+        <div><span class="leg ico-hyp"></span><b>Hypothèse</b> — postulat de travail à valider, jamais présenté comme un fait.</div>
+      </div>
+      <ul class="src-list">
+        <li>IMARC Group — biens de luxe personnels KSA <strong>5,3&nbsp;Md$ (2025)</strong> (TAM retenu) ; marché large 10,1→23,3&nbsp;Md$ ; seconde main luxe GCC <strong>617&nbsp;M$ (2024)</strong> → 1,5&nbsp;Md$ (2033). Périmètres divergents (1,97 à 19,2&nbsp;Md$) assumés.</li>
+        <li>Mordor Intelligence (2025) — luxe Moyen-Orient/Afrique ; Transparency Market Research — seconde main MEA 3,5&nbsp;Md$ en 2035 (TCAC 13,3&nbsp;%).</li>
+        <li>PS Market Research (2025) — millionnaires&nbsp;: 300 (2024) → ≈ 2 400 (2025) · Chalhoub Group (05/2024) — femmes&nbsp;: +55&nbsp;% de dépenses, 60&nbsp;% du marché.</li>
+        <li>Hermès — résultats officiels 2025 (CA 16&nbsp;002&nbsp;M€, 12/02/2026) ; Petit&nbsp;h à Dubaï (nov. 2022) ; A.&nbsp;Dumas, AG 2026 (implantation KSA à l'étude).</li>
+        <li>Banque centrale saoudienne / SAMA (15/04/2025) — paiements électroniques 79&nbsp;% (2024), 85&nbsp;% (2025).</li>
+        <li>Arab News &amp; Kohan Textile Journal (01–02/2025) — upcycling porté par la Fashion Commission ; Kering Generation Awards.</li>
+        <li>Robb Report ; Philip Karto ; Mubasher Info — Rolex CPO, Coach (Re)Loved, The Luxury Closet, upcycling tiers.</li>
+        <li>Trade.gov ; Honour Ocean ; Mezan / KPMG — tarif CCG 5&nbsp;%, import luxe ≤ 15&nbsp;%, TVA 15&nbsp;% (vendeur particulier exonéré).</li>
+      </ul>
+      <p class="annexe-note"><b>Preuve de rigueur&nbsp;:</b> lors de notre vérification (phase 2), une source initiale (le « 63,2&nbsp;Md$ » de mégaprojets) s'est révélée <b>générée par IA, sans traçabilité</b> — elle a été détectée, écartée et remplacée par des chiffres recoupés indépendamment. Périmètre&nbsp;: Arabie Saoudite (Dubaï = grille de lecture 1990→2020) · toutes catégories hors Birkin &amp; Kelly · plateforme propriétaire rachat, revente certifiée &amp; upcycling via Petit&nbsp;h. Traçabilité complète Fait/Estimation/Hypothèse en annexe xlsx.</p>
+      <div class="annexe-credit">Cellule d'intelligence marché · Soutenance RNCP niveau 6 · Équipe de 4 — support expérientiel.</div>
+    </div>
+  </footer>
+
+  <!-- ═══════════ S14 · CINÉMA DUBAÏ → RIYAD ═══════════ -->
+  <section class="sec cinema-sec" id="cinema-sec" data-name="Le voyage">
+    <div class="sec-head center">
+      <span class="eyebrow">VOYAGE — DUBAÏ → RIYAD</span>
+      <h2>Là où la maison doit être.</h2>
+    </div>
+    <div class="cinema" id="cinema">
+      <video class="cinema-video" id="cinemaVid" muted loop playsinline preload="auto" poster="assets/img/riyadh_cinema.jpg">
+        <source src="assets/video/riyadh_cinema.mp4" type="video/mp4" />
+      </video>
+      <div class="cinema-veil"></div>
+      <div class="cinema-bars"></div>
+      <div class="cinema-captions" id="cinemaCaps">
+        <div class="cap" data-in="0" data-out="4.4"><span class="cap-k">ACTE I</span><span class="cap-l">Le voyage commence</span></div>
+        <div class="cap" data-in="4.6" data-out="8.8"><span class="cap-k">L'ARABIE</span><span class="cap-l">au seuil de sa Vision 2030</span></div>
+        <div class="cap" data-in="9.0" data-out="13.2"><span class="cap-k">RIYAD</span><span class="cap-l">Capitale du luxe émergent</span></div>
+        <div class="cap" data-in="13.4" data-out="17.6"><span class="cap-k">CLIENTÈLE</span><span class="cap-l">Une élite ultra premium</span></div>
+        <div class="cap" data-in="17.8" data-out="22.6"><span class="cap-k">L'INSTANT HERMÈS</span><span class="cap-l">Là où la maison doit être</span></div>
+      </div>
+      <div class="cinema-progress" id="cinemaProg" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="cinema-corner">DUBAÏ → RIYAD · 22 s</div>
+    </div>
+  </section>
+
+  <!-- ═══════════ TRAILER · LANCER LE FILM ═══════════ -->
+  <section class="sec trailer-cta" id="trailer" data-name="Le film">
+    <div class="trailer-cta-inner">
+      <span class="trailer-kicker reveal-up">L'instant cinéma</span>
+      <h2 class="trailer-title reveal-up">Dubaï <em>→</em> Riyad</h2>
+      <p class="trailer-sub reveal-up">Un voyage de 60 secondes. Voix off, musique, plans cinéma.</p>
+      <button class="trailer-btn reveal-up" id="trailerOpen" type="button" aria-label="Lancer le film">
+        <span class="trailer-btn-ico" aria-hidden="true">▶</span>
+        <span class="trailer-btn-label">Lancer le film</span>
+        <span class="trailer-btn-meta">60 s · son ON</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════════ OUTRO · EMBLÈME ═══════════ -->
+  <section class="sec emblem-outro" id="emblem" data-name="Signature">
+    <video class="emblem-video" autoplay muted loop playsinline poster="assets/img/emblem.jpg">
+      <source src="assets/video/emblem.mp4" type="video/mp4" />
+    </video>
+    <h2 class="emblem-merci reveal-up">Merci</h2>
+    <p class="emblem-sub reveal-up">de votre attention</p>
+  </section>
+
+</main>
+
+<!-- ═══════════ TRAILER · MODALE PLEIN ÉCRAN ═══════════ -->
+<div class="trailer-modal" id="trailerModal" aria-hidden="true" role="dialog" aria-label="Trailer Hermès Perpétuelle">
+  <button class="trailer-close" id="trailerClose" type="button" aria-label="Fermer">✕</button>
+  <video class="trailer-video" id="trailerVideo" playsinline preload="metadata" controls>
+    <source src="assets/video/trailer.mp4" type="video/mp4" />
+  </video>
+</div>
+
+<div class="src-tooltip" id="srcTooltip" role="tooltip"></div>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script src="assets/lib/three.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
