@@ -141,8 +141,8 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 @keyframes m3dScrollDown{from{transform:translateY(-50%)} to{transform:translateY(0)}}
 
 .hero-veil{position:absolute;inset:0;z-index:1;background:
-  radial-gradient(ellipse at 50% 58%,rgba(11,8,5,.42) 0%,rgba(11,8,5,.72) 55%,rgba(11,8,5,.97) 100%),
-  linear-gradient(180deg,rgba(11,8,5,.82) 0%,rgba(11,8,5,.5) 28%,rgba(11,8,5,.5) 60%,rgba(11,8,5,.94) 100%)}
+  radial-gradient(ellipse at 50% 58%,rgba(11,8,5,.12) 0%,rgba(11,8,5,.42) 58%,rgba(11,8,5,.82) 100%),
+  linear-gradient(180deg,rgba(11,8,5,.55) 0%,rgba(11,8,5,.18) 30%,rgba(11,8,5,.2) 62%,rgba(11,8,5,.8) 100%)}
 .hero-veil.dark{background:radial-gradient(ellipse at 50% 50%,rgba(11,8,5,.4),rgba(11,8,5,.92))}
 
 /* Voile plus leger pour la section ADN : laisser respirer les photos */
@@ -594,11 +594,16 @@ em{font-style:italic;color:var(--orange);font-weight:400}
 .conclu{color:var(--on-dark)}
 .reveal-sec{background:radial-gradient(ellipse at 50% 28%,rgba(232,89,12,.16),var(--noir-deep) 62%);color:var(--on-dark)}
 .reveal-sec .reveal-title{color:var(--on-dark)}
-.reveal-sec .reveal-sub{color:var(--on-dark-dim)}
-.reveal-sec .pillar{background:rgba(255,250,242,.04);border:1px solid rgba(255,250,242,.10)}
-.reveal-sec .pillars{background:rgba(255,250,242,.08)}
+.reveal-sec .reveal-sub{color:#fff;font-weight:400;text-shadow:0 2px 26px rgba(0,0,0,.9),0 1px 4px rgba(0,0,0,.95)}
+/* Cartes recommandation : effet premium incliné qui se redresse au survol */
+.reveal-sec .pillars{background:transparent;border:none;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;perspective:1400px}
+.reveal-sec .pillar{position:relative;background:linear-gradient(155deg,rgba(255,250,242,.07),rgba(255,250,242,.02));border:1px solid rgba(255,250,242,.14);border-radius:14px;padding:40px 30px;transform:skewY(-5deg) translateY(0);transition:transform .55s var(--ease),box-shadow .55s var(--ease),border-color .55s var(--ease),background .55s var(--ease);box-shadow:0 18px 40px rgba(0,0,0,.32);backdrop-filter:blur(3px)}
+.reveal-sec .pillar:nth-child(2){transform:skewY(-5deg) translateY(22px)}
+.reveal-sec .pillar:nth-child(3){transform:skewY(-5deg) translateY(44px)}
+.reveal-sec .pillar:hover{transform:skewY(0deg) translateY(-10px) scale(1.03);z-index:5;background:linear-gradient(155deg,rgba(232,89,12,.18),rgba(255,250,242,.04));border-color:rgba(232,89,12,.6);box-shadow:0 32px 70px rgba(232,89,12,.32)}
 .reveal-sec .pillar h3{color:var(--on-dark)}
 .reveal-sec .pillar p{color:var(--on-dark-dim)}
+@media (max-width:760px){.reveal-sec .pillars{grid-template-columns:1fr}.reveal-sec .pillar,.reveal-sec .pillar:nth-child(2),.reveal-sec .pillar:nth-child(3){transform:skewY(0deg)}}
 
 /* ---- UI chrome on light ---- */
 .dots button{border-color:rgba(33,26,17,.35)}

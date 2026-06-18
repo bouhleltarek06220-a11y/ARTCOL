@@ -257,45 +257,71 @@
      ============================================================ */
   function initArena() {
     const ring = $('#arRing');
+    if (!ring) return;
     const n = COMPETITORS.length;
-    const radius = 300;
+    const R = Math.min(210, (ring.parentElement.clientWidth || 440) * 0.46);
+
+    // état partagé (déclaré avant les handlers de clic)
+    let rotX = -10, rotY = 0, vx = 0, vy = 0, down = false, lastX = 0, lastY = 0, dragMoved = false, auto = true;
+
+    // distribution Fibonacci sur une sphère (couverture homogène)
+    const golden = Math.PI * (3 - Math.sqrt(5));
     const nodes = COMPETITORS.map((c, i) => {
-      const ang = i * (360 / n);
+      const by = 1 - (i + 0.5) / n * 2;          // 1 .. -1
+      const r = Math.sqrt(Math.max(0, 1 - by * by));
+      const th = golden * i;
+      const base = { x: Math.cos(th) * r, y: by, z: Math.sin(th) * r };
       const el = document.createElement('div');
       el.className = 'ar-node';
-      el.dataset.ang = ang;
       el.innerHTML =
         '<div class="ar-card">' +
           '<div class="ar-wm' + (c.sans ? ' sans' : '') + '">' + c.wm + '</div>' +
           '<div class="ar-cat">' + c.cat + '</div>' +
         '</div>';
-      el.querySelector('.ar-card').addEventListener('click', e => { e.stopPropagation(); openModal(c); });
+      el.querySelector('.ar-card').addEventListener('click', e => {
+        e.stopPropagation(); if (!dragMoved) openModal(c);
+      });
       ring.appendChild(el);
-      return el;
+      return { el, base };
     });
 
-    let rotY = 0, vel = 0, down = false, lastX = 0, dragMoved = false, auto = true;
     function place() {
-      nodes.forEach(el => {
-        const a = parseFloat(el.dataset.ang) + rotY;
-        // each card sits on a horizontal ring, facing outward; counter-rotate to face camera
-        el.style.transform = 'rotateY(' + a + 'deg) translateZ(' + radius + 'px) rotateY(' + (-a) + 'deg)';
-        const rad = a * Math.PI / 180;
-        const depth = Math.cos(rad); // -1 (back) .. 1 (front)
-        const card = el.firstChild;
-        card.style.opacity = (0.45 + 0.55 * (depth + 1) / 2).toFixed(3);
+      const cx = Math.cos(rotX * Math.PI / 180), sx = Math.sin(rotX * Math.PI / 180);
+      const cy = Math.cos(rotY * Math.PI / 180), sy = Math.sin(rotY * Math.PI / 180);
+      nodes.forEach(({ el, base }) => {
+        let x = base.x, y = base.y, z = base.z;
+        // rotation Y (glisser horizontal)
+        const x1 = x * cy + z * sy, z1 = -x * sy + z * cy; x = x1; z = z1;
+        // rotation X (glisser vertical)
+        const y2 = y * cx - z * sx, z2 = y * sx + z * cx; y = y2; z = z2;
+        const depth = z; // -1 (arrière) .. 1 (avant)
+        const s = 0.55 + 0.5 * (depth + 1) / 2;
+        el.style.transform = 'translate(' + (x * R).toFixed(1) + 'px,' + (y * R).toFixed(1) + 'px) scale(' + s.toFixed(3) + ')';
         el.style.zIndex = Math.round(100 + depth * 100);
-        card.style.filter = depth < 0 ? 'blur(.4px)' : 'none';
+        const card = el.firstChild;
+        card.style.opacity = (0.32 + 0.68 * (depth + 1) / 2).toFixed(3);
+        card.style.filter = depth < -0.1 ? 'blur(.6px)' : 'none';
+        card.style.pointerEvents = depth < -0.2 ? 'none' : 'auto';
       });
     }
     function loop() {
-      if (!down) { if (auto) vel += 0.02; rotY += vel; vel *= 0.94; if (Math.abs(vel) < 0.002) vel = 0; }
+      if (!down) {
+        if (auto) vy += 0.02;
+        rotY += vy; rotX += vx;
+        vy *= 0.94; vx *= 0.9;
+        if (Math.abs(vy) < 0.002) vy = 0;
+        if (Math.abs(vx) < 0.002) vx = 0;
+        rotX = Math.max(-85, Math.min(85, rotX));
+      }
       place(); requestAnimationFrame(loop);
     }
     const start = e => { down = true; auto = false; dragMoved = false; ring.classList.add('grab');
-      lastX = (e.touches ? e.touches[0] : e).clientX; vel = 0; };
-    const move = e => { if (!down) return; const x = (e.touches ? e.touches[0] : e).clientX;
-      const dx = x - lastX; if (Math.abs(dx) > 3) dragMoved = true; rotY += dx * 0.35; vel = dx * 0.35; lastX = x; };
+      const p = e.touches ? e.touches[0] : e; lastX = p.clientX; lastY = p.clientY; vx = vy = 0; };
+    const move = e => { if (!down) return; const p = e.touches ? e.touches[0] : e;
+      const dx = p.clientX - lastX, dy = p.clientY - lastY;
+      if (Math.abs(dx) + Math.abs(dy) > 3) dragMoved = true;
+      rotY += dx * 0.3; rotX -= dy * 0.3; rotX = Math.max(-85, Math.min(85, rotX));
+      vy = dx * 0.3; vx = -dy * 0.3; lastX = p.clientX; lastY = p.clientY; };
     const end = () => { if (!down) return; down = false; ring.classList.remove('grab');
       setTimeout(() => { auto = true; }, 2500); };
     ring.addEventListener('mousedown', start); window.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
@@ -322,7 +348,7 @@
     }
 
     if (!reduce && window.gsap) {
-      gsap.from(nodes, { opacity: 0, scale: 0.5, duration: 0.8, ease: 'back.out(1.5)', stagger: 0.08,
+      gsap.from(nodes.map(o => o.el), { opacity: 0, duration: 0.8, ease: 'power2.out', stagger: 0.06,
         scrollTrigger: { trigger: '#s6', start: 'top 65%' } });
     }
   }
