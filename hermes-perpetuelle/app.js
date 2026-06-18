@@ -491,7 +491,7 @@
      JOURNEY videos play in view
      ============================================================ */
   function initJourney() {
-    $$('.j-vid').forEach(v => {
+    $$('.j-vid, .reveal-bg').forEach(v => {
       ScrollTrigger.create({ trigger:v, start:'top 90%', end:'bottom 10%',
         onEnter:()=>v.play().catch(()=>{}), onEnterBack:()=>v.play().catch(()=>{}),
         onLeave:()=>v.pause(), onLeaveBack:()=>v.pause() });
