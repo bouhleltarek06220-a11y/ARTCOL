@@ -140,23 +140,82 @@
       <h2>Le Golfe se réinvente.<br/>L'Arabie Saoudite, prochain épicentre.</h2>
       <p class="lede reveal-up">Nous lisons le potentiel saoudien à travers la trajectoire de Dubaï&nbsp;(1990→2020)&nbsp;: une grille analytique, pas une promesse.</p>
     </div>
-    <div class="cinema" id="cinema">
-      <video class="cinema-video" id="cinemaVid" muted loop playsinline preload="auto" poster="assets/img/riyadh_cinema.jpg">
-        <source src="assets/video/riyadh_cinema.mp4" type="video/mp4" />
-      </video>
-      <div class="cinema-veil"></div>
-      <div class="cinema-bars"></div>
-      <div class="cinema-captions" id="cinemaCaps">
-        <div class="cap" data-in="0" data-out="4.4"><span class="cap-k">ACTE I</span><span class="cap-l">Le voyage commence</span></div>
-        <div class="cap" data-in="4.6" data-out="8.8"><span class="cap-k">L'ARABIE</span><span class="cap-l">au seuil de sa Vision 2030</span></div>
-        <div class="cap" data-in="9.0" data-out="13.2"><span class="cap-k">RIYAD</span><span class="cap-l">Capitale du luxe émergent</span></div>
-        <div class="cap" data-in="13.4" data-out="17.6"><span class="cap-k">CLIENTÈLE</span><span class="cap-l">Une élite ultra premium</span></div>
-        <div class="cap" data-in="17.8" data-out="22.6"><span class="cap-k">L'INSTANT HERMÈS</span><span class="cap-l">Là où la maison doit être</span></div>
+    <div class="strat-wrap" id="stratMap">
+      <img class="strat-bg" src="assets/img/strategic_map.jpg" alt="" />
+      <div class="strat-veil"></div>
+      <div class="strat-grain"></div>
+      <div class="strat-title">
+        <span class="strat-eyebrow">HERMÈS · HÉRITAGE</span>
+        <span class="strat-sub">Plateforme de rachat, revente certifiée &amp; upcycling</span>
       </div>
-      <div class="cinema-progress" id="cinemaProg" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i>
+      <svg class="strat-flows" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="flowGold" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#caa15a" stop-opacity="0"/>
+            <stop offset="22%" stop-color="#caa15a" stop-opacity=".9"/>
+            <stop offset="78%" stop-color="#caa15a" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#caa15a" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="flowOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e8590c" stop-opacity="0"/>
+            <stop offset="25%" stop-color="#e8590c" stop-opacity=".85"/>
+            <stop offset="75%" stop-color="#e8590c" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#e8590c" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="flowWhite" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f6e7c8" stop-opacity="0"/>
+            <stop offset="30%" stop-color="#f6e7c8" stop-opacity=".7"/>
+            <stop offset="70%" stop-color="#f6e7c8" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="#f6e7c8" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- DUBAI(20,38) → RIYAD(52,53) — or -->
+        <path class="flow flow-gold"   d="M20,38 Q 38,12 52,53" />
+        <!-- ABU DHABI(15,42) → RIYAD(52,53) — orange -->
+        <path class="flow flow-orange" d="M15,42 Q 30,20 52,53" />
+        <!-- DUBAI(20,38) → NEOM(36,17) — blanc -->
+        <path class="flow flow-white"  d="M20,38 Q 24,22 36,17" />
+      </svg>
+
+      <div class="strat-city strat-prio" style="--x:52%;--y:53%">
+        <span class="strat-pin"><i></i></span>
+        <span class="strat-lab">
+          <span class="strat-name">RIYAD</span>
+          <span class="strat-cap">Capitale · marché prioritaire</span>
+        </span>
       </div>
-      <div class="cinema-corner">DUBAÏ → RIYAD · 22 s</div>
+      <div class="strat-city strat-hub" style="--x:20%;--y:38%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab">
+          <span class="strat-name">DUBAÏ</span>
+          <span class="strat-cap">Hub régional du luxe</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:15%;--y:42%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab strat-lab-left">
+          <span class="strat-name">ABU DHABI</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:36%;--y:17%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab">
+          <span class="strat-name">NEOM</span>
+          <span class="strat-cap">Mégaprojet Vision 2030</span>
+        </span>
+      </div>
+      <div class="strat-city" style="--x:28%;--y:72%">
+        <span class="strat-pin"></span>
+        <span class="strat-lab strat-lab-left">
+          <span class="strat-name">JEDDAH</span>
+        </span>
+      </div>
+
+      <div class="strat-legend">
+        <span><i class="lg-or"></i>Flux de luxe</span>
+        <span><i class="lg-orange"></i>Investissement</span>
+        <span><i class="lg-white"></i>Clientèle premium</span>
+      </div>
     </div>
     <div class="golfe-stats">
       <div class="gstat reveal-up"><div class="gnum"><span data-count="10.1" data-dec="1">0</span><small>Mds&nbsp;$</small></div><div class="glab">Marché du luxe saoudien, périmètre large (voyage, auto, hôtellerie incl.) — 2024 <span class="tag tag-est">Estimation</span><span class="ref" data-src="IMARC Group — marché du luxe au sens large (10,1 Md$ 2024 → 23,3 Md$ 2033). NB : les biens de luxe personnels = 5,3 Md$ (2025), cf. TAM section dimensionnement.">i</span></div></div>
@@ -396,6 +455,32 @@
       <div class="annexe-credit">Cellule d'intelligence marché · Soutenance RNCP niveau 6 · Équipe de 4 — support expérientiel.</div>
     </div>
   </footer>
+
+  <!-- ═══════════ S14 · CINÉMA DUBAÏ → RIYAD ═══════════ -->
+  <section class="sec cinema-sec" id="cinema-sec" data-name="Le voyage">
+    <div class="sec-head center">
+      <span class="eyebrow">VOYAGE — DUBAÏ → RIYAD</span>
+      <h2>Là où la maison doit être.</h2>
+    </div>
+    <div class="cinema" id="cinema">
+      <video class="cinema-video" id="cinemaVid" muted loop playsinline preload="auto" poster="assets/img/riyadh_cinema.jpg">
+        <source src="assets/video/riyadh_cinema.mp4" type="video/mp4" />
+      </video>
+      <div class="cinema-veil"></div>
+      <div class="cinema-bars"></div>
+      <div class="cinema-captions" id="cinemaCaps">
+        <div class="cap" data-in="0" data-out="4.4"><span class="cap-k">ACTE I</span><span class="cap-l">Le voyage commence</span></div>
+        <div class="cap" data-in="4.6" data-out="8.8"><span class="cap-k">L'ARABIE</span><span class="cap-l">au seuil de sa Vision 2030</span></div>
+        <div class="cap" data-in="9.0" data-out="13.2"><span class="cap-k">RIYAD</span><span class="cap-l">Capitale du luxe émergent</span></div>
+        <div class="cap" data-in="13.4" data-out="17.6"><span class="cap-k">CLIENTÈLE</span><span class="cap-l">Une élite ultra premium</span></div>
+        <div class="cap" data-in="17.8" data-out="22.6"><span class="cap-k">L'INSTANT HERMÈS</span><span class="cap-l">Là où la maison doit être</span></div>
+      </div>
+      <div class="cinema-progress" id="cinemaProg" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="cinema-corner">DUBAÏ → RIYAD · 22 s</div>
+    </div>
+  </section>
 
   <!-- ═══════════ OUTRO · EMBLÈME ═══════════ -->
   <section class="sec emblem-outro" id="emblem" data-name="Signature">
