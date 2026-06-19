@@ -1,0 +1,47 @@
+# ============================================================================
+# REFLEXE — Modèle de mission de prospection
+#
+# Copier ce fichier (ex : missions/ma_mission.yaml) puis personnaliser.
+# Tout ce qui est marqué « À PERSONNALISER » doit être adapté à votre cible.
+# AUCUNE cible réelle n'est pré-remplie ici : ce n'est qu'un modèle.
+# ============================================================================
+
+nom: "ma_premiere_mission"            # À PERSONNALISER — nom libre de la mission
+
+# Sources activées (dans l'ordre logique). La première est gratuite et sans clé.
+sources_actives:
+  - recherche_entreprises             # source primaire (officielle, gratuite, sans clé)
+  - website                           # enrichissement : site public (emails/tel/réseaux)
+  - pappers                           # optionnel — nécessite PAPPERS_API_KEY (sinon sauté)
+
+filtres:
+  # Codes NAF/APE cibles (avec ou sans point : 6201Z ou 62.01Z).
+  naf: ["XXXXZ"]                      # À PERSONNALISER — ex : 6201Z (programmation informatique)
+  # Zones : départements ("06", "83") et/ou codes postaux ("06000").
+  zones: ["06"]                       # À PERSONNALISER
+  effectif_min: 1                     # À PERSONNALISER — borne basse d'effectif
+  effectif_max: 50                    # À PERSONNALISER — borne haute d'effectif
+  mots_cles: []                       # À PERSONNALISER — filtrage texte optionnel
+
+# Décris ton client idéal en langage naturel. Claude s'en sert pour scorer.
+description_icp: |                    # À PERSONNALISER
+  Décris ici précisément le type d'entreprise que tu cibles : son secteur, sa
+  taille, ses problématiques typiques et ses signaux d'achat. Plus c'est précis,
+  meilleur est le scoring.
+
+# Ne garder que les prospects au-dessus de ce score (0-100).
+seuil_score_min: 60
+
+# Instructions de rédaction pour le message de prospection (ton, longueur, objectif).
+modele_message: |                     # À PERSONNALISER
+  Ton professionnel et chaleureux. 4 à 6 phrases. Une accroche liée à l'activité
+  du prospect, une proposition de valeur claire, un appel à l'action léger
+  (proposer un court échange). Pas de jargon, pas de promesses exagérées.
+
+# Plafond de sécurité sur le nombre de prospects collectés.
+limite_prospects: 50
+
+# Liste noire (RGPD / opt-out) : ne jamais contacter ces domaines ou emails.
+exclusions:
+  domaines: []                        # ex : ["exemple-concurrent.fr"]
+  emails: []                          # ex : ["ne-pas-contacter@domaine.fr"]
