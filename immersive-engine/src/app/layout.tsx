@@ -11,9 +11,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "NEXUS — Agence d'intelligence artificielle",
+  title: "AMAVYA — La Galerie Orbitale",
   description:
-    "Une expérience web 3D immersive : entrez dans un univers, avancez en profondeur, découvrez l'IA.",
+    "Une galerie 3D immersive : avancez dans une galaxie cyberpunk et explorez mes créations, exposées comme des œuvres.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

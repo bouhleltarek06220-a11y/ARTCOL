@@ -1,90 +1,112 @@
 /**
- * ✦ CONTENU ÉDITABLE DE L'EXPÉRIENCE ✦
- * Tout le « scénario » du site vit ici. Pour adapter le moteur à un autre projet
- * (auto, luxe, immobilier…), on ne touche qu'à ce fichier.
+ * ✦ CONTENU ÉDITABLE — AMAVYA · « La Galerie Orbitale » ✦
+ * Univers : galaxie + sanctuaires cyberpunk-japonais qui exposent TES créations.
+ * Le PATH est le rail de la caméra ; chaque nœud a une position caméra (cam) et
+ * un point regardé (focus). Les nœuds « creation » portent une œuvre exposée.
  *
- * Univers par défaut : AGENCE IA FUTURISTE.
- * Chaque station est un moment posé dans l'espace 3D, sur le rail de la caméra.
+ * Pour adapter : édite uniquement ce fichier (textes, créations, ordre, couleurs).
  */
-
 export type Vec3 = [number, number, number];
 
-export type Station = {
+export type Node = {
   id: string;
-  kicker: string;       // sur-titre court
-  title: string;        // titre de la section
-  body: string;         // texte d'accroche
-  position: Vec3;       // point sur le rail (la caméra y passe)
-  /** Côté où le panneau holographique apparaît par rapport à l'allée. */
-  side: "left" | "right" | "center";
+  kind: "hero" | "creation" | "outro";
+  cam: Vec3;          // position de la caméra à ce nœud
+  focus: Vec3;        // point que la caméra regarde
+  kicker?: string;
+  title: string;
+  body?: string;
+  // pour les créations exposées :
+  type?: "Outil" | "Site" | "Landing" | "Expérience";
+  tech?: string[];
+  url?: string;
+  preview?: string;   // nom du fichier dans /assets/textures (sans extension)
+  accent?: string;
 };
 
 export const THEME = {
-  bg: "#05070d",
-  fog: "#070b14",
-  accent: "#5ad1ff",   // cyan néon
-  accent2: "#9b6bff",  // violet
-  accent3: "#36f5b0",  // vert hologramme
-  ground: "#0a0e18",
-  text: "#eaf2ff",
+  bg: "#05030a",
+  fog: "#0a0612",
+  magenta: "#ff2d7e",
+  cyan: "#36e0ff",
+  red: "#e23636",
+  gold: "#e8b84b",
+  text: "#f0eaff",
 };
 
 export const EXPERIENCE = {
-  name: "NEXUS",
-  tagline: "Agence d'intelligence artificielle",
+  name: "AMAVYA",
+  tagline: "Galerie orbitale · cyberpunk",
 };
 
-/**
- * Le rail va de z=0 vers le fond (-z). On décale légèrement x/y pour que le
- * couloir « respire » et que le déplacement soit lisible.
- */
-export const STATIONS: Station[] = [
+/** Le parcours : hero → créations (gauche/droite) → sortie. */
+export const PATH: Node[] = [
   {
     id: "hero",
-    kicker: "NEXUS · INTELLIGENCE ARTIFICIELLE",
-    title: "Entrez dans le futur.",
-    body: "Pas une page. Un univers. Avancez pour découvrir ce que l'IA peut faire pour vous.",
-    position: [0, 0, 4],
-    side: "center",
+    kind: "hero",
+    cam: [0, 1.3, 10],
+    focus: [0, 1.0, 0],
+    kicker: "Entrez dans la galerie",
+    title: "AMAVYA",
+    body: "Une galaxie. Des sanctuaires. Chaque œuvre est une de mes créations. Avancez et explorez.",
   },
   {
-    id: "concept",
-    kicker: "I · Le concept",
-    title: "Une intelligence, sur mesure.",
-    body: "Nous concevons des systèmes d'IA taillés pour votre métier — pas des gadgets.",
-    position: [3.5, 0.6, -16],
-    side: "right",
+    id: "crm",
+    kind: "creation",
+    cam: [0, 1.3, -2],
+    focus: [-5.6, 0.6, -9],
+    title: "Amavya CRM",
+    type: "Outil",
+    tech: ["Next.js", "Supabase", "TypeScript"],
+    url: "https://amavya.cloud",
+    preview: "crm",
+    accent: "#36e0ff",
   },
   {
-    id: "services",
-    kicker: "II · Nos expertises",
-    title: "Ce que nous construisons.",
-    body: "Agents autonomes, copilotes métier, vision par ordinateur, RAG & data.",
-    position: [-4, -0.4, -36],
-    side: "left",
+    id: "prospection",
+    kind: "creation",
+    cam: [0, 1.3, -18],
+    focus: [5.6, 0.6, -25],
+    title: "Machine de Prospection",
+    type: "Outil",
+    tech: ["IA", "Node.js", "Automation"],
+    url: "#",
+    preview: "prospect",
+    accent: "#ff2d7e",
   },
   {
-    id: "demo",
-    kicker: "III · La démonstration",
-    title: "Voir l'IA en action.",
-    body: "Une démonstration interactive, en temps réel, dans l'espace.",
-    position: [3, 0.8, -56],
-    side: "right",
+    id: "lostchapter",
+    kind: "creation",
+    cam: [0, 1.3, -34],
+    focus: [-5.6, 0.6, -41],
+    title: "Lost Chapter 3D",
+    type: "Expérience",
+    tech: ["Three.js", "R3F", "WebGL"],
+    url: "#",
+    preview: "site3d",
+    accent: "#e8b84b",
   },
   {
-    id: "proof",
-    kicker: "IV · La preuve",
-    title: "Des résultats mesurables.",
-    body: "+38 % de productivité · −60 % de tâches répétitives · ROI en 4 mois.",
-    position: [-3.5, 0.2, -76],
-    side: "left",
+    id: "artcol",
+    kind: "creation",
+    cam: [0, 1.3, -50],
+    focus: [5.6, 0.6, -57],
+    title: "ARTCOL — Sanctuaire",
+    type: "Expérience",
+    tech: ["R3F", "GLSL", "Cyberpunk"],
+    url: "#",
+    preview: "hall",
+    accent: "#e23636",
   },
   {
-    id: "cta",
-    kicker: "V · Embarquez",
-    title: "Construisons votre univers.",
-    body: "Parlons de votre projet. Le futur n'attend pas.",
-    position: [0, 0, -96],
-    side: "center",
+    id: "outro",
+    kind: "outro",
+    cam: [0, 1.3, -70],
+    focus: [0, 1.0, -82],
+    kicker: "La suite",
+    title: "Construisons la vôtre.",
+    body: "Chaque création peut vivre ici. Parlons de votre univers.",
   },
 ];
+
+export const CREATIONS = PATH.filter((n) => n.kind === "creation");

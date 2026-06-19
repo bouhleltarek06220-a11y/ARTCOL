@@ -29,3 +29,39 @@ body {
 ::selection {
   background: rgba(90, 209, 255, 0.25);
 }
+
+/* étiquette holographique d'une œuvre (rendue dans la scène via drei <Html>) */
+.exhibit-label {
+  width: 220px;
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid;
+  background: rgba(8, 6, 18, 0.6);
+  backdrop-filter: blur(6px);
+  transform: translateZ(0);
+  pointer-events: none;
+}
+.exhibit-label span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.exhibit-label b {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 22px;
+  color: #f0eaff;
+  line-height: 1.1;
+}
+.exhibit-label i {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(240, 234, 255, 0.45);
+}

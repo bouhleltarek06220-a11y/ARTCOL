@@ -1,17 +1,19 @@
 "use client";
 
 /**
- * Le <Canvas> racine : caméra, environnement, rig, post-traitement (glow néon).
- * Monté côté client uniquement (voir page.tsx → dynamic ssr:false).
+ * Canvas racine AMAVYA : galaxie + œuvres exposées + caméra sur rail + post-traitement.
+ * Rendu client uniquement (WebGL) — voir page.tsx (dynamic ssr:false).
  */
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-import Environment from "./Environment";
+import Galaxy from "./Galaxy";
+import Exhibit from "./Exhibit";
 import CameraRig from "./CameraRig";
+import { CREATIONS } from "@/data/experience";
 import { TOTAL } from "@/lib/path";
 import { useExperience } from "@/stores/useExperience";
-import { THEME } from "@/data/experience";
 
 export default function Experience() {
   const setTotal = useExperience((s) => s.setTotal);
@@ -19,17 +21,27 @@ export default function Experience() {
 
   return (
     <Canvas
-      gl={{ antialias: true, powerPreference: "high-performance" }}
+      gl={{
+        antialias: true,
+        powerPreference: "high-performance",
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1.05,
+      }}
       dpr={[1, 1.75]}
-      camera={{ fov: 55, near: 0.1, far: 300, position: [0, 1.3, 6] }}
+      camera={{ fov: 58, near: 0.1, far: 400, position: [0, 1.3, 10] }}
       style={{ position: "fixed", inset: 0 }}
     >
-      <Environment />
+      <Suspense fallback={null}>
+        <Galaxy />
+        {CREATIONS.map((n) => (
+          <Exhibit key={n.id} node={n} />
+        ))}
+      </Suspense>
       <CameraRig />
 
       <EffectComposer>
-        <Bloom mipmapBlur intensity={0.9} luminanceThreshold={0.25} luminanceSmoothing={0.3} />
-        <Vignette eskil={false} offset={0.25} darkness={0.85} />
+        <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.2} luminanceSmoothing={0.35} />
+        <Vignette eskil={false} offset={0.22} darkness={0.9} />
       </EffectComposer>
     </Canvas>
   );
