@@ -168,6 +168,8 @@ Jeu : `react-three-rapier`, `react-postprocessing`, `react-spring`, `zustand`,
 **Immersif / Jeu**
 - **react-three-rapier** — physique (collisions, gravité, `RigidBody`, **CharacterController**, **sensors=triggers**). *Quand* : déplacement avec collisions, jeu, triggers de zone.
 - **react-postprocessing** — effets (`Bloom`, `DepthOfField`, `SSAO`/`N8AO`, `Vignette`, `ToneMapping`). v3 ↔ R3F9. *Quand* : ambiance ciné/néon.
+- **lamina** — matériaux shaders **par couches** (`LayerMaterial` + `Depth`/`Fresnel`…). *Quand* : matières dégradées/holographiques déclaratives. ⚠️ **archivé (2023)** → préférer **three-custom-shader-material (CSM)**.
+- **three-nebula** — moteur de **particules** 3D (étincelles, fumée, magie, à partir de sprites/meshes, JSON). ⚠️ cible **three@0.122** → brancher avec précaution sur three 0.184.
 - **react-spring** (`@react-spring/three`) — animations **ressort** physiques. *Quand* : transitions fluides (caméra se pose, apparitions).
 - **zustand** — état global par hooks. **Règle d'or : refs pour le 60 fps (transform), store pour l'UI.**
 - **racing-game** — **réf de structure jouable** : store unique (`vehicleConfig`, `booleans`, `keys`, modes caméra), refs>state, boucle `useFrame`, dossiers `/models /effects /ui /utils`. ⚠️ physique = **cannon (ancien)** → on transpose en **rapier**.
@@ -175,6 +177,7 @@ Jeu : `react-three-rapier`, `react-postprocessing`, `react-spring`, `zustand`,
 **Apprentissage**
 - **project_3D_developer_portfolio** — portfolio 3D (JS Mastery) : patterns scène/sections/animation pour un site 3D.
 - **3d-game-shaders-for-beginners** — bible des shaders (SSAO, DOF, normal maps, reflets, glow) : théorie pour écrire/régler GLSL & post-fx.
+- **glTF-Sample-Models** — banque de modèles `.glb`/`.gltf` libres (DamagedHelmet…). ⚠️ archivé → suite officielle = `glTF-Sample-Assets`.
 
 **Design / Skills**
 - **skills** (anthropics) — Agent Skills officiels (`docx`/`pdf`/`pptx`/`xlsx` + créatif/design/technique). *Quand* : générer des docs repeatables ; modèle pour créer nos propres skills.
@@ -200,6 +203,21 @@ Jeu : `react-three-rapier`, `react-postprocessing`, `react-spring`, `zustand`,
 | « une UI qui ressemble à <marque/style> » | **awesome-design-md** (`DESIGN.md`) / **awesome-design-skills** (`SKILL.md`) |
 | « génère un doc / pptx / pdf / excel » | **skills** (anthropics) `docx`/`pdf`/`pptx`/`xlsx` |
 | « navigable en profondeur / zones / salles » | monde en zones + sensors rapier + lazy-load + transitions react-spring/gsap |
+| « particules / étincelles / fumée / poussière magique » | **three-nebula** (ou points GPU custom) |
+| « matière holographique / dégradé / couches » | **lamina** → en pratique **CSM** (lamina archivé) |
+| « un modèle 3D tout prêt » | **glTF-Sample-Models** / `glTF-Sample-Assets` (Khronos) |
+
+## 16. VEILLE DES FORKS (autonome)
+
+Inventaire & utilité des forks = **`TOOLS.md`** (racine) — ma **mémoire entre sessions**.
+Routine rejouable au déclencheur « **vérifie mes forks** » :
+1. Lire `TOOLS.md`. 2. **INVENTAIRE** (`search_repositories user:… fork:true`) →
+liste + `updated_at`. 3. Repérer **NOUVEAUX** (absents) & **MODIFIÉS** (date plus
+récente). 4. **ANALYSE** uniquement ceux-là (README + package.json via raw GitHub).
+5. **INTÉGRATION** (usage + compat R3F) → **DOCUMENTATION** met à jour `TOOLS.md`
++ ce fichier. 6. Résumé : nouveau / changé / recommandations.
+**Règles** : ne jamais modifier le code d'un projet sans accord (proposer puis
+attendre) ; signaler un dépôt disparu/inaccessible sans planter.
 
 **Constantes (toujours)** : set compatible **R3F 9 / React 19 / three 0.184 / drei 10 /
 postprocessing 3 / zustand 5 / rapier (compat fiber 9)** · perf par tiers · code
