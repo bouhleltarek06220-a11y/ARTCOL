@@ -153,3 +153,55 @@ Jeu : `react-three-rapier`, `react-postprocessing`, `react-spring`, `zustand`,
 `racing-game` · Appui : `project_3D_developer_portfolio`,
 `3d-game-shaders-for-beginners` · Design/skills : `skills`,
 `awesome-design-skills`, `awesome-design-md`, `open-design`.
+
+---
+
+## 14. MÉMOIRE — fiche par dépôt (quoi / quand / comment)
+
+**Cœur 3D**
+- **three.js** — moteur WebGL/WebGPU bas niveau (Scene, Camera, Material, Geometry, shaders). *Quand* : besoin direct de primitives 3D / GLSL. *Comment* : `import * as THREE`.
+- **react-three-fiber (R3F)** — three.js en JSX React (`<Canvas>`, `useFrame`, `useThree`). **Règle : v9 ↔ React 19, v8 ↔ React 18.** Base de toute scène React.
+- **drei** — helpers prêts (caméras, `PointerLockControls`, `KeyboardControls`, loaders, `Environment`, `Html`, `Text`, `Instances`, `Grid`, `Stars`, `useGLTF`, `useAnimations`, `useVideoTexture`). Utilise `three-stdlib`.
+- **react-three-next** — starter Next+R3F. ⚠️ Fork en **v2 (R3F8/React18/Next14) = ANCIEN** : ne pas l'utiliser tel quel ; s'en inspirer (pont canvas↔DOM multi-pages).
+- **gltfjsx** — CLI `.glb` → composant JSX **typé + animations**. *Quand* : intégrer un modèle proprement (réutilisable, DRACO). *Comment* : `npx gltfjsx model.glb -t -T`.
+
+**Immersif / Jeu**
+- **react-three-rapier** — physique (collisions, gravité, `RigidBody`, **CharacterController**, **sensors=triggers**). *Quand* : déplacement avec collisions, jeu, triggers de zone.
+- **react-postprocessing** — effets (`Bloom`, `DepthOfField`, `SSAO`/`N8AO`, `Vignette`, `ToneMapping`). v3 ↔ R3F9. *Quand* : ambiance ciné/néon.
+- **react-spring** (`@react-spring/three`) — animations **ressort** physiques. *Quand* : transitions fluides (caméra se pose, apparitions).
+- **zustand** — état global par hooks. **Règle d'or : refs pour le 60 fps (transform), store pour l'UI.**
+- **racing-game** — **réf de structure jouable** : store unique (`vehicleConfig`, `booleans`, `keys`, modes caméra), refs>state, boucle `useFrame`, dossiers `/models /effects /ui /utils`. ⚠️ physique = **cannon (ancien)** → on transpose en **rapier**.
+
+**Apprentissage**
+- **project_3D_developer_portfolio** — portfolio 3D (JS Mastery) : patterns scène/sections/animation pour un site 3D.
+- **3d-game-shaders-for-beginners** — bible des shaders (SSAO, DOF, normal maps, reflets, glow) : théorie pour écrire/régler GLSL & post-fx.
+
+**Design / Skills**
+- **skills** (anthropics) — Agent Skills officiels (`docx`/`pdf`/`pptx`/`xlsx` + créatif/design/technique). *Quand* : générer des docs repeatables ; modèle pour créer nos propres skills.
+- **awesome-design-skills** — 67 skills de design (`SKILL.md` + `DESIGN.md`). *Comment* : `npx typeui.sh pull <slug>` ou copier le `SKILL.md`.
+- **awesome-design-md** — `DESIGN.md` de marques réelles. *Quand* : « fais une UI qui ressemble à X » → déposer le `DESIGN.md` et générer une UI cohérente.
+- **open-design** — app/référentiel de design agentique (100+ skills, 150 `DESIGN.md`, 261 plugins).
+
+## 15. ROUTAGE AUTOMATIQUE (demande → outil)
+
+> À chaque demande je me « prompte » seul : j'identifie le besoin, je choisis dans
+> cette boîte à outils, et j'implémente avec le set de versions compatible — sans redemander.
+
+| Si l'utilisateur demande… | J'utilise |
+|---|---|
+| « on se déplace / on marche / un jeu / 1ʳᵉ personne » | R3F + **rapier** (CharacterController) + drei `KeyboardControls`/`PointerLockControls` + zustand |
+| « ça tombe / collision / pousser / gravité » | **rapier** (RigidBody + colliders) |
+| « caméra qui suit un perso / 3ᵉ personne » | rapier RigidBody + caméra de poursuite (lerp) |
+| « mon modèle / un objet 3D / un perso / le sac » | **gltfjsx** → `useGLTF`/`useAnimations` |
+| « plus beau / cinéma / néon / glow / flou / profondeur » | **react-postprocessing** (+ shaders, réf `3d-game-shaders`) |
+| « transition douce / la caméra se pose / apparition » | **react-spring** (+ `gsap` pour timelines scriptées) |
+| « état / progression / menu / score / caméra » | **zustand** (refs=transform, store=UI) |
+| « structure d'un jeu jouable » | modèle **racing-game** (store unique, `/models /effects /ui`) |
+| « une UI qui ressemble à <marque/style> » | **awesome-design-md** (`DESIGN.md`) / **awesome-design-skills** (`SKILL.md`) |
+| « génère un doc / pptx / pdf / excel » | **skills** (anthropics) `docx`/`pdf`/`pptx`/`xlsx` |
+| « navigable en profondeur / zones / salles » | monde en zones + sensors rapier + lazy-load + transitions react-spring/gsap |
+
+**Constantes (toujours)** : set compatible **R3F 9 / React 19 / three 0.184 / drei 10 /
+postprocessing 3 / zustand 5 / rapier (compat fiber 9)** · perf par tiers · code
+typé, commenté, **data-driven** · `<Canvas>` via `next/dynamic ssr:false`.
+
