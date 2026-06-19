@@ -32,10 +32,21 @@ export default function DetailPanel() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             style={{ borderColor: (node.accent ?? "#36e0ff") + "55" }}
           >
-            <div
-              className="h-56 w-full bg-cover bg-center md:h-72"
-              style={{ backgroundImage: `url(/assets/textures/${node.preview}.png)` }}
-            />
+            {node.video ? (
+              <video
+                className="h-56 w-full object-cover md:h-72"
+                src={`/assets/video/${node.video}.mp4`}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            ) : (
+              <div
+                className="h-56 w-full bg-cover bg-center md:h-72"
+                style={{ backgroundImage: `url(/assets/textures/${node.preview}.png)` }}
+              />
+            )}
             <div className="p-7">
               <div className="mb-2 text-[11px] uppercase tracking-[0.3em]" style={{ color: node.accent }}>
                 {node.type}

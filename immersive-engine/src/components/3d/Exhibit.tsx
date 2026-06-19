@@ -1,24 +1,47 @@
 /**
- * Une œuvre exposée = un écran holographique encadré de néon, posé dans l'espace,
- * orienté vers l'allée. Survol → s'illumine ; clic → ouvre la fiche détail.
+ * Une œuvre exposée = un écran (image OU vidéo) encadré de néon, posé dans l'espace.
+ * Survol → s'illumine ; clic → ouvre la fiche détail.
  */
 import { useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useTexture, Html } from "@react-three/drei";
+import { useTexture, useVideoTexture, Html } from "@react-three/drei";
 import type { Node } from "@/data/experience";
 import { useExperience } from "@/stores/useExperience";
 
+function ImageScreen({ src, w, h }: { src: string; w: number; h: number }) {
+  const tex = useTexture(src);
+  return (
+    <mesh>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} side={THREE.DoubleSide} toneMapped={false} />
+    </mesh>
+  );
+}
+
+function VideoScreen({ src, w, h }: { src: string; w: number; h: number }) {
+  const tex = useVideoTexture(src, { muted: true, loop: true, start: true, crossOrigin: "anonymous" });
+  return (
+    <mesh>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} side={THREE.DoubleSide} toneMapped={false} />
+    </mesh>
+  );
+}
+
 export default function Exhibit({ node }: { node: Node }) {
   const group = useRef<THREE.Group>(null);
-  const tex = useTexture(`/assets/textures/${node.preview}.png`);
   const [hover, setHover] = useState(false);
   const openDetail = useExperience((s) => s.openDetail);
   const accent = node.accent ?? "#36e0ff";
 
-  // La caméra arrive depuis +z : la face +z de l'écran regarde déjà la caméra.
-  // On ajoute juste un léger yaw vers l'allée (selon le côté).
-  const yaw = node.focus[0] < 0 ? 0.42 : -0.42;
+  // dimensions selon le format
+  const square = node.ratio === "square";
+  const sw = square ? 3.7 : 6.2;
+  const sh = square ? 3.7 : 3.55;
+
+  // yaw vers l'allée (les œuvres centrées ne tournent pas)
+  const yaw = Math.abs(node.focus[0]) < 0.5 ? 0 : node.focus[0] < 0 ? 0.42 : -0.42;
 
   useFrame((_, dt) => {
     if (!group.current) return;
@@ -48,22 +71,23 @@ export default function Exhibit({ node }: { node: Node }) {
     >
       {/* halo arrière */}
       <mesh position={[0, 0, -0.12]}>
-        <planeGeometry args={[7.2, 4.5]} />
-        <meshBasicMaterial color={accent} transparent opacity={hover ? 0.22 : 0.1} side={THREE.DoubleSide} toneMapped={false} />
+        <planeGeometry args={[sw + 1, sh + 0.9]} />
+        <meshBasicMaterial color={accent} transparent opacity={hover ? 0.24 : 0.11} side={THREE.DoubleSide} toneMapped={false} />
       </mesh>
       {/* cadre néon */}
       <mesh position={[0, 0, -0.06]}>
-        <planeGeometry args={[6.5, 3.85]} />
+        <planeGeometry args={[sw + 0.3, sh + 0.3]} />
         <meshBasicMaterial color={accent} side={THREE.DoubleSide} toneMapped={false} />
       </mesh>
-      {/* écran (aperçu de la création) */}
-      <mesh>
-        <planeGeometry args={[6.2, 3.55]} />
-        <meshBasicMaterial map={tex} side={THREE.DoubleSide} toneMapped={false} />
-      </mesh>
+      {/* écran (image ou vidéo) */}
+      {node.video ? (
+        <VideoScreen src={`/assets/video/${node.video}.mp4`} w={sw} h={sh} />
+      ) : (
+        <ImageScreen src={`/assets/textures/${node.preview}.png`} w={sw} h={sh} />
+      )}
 
       {/* étiquette holographique */}
-      <Html position={[0, -2.45, 0]} center distanceFactor={11} prepend>
+      <Html position={[0, -(sh / 2) - 0.7, 0]} center distanceFactor={11} prepend>
         <div className="exhibit-label" style={{ borderColor: accent }}>
           <span style={{ color: accent }}>{node.type}</span>
           <b>{node.title}</b>

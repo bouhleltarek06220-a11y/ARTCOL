@@ -20,7 +20,9 @@ export type Node = {
   type?: "Outil" | "Site" | "Landing" | "Expérience";
   tech?: string[];
   url?: string;
-  preview?: string;   // nom du fichier dans /assets/textures (sans extension)
+  preview?: string;   // image dans /assets/textures (sans extension)
+  video?: string;     // vidéo dans /assets/video (sans extension) — prioritaire sur preview
+  ratio?: "wide" | "square";
   accent?: string;
 };
 
@@ -39,22 +41,35 @@ export const EXPERIENCE = {
   tagline: "Galerie orbitale · cyberpunk",
 };
 
-/** Le parcours : hero → créations (gauche/droite) → sortie. */
+/** Le parcours : hero → gardien → créations (gauche/droite) → sortie. */
 export const PATH: Node[] = [
   {
     id: "hero",
     kind: "hero",
-    cam: [0, 1.3, 10],
-    focus: [0, 1.0, 0],
+    cam: [0, 1.3, 11],
+    focus: [0, 1.0, 2],
     kicker: "Entrez dans la galerie",
     title: "AMAVYA",
     body: "Une galaxie. Des sanctuaires. Chaque œuvre est une de mes créations. Avancez et explorez.",
   },
   {
+    id: "gardien",
+    kind: "creation",
+    cam: [0, 1.3, 3],
+    focus: [0, 0.7, -6],
+    title: "Gardien AMAVYA",
+    type: "Expérience",
+    tech: ["Cyberpunk", "Vidéo", "AMAVYA"],
+    url: "#",
+    video: "guardian",
+    ratio: "square",
+    accent: "#7CFF3D",
+  },
+  {
     id: "crm",
     kind: "creation",
-    cam: [0, 1.3, -2],
-    focus: [-5.6, 0.6, -9],
+    cam: [0, 1.3, -11],
+    focus: [-5.6, 0.6, -18],
     title: "Amavya CRM",
     type: "Outil",
     tech: ["Next.js", "Supabase", "TypeScript"],
@@ -65,8 +80,8 @@ export const PATH: Node[] = [
   {
     id: "prospection",
     kind: "creation",
-    cam: [0, 1.3, -18],
-    focus: [5.6, 0.6, -25],
+    cam: [0, 1.3, -27],
+    focus: [5.6, 0.6, -34],
     title: "Machine de Prospection",
     type: "Outil",
     tech: ["IA", "Node.js", "Automation"],
@@ -77,8 +92,8 @@ export const PATH: Node[] = [
   {
     id: "lostchapter",
     kind: "creation",
-    cam: [0, 1.3, -34],
-    focus: [-5.6, 0.6, -41],
+    cam: [0, 1.3, -43],
+    focus: [-5.6, 0.6, -50],
     title: "Lost Chapter 3D",
     type: "Expérience",
     tech: ["Three.js", "R3F", "WebGL"],
@@ -89,8 +104,8 @@ export const PATH: Node[] = [
   {
     id: "artcol",
     kind: "creation",
-    cam: [0, 1.3, -50],
-    focus: [5.6, 0.6, -57],
+    cam: [0, 1.3, -59],
+    focus: [5.6, 0.6, -66],
     title: "ARTCOL — Sanctuaire",
     type: "Expérience",
     tech: ["R3F", "GLSL", "Cyberpunk"],
@@ -101,8 +116,8 @@ export const PATH: Node[] = [
   {
     id: "outro",
     kind: "outro",
-    cam: [0, 1.3, -70],
-    focus: [0, 1.0, -82],
+    cam: [0, 1.3, -80],
+    focus: [0, 1.0, -92],
     kicker: "La suite",
     title: "Construisons la vôtre.",
     body: "Chaque création peut vivre ici. Parlons de votre univers.",
