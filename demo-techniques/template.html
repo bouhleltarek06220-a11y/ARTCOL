@@ -3,133 +3,71 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Atelier des Techniques — Démo immersive (scroll WebGL)</title>
+<title>Profondeur — démo scroll en Z (on entre dans la page)</title>
 <style>
   :root{ --cream:#f3ece0; --dim:#cfc6b6; --bleu:#8FC0DD; --noir:#0b0d10; }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{min-height:100%;overflow-x:hidden}
   body{background:var(--noir);color:var(--cream);font-family:Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-
-  /* CSS requis par Lenis (smooth scroll) */
-  html.lenis, html.lenis body{height:auto}
-  .lenis.lenis-smooth{scroll-behavior:auto !important}
-  .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
-  .lenis.lenis-stopped{overflow:hidden}
-  .lenis.lenis-smooth iframe{pointer-events:none}
   .serif{font-family:Georgia,'Times New Roman',serif}
 
-  /* canvas WebGL en fond fixe */
-  #gl{position:fixed;inset:0;z-index:0;display:block}
+  /* CSS requis par Lenis */
+  html.lenis, html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto !important}
+  .lenis.lenis-stopped{overflow:hidden}
 
-  /* progression */
+  #gl{position:fixed;inset:0;z-index:0;display:block}
+  /* vignette pour la profondeur + lisibilité */
+  #vig{position:fixed;inset:0;z-index:1;pointer-events:none;
+       background:radial-gradient(ellipse at 50% 50%,transparent 38%,rgba(7,9,12,.55) 100%)}
   #bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--bleu),#fff);z-index:30}
 
   nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
       padding:20px clamp(16px,4vw,44px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;mix-blend-mode:difference}
   nav .b{font-weight:700}
 
-  .content{position:relative;z-index:10}
-  .scene{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px}
-  .s-in{display:flex;flex-direction:column;align-items:center;will-change:opacity}
-  .kicker{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--bleu);margin-bottom:20px}
-  .title{font-family:Georgia,serif;font-weight:400;font-size:clamp(46px,9vw,118px);line-height:.98;letter-spacing:-.02em;text-shadow:0 4px 40px rgba(0,0,0,.5)}
-  .title.hero{font-size:clamp(58px,13vw,180px)}
-  .word{display:inline-block;overflow:hidden;vertical-align:top}
-  .word>span{display:inline-block;will-change:transform}
-  .sub{margin-top:24px;max-width:520px;font-size:clamp(15px,1.8vw,19px);line-height:1.6;color:var(--dim);text-shadow:0 2px 18px rgba(0,0,0,.7)}
+  /* titres : superposés au centre, pilotés en opacité par la profondeur */
+  #titles{position:fixed;inset:0;z-index:10;pointer-events:none}
+  .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:0;will-change:opacity,transform}
+  .kicker{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--bleu);margin-bottom:18px}
+  .title{font-family:Georgia,serif;font-weight:400;font-size:clamp(46px,8.5vw,112px);line-height:.98;letter-spacing:-.02em;text-shadow:0 6px 50px rgba(0,0,0,.8)}
+  .sub{margin-top:22px;max-width:520px;font-size:clamp(15px,1.8vw,19px);line-height:1.6;color:var(--cream);text-shadow:0 2px 22px rgba(0,0,0,.95)}
 
-  .hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:10px}
-  .hint i{width:1px;height:44px;background:linear-gradient(var(--bleu),transparent);animation:h 1.8s ease-in-out infinite}
+  .hint{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:20;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:9px}
+  .hint i{width:1px;height:40px;background:linear-gradient(var(--bleu),transparent);animation:h 1.8s ease-in-out infinite}
   @keyframes h{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-  /* panneau pédagogique */
-  #learn{position:fixed;left:22px;bottom:22px;z-index:25;max-width:330px;background:rgba(12,15,20,.82);backdrop-filter:blur(10px);
-          border:1px solid rgba(143,192,221,.4);border-radius:14px;padding:16px 18px;transition:opacity .4s,transform .4s}
+  #learn{position:fixed;left:22px;bottom:22px;z-index:25;max-width:320px;background:rgba(12,15,20,.82);backdrop-filter:blur(10px);
+         border:1px solid rgba(143,192,221,.4);border-radius:14px;padding:15px 17px;transition:opacity .4s,transform .4s}
   #learn.off{opacity:0;transform:translateY(14px);pointer-events:none}
   #learn .lk{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bleu);margin-bottom:6px}
-  #learn .lt{font-family:Georgia,serif;font-size:18px;margin-bottom:6px}
-  #learn .ld{font-size:13px;line-height:1.55;color:var(--dim)}
+  #learn .lt{font-family:Georgia,serif;font-size:17px;margin-bottom:5px}
+  #learn .ld{font-size:12.5px;line-height:1.5;color:var(--dim)}
   #toggle{position:fixed;right:22px;bottom:22px;z-index:25;cursor:pointer;border:1px solid rgba(143,192,221,.5);
-          background:rgba(12,15,20,.8);color:var(--cream);border-radius:999px;padding:10px 16px;font-size:12px;letter-spacing:.05em}
+          background:rgba(12,15,20,.8);color:var(--cream);border-radius:999px;padding:9px 15px;font-size:12px}
 
-  .footer{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px;padding:0 24px;
-          background:linear-gradient(180deg,transparent,rgba(7,9,12,.9) 55%)}
-  .fq{font-family:Georgia,serif;font-style:italic;font-size:clamp(22px,3.4vw,36px);max-width:740px;line-height:1.3}
-  .fb{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--bleu)}
+  /* zone de défilement invisible : c'est elle qui capte le scroll */
+  #scroller{position:relative;z-index:5;pointer-events:none}
   @media (prefers-reduced-motion: reduce){ .hint i{animation:none} }
 </style>
 </head>
 <body>
   <canvas id="gl"></canvas>
+  <div id="vig"></div>
   <div id="bar"></div>
+  <nav><span>Profondeur</span><span class="b">SCROLL&nbsp;EN&nbsp;Z</span><span>Démo</span></nav>
 
-  <nav><span>Atelier</span><span class="b">DES&nbsp;TECHNIQUES</span><span>Démo</span></nav>
+  <div id="titles"></div>
+  <div class="hint">entrer<i></i></div>
 
   <div id="learn">
-    <div class="lk">🎓 Technique en cours</div>
-    <div class="lt" id="lt">Smooth scroll</div>
-    <div class="ld" id="ld">Lenis lisse le défilement et le transforme en une valeur continue 0→1 qui pilote toute la scène.</div>
+    <div class="lk">🎓 Technique</div>
+    <div class="lt" id="lt">Scroll en profondeur (axe Z)</div>
+    <div class="ld" id="ld">Le scroll ne descend pas la page : il avance la caméra dans la scène 3D. On traverse des images empilées en profondeur — on entre dans la page.</div>
   </div>
   <div id="toggle">🎓 Apprentissage : ON</div>
 
-  <main class="content">
-    <!-- chaque .scene : data-tech-title / data-tech-desc pour le panneau pédagogique -->
-    <section class="scene" data-scene="0"
-      data-tech-title="Smooth scroll (Lenis)"
-      data-tech-desc="Le scroll natif est « lissé » par Lenis et exposé en valeur continue 0→1. C'est cette valeur — pas la molette — qui pilote l'animation.">
-      <div class="kicker">ATELIER · PERPÉTUELLE</div>
-      <h1 class="title hero" data-split>Perpétuelle</h1>
-      <p class="sub">Fais défiler : le scroll devient la tête de lecture d'un film.</p>
-      <div class="hint">défiler<i></i></div>
-    </section>
-
-    <section class="scene" data-scene="1"
-      data-tech-title="Transition par shader GLSL"
-      data-tech-desc="Deux images sont mélangées sur le GPU via un « wipe » organique (bruit). La fraction de mélange = la progression du scroll entre deux scènes.">
-      <div class="kicker">I · LE GESTE</div>
-      <h1 class="title" data-split>L'Atelier</h1>
-      <p class="sub">La transition entre deux scènes est calculée par un shader, pixel par pixel.</p>
-    </section>
-
-    <section class="scene" data-scene="2"
-      data-tech-title="Cover-fit & parallaxe"
-      data-tech-desc="L'image couvre l'écran sans jamais être déformée (cover-fit en shader), avec un léger Ken-Burns qui respire pour donner de la profondeur.">
-      <div class="kicker">II · LA MATIÈRE</div>
-      <h1 class="title" data-split>Le Cuir</h1>
-      <p class="sub">Quel que soit l'écran, l'image reste cadrée — jamais étirée.</p>
-    </section>
-
-    <section class="scene" data-scene="3"
-      data-tech-title="Vraie 3D WebGL (Three.js)"
-      data-tech-desc="Un objet 3D réel est rendu en perspective au-dessus du fond. Sa rotation et son apparition sont pilotées par le scroll.">
-      <div class="kicker">III · L'OBJET</div>
-      <h1 class="title" data-split>En 3D</h1>
-      <p class="sub">Un objet en volume, éclairé en temps réel, qui tourne avec ton scroll.</p>
-    </section>
-
-    <section class="scene" data-scene="4"
-      data-tech-title="Scrub : scroll = tête de lecture"
-      data-tech-desc="« Scrub » attache l'animation à la barre de scroll : tu remontes, ça revient en arrière. Le mouvement est réversible et continu.">
-      <div class="kicker">IV · LA CONFIANCE</div>
-      <h1 class="title" data-split>Certifiée</h1>
-      <p class="sub">Remonte : l'animation revient en arrière. Le scroll EST la timeline.</p>
-    </section>
-
-    <section class="scene" data-scene="5"
-      data-tech-title="Reveal de texte (split)"
-      data-tech-desc="Le titre est découpé en mots masqués qui montent en cascade quand la section entre à l'écran (principe de SplitText + ScrollTrigger).">
-      <div class="kicker">V · PETIT h</div>
-      <h1 class="title" data-split>Renaissance</h1>
-      <p class="sub">Chaque mot est masqué puis révélé, en cascade, à l'entrée.</p>
-    </section>
-
-    <footer class="footer" data-scene="5"
-      data-tech-title="Tout est synchronisé"
-      data-tech-desc="Lenis + GSAP/ScrollTrigger + Three.js partagent une seule horloge : un rendu fluide et cohérent. C'est ça, « le scroll est responsable ».">
-      <p class="fq">« D'une logique de transaction à une logique d'écosystème. »</p>
-      <span class="fb">ATELIER DES TECHNIQUES</span>
-    </footer>
-  </main>
+  <div id="scroller"></div>
 
   <!-- ===== LIBS (vendored, hors-ligne) ===== -->
   <script>/*THREE*/__LIB_THREE__</script>
@@ -137,225 +75,124 @@
   <script>/*ScrollTrigger*/__LIB_ST__</script>
   <script>/*Lenis*/__LIB_LENIS__</script>
 
-  <!-- ===== DÉMO ===== -->
+  <!-- ===== DÉMO : scroll en Z (z-stack / dolly caméra) ===== -->
   <script>
   (function(){
     "use strict";
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const IMAGES = __IMAGES__;          // tableau de data-URI (une par scène)
+    const IMAGES = __IMAGES__;
+    const SCENES = [
+      { kicker:'ATELIER · PERPÉTUELLE', title:'Perpétuelle', sub:"Entre dans la page : le scroll t'avance en profondeur." },
+      { kicker:'I · LE GESTE',          title:"L'Atelier",   sub:"Chaque plan flotte dans l'espace ; tu le traverses." },
+      { kicker:'II · LA MATIÈRE',       title:'Le Cuir',     sub:"La profondeur, pas le défilement : un voyage vers l'avant." },
+      { kicker:'III · LA CONFIANCE',    title:'Certifiée',   sub:"Les plans s'approchent, grandissent, te dépassent." },
+      { kicker:'IV · LE CYCLE',         title:'Revente',     sub:"Un empilement (z-stack) que la caméra franchit." },
+      { kicker:'V · PETIT h',           title:'Renaissance', sub:"Rien ne se perd : on ressort par le fond." },
+    ];
     const N = IMAGES.length;
-    const S = { progress: 0, velocity: 0 };  // état de scroll partagé
+    const S = { progress:0, velocity:0 };
 
-    /* ============================================================
-       1) LENIS — smooth scroll, synchronisé avec GSAP ScrollTrigger
-       ============================================================ */
+    /* 1) Lenis : le scroll -> valeur 0..1 (sans bouger la page visible) */
     gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: !reduce });
-    lenis.on('scroll', (e) => {
-      S.progress = e.progress || 0;
-      S.velocity = e.velocity || 0;
-      ScrollTrigger.update();
-    });
-    gsap.ticker.add((t) => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
+    document.getElementById('scroller').style.height = ((N + 1.5) * 100) + 'vh';
+    const lenis = new Lenis({ duration:1.2, smoothWheel:!reduce });
+    lenis.on('scroll', (e)=>{ S.progress = e.progress||0; S.velocity = e.velocity||0; ScrollTrigger.update(); });
+    gsap.ticker.add((t)=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
 
-    /* ============================================================
-       2) THREE.JS — fond plein écran : transition shader entre scènes
-          + une vraie passe 3D (objet en perspective) pour une scène
-       ============================================================ */
+    /* 2) Three.js : empilement de plans le long de l'axe Z + brouillard */
     const canvas = document.getElementById('gl');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-    renderer.autoClear = false;
+    const FOG = 0x0b0d10;
+    renderer.setClearColor(FOG, 1);
 
-    // -- scène A : plan plein écran (transition d'images en GLSL) --
-    const bgScene = new THREE.Scene();
-    const bgCam = new THREE.Camera(); // inutilisée (on bypass via gl_Position)
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(FOG, 0.020);
+    const cam = new THREE.PerspectiveCamera(55, 1, 0.1, 300);
+
+    const GAP = 7;             // espacement des plans en Z
+    const COVER = 4;           // distance à laquelle un plan remplit l'écran
+    const CAM_START = COVER + 1;          // 1er plan quasi net dès le départ
+    const END_Z = -(N - 1) * GAP - 1.5;   // on franchit tout juste le dernier plan
+    const TRAVEL = CAM_START - END_Z;
+
     const loader = new THREE.TextureLoader();
-    const textures = IMAGES.map((src) => {
-      const t = loader.load(src);
-      t.minFilter = THREE.LinearFilter;
-      t.generateMipmaps = false;
-      return t;
+    const planes = IMAGES.map((src, i) => {
+      const mat = new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthTest:false, depthWrite:false });
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1), mat);
+      mesh.position.z = -i * GAP;
+      mesh.renderOrder = -i;   // les plans proches dessinés par-dessus
+      mesh.userData.tex = null;
+      loader.load(src, (tex)=>{ tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false;
+        mat.map = tex; mat.needsUpdate = true; mesh.userData.tex = tex; fitPlane(mesh); });
+      scene.add(mesh);
+      return mesh;
     });
-    const uniforms = {
-      uTexA:{value:textures[0]}, uTexB:{value:textures[1]||textures[0]},
-      uResA:{value:new THREE.Vector2(1,1)}, uResB:{value:new THREE.Vector2(1,1)},
-      uViewport:{value:new THREE.Vector2(1,1)},
-      uProgress:{value:0}, uVelocity:{value:0}, uTime:{value:0}, uReduced:{value:reduce?1:0}
-    };
-    const bgMat = new THREE.ShaderMaterial({
-      uniforms, depthTest:false, depthWrite:false,
-      vertexShader: `
-        varying vec2 vUv;
-        void main(){ vUv = position.xy*0.5+0.5; gl_Position = vec4(position.xy,0.0,1.0); }
-      `,
-      fragmentShader: `
-        precision highp float;
-        varying vec2 vUv;
-        uniform sampler2D uTexA,uTexB; uniform vec2 uResA,uResB,uViewport;
-        uniform float uProgress,uVelocity,uTime,uReduced;
-        vec2 coverUV(vec2 uv,vec2 res,vec2 vp){
-          float ra=res.x/res.y, rv=vp.x/vp.y;
-          vec2 s = ra>rv ? vec2(rv/ra,1.0) : vec2(1.0,ra/rv);
-          return (uv-0.5)*s+0.5;
-        }
-        float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-        float noise(vec2 p){vec2 i=floor(p),f=fract(p);float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-        void main(){
-          vec2 uv=vUv;
-          float kb = uReduced>0.5?0.0:0.018;
-          vec2 z=(uv-0.5)*(1.0-kb*sin(uTime*0.15))+0.5;
-          vec2 uvA=coverUV(z,uResA,uViewport), uvB=coverUV(z,uResB,uViewport);
-          float v=clamp(abs(uVelocity)*0.010,0.0,0.045)*(uReduced>0.5?0.0:1.0);
-          float n=noise(uv*3.0+uTime*0.05);
-          float wipe=smoothstep(0.0,1.0,uProgress*1.35-uv.y*0.30+(n-0.5)*0.22);
-          vec3 A,B;
-          A.r=texture2D(uTexA,uvA+vec2(v,0.0)).r; A.g=texture2D(uTexA,uvA).g; A.b=texture2D(uTexA,uvA-vec2(v,0.0)).b;
-          B.r=texture2D(uTexB,uvB+vec2(v,0.0)).r; B.g=texture2D(uTexB,uvB).g; B.b=texture2D(uTexB,uvB-vec2(v,0.0)).b;
-          vec3 col=mix(A,B,wipe);
-          col*=0.60;
-          float d=distance(uv,vec2(0.5));
-          col*=smoothstep(0.98,0.32,d)*0.5+0.62;
-          col+=(hash(uv*(uTime+1.0))-0.5)*0.022;
-          gl_FragColor=vec4(col,1.0);
-        }
-      `
-    });
-    bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), bgMat));
 
-    // -- scène B : objet 3D réel (perspective) --
-    const objScene = new THREE.Scene();
-    const objCam = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    objCam.position.set(0, 0, 5);
-    objScene.add(new THREE.HemisphereLight(0xbfe0ff, 0x202028, 1.0));
-    const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(3,4,5); objScene.add(key);
-    const rim = new THREE.DirectionalLight(0x8FC0DD, 1.2); rim.position.set(-4,-2,-3); objScene.add(rim);
-    const knot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(1.0, 0.34, 200, 32),
-      new THREE.MeshStandardMaterial({ color:0xe9e0cf, metalness:0.85, roughness:0.22 })
-    );
-    objScene.add(knot);
-
+    function fitPlane(mesh){
+      const tex = mesh.userData.tex; if(!tex || !tex.image) return;
+      const W = window.innerWidth, H = window.innerHeight;
+      const vh = 2 * Math.tan(THREE.MathUtils.degToRad(cam.fov)/2) * COVER;
+      const vw = vh * (W/H);
+      const ia = tex.image.width / tex.image.height;     // cover du cadre
+      let w, h;
+      if (ia > vw/vh){ h = vh; w = h * ia; } else { w = vw; h = w / ia; }
+      mesh.scale.set(w, h, 1);
+    }
     function resize(){
-      const w = window.innerWidth, h = window.innerHeight;
-      renderer.setSize(w, h, false);
-      uniforms.uViewport.value.set(w, h);
-      objCam.aspect = w/h; objCam.updateProjectionMatrix();
+      const W = window.innerWidth, H = window.innerHeight;
+      renderer.setSize(W, H, false);
+      cam.aspect = W/H; cam.updateProjectionMatrix();
+      planes.forEach(fitPlane);
     }
     window.addEventListener('resize', resize); resize();
 
-    /* ============================================================
-       3) PIN (scrollytelling) — chaque scène est ÉPINGLÉE et reste
-          fixe à l'écran pendant que le scroll la transforme.
-          sceneF = index de scène + progression dans l'épingle (0..N).
-          C'est ça qui rend l'expérience « verrouillée », pas un simple
-          défilement vertical.
-       ============================================================ */
-    let sceneF = 0;
-    // emballe le contenu de chaque scène dans .s-in (pour le faire fondre)
-    const panels = Array.prototype.slice.call(document.querySelectorAll('.scene'));
-    panels.forEach((panel) => {
-      const inner = document.createElement('div');
-      inner.className = 's-in';
-      Array.prototype.slice.call(panel.children).forEach((ch) => {
-        if (!ch.classList.contains('hint')) inner.appendChild(ch);
-      });
-      panel.insertBefore(inner, panel.firstChild);
+    /* 3) Titres superposés (un par scène) */
+    const titlesEl = document.getElementById('titles');
+    const titleNodes = SCENES.map((s)=>{
+      const d = document.createElement('div'); d.className='t';
+      d.innerHTML = `<div class="kicker">${s.kicker}</div><div class="title serif">${s.title}</div><div class="sub">${s.sub}</div>`;
+      titlesEl.appendChild(d); return d;
     });
-    panels.forEach((panel, i) => {
-      const inner = panel.querySelector('.s-in');
-      ScrollTrigger.create({
-        trigger: panel, start: 'top top', end: '+=110%',
-        pin: !reduce, pinSpacing: true,
-        onUpdate: (self) => {
-          sceneF = i + self.progress;
-          const p = self.progress;                 // fondu sortant en fin d'épingle
-          inner.style.opacity = (p < 0.74 ? 1 : Math.max(0, 1 - (p - 0.74) / 0.24)).toFixed(3);
-        },
-      });
-    });
-    ScrollTrigger.refresh();
+    const lt = document.getElementById('lt'), ld = document.getElementById('ld');
 
-    /* ============================================================
-       4) BOUCLE DE RENDU — lit sceneF, mélange les scènes, dessine
-       ============================================================ */
-    let smFrac = 0, smVel = 0, last = performance.now();
+    /* 4) Boucle de rendu : le scroll AVANCE la caméra dans l'axe Z */
+    let camZ = CAM_START, last = performance.now();
     function render(now){
       const dt = Math.min(0.05, (now - last)/1000); last = now;
+      const targetZ = CAM_START - S.progress * TRAVEL;
+      camZ += (targetZ - camZ) * Math.min(1, dt * 5);   // lissage
+      cam.position.z = camZ;
 
-      const f = sceneF;                            // piloté par les épingles
-      let idx = Math.min(Math.floor(f), N - 2); if (idx < 0) idx = 0;
-      const target = Math.min(1, f - idx);
-      smFrac += (target - smFrac) * Math.min(1, dt*6);
-      smVel  += (S.velocity - smVel) * Math.min(1, dt*5);
-
-      const a = textures[idx], b = textures[idx+1] || textures[idx];
-      uniforms.uTexA.value = a; uniforms.uTexB.value = b;
-      if (a.image) uniforms.uResA.value.set(a.image.width, a.image.height);
-      if (b.image) uniforms.uResB.value.set(b.image.width, b.image.height);
-      uniforms.uProgress.value = smFrac;
-      uniforms.uVelocity.value = smVel;
-      uniforms.uTime.value += dt;
-
-      renderer.clear();
-      renderer.render(bgScene, bgCam);
-
-      // passe 3D : visible pendant que la scène « En 3D » (index 3) est épinglée
-      let w3 = 0;
-      if (f > 2.80 && f < 4.20) w3 = Math.min(1, Math.min((f - 2.80)/0.40, (4.20 - f)/0.40));
-      if (w3 > 0.001){
-        knot.rotation.y = (f - 3) * 3.0 + now*0.00018;   // tourne avec le scroll
-        knot.rotation.x = 0.5 + (f - 3) * 0.8;
-        knot.scale.setScalar(0.55 + 0.55*w3);
-        knot.material.opacity = w3; knot.material.transparent = true;
-        renderer.clearDepth();
-        renderer.render(objScene, objCam);
+      let bestI = 0, bestO = -1;
+      for (let i = 0; i < N; i++){
+        const mesh = planes[i];
+        const d = camZ - mesh.position.z;                // >0 : plan devant
+        // opacité image : apparaît au loin, plein à mi-distance, s'efface avant qu'on le traverse
+        let mo = 0;
+        if (d > 0.5 && d < GAP*1.9) mo = Math.min((d-0.5)/1.6, (GAP*1.9 - d)/(GAP*1.1), 1);
+        mesh.material.opacity = Math.max(0, mo);
+        mesh.visible = mo > 0.002;
+        // opacité du titre : net seulement quand le plan est dans la zone focale
+        let to = 0;
+        if (d > 1.4 && d < GAP*1.25) to = Math.min((d-1.4)/1.8, (GAP*1.25 - d)/(GAP*0.7), 1);
+        const node = titleNodes[i];
+        node.style.opacity = Math.max(0, to).toFixed(3);
+        node.style.transform = 'translateZ(0) scale(' + (1 + (1-Math.min(1,d/COVER))*0.04) + ')';
+        if (to > bestO){ bestO = to; bestI = i; }
       }
+      renderer.render(scene, cam);
       requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
 
-    /* ============================================================
-       4) GSAP — reveal des titres en cascade (split) + sous-titres
-       ============================================================ */
-    document.querySelectorAll('[data-split]').forEach((el) => {
-      const words = el.textContent.split(' ');
-      el.innerHTML = words.map(w => `<span class="word"><span>${w}</span></span>`).join(' ');
-      const inner = el.querySelectorAll('.word > span');
-      if (reduce){ gsap.set(inner,{yPercent:0,opacity:1}); return; }
-      gsap.set(inner,{yPercent:115,opacity:0});
-      gsap.to(inner,{ yPercent:0, opacity:1, duration:1.1, ease:'power3.out', stagger:0.06,
-        scrollTrigger:{ trigger: el, start:'top 85%' } });
-    });
-    document.querySelectorAll('.sub, .fq').forEach((el) => {
-      if (reduce) return;
-      gsap.from(el,{ y:24, opacity:0, duration:1, ease:'power3.out',
-        scrollTrigger:{ trigger: el, start:'top 88%' } });
-    });
-
-    /* ============================================================
-       5) Barre de progression + panneau pédagogique
-       ============================================================ */
+    /* 5) Barre de progression + panneau pédagogique */
     const bar = document.getElementById('bar');
-    ScrollTrigger.create({ start:0, end:'max', onUpdate:(self)=>{ bar.style.width=(self.progress*100)+'%'; }});
-
-    const lt = document.getElementById('lt'), ld = document.getElementById('ld');
-    document.querySelectorAll('[data-tech-title]').forEach((sec) => {
-      ScrollTrigger.create({ trigger: sec, start:'top center', end:'bottom center',
-        onToggle:(self)=>{ if(self.isActive){ lt.textContent = sec.dataset.techTitle; ld.textContent = sec.dataset.techDesc; } }});
-    });
-
+    ScrollTrigger.create({ start:0, end:'max', onUpdate:(self)=>{ bar.style.width = (self.progress*100)+'%'; }});
     const learn = document.getElementById('learn'), toggle = document.getElementById('toggle');
     let on = true;
-    toggle.addEventListener('click', () => {
-      on = !on; learn.classList.toggle('off', !on);
-      toggle.textContent = '🎓 Apprentissage : ' + (on ? 'ON' : 'OFF');
-    });
-
-    // recalage des positions une fois tout en place (le pin modifie la hauteur)
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-    window.addEventListener('load', () => ScrollTrigger.refresh());
+    toggle.addEventListener('click', ()=>{ on=!on; learn.classList.toggle('off',!on);
+      toggle.textContent = '🎓 Apprentissage : ' + (on?'ON':'OFF'); });
   })();
   </script>
 </body>
