@@ -10,6 +10,7 @@ import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import Galaxy from "./Galaxy";
 import Exhibit from "./Exhibit";
+import Robot from "./Robot";
 import CameraRig from "./CameraRig";
 import { CREATIONS } from "@/data/experience";
 import { TOTAL } from "@/lib/path";
@@ -33,6 +34,8 @@ export default function Experience() {
     >
       <Suspense fallback={null}>
         <Galaxy />
+        {/* gardien : VRAI modèle 3D animé (glTF) */}
+        <Robot position={[5.4, -3, -11]} scale={1.5} clip="Wave" spin={0.35} accent="#7CFF3D" />
         {CREATIONS.map((n) => (
           <Exhibit key={n.id} node={n} />
         ))}
