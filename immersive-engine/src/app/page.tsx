@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { KeyboardControls } from "@react-three/drei";
 import Hud from "@/components/ui/Hud";
 import DetailPanel from "@/components/ui/DetailPanel";
 import { useNavigation } from "@/hooks/useNavigation";
@@ -15,11 +16,22 @@ const Experience = dynamic(() => import("@/components/3d/Experience"), {
   ),
 });
 
+// Mapping clavier (mode marche) : ZQSD + WASD + flèches.
+const KEYS = [
+  { name: "forward", keys: ["ArrowUp", "w", "W", "z", "Z"] },
+  { name: "backward", keys: ["ArrowDown", "s", "S"] },
+  { name: "left", keys: ["ArrowLeft", "a", "A", "q", "Q"] },
+  { name: "right", keys: ["ArrowRight", "d", "D"] },
+  { name: "jump", keys: ["Space"] },
+];
+
 export default function Page() {
   useNavigation();
   return (
     <main className="relative h-screen w-screen overflow-hidden">
-      <Experience />
+      <KeyboardControls map={KEYS}>
+        <Experience />
+      </KeyboardControls>
       <Hud />
       <DetailPanel />
     </main>

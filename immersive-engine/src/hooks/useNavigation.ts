@@ -12,19 +12,21 @@ import { useExperience } from "@/stores/useExperience";
 
 export function useNavigation() {
   useEffect(() => {
-    const { nudge } = useExperience.getState();
+    const railOnly = () => useExperience.getState().mode === "rail";
+    const nudge = (d: number) => useExperience.getState().nudge(d);
 
-    const onWheel = (e: WheelEvent) => nudge(e.deltaY * 0.00022);
+    const onWheel = (e: WheelEvent) => { if (railOnly()) nudge(e.deltaY * 0.00022); };
 
     const onKey = (e: KeyboardEvent) => {
-      if (["ArrowDown", "ArrowRight", "s", "S", "z", "Z"].includes(e.key)) nudge(0.05);
-      if (["ArrowUp", "ArrowLeft", "w", "W"].includes(e.key)) nudge(-0.05);
+      if (!railOnly()) return; // en marche, le clavier est géré par KeyboardControls
+      if (["ArrowDown", "ArrowRight"].includes(e.key)) nudge(0.05);
+      if (["ArrowUp", "ArrowLeft"].includes(e.key)) nudge(-0.05);
     };
 
     let lastY: number | null = null;
     const onTouchStart = (e: TouchEvent) => (lastY = e.touches[0].clientY);
     const onTouchMove = (e: TouchEvent) => {
-      if (lastY === null) return;
+      if (lastY === null || !railOnly()) return;
       const y = e.touches[0].clientY;
       nudge((lastY - y) * 0.0011);
       lastY = y;

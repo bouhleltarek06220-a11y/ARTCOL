@@ -7,6 +7,7 @@
 import { create } from "zustand";
 
 export type Quality = "high" | "low";
+export type Mode = "rail" | "explore";
 
 type ExperienceState = {
   t: number;
@@ -14,6 +15,7 @@ type ExperienceState = {
   active: number;        // index de la station la plus proche
   total: number;         // nombre de stations
   quality: Quality;
+  mode: Mode;            // "rail" = caméra guidée · "explore" = marche 1re personne
   detail: string | null; // id de la station ouverte en vue détaillée (étapes suivantes)
 
   setTotal: (n: number) => void;
@@ -22,6 +24,8 @@ type ExperienceState = {
   goTo: (index: number) => void;
   setT: (v: number) => void;
   setQuality: (q: Quality) => void;
+  setMode: (m: Mode) => void;
+  toggleMode: () => void;
   openDetail: (id: string | null) => void;
 };
 
@@ -33,6 +37,7 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   active: 0,
   total: 1,
   quality: "high",
+  mode: "rail",
   detail: null,
 
   setTotal: (n) => set({ total: Math.max(1, n) }),
@@ -49,5 +54,7 @@ export const useExperience = create<ExperienceState>((set, get) => ({
     set({ t: v, active });
   },
   setQuality: (q) => set({ quality: q }),
+  setMode: (m) => set({ mode: m }),
+  toggleMode: () => set({ mode: get().mode === "rail" ? "explore" : "rail" }),
   openDetail: (id) => set({ detail: id }),
 }));
