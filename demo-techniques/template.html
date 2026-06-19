@@ -3,287 +3,203 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HERMÈS · PERPÉTUELLE — Présentation en profondeur</title>
+<title>HERMÈS · PERPÉTUELLE — Tunnel en profondeur</title>
 <style>
-  :root{ --cream:#f3ece0; --dim:#cdc4b4; --bleu:#8FC0DD; --or:#caa15a; --noir:#0b0d10; }
+  :root{ --cream:#f3ece0; --dim:#cdc4b4; --bleu:#8FC0DD; --or:#caa15a; --noir:#06080b; }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{min-height:100%;overflow-x:hidden}
-  body{background:var(--noir);color:var(--cream);font-family:Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{min-height:100%;overflow-x:hidden;background:var(--noir)}
+  body{color:var(--cream);font-family:Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,'Times New Roman',serif}
   html.lenis,html.lenis body{height:auto}
   .lenis.lenis-smooth{scroll-behavior:auto !important}
 
-  #gl{position:fixed;inset:0;z-index:0;display:block}
-  #vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(7,9,12,.25) 30%,rgba(7,9,12,.72) 100%)}
+  /* scène en perspective (le tunnel) */
+  #tunnel{position:fixed;inset:0;z-index:0;overflow:hidden;
+          perspective:1100px;perspective-origin:50% 50%;
+          background:radial-gradient(ellipse at 50% 50%,rgba(40,60,80,.22),rgba(6,8,11,1) 62%)}
+  #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+  /* halo "bout du tunnel" + vignette */
+  #vig{position:fixed;inset:0;z-index:2;pointer-events:none;
+       background:radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(6,8,11,.55) 100%)}
+
+  .ring{position:absolute;left:50%;top:50%;width:66vw;height:66vh;margin:-33vh 0 0 -33vw;
+        border:1px solid rgba(143,192,221,.5);border-radius:22px;box-shadow:0 0 40px rgba(143,192,221,.06) inset;will-change:opacity}
+  .item{position:absolute;left:50%;top:50%;will-change:opacity;backface-visibility:hidden}
+
+  .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--bleu);margin-bottom:12px}
+  .title{font-family:Georgia,serif;font-weight:400;font-size:clamp(40px,7vw,96px);line-height:1.0;letter-spacing:-.02em;text-shadow:0 6px 50px #000}
+  .title em{font-style:italic;color:var(--or)}
+  .h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(26px,4vw,48px);line-height:1.08;text-shadow:0 4px 30px #000}
+  .sub{margin:18px auto 0;max-width:560px;font-size:clamp(14px,1.7vw,18px);line-height:1.6;color:var(--cream);text-shadow:0 2px 18px #000}
+  .center{text-align:center}
+
+  .card{background:rgba(10,13,18,.66);backdrop-filter:blur(5px);border:1px solid rgba(243,236,224,.18);border-radius:14px;padding:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+  .card .num{display:block;font-family:Georgia,serif;font-size:44px;color:var(--cream)}
+  .card .num small{font-size:17px;color:var(--bleu)}
+  .card span{display:block;margin-top:7px;font-size:14px;color:var(--dim);line-height:1.4}
+  .card i{font-family:Georgia,serif;font-style:normal;font-size:26px;color:var(--or)}
+  .card b{display:block;margin:8px 0 6px;font-size:19px}
+  .card p{font-size:14px;line-height:1.45;color:var(--dim)}
+  .card.hi{border-color:rgba(143,192,221,.42)} .card.hi .num{color:var(--bleu)}
+
+  .panel{background:rgba(10,13,18,.6);backdrop-filter:blur(5px);border:1px solid rgba(243,236,224,.16);border-radius:16px;padding:22px;text-align:left;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .panel h3{font-family:Georgia,serif;font-weight:400;font-size:24px;margin-bottom:12px}
+  .mini{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .mini li{position:relative;padding-left:18px;font-size:13px;color:var(--cream);line-height:1.4}
+  .mini li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:50%;background:var(--or)}
+
+  .pl{background:linear-gradient(160deg,rgba(143,192,221,.14),rgba(10,13,18,.5));border:1px solid rgba(243,236,224,.18);border-radius:16px;padding:20px;text-align:left;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .pl .rn{font-family:Georgia,serif;font-size:28px;color:var(--or)}
+  .pl b{display:block;margin:8px 0 6px;font-size:16px}
+  .pl p{font-size:12px;line-height:1.5;color:var(--dim)}
+
+  .imgcard{border-radius:16px;overflow:hidden;border:1px solid rgba(243,236,224,.2);box-shadow:0 30px 70px rgba(0,0,0,.55);position:relative}
+  .imgcard img{display:block;width:100%;filter:brightness(.72) saturate(1.05)}
+  .imlbl{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-family:Georgia,serif;letter-spacing:.18em;font-size:15px;color:#fff;text-shadow:0 2px 14px #000}
+
+  .bars{display:flex;flex-direction:column;gap:13px;margin-top:18px;text-align:left}
+  .br b{font-family:Georgia,serif;font-size:13px} .br .tk{margin-top:6px;height:26px;border-radius:7px;background:rgba(255,255,255,.08);overflow:hidden}
+  .br .fl{height:100%;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;padding:0 11px;font-size:12px;font-weight:600;color:#0b0d10}
+
+  .quote{font-family:Georgia,serif;font-style:italic;font-size:clamp(24px,3.4vw,40px);line-height:1.3;text-shadow:0 3px 26px #000}
+  .quote cite{display:block;margin-top:14px;font-style:normal;font-size:12px;letter-spacing:.25em;color:var(--bleu)}
+
+  /* UI */
   #bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--bleu),var(--or));z-index:30}
   nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
       padding:18px clamp(16px,4vw,44px);font-size:11px;letter-spacing:.24em;text-transform:uppercase;mix-blend-mode:difference}
   nav .b{font-weight:700}
-
-  /* paliers de contenu superposés, pilotés par la profondeur */
-  #stations{position:fixed;inset:0;z-index:10;pointer-events:none}
-  .st{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:84px 24px;opacity:0;will-change:opacity,transform}
-  .c-in{max-width:1000px;width:100%;text-align:center}
-  .kicker{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--bleu);margin-bottom:16px}
-  .title{font-family:Georgia,serif;font-weight:400;font-size:clamp(40px,7.5vw,104px);line-height:1.0;letter-spacing:-.02em;text-shadow:0 6px 50px rgba(0,0,0,.85)}
-  .title em{font-style:italic;color:var(--or)}
-  .h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(28px,4.4vw,52px);line-height:1.08;letter-spacing:-.01em;margin-bottom:30px;text-shadow:0 4px 36px rgba(0,0,0,.9)}
-  .sub{margin:22px auto 0;max-width:600px;font-size:clamp(15px,1.8vw,19px);line-height:1.6;color:var(--cream);text-shadow:0 2px 22px rgba(0,0,0,.95)}
-  .note{margin-top:22px;font-style:italic;color:var(--cream);font-family:Georgia,serif;font-size:clamp(16px,2vw,22px);text-shadow:0 2px 20px rgba(0,0,0,.95)}
-
-  /* blocs */
-  .stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
-  .st-c{flex:1 1 150px;max-width:200px;background:rgba(10,13,18,.46);backdrop-filter:blur(6px);border:1px solid rgba(243,236,224,.14);border-radius:14px;padding:22px 16px}
-  .st-c b{display:block;font-family:Georgia,serif;font-size:clamp(28px,3.4vw,42px);color:var(--cream)}
-  .st-c span{display:block;margin-top:8px;font-size:12px;color:var(--dim);line-height:1.4}
-
-  .cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-  .cd{background:rgba(10,13,18,.5);backdrop-filter:blur(6px);border:1px solid rgba(243,236,224,.14);border-radius:14px;padding:20px;text-align:left}
-  .cd i{font-family:Georgia,serif;font-size:22px;color:var(--or);font-style:normal}
-  .cd b{display:block;margin:8px 0 6px;font-size:16px}
-  .cd p{font-size:12.5px;line-height:1.5;color:var(--dim)}
-
-  .gstats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
-  .gs{flex:1 1 180px;max-width:230px;background:rgba(10,13,18,.5);border:1px solid rgba(143,192,221,.28);border-radius:14px;padding:20px 16px}
-  .gs b{display:block;font-family:Georgia,serif;font-size:clamp(26px,3vw,38px);color:var(--bleu)}
-  .gs b small{font-size:15px;color:var(--dim)}
-  .gs span{display:block;margin-top:7px;font-size:11.5px;color:var(--dim);line-height:1.45}
-
-  .pillars3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}
-  .pl{background:linear-gradient(160deg,rgba(143,192,221,.12),rgba(10,13,18,.4));border:1px solid rgba(243,236,224,.16);border-radius:16px;padding:24px}
-  .pl .rn{font-family:Georgia,serif;font-size:30px;color:var(--or)}
-  .pl b{display:block;margin:10px 0 8px;font-size:18px}
-  .pl p{font-size:12.5px;line-height:1.55;color:var(--dim)}
-
-  .bars{max-width:620px;margin:0 auto;text-align:left;display:flex;flex-direction:column;gap:16px}
-  .br b{font-family:Georgia,serif;font-size:14px;letter-spacing:.04em}
-  .br .track{margin-top:7px;height:30px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
-  .br .fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;font-size:13px;font-weight:600;color:#0b0d10}
-
-  .kpi4{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
-  .kp{flex:1 1 160px;max-width:210px;background:rgba(10,13,18,.5);border:1px solid rgba(243,236,224,.14);border-radius:14px;padding:20px 14px}
-  .kp b{display:block;font-family:Georgia,serif;font-size:clamp(26px,3vw,40px);color:var(--cream)}
-  .kp b small{font-size:14px;color:var(--bleu)}
-  .kp span{display:block;margin-top:7px;font-size:11.5px;color:var(--dim);line-height:1.45}
-
-  .adv{list-style:none;max-width:620px;margin:0 auto;text-align:left;display:flex;flex-direction:column;gap:12px}
-  .adv li{position:relative;padding-left:24px;font-size:15px;line-height:1.5;color:var(--cream)}
-  .adv li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;border-radius:50%;background:var(--or)}
-  .adv li b{color:#fff}
-
-  .steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:760px;margin:0 auto}
-  .sp{flex:1 1 110px;max-width:150px;background:rgba(10,13,18,.5);border:1px solid rgba(243,236,224,.14);border-radius:12px;padding:14px 10px}
-  .sp i{font-family:Georgia,serif;font-style:normal;font-size:18px;color:var(--or)}
-  .sp b{display:block;margin:6px 0 4px;font-size:13px}
-  .sp p{font-size:10.5px;line-height:1.4;color:var(--dim)}
-
-  .quote{font-family:Georgia,serif;font-style:italic;font-size:clamp(20px,2.8vw,30px);line-height:1.35;max-width:780px;margin:0 auto;text-shadow:0 2px 24px rgba(0,0,0,.95)}
-  .quote cite{display:block;margin-top:16px;font-style:normal;font-size:13px;letter-spacing:.1em;color:var(--bleu)}
-
-  .hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:20;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:8px}
-  .hint i{width:1px;height:36px;background:linear-gradient(var(--bleu),transparent);animation:h 1.8s ease-in-out infinite}
+  .hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:20;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:8px}
+  .hint i{width:1px;height:34px;background:linear-gradient(var(--bleu),transparent);animation:h 1.8s ease-in-out infinite}
   @keyframes h{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
   #scroller{position:relative;z-index:5;pointer-events:none}
-  @media (max-width:820px){ .cards4,.pillars3{grid-template-columns:repeat(2,1fr)} }
   @media (prefers-reduced-motion: reduce){ .hint i{animation:none} }
 </style>
 </head>
 <body>
-  <canvas id="gl"></canvas>
+  <div id="tunnel"><div id="world"></div></div>
   <div id="vig"></div>
   <div id="bar"></div>
   <nav><span>HERMÈS</span><span class="b">PERPÉTUELLE</span><span>2026</span></nav>
-  <div id="stations"></div>
-  <div class="hint">entrer<i></i></div>
+  <div class="hint">avancer<i></i></div>
   <div id="scroller"></div>
 
-  <script>/*THREE*/__LIB_THREE__</script>
-  <script>/*GSAP*/__LIB_GSAP__</script>
-  <script>/*ScrollTrigger*/__LIB_ST__</script>
   <script>/*Lenis*/__LIB_LENIS__</script>
-
   <script>
   (function(){
     "use strict";
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const IMAGES = __IMAGES__;   // data-URI, même ordre que STATIONS
+    const IMG = __IMAGES__;   // { nom: dataURI }
+    const img = (n,w,lbl)=>`<div class="imgcard" style="width:${w}"><img src="${IMG[n]}"/>${lbl?`<span class="imlbl">${lbl}</span>`:''}</div>`;
 
-    const STATIONS = [
-      { html:`<div class="c-in">
-        <div class="kicker">ÉTUDE STRATÉGIQUE · ARABIE SAOUDITE · 2026</div>
-        <h1 class="title">Hermès vend<br/><em>du temps.</em></h1>
-        <p class="sub">Pourquoi la maison devrait-elle bâtir sa propre plateforme de rachat, revente certifiée &amp; upcycling dans le Golfe&nbsp;?</p>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre I · L'ADN</div>
-        <h2 class="h2">Une maison bâtie pour durer</h2>
-        <div class="stats">
-          <div class="st-c"><b>1837</b><span>Fondation, sellier-harnacheur à Paris</span></div>
-          <div class="st-c"><b>26 000</b><span>Collaborateurs dans le monde</span></div>
-          <div class="st-c"><b>300</b><span>Boutiques en propre</span></div>
-          <div class="st-c"><b>45</b><span>Pays</span></div>
-        </div>
-        <p class="note">La maison fabrique — donc elle sait réparer.</p>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre II · La situation</div>
-        <h2 class="h2">Le marché existe déjà.<br/>Mais il échappe à la maison.</h2>
-        <div class="cards4">
-          <div class="cd"><i>01</i><b>Marché gris</b><p>La valeur se joue sur des plateformes hors contrôle.</p></div>
-          <div class="cd"><i>02</i><b>Revente informelle</b><p>Cercles privés et réseaux, très ancrés dans le Golfe.</p></div>
-          <div class="cd"><i>03</i><b>Contrefaçon</b><p>Sans canal officiel, le faux dilue la confiance.</p></div>
-          <div class="cd"><i>04</i><b>Perte de contrôle</b><p>Prix, expérience, récit : tout se décide ailleurs.</p></div>
-        </div>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre III · Le terrain</div>
-        <h2 class="h2">Le Golfe se réinvente —<br/>l'Arabie Saoudite, prochain épicentre.</h2>
-        <div class="gstats">
-          <div class="gs"><b>10,1<small> Md$</small></b><span>Marché du luxe saoudien, périmètre large — 2024</span></div>
-          <div class="gs"><b>23,3<small> Md$</small></b><span>Projection 2033 · CAGR 9,7 %</span></div>
-          <div class="gs"><b>8<small> ×</small></b><span>Millionnaires : ≈ 300 → ≈ 2 400 (2025)</span></div>
-          <div class="gs"><b>1 300<small> Md$+</small></b><span>Engagés dans les mégaprojets (Vision 2030)</span></div>
-        </div>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre IV · L'environnement</div>
-        <h2 class="h2">PESTEL — Arabie Saoudite</h2>
-        <ul class="adv">
-          <li><b>Politique</b> — Vision 2030 : ouverture, soft-power, tourisme de luxe.</li>
-          <li><b>Économique</b> — diversification post-pétrole, pouvoir d'achat élevé.</li>
-          <li><b>Socioculturel</b> — clientèle féminine en forte croissance (≈ 60 % du marché).</li>
-          <li><b>Technologique</b> — paiements électroniques à 85 % (2025).</li>
-          <li><b>Écologique</b> — circularité encouragée par la Fashion Commission.</li>
-          <li><b>Légal</b> — TVA 15 % (vendeur particulier exonéré), import luxe ≤ 15 %.</li>
-        </ul>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre V · La veille</div>
-        <h2 class="h2">L'avantage qu'aucun ne réplique</h2>
-        <ul class="adv">
-          <li><b>Authentification native</b> — seule Hermès connaît ses pièces de l'intérieur.</li>
-          <li><b>Restauration en atelier</b> — un savoir-faire propriétaire, pas un service tiers.</li>
-          <li><b>Upcycling exclusif (Petit h)</b> — une pièce unique impossible à copier ni comparer.</li>
-        </ul>
-        <p class="note">Aucun concurrent du même groupe — la maison reste indépendante.</p>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre VIII · Le dimensionnement</div>
-        <h2 class="h2">TAM · SAM · SOM</h2>
-        <div class="bars">
-          <div class="br"><b>TAM — luxe personnel KSA</b><div class="track"><div class="fill" style="width:100%;background:linear-gradient(90deg,#d8b07f,#8a5a2b)">5,3 Md$</div></div></div>
-          <div class="br"><b>SAM — seconde main luxe, Golfe</b><div class="track"><div class="fill" style="width:42%;background:linear-gradient(90deg,#c9a24b,#8a6a1f)">617 M$</div></div></div>
-          <div class="br"><b>SOM — captable, plateforme propriétaire</b><div class="track"><div class="fill" style="width:20%;background:linear-gradient(90deg,#8FC0DD,#4E86A6)">≈ 135 M$</div></div></div>
-        </div>
-        <p class="sub">Birkin &amp; Kelly volontairement exclus — préserver la rareté, ne pas créer de marché secondaire officiel sur l'icône.</p>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">La recommandation</div>
-        <h2 class="h2">HERMÈS <em class="serif" style="font-style:italic;color:var(--or)">Perpétuelle</em></h2>
-        <div class="pillars3">
-          <div class="pl"><span class="rn">I</span><b>Reprise officielle</b><p>Rachat direct aux particuliers, hors Birkin et Kelly. La maison reprend le premier maillon.</p></div>
-          <div class="pl"><span class="rn">II</span><b>Revente certifiée</b><p>Restauration en atelier, authentification maison, certification. La confiance redevient un actif d'Hermès.</p></div>
-          <div class="pl"><span class="rn">III</span><b>Upcycling · Petit h</b><p>La matière devient pièce unique. Zéro comparable, désirabilité intacte.</p></div>
-        </div>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">L'expérience</div>
-        <h2 class="h2">Une seconde vie, orchestrée</h2>
-        <div class="steps">
-          <div class="sp"><i>1</i><b>Dépôt</b><p>Remise gantée, en boutique ou enlèvement privé.</p></div>
-          <div class="sp"><i>2</i><b>Authentification</b><p>Du fermoir au point sellier.</p></div>
-          <div class="sp"><i>3</i><b>Restauration</b><p>Cuir, couture, patine redonnés à neuf.</p></div>
-          <div class="sp"><i>4</i><b>Certification</b><p>Un passeport Hermès.</p></div>
-          <div class="sp"><i>5</i><b>Revente</b><p>Au juste prix de la maison.</p></div>
-          <div class="sp"><i>6</i><b>Nouvelle vie</b><p>Repart — ou renaît, upcyclée.</p></div>
-        </div>
-      </div>`},
-      { html:`<div class="c-in">
-        <div class="kicker">Chapitre IX · Le pilotage</div>
-        <h2 class="h2">Indicateurs de succès</h2>
-        <div class="kpi4">
-          <div class="kp"><b>95<small> %</small></b><span>Taux de rachat accepté (authentification)</span></div>
-          <div class="kp"><b>21<small> j</small></b><span>Délai moyen de restauration</span></div>
-          <div class="kp"><b>100<small> %</small></b><span>Pièces upcycling sans comparable de prix</span></div>
-          <div class="kp"><b>0<small> fuite</small></b><span>Confidentialité du statut préservée</span></div>
-        </div>
-        <p class="note">On mesure d'abord le retour des créations dans l'écosystème — pas le chiffre d'affaires.</p>
-      </div>`},
-      { html:`<div class="c-in">
-        <p class="quote">« La valeur ne se perd pas.<br/>Elle se transmet. »<cite>HERMÈS · PERPÉTUELLE</cite></p>
-      </div>`},
+    // Chaque élément vit dans l'espace : x/y (autour de l'axe) + z (profondeur).
+    // La caméra avance ; les éléments arrivent de gauche/droite/haut/bas et nous dépassent.
+    const ITEMS = [
+      {x:'0',y:'0',z:-1050,w:'min(900px,88vw)',c:'center',h:`<div class="kicker">Étude stratégique · Arabie Saoudite · 2026</div><h1 class="title">Hermès vend <em>du temps.</em></h1><p class="sub">Bâtir sa propre plateforme de rachat, revente certifiée &amp; upcycling dans le Golfe ?</p>`},
+
+      {x:'0',y:'-30vh',z:-3300,w:'540px',c:'center',h:`<div class="kicker">Chapitre I · L'ADN</div><h2 class="h2">Bâtie pour durer</h2>`},
+      {x:'-34vw',y:'-2vh',z:-3500,w:'190px',c:'card',h:`<b class="num">1837</b><span>Fondation, sellier à Paris</span>`},
+      {x:'34vw',y:'-8vh',z:-3700,w:'190px',c:'card',h:`<b class="num">26 000</b><span>Collaborateurs</span>`},
+      {x:'-30vw',y:'26vh',z:-3900,w:'180px',c:'card',h:`<b class="num">300</b><span>Boutiques en propre</span>`},
+      {x:'32vw',y:'27vh',z:-4100,w:'160px',c:'card',h:`<b class="num">45</b><span>Pays</span>`},
+      {x:'24vw',y:'4vh',z:-4600,w:'300px',c:'',h:img('leather','300px')},
+
+      {x:'0',y:'-31vh',z:-5800,w:'620px',c:'center',h:`<div class="kicker">Chapitre II · La situation</div><h2 class="h2">Le marché échappe à la maison</h2>`},
+      {x:'-35vw',y:'-4vh',z:-6000,w:'215px',c:'card',h:`<i>01</i><b>Marché gris</b><p>Valeur sur des plateformes hors contrôle.</p>`},
+      {x:'35vw',y:'-8vh',z:-6200,w:'215px',c:'card',h:`<i>02</i><b>Revente informelle</b><p>Cercles privés, ancrés dans le Golfe.</p>`},
+      {x:'-31vw',y:'24vh',z:-6400,w:'215px',c:'card',h:`<i>03</i><b>Contrefaçon</b><p>Sans canal officiel, le faux dilue la confiance.</p>`},
+      {x:'33vw',y:'25vh',z:-6600,w:'205px',c:'card',h:`<i>04</i><b>Perte de contrôle</b><p>Tout se décide ailleurs.</p>`},
+
+      {x:'0',y:'-31vh',z:-8000,w:'660px',c:'center',h:`<div class="kicker">Chapitre III · Le terrain</div><h2 class="h2">L'Arabie Saoudite, prochain épicentre</h2>`},
+      {x:'-35vw',y:'0',z:-8200,w:'200px',c:'card hi',h:`<b class="num">10,1<small> Md$</small></b><span>Luxe saoudien (large) — 2024</span>`},
+      {x:'35vw',y:'-6vh',z:-8400,w:'200px',c:'card hi',h:`<b class="num">23,3<small> Md$</small></b><span>Projection 2033 · +9,7 %/an</span>`},
+      {x:'-31vw',y:'25vh',z:-8600,w:'195px',c:'card hi',h:`<b class="num">8<small> ×</small></b><span>Millionnaires (2024→25)</span>`},
+      {x:'32vw',y:'26vh',z:-8800,w:'210px',c:'card hi',h:`<b class="num">1 300<small> Md$+</small></b><span>Mégaprojets Vision 2030</span>`},
+      {x:'0',y:'2vh',z:-9900,w:'min(720px,82vw)',c:'',h:img('strategic_map','100%','RIYAD · DUBAÏ · NEOM')},
+
+      {x:'-24vw',y:'0',z:-11200,w:'360px',c:'panel',h:`<div class="kicker">Chap. IV · PESTEL</div><h3>Environnement</h3><ul class="mini"><li>Vision 2030, soft-power</li><li>Diversification post-pétrole</li><li>Clientèle féminine ≈ 60 %</li><li>Paiements électroniques 85 %</li><li>Circularité encouragée</li><li>TVA 15 % — particulier exonéré</li></ul>`},
+      {x:'25vw',y:'2vh',z:-12200,w:'350px',c:'panel',h:`<div class="kicker">Chap. V · La veille</div><h3>L'avantage unique</h3><ul class="mini"><li>Authentification native</li><li>Restauration en atelier</li><li>Upcycling Petit h exclusif</li></ul>`},
+
+      {x:'0',y:'0',z:-13500,w:'min(640px,88vw)',c:'center',h:`<div class="kicker">Le dimensionnement</div><h2 class="h2">TAM · SAM · SOM</h2><div class="bars"><div class="br"><b>TAM — luxe personnel KSA</b><div class="tk"><div class="fl" style="width:100%;background:linear-gradient(90deg,#d8b07f,#8a5a2b)">5,3 Md$</div></div></div><div class="br"><b>SAM — seconde main, Golfe</b><div class="tk"><div class="fl" style="width:42%;background:linear-gradient(90deg,#c9a24b,#8a6a1f)">617 M$</div></div></div><div class="br"><b>SOM — captable</b><div class="tk"><div class="fl" style="width:20%;background:linear-gradient(90deg,#8FC0DD,#4E86A6)">≈135 M$</div></div></div></div>`},
+
+      {x:'0',y:'-2vh',z:-15200,w:'min(820px,86vw)',c:'',h:img('recommandation','100%','HERMÈS · PERPÉTUELLE')},
+      {x:'-32vw',y:'6vh',z:-16200,w:'250px',c:'pl',h:`<span class="rn">I</span><b>Reprise officielle</b><p>Rachat direct aux particuliers, hors Birkin/Kelly.</p>`},
+      {x:'0',y:'28vh',z:-16400,w:'250px',c:'pl',h:`<span class="rn">II</span><b>Revente certifiée</b><p>Restauration + authentification maison.</p>`},
+      {x:'32vw',y:'6vh',z:-16600,w:'250px',c:'pl',h:`<span class="rn">III</span><b>Upcycling · Petit h</b><p>Pièce unique, zéro comparable.</p>`},
+
+      {x:'0',y:'-30vh',z:-18000,w:'520px',c:'center',h:`<div class="kicker">L'expérience</div><h2 class="h2">Une seconde vie, orchestrée</h2>`},
+      {x:'-36vw',y:'-6vh',z:-18200,w:'150px',c:'card',h:`<i>1</i><b>Dépôt</b><p>Remise gantée.</p>`},
+      {x:'-12vw',y:'26vh',z:-18350,w:'150px',c:'card',h:`<i>2</i><b>Authentification</b><p>Du fermoir au point sellier.</p>`},
+      {x:'14vw',y:'-26vh',z:-18500,w:'150px',c:'card',h:`<i>3</i><b>Restauration</b><p>Cuir & patine.</p>`},
+      {x:'36vw',y:'4vh',z:-18650,w:'150px',c:'card',h:`<i>4</i><b>Certification</b><p>Passeport Hermès.</p>`},
+      {x:'-30vw',y:'28vh',z:-18800,w:'150px',c:'card',h:`<i>5</i><b>Revente</b><p>Au juste prix.</p>`},
+      {x:'30vw',y:'27vh',z:-18950,w:'150px',c:'card',h:`<i>6</i><b>Nouvelle vie</b><p>Repart ou renaît.</p>`},
+
+      {x:'0',y:'-30vh',z:-20300,w:'460px',c:'center',h:`<div class="kicker">Le pilotage</div><h2 class="h2">Indicateurs de succès</h2>`},
+      {x:'-34vw',y:'0',z:-20500,w:'185px',c:'card hi',h:`<b class="num">95<small> %</small></b><span>Rachat accepté (authentification)</span>`},
+      {x:'34vw',y:'-6vh',z:-20700,w:'185px',c:'card hi',h:`<b class="num">21<small> j</small></b><span>Délai moyen de restauration</span>`},
+      {x:'-30vw',y:'25vh',z:-20900,w:'185px',c:'card hi',h:`<b class="num">100<small> %</small></b><span>Upcycling sans comparable de prix</span>`},
+      {x:'32vw',y:'26vh',z:-21100,w:'185px',c:'card hi',h:`<b class="num">0<small></small></b><span>Fuite du statut — confidentialité</span>`},
+
+      {x:'0',y:'0',z:-22600,w:'min(820px,88vw)',c:'center',h:`<p class="quote">« La valeur ne se perd pas.<br/>Elle se transmet. »<cite>HERMÈS · PERPÉTUELLE</cite></p>`},
     ];
-    const N = IMAGES.length;
-    const S = { progress:0, velocity:0 };
 
-    /* Lenis */
-    gsap.registerPlugin(ScrollTrigger);
-    document.getElementById('scroller').style.height = ((N + 1.4) * 100) + 'vh';
-    const lenis = new Lenis({ duration:1.25, smoothWheel:!reduce });
-    lenis.on('scroll', (e)=>{ S.progress=e.progress||0; S.velocity=e.velocity||0; ScrollTrigger.update(); });
-    gsap.ticker.add((t)=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+    const world = document.getElementById('world');
+    const MINZ = Math.min.apply(null, ITEMS.map(o=>o.z));   // le plus profond
+    const MAXZ = -MINZ + 1400;                              // distance totale à parcourir
 
-    /* Three.js — empilement de plans (z-stack) */
-    const canvas = document.getElementById('gl');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-    const FOG = 0x0b0d10; renderer.setClearColor(FOG, 1);
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(FOG, 0.018);
-    const cam = new THREE.PerspectiveCamera(55, 1, 0.1, 320);
-
-    const GAP = 9, COVER = 4.5;
-    const CAM_START = COVER + 1;
-    const END_Z = -(N - 1) * GAP - 1.5;
-    const TRAVEL = CAM_START - END_Z;
-
-    const loader = new THREE.TextureLoader();
-    const planes = IMAGES.map((src, i) => {
-      const mat = new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthTest:false, depthWrite:false, color:0x9a948c });
-      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1), mat);
-      mesh.position.z = -i * GAP; mesh.renderOrder = -i; mesh.userData.tex = null;
-      loader.load(src, (tex)=>{ tex.minFilter=THREE.LinearFilter; tex.generateMipmaps=false;
-        mat.map=tex; mat.needsUpdate=true; mesh.userData.tex=tex; fitPlane(mesh); });
-      scene.add(mesh); return mesh;
+    // anneaux du tunnel
+    const rings = [];
+    for (let i=0;i<22;i++){
+      const z = -i*1000 - 500;
+      const r = document.createElement('div'); r.className='ring';
+      r.style.transform = `translateZ(${z}px)`;
+      r.dataset.z = z; world.appendChild(r); rings.push(r);
+    }
+    // éléments de contenu
+    const nodes = ITEMS.map(o=>{
+      const el = document.createElement('div'); el.className = 'item ' + (o.c||'');
+      el.style.width = o.w; el.innerHTML = o.h;
+      el.style.transform = `translate(-50%,-50%) translate3d(${o.x},${o.y},${o.z}px)`;
+      el.dataset.z = o.z; world.appendChild(el); return el;
     });
-    function fitPlane(mesh){
-      const tex=mesh.userData.tex; if(!tex||!tex.image) return;
-      const W=innerWidth,H=innerHeight;
-      const vh=2*Math.tan(THREE.MathUtils.degToRad(cam.fov)/2)*COVER, vw=vh*(W/H);
-      const ia=tex.image.width/tex.image.height; let w,h;
-      if(ia>vw/vh){h=vh;w=h*ia;}else{w=vw;h=w/ia;}
-      mesh.scale.set(w,h,1);
+
+    /* Lenis : scroll -> progression */
+    let progress = 0, velocity = 0;
+    document.getElementById('scroller').style.height = Math.round(MAXZ/9) + 'vh';
+    const lenis = new Lenis({ duration:1.25, smoothWheel:!reduce });
+    lenis.on('scroll', (e)=>{ progress = e.progress||0; velocity = e.velocity||0; });
+    function rafL(t){ lenis.raf(t); requestAnimationFrame(rafL); }
+    requestAnimationFrame(rafL);
+
+    const bar = document.getElementById('bar');
+    function visItem(sz){
+      const inn = (sz + 1800)/800;     // apparaît depuis la profondeur
+      const out = (-160 - sz)/340;     // plein au point focal, puis s'efface en nous dépassant
+      return Math.max(0, Math.min(1, Math.min(inn, out)));
     }
-    function resize(){ const W=innerWidth,H=innerHeight; renderer.setSize(W,H,false);
-      cam.aspect=W/H; cam.updateProjectionMatrix(); planes.forEach(fitPlane); }
-    addEventListener('resize', resize); resize();
+    function visRing(sz){
+      const inn = (sz + 13000)/5000, out = (-60 - sz)/520;
+      return Math.max(0, Math.min(0.6, Math.min(inn, out)));
+    }
 
-    /* paliers de contenu */
-    const wrap = document.getElementById('stations');
-    const nodes = STATIONS.map((s)=>{ const d=document.createElement('div'); d.className='st'; d.innerHTML=s.html; wrap.appendChild(d); return d; });
-
-    /* rendu : le scroll avance la caméra dans l'axe Z */
-    let camZ=CAM_START, last=performance.now();
-    function render(now){
-      const dt=Math.min(0.05,(now-last)/1000); last=now;
-      const targetZ = CAM_START - S.progress*TRAVEL;
-      camZ += (targetZ-camZ)*Math.min(1,dt*5); cam.position.z=camZ;
-      for(let i=0;i<N;i++){
-        const m=planes[i]; const d=camZ-m.position.z;
-        let mo=0; if(d>0.5 && d<GAP*1.9) mo=Math.min((d-0.5)/1.8,(GAP*1.9-d)/(GAP*1.1),1);
-        m.material.opacity=Math.max(0,mo); m.visible=mo>0.002;
-        let to=0; if(d>1.8 && d<GAP*1.35) to=Math.min((d-1.8)/2.4,(GAP*1.35-d)/(GAP*0.7),1);
-        const node=nodes[i]; const o=Math.max(0,to);
-        node.style.opacity=o.toFixed(3);
-        node.style.transform='scale('+(1+(1-Math.min(1,d/COVER))*0.05).toFixed(3)+')';
+    let camZ = 0, last = performance.now();
+    function loop(now){
+      const dt = Math.min(0.05,(now-last)/1000); last = now;
+      const target = progress * MAXZ;
+      camZ += (target - camZ) * Math.min(1, dt*5);
+      world.style.transform = `translateZ(${camZ}px)`;       // on AVANCE dans le tunnel
+      for (let i=0;i<nodes.length;i++){
+        const sz = (+nodes[i].dataset.z) + camZ;             // profondeur écran de l'élément
+        nodes[i].style.opacity = visItem(sz).toFixed(3);
       }
-      renderer.render(scene,cam);
-      requestAnimationFrame(render);
+      for (let i=0;i<rings.length;i++){
+        rings[i].style.opacity = visRing((+rings[i].dataset.z) + camZ).toFixed(3);
+      }
+      bar.style.width = (progress*100) + '%';
+      requestAnimationFrame(loop);
     }
-    requestAnimationFrame(render);
-
-    const bar=document.getElementById('bar');
-    ScrollTrigger.create({ start:0, end:'max', onUpdate:(s)=>{ bar.style.width=(s.progress*100)+'%'; }});
+    requestAnimationFrame(loop);
   })();
   </script>
 </body>

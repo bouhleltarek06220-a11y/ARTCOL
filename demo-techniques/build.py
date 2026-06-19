@@ -19,8 +19,8 @@ html = html.replace("__LIB_GSAP__",   read(LIB/"gsap.min.js"))
 html = html.replace("__LIB_ST__",     read(LIB/"ScrollTrigger.min.js"))
 html = html.replace("__LIB_LENIS__",  read(LIB/"lenis.min.js"))
 
-scenes = ["hero-bag","leather","depot","strategic_map","riyadh_cinema","clasp","atelier","recommandation","revente","certification","emblem"]
-images = [datauri(IMG/f"{n}.jpg") for n in scenes]
+names = ["hero-bag","leather","depot","strategic_map","riyadh_cinema","clasp","atelier","recommandation","revente","certification","emblem","nouvelle_vie"]
+images = {n: datauri(IMG/f"{n}.jpg") for n in names}
 html = html.replace("__IMAGES__", json.dumps(images))
 
 OUT.write_bytes(html.encode("utf-8"))
