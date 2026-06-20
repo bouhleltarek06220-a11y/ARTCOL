@@ -108,9 +108,10 @@ export function VillaGrounds() {
       {/* Palmiers (silhouettes élégantes, rétro-éclairés) */}
       <Palm position={[12.5, 0, 9]} scale={1.15} tilt={0.05} />
       <Palm position={[-12, 0, 8]} scale={1.3} tilt={-0.08} />
-      <Palm position={[14, 0, 2]} scale={1.0} tilt={0.04} />
-      <OliveTree position={[-13, 0.2, 2]} scale={1.1} />
-      <OliveTree position={[13.5, 0.2, -4]} scale={0.9} />
+      {/* Repositionnés hors des nouvelles ailes (cuisine ouest / bibliothèque est) */}
+      <Palm position={[20.5, 0, 3]} scale={1.0} tilt={0.04} />
+      <OliveTree position={[-20.5, 0.2, 3]} scale={1.1} />
+      <OliveTree position={[20, 0.2, -3]} scale={0.9} />
     </group>
   );
 }
