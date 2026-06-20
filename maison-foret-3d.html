@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Refuge des Pins · Maison sur mesure · Visite 3D</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Archivo:wght@400;600;700;800&display=swap');
+:root{--gold:#c9a24b;--font-d:'Cormorant Garamond',serif;--font-b:'Archivo',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--font-b);background:#bfe3f5;color:#f3f1e9;overflow:hidden;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;z-index:1}#stage canvas{display:block}
+#vig{position:fixed;inset:0;z-index:4;pointer-events:none;box-shadow:inset 0 0 240px 40px rgba(0,0,0,.36)}
+.ui{position:fixed;inset:0;z-index:10;pointer-events:none}.ui>*{pointer-events:auto}
+.brand{position:absolute;top:32px;left:40px;text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.brand .ey{font-weight:800;letter-spacing:.34em;text-transform:uppercase;font-size:.66rem;color:var(--gold)}
+.brand h1{font-family:var(--font-d);font-weight:700;font-size:clamp(2.2rem,5.5vw,4rem);line-height:.95;color:#fff}
+.brand p{font-size:.84rem;color:#eef3ee;opacity:.92;margin-top:.3rem}
+.rooms{position:absolute;top:50%;right:34px;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px}
+.rooms button{font-weight:700;font-size:.78rem;color:#eef3ee;text-align:right;background:rgba(13,26,20,.32);
+  border:1px solid rgba(255,255,255,.18);border-right:3px solid transparent;padding:9px 14px;border-radius:10px;
+  cursor:pointer;transition:.25s;backdrop-filter:blur(6px);min-width:150px}
+.rooms button:hover{background:rgba(13,26,20,.5);color:#fff}
+.rooms button.on{border-right-color:var(--gold);color:#fff;background:rgba(91,140,90,.42)}
+.bar{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:12px}
+.bar button{font-weight:700;font-size:.82rem;color:#0d1a14;background:var(--gold);border:none;padding:.72rem 1.4rem;
+  border-radius:100px;cursor:pointer;transition:.25s;box-shadow:0 10px 28px -8px rgba(0,0,0,.5)}
+.bar button:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.bar .ghost{background:rgba(13,26,20,.4);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+.card{position:absolute;left:40px;bottom:36px;max-width:370px;background:rgba(10,18,14,.62);border:1px solid rgba(255,255,255,.16);
+  border-radius:16px;padding:18px 20px;backdrop-filter:blur(10px);box-shadow:0 30px 60px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(16px);transition:.45s ease;pointer-events:none}
+.card.show{opacity:1;transform:none;pointer-events:auto}
+.card .rn{font-family:var(--font-d);font-weight:700;font-size:1.9rem;color:#fff;line-height:1}
+.card .rt{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:.3rem 0 .6rem}
+.card .rd{font-size:.9rem;line-height:1.5;color:#e9efe7}
+.card .close{position:absolute;top:10px;right:12px;background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;opacity:.7}
+.hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#0d1a14;opacity:.55}
+#load{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:linear-gradient(#bfe3f5,#dff0e6);transition:opacity .8s ease}
+#load.off{opacity:0;pointer-events:none}
+#load .t{font-family:var(--font-d);font-weight:700;font-size:2.4rem;color:#2c4a39}
+#load .b{width:170px;height:3px;background:#2c4a3933;border-radius:3px;overflow:hidden}
+#load .b i{display:block;height:100%;width:35%;background:#5b8c5a;animation:ld 1s ease-in-out infinite}
+@keyframes ld{0%{transform:translateX(-110%)}100%{transform:translateX(330%)}}
+@media(max-width:760px){.rooms{right:12px;gap:6px}.rooms button{min-width:0;font-size:.7rem;padding:7px 10px}.brand{left:18px;top:18px}.card{left:14px;right:14px;max-width:none;bottom:96px}}
+</style>
+</head>
+<body>
+<div id="stage"></div><div id="vig"></div>
+<div class="ui">
+  <div class="brand"><div class="ey">Plan sur mesure · visite immersive</div>
+    <h1>Le Refuge des Pins</h1><p>Maison de campagne en clairière · explore en 3D</p></div>
+  <div class="rooms" id="rooms">
+    <button data-room="exterieur" class="on">Extérieur</button>
+    <button data-room="salon">Séjour · Salon</button>
+    <button data-room="cuisine">Cuisine & repas</button>
+    <button data-room="chambres">Aile nuit · 3 ch.</button>
+    <button data-room="suite">Suite & bain</button>
+    <button data-room="terrasse">La terrasse</button>
+    <button data-room="jardin">Le jardin</button>
+  </div>
+  <div class="bar">
+    <button id="tour">▶ Visite guidée</button>
+    <button id="daynight" class="ghost">🌙 Nuit</button>
+  </div>
+  <div class="card" id="card">
+    <button class="close" id="cardClose">✕</button>
+    <div class="rn" id="cardName">—</div><div class="rt" id="cardTag">—</div><div class="rd" id="cardDesc">—</div>
+  </div>
+  <div class="hint">glisse · molette · clique une pièce</div>
+</div>
+<div id="load"><div class="t">Le Refuge des Pins</div><div class="b"><i></i></div></div>
+
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+  var stage=document.getElementById('stage'), loadEl=document.getElementById('load');
+  function webglOK(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
+  if(!window.THREE||!webglOK()){loadEl.innerHTML='<div class="t">WebGL indisponible 😕</div>';return;}
+
+  var W=innerWidth,H=innerHeight;
+  var scene=new THREE.Scene();
+  var DAY={top:new THREE.Color(0x2a72c4),bot:new THREE.Color(0xcfeaf6),fog:new THREE.Color(0xd6ecf4),sun:0xfff3d6,sunI:1.5,hemi:0.85,amb:0.35};
+  var NIGHT={top:new THREE.Color(0x05060f),bot:new THREE.Color(0x16223c),fog:new THREE.Color(0x121a2b),sun:0x9fb8ff,sunI:0.28,hemi:0.32,amb:0.18};
+  var nightF=0,nightTarget=0;
+  scene.fog=new THREE.Fog(DAY.fog.getHex(),45,260);
+
+  var camera=new THREE.PerspectiveCamera(50,W/H,0.1,900);
+  camera.position.set(28,16,32);
+  var renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  if(THREE.sRGBEncoding!==undefined)renderer.outputEncoding=THREE.sRGBEncoding;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  stage.appendChild(renderer.domElement);
+
+  // sky
+  var skyU={top:{value:DAY.top.clone()},bot:{value:DAY.bot.clone()}};
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(500,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:skyU,
+    vertexShader:'varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+    fragmentShader:'varying vec3 vP;uniform vec3 top;uniform vec3 bot;void main(){float h=normalize(vP).y;gl_FragColor=vec4(mix(bot,top,smoothstep(-0.05,0.55,h)),1.0);}'})));
+
+  var hemi=new THREE.HemisphereLight(0xbfe3f5,0x4a6b3a,DAY.hemi);scene.add(hemi);
+  var amb=new THREE.AmbientLight(0xffffff,DAY.amb);scene.add(amb);
+  var sun=new THREE.DirectionalLight(DAY.sun,DAY.sunI);sun.position.set(48,62,34);sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);var sc=sun.shadow.camera;sc.near=10;sc.far=220;sc.left=-80;sc.right=80;sc.top=80;sc.bottom=-80;sun.shadow.bias=-0.0004;
+  scene.add(sun);scene.add(sun.target);
+
+  function radial(c1,c2){var s=128,cv=document.createElement('canvas');cv.width=cv.height=s;var x=cv.getContext('2d');var g=x.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);g.addColorStop(0,c1);g.addColorStop(1,c2);x.fillStyle=g;x.fillRect(0,0,s,s);return new THREE.CanvasTexture(cv);}
+  var sunSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:radial('rgba(255,250,225,1)','rgba(255,240,200,0)'),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));
+  sunSprite.scale.set(42,42,1);sunSprite.position.copy(sun.position).multiplyScalar(1.2);scene.add(sunSprite);
+
+  // ground
+  var ground=new THREE.Mesh(new THREE.CircleGeometry(260,72),new THREE.MeshStandardMaterial({color:0x5f8a43,roughness:1}));
+  ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+  for(var i=0;i<22;i++){var pr=2+Math.random()*6;var p=new THREE.Mesh(new THREE.CircleGeometry(pr,16),new THREE.MeshStandardMaterial({color:(Math.random()<.5?0x547a3b:0x6b9850),roughness:1,transparent:true,opacity:.7}));p.rotation.x=-Math.PI/2;var a=Math.random()*6.28,r=18+Math.random()*120;p.position.set(Math.cos(a)*r,0.02,Math.sin(a)*r);scene.add(p);}
+
+  // materials
+  var matWall=new THREE.MeshStandardMaterial({color:0xe9e0cf,roughness:.85});
+  var matStone=new THREE.MeshStandardMaterial({color:0x9a8f7d,roughness:.95});
+  var matRoof=new THREE.MeshStandardMaterial({color:0x4b4f55,roughness:.7});
+  var matWood=new THREE.MeshStandardMaterial({color:0x8a5a32,roughness:.7});
+  var matShutter=new THREE.MeshStandardMaterial({color:0x3f6e57,roughness:.6});
+  var glassMat=new THREE.MeshStandardMaterial({color:0x9fc7e0,roughness:.12,metalness:.1,emissive:0xffcf8a,emissiveIntensity:0,transparent:true,opacity:.85});
+  var windowGlass=[];
+  var house=new THREE.Group();scene.add(house);
+  function box(w,h,d,mat,x,y,z,g){var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;(g||house).add(m);return m;}
+
+  // gable roof via extruded triangle (ridge along X)
+  function gableRoof(mw,md,rh,cx,cy,cz,ov){
+    var W2=mw/2+ (ov||0.6), D2=md/2+(ov||0.6);
+    var shape=new THREE.Shape();
+    shape.moveTo(-D2,0);shape.lineTo(D2,0);shape.lineTo(0,rh);shape.lineTo(-D2,0);
+    var geo=new THREE.ExtrudeGeometry(shape,{depth:mw+(ov||0.6)*2,bevelEnabled:false});
+    geo.translate(0,0,-(mw+(ov||0.6)*2)/2); geo.rotateY(Math.PI/2);
+    var m=new THREE.Mesh(geo,matRoof); m.position.set(cx,cy,cz); m.castShadow=true; house.add(m); return m;
+  }
+  function bigGlass(w,h,x,y,z,axis){
+    var g=new THREE.Mesh(new THREE.PlaneGeometry(w,h),glassMat);g.position.set(x,y,z);
+    if(axis==='x')g.rotation.y=Math.PI/2; house.add(g);windowGlass.push(g);
+    // frame
+    var fw=axis==='x'?0.12:w+0.18, fd=axis==='x'?w+0.18:0.12;
+    box(fw,h+0.18,fd,matWood,x,y,z);
+    return g;
+  }
+  function window2(x,y,z){ // small front window with shutters
+    var w=1.5,h=1.9; box(w+0.25,h+0.25,0.16,matWood,x,y,z);
+    var g=new THREE.Mesh(new THREE.PlaneGeometry(w,h),glassMat);g.position.set(x,y,z+0.1);house.add(g);windowGlass.push(g);
+    box(0.45,h+0.15,0.07,matShutter,x-w/2-0.32,y,z+0.04);box(0.45,h+0.15,0.07,matShutter,x+w/2+0.32,y,z+0.04);
+  }
+
+  // ---- LIVING VOLUME (south, +z) : séjour / cuisine / repas ----
+  var LW=12,LH=5,LD=8, Lz=3;            // centered at z=3 -> south face at z=7
+  box(LW,LH,LD,matWall,0,LH/2,Lz);
+  box(LW+0.6,1.2,LD+0.6,matStone,0,0.6,Lz);     // stone base
+  gableRoof(LW,LD,3.2,0,LH,Lz,0.7);
+  // big bay windows on south face (z = Lz+LD/2)
+  var sf=Lz+LD/2;
+  bigGlass(4.2,3.2,-3.2,2.6,sf+0.02,'z');
+  bigGlass(4.2,3.2,3.2,2.6,sf+0.02,'z');
+  // door (entrée) on east side
+  box(1.6,3,0.2,matWood,LW/2+0.02,1.5,Lz-1,null);
+  // side windows living
+  window2(-LW/2-0.0,3,Lz-2); // west (will be near kitchen) -> use x face approx
+  // chimney
+  box(0.9,2.6,0.9,matStone,3.5,LH+1.7,Lz-2);
+
+  // ---- NIGHT WING (north, -z) : 3 chambres + dressing + sdb ----
+  var NW=16,NH=4,ND=6, Nz=-7;          // long lower volume to the north
+  box(NW,NH,ND,matWall,0,NH/2,Nz);
+  box(NW+0.5,1.0,ND+0.5,matStone,0,0.5,Nz);
+  gableRoof(NW,ND,2.4,0,NH,Nz,0.6);
+  // bedroom windows on north face
+  var nf=Nz-ND/2;
+  window2(-5,2.4,nf-0.0); window2(0,2.4,nf-0.0); window2(5,2.4,nf-0.0);
+  // garden-side glass on wing (south face of wing, toward living gap)
+  bigGlass(2.4,2.0,-5.5,2.4, Nz+ND/2+0.02,'z');
+
+  // connector / entrée hall between volumes (east)
+  box(4,3.6,4,matWall,LW/2+1, 1.8, -1.5);
+  gableRoof(4,4,1.6, LW/2+1, 3.6, -1.5, 0.4);
+  box(1.5,2.8,0.18,matWood, LW/2+3.0, 1.4, -1.5); // entrance door
+
+  // ---- TERRASSE (south) : dallage arrondi + parasol ----
+  var terr=new THREE.Mesh(new THREE.CircleGeometry(6.4,48),new THREE.MeshStandardMaterial({color:0xcabfa2,roughness:1}));
+  terr.rotation.x=-Math.PI/2;terr.position.set(-0.5,0.05,sf+4.2);terr.receiveShadow=true;scene.add(terr);
+  // paving rings
+  var ring=new THREE.Mesh(new THREE.RingGeometry(4.2,4.5,48),new THREE.MeshStandardMaterial({color:0xb7a583,roughness:1,side:THREE.DoubleSide}));
+  ring.rotation.x=-Math.PI/2;ring.position.set(-0.5,0.07,sf+4.2);scene.add(ring);
+  // parasol
+  (function(){var px=-2.5,pz=sf+5.2;box(0.12,3,0.12,matWood,px,1.5,pz);
+    var can=new THREE.Mesh(new THREE.ConeGeometry(2.6,1.1,16),new THREE.MeshStandardMaterial({color:0xe7ddc8,roughness:.9}));can.position.set(px,3.1,pz);can.castShadow=true;house.add(can);})();
+  // table + chairs (simple)
+  box(1.6,0.12,1.0,matWood,-2.5,1.0,sf+5.2);box(0.1,1,0.1,matWood,-2.5,0.5,sf+5.2);
+  // 2 loungers
+  function lounger(x,z,rot){var g=new THREE.Group();var seat=new THREE.Mesh(new THREE.BoxGeometry(0.7,0.12,2),new THREE.MeshStandardMaterial({color:0xddd2bc,roughness:.8}));seat.position.y=0.5;seat.castShadow=true;g.add(seat);g.position.set(x,0,z);g.rotation.y=rot;house.add(g);}
+  lounger(1.8,sf+4.5,0.2);lounger(2.7,sf+4.5,0.2);
+
+  // path to entrance (east)
+  var pathMat=new THREE.MeshStandardMaterial({color:0xbcaa86,roughness:1});
+  for(var i=0;i<6;i++){var stp=box(1.6,0.12,1.2,pathMat,LW/2+4+i*1.6,0.06,-1.5);stp.receiveShadow=true;}
+
+  // ---- VEGETATION ----
+  var trunkMat=new THREE.MeshStandardMaterial({color:0x5b3b22,roughness:1});
+  var pineMats=[0x2f5d3a,0x356b41,0x294f33,0x3c7a4a].map(function(c){return new THREE.MeshStandardMaterial({color:c,roughness:1});});
+  function pine(x,z,s){var g=new THREE.Group();var tr=new THREE.Mesh(new THREE.CylinderGeometry(0.18*s,0.3*s,1.4*s,7),trunkMat);tr.position.y=0.7*s;tr.castShadow=true;g.add(tr);var pm=pineMats[(Math.random()*pineMats.length)|0];for(var k=0;k<3;k++){var r=(1.6-k*0.38)*s,hh=(1.7-k*0.2)*s,cn=new THREE.Mesh(new THREE.ConeGeometry(r,hh,8),pm);cn.position.y=(1.3+k*1.15)*s;cn.castShadow=true;g.add(cn);}g.position.set(x,0,z);g.rotation.y=Math.random()*6.28;g.scale.setScalar(0.8+Math.random()*0.7);scene.add(g);}
+  var placed=0,guard=0;
+  while(placed<48&&guard<900){guard++;var a=Math.random()*6.28,r=22+Math.random()*95;var x=Math.cos(a)*r,z=Math.sin(a)*r;
+    if(z>2&&z<24&&x>-16&&x<16)continue; // keep terrace/front clear
+    pine(x,z,1+Math.random()*0.9);placed++;}
+  var bushMat=new THREE.MeshStandardMaterial({color:0x4f7a3e,roughness:1});
+  for(var i=0;i<16;i++){var b=new THREE.Mesh(new THREE.SphereGeometry(0.6+Math.random()*0.7,8,8),bushMat);var a=Math.random()*6.28,r=9+Math.random()*6;b.position.set(Math.cos(a)*r,0.5,Math.sin(a)*r);b.castShadow=true;b.scale.y=0.8;scene.add(b);}
+  var rockMat=new THREE.MeshStandardMaterial({color:0x8d8d86,roughness:1});
+  for(var i=0;i<10;i++){var rk=new THREE.Mesh(new THREE.IcosahedronGeometry(0.4+Math.random()*0.7,0),rockMat);var a=Math.random()*6.28,r=12+Math.random()*40;rk.position.set(Math.cos(a)*r,0.3,Math.sin(a)*r);rk.castShadow=true;rk.rotation.set(Math.random(),Math.random(),Math.random());scene.add(rk);}
+
+  // clouds / birds / pollen / smoke
+  var clouds=[],cloudTex=radial('rgba(255,255,255,.95)','rgba(255,255,255,0)');
+  for(var i=0;i<10;i++){var c=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,transparent:true,depthWrite:false,opacity:.85}));var sz=18+Math.random()*26;c.scale.set(sz,sz*0.55,1);c.position.set(-170+Math.random()*340,42+Math.random()*38,-130+Math.random()*260);c.userData.sp=2+Math.random()*4;clouds.push(c);scene.add(c);}
+  var birds=[],birdMat=new THREE.MeshBasicMaterial({color:0x222a2e,side:THREE.DoubleSide});
+  for(var i=0;i<7;i++){var bg=new THREE.Group();var wl=new THREE.Mesh(new THREE.PlaneGeometry(1.1,0.3),birdMat),wr=wl.clone();wl.position.x=-0.55;wr.position.x=0.55;bg.add(wl,wr);bg.userData={r:30+Math.random()*40,sp:0.15+Math.random()*0.2,ph:Math.random()*6.28,y:34+Math.random()*16,wl:wl,wr:wr};bg.scale.setScalar(0.8+Math.random());scene.add(bg);birds.push(bg);}
+  var pN=300,pg=new THREE.BufferGeometry(),pp=new Float32Array(pN*3);for(var i=0;i<pN;i++){pp[i*3]=(Math.random()-.5)*70;pp[i*3+1]=Math.random()*22;pp[i*3+2]=(Math.random()-.5)*70;}pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+  var pollen=new THREE.Points(pg,new THREE.PointsMaterial({color:0xfff2c0,size:0.12,transparent:true,opacity:.7,depthWrite:false}));scene.add(pollen);
+  var smoke=[],smokeTex=radial('rgba(220,220,220,.9)','rgba(220,220,220,0)');
+  for(var i=0;i<14;i++){var sm=new THREE.Sprite(new THREE.SpriteMaterial({map:smokeTex,transparent:true,depthWrite:false,opacity:0}));sm.userData.t=Math.random();sm.scale.set(1.5,1.5,1);scene.add(sm);smoke.push(sm);}
+
+  // controls
+  var controls=new THREE.OrbitControls(camera,renderer.domElement);
+  controls.enableDamping=true;controls.dampingFactor=.07;controls.enablePan=false;
+  controls.minDistance=10;controls.maxDistance=85;controls.maxPolarAngle=1.52;controls.minPolarAngle=0.22;
+  controls.target.set(-1,3,0);controls.autoRotate=true;controls.autoRotateSpeed=0.32;
+
+  var VIEWS={
+    exterieur:{pos:new THREE.Vector3(28,16,32),tgt:new THREE.Vector3(-1,3,0),auto:true,name:"Le Refuge des Pins",tag:"Vue d'ensemble",desc:"Maison sur mesure en pierre & bois d'après ton plan : aile nuit au nord, séjour ouvert au sud, terrasse arrondie face à la pinède. Toit à deux pentes, grandes baies plein sud."},
+    salon:{pos:new THREE.Vector3(0,4,24),tgt:new THREE.Vector3(0,3,4),auto:false,name:"Le séjour · salon",tag:"≈ 30 m² · plein sud",desc:"Double orientation, charpente apparente, cheminée en pierre, parquet chêne. Deux grandes baies cadrent les pins et ouvrent de plain-pied sur la terrasse."},
+    cuisine:{pos:new THREE.Vector3(-14,4,16),tgt:new THREE.Vector3(-4,2.6,3),auto:false,name:"Cuisine & salle à manger",tag:"13,5 m² + coin repas",desc:"Cuisine ouverte sur la salle à manger, îlot central en chêne, verrière atelier, accès direct terrasse. La pièce à vivre fait corps avec le salon."},
+    chambres:{pos:new THREE.Vector3(0,9,-30),tgt:new THREE.Vector3(0,3,-7),auto:false,name:"L'aile nuit",tag:"3 chambres · couloir",desc:"Trois chambres d'environ 13,5 m² desservies par un couloir, calmes et orientées nord sur la forêt. Volume bas et allongé, distinct du séjour."},
+    suite:{pos:new THREE.Vector3(-16,7,-18),tgt:new THREE.Vector3(-5,3,-7),auto:false,name:"Suite parentale",tag:"Dressing · salle de bain · WC",desc:"La chambre principale s'ouvre sur un dressing et une salle de bain en tadelakt, WC séparé. Lumière douce du matin, vue canopée."},
+    terrasse:{pos:new THREE.Vector3(2,4,26),tgt:new THREE.Vector3(-0.5,1.5,11),auto:false,name:"La terrasse",tag:"Dallage arrondi · plein sud",desc:"Terrasse dessinée en arc de cercle (comme sur le croquis), parasol, bains de soleil et table conviviale. Le coucher de soleil file entre les troncs."},
+    jardin:{pos:new THREE.Vector3(-34,12,-30),tgt:new THREE.Vector3(-3,2,-3),auto:false,name:"Le jardin & la pinède",tag:"Clairière privée",desc:"Une clairière cernée de pins, pas japonais vers l'entrée, et tout autour la forêt qui isole du monde. Chants d'oiseaux inclus."}
+  };
+  var flying=false,fromP=new THREE.Vector3(),fromT=new THREE.Vector3(),toP=new THREE.Vector3(),toT=new THREE.Vector3(),flyT=0,curAuto=true;
+  function goTo(key,showCard){var v=VIEWS[key];if(!v)return;fromP.copy(camera.position);fromT.copy(controls.target);toP.copy(v.pos);toT.copy(v.tgt);flyT=0;flying=true;curAuto=v.auto;controls.autoRotate=false;
+    [].forEach.call(document.querySelectorAll('.rooms button'),function(b){b.classList.toggle('on',b.dataset.room===key);});
+    var card=document.getElementById('card');if(showCard!==false){document.getElementById('cardName').textContent=v.name;document.getElementById('cardTag').textContent=v.tag;document.getElementById('cardDesc').textContent=v.desc;card.classList.add('show');}}
+  [].forEach.call(document.querySelectorAll('.rooms button'),function(b){b.addEventListener('click',function(){goTo(b.dataset.room,true);});});
+  document.getElementById('cardClose').addEventListener('click',function(){document.getElementById('card').classList.remove('show');});
+  controls.addEventListener('start',function(){flying=false;});
+
+  var tourSeq=['salon','cuisine','chambres','suite','terrasse','jardin','exterieur'],tourI=0,touring=false,tourTimer=null;
+  function tourStep(){goTo(tourSeq[tourI],true);tourI=(tourI+1)%tourSeq.length;}
+  document.getElementById('tour').addEventListener('click',function(){touring=!touring;this.textContent=touring?'⏸ Pause':'▶ Visite guidée';if(touring){tourI=0;tourStep();tourTimer=setInterval(tourStep,5200);}else{clearInterval(tourTimer);}});
+
+  document.getElementById('daynight').addEventListener('click',function(){nightTarget=nightTarget>0.5?0:1;this.textContent=nightTarget>0.5?'☀ Jour':'🌙 Nuit';});
+  function lerpC(a,b,t){return a.clone().lerp(b,t);}
+  function applyDN(){var t=nightF;skyU.top.value.copy(lerpC(DAY.top,NIGHT.top,t));skyU.bot.value.copy(lerpC(DAY.bot,NIGHT.bot,t));scene.fog.color.copy(lerpC(DAY.fog,NIGHT.fog,t));sun.intensity=DAY.sunI+(NIGHT.sunI-DAY.sunI)*t;sun.color.setHex(t>0.5?NIGHT.sun:DAY.sun);hemi.intensity=DAY.hemi+(NIGHT.hemi-DAY.hemi)*t;amb.intensity=DAY.amb+(NIGHT.amb-DAY.amb)*t;sunSprite.material.opacity=1-t*0.85;var ei=t*1.7;windowGlass.forEach(function(g){g.material.emissiveIntensity=ei;});}
+
+  var introP=0,startPos=new THREE.Vector3(64,42,74),endPos=new THREE.Vector3(28,16,32);
+  var clock=new THREE.Clock();
+  function animate(){requestAnimationFrame(animate);var dt=clock.getDelta(),t=clock.elapsedTime;
+    if(introP<1){introP=Math.min(introP+dt*0.5,1);var e=1-Math.pow(1-introP,3);camera.position.lerpVectors(startPos,endPos,e);}
+    if(flying){flyT=Math.min(flyT+dt*0.8,1);var e=flyT<.5?2*flyT*flyT:1-Math.pow(-2*flyT+2,2)/2;camera.position.lerpVectors(fromP,toP,e);controls.target.lerpVectors(fromT,toT,e);if(flyT>=1){flying=false;controls.autoRotate=curAuto;}}
+    if(Math.abs(nightF-nightTarget)>0.001){nightF+=(nightTarget-nightF)*Math.min(dt*1.2,1);applyDN();}
+    clouds.forEach(function(c){c.position.x+=c.userData.sp*dt;if(c.position.x>190)c.position.x=-190;});
+    birds.forEach(function(b){var u=b.userData;u.ph+=u.sp*dt;b.position.set(Math.cos(u.ph)*u.r,u.y+Math.sin(u.ph*2)*2,Math.sin(u.ph)*u.r);b.rotation.y=-u.ph+Math.PI/2;var f=Math.sin(t*10+u.ph*3)*0.6;u.wl.rotation.z=f;u.wr.rotation.z=-f;});
+    var ar=pg.attributes.position.array;for(var i=0;i<pN;i++){ar[i*3+1]+=dt*0.4;ar[i*3]+=Math.sin(t+i)*dt*0.15;if(ar[i*3+1]>22)ar[i*3+1]=0;}pg.attributes.position.needsUpdate=true;
+    smoke.forEach(function(s){s.userData.t+=dt*0.16;var tt=s.userData.t%1;s.position.set(3.5+Math.sin(tt*6)*0.3,LH+2.5+tt*7,Lz-2);var ss=1.2+tt*3;s.scale.set(ss,ss,1);s.material.opacity=(1-tt)*0.45;});
+    controls.update();renderer.render(scene,camera);}
+  applyDN();setTimeout(function(){loadEl.classList.add('off');},500);animate();
+  addEventListener('resize',function(){W=innerWidth;H=innerHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
+})();
+</script>
+</body>
+</html>
