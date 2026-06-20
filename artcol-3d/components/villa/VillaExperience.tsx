@@ -62,8 +62,8 @@ export function VillaExperience() {
           <Environment
             files="/hdri/qwantani_sunset_puresky_2k.hdr"
             background
-            backgroundBlurriness={0.015}
-            environmentIntensity={0.42}
+            backgroundBlurriness={0.04}
+            environmentIntensity={0.36}
           />
           <Lighting />
 

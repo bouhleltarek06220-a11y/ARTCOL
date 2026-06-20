@@ -10,9 +10,9 @@ export function Lighting() {
     <>
       {/* Soleil rasant doré, ombres longues. */}
       <directionalLight
-        position={[-34, 13, 22]}
-        intensity={1.7}
-        color="#ffd6a0"
+        position={[-26, 9, 24]}
+        intensity={2.3}
+        color="#ffca8a"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0004}
