@@ -80,9 +80,16 @@ export function VillaArchitecture() {
       <mesh material={concrete} position={[LEFT_X, 5.0, -1.5]} castShadow>
         <boxGeometry args={[0.4, 4.8, 1.6]} />
       </mesh>
-      {/* Mur droit */}
-      <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, -3]} castShadow receiveShadow>
-        <boxGeometry args={[0.4, WALL_H, 11.4]} />
+      {/* Mur droit : 2 segments + linteau = OUVERTURE vers la bibliothèque
+          (z ≈ -1, accès depuis le salon). */}
+      <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, -5.25]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 6.9]} />
+      </mesh>
+      <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, 1.25]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 2.9]} />
+      </mesh>
+      <mesh material={concrete} position={[RIGHT_X, 5.0, -1]} castShadow>
+        <boxGeometry args={[0.4, 4.8, 1.6]} />
       </mesh>
       {/* Bandeau béton au-dessus de la façade (linteau) */}
       <mesh material={concrete} position={[0, 7.0, FRONT_Z]} castShadow>
