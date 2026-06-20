@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { KeyboardControls } from "@react-three/drei";
 import Hud from "@/components/ui/Hud";
 import DetailPanel from "@/components/ui/DetailPanel";
+import RobotChat from "@/components/ui/RobotChat";
 import { useNavigation } from "@/hooks/useNavigation";
 
 // La scène 3D est chargée uniquement côté client (WebGL).
@@ -35,6 +36,7 @@ export default function Page() {
       </KeyboardControls>
       <Hud />
       <DetailPanel />
+      <RobotChat />
     </main>
   );
 }
