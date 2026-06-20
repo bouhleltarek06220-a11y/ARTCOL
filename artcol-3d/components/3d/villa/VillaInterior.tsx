@@ -123,17 +123,17 @@ export function VillaInterior() {
       <Artwork position={[-6, 2.6, -8.28]} color={ART[0]} frameMat={frameMat} />
       <Artwork position={[0, 2.6, -8.28]} color={ART[1]} frameMat={frameMat} wide />
       <Artwork position={[6, 2.6, -8.28]} color={ART[2]} frameMat={frameMat} />
-      {/* Mur gauche (x = -10.8, face +x) */}
+      {/* Mur gauche (x = -10.8, face +x) — décalée pour dégager la porte cuisine */}
       <Artwork
-        position={[-10.78, 2.6, -3]}
+        position={[-10.78, 2.6, -5.5]}
         rotation={[0, Math.PI / 2, 0]}
         color={ART[3]}
         frameMat={frameMat}
         wide
       />
-      {/* Mur droit (x = 10.8, face -x) */}
+      {/* Mur droit (x = 10.8, face -x) — décalée pour dégager la porte bibliothèque */}
       <Artwork
-        position={[10.78, 2.6, 0]}
+        position={[10.78, 2.6, -5.5]}
         rotation={[0, -Math.PI / 2, 0]}
         color={ART[4]}
         frameMat={frameMat}

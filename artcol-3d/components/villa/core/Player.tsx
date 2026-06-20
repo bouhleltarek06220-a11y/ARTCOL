@@ -22,8 +22,10 @@ const SPEED = 4.8;
  *  qui crée de vraies pièces reliées par des portes (ex : hall ↔ cuisine). */
 const ROOMS: [number, number, number, number][] = [
   [-10.6, 10.6, -8, 13], // hall + terrasse
-  [-11.6, -10.4, -2.3, -0.7], // embrasure de la porte cuisine
+  [-11.6, -10.4, -2.3, -0.7], // embrasure porte cuisine
   [-17.4, -11.0, -5.4, 0.4], // cuisine
+  [10.4, 11.6, -1.8, -0.2], // embrasure porte bibliothèque
+  [11.0, 17.4, -5.4, 0.4], // bibliothèque
 ];
 const inAny = (x: number, z: number) =>
   ROOMS.some((b) => x >= b[0] && x <= b[1] && z >= b[2] && z <= b[3]);
@@ -130,6 +132,7 @@ export function Player() {
 
     let z = "Galerie principale";
     if (nx < -11) z = "Cuisine";
+    else if (nx > 11) z = "Bibliothèque";
     else if (nz > 5) z = "Terrasse & piscine";
     else if (nz > -2 && Math.abs(nx) < 3.5) z = "Hall principal";
     else if (nx < -6) z = "Salle à manger";
