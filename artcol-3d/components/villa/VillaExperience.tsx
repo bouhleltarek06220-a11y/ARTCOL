@@ -14,6 +14,7 @@ import { Hud } from "./ui/Hud";
 import { ConversationPanel } from "./ui/ConversationPanel";
 import { CharacterGuide } from "./character/CharacterGuide";
 import { VillaFurniture } from "./world/VillaFurniture";
+import { VillaKitchenDining } from "./world/VillaKitchenDining";
 import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
@@ -70,6 +71,7 @@ export function VillaExperience() {
           <VillaInterior />
           <VillaGrounds />
           <VillaFurniture />
+          <VillaKitchenDining />
           <CharacterGuide position={[-3.4, 0, 1.2]} rotation={0.2} />
 
           <ContactShadows
