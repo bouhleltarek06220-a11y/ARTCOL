@@ -16,7 +16,8 @@ type ExperienceState = {
   total: number;         // nombre de stations
   quality: Quality;
   mode: Mode;            // "rail" = caméra guidée · "explore" = marche 1re personne
-  detail: string | null; // id de la station ouverte en vue détaillée (étapes suivantes)
+  detail: string | null; // id de la station ouverte en vue détaillée
+  targeted: string | null; // id de l'œuvre visée par le viseur (mode explore)
 
   setTotal: (n: number) => void;
   setTarget: (v: number) => void;
@@ -27,6 +28,7 @@ type ExperienceState = {
   setMode: (m: Mode) => void;
   toggleMode: () => void;
   openDetail: (id: string | null) => void;
+  setTargeted: (id: string | null) => void;
 };
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -39,6 +41,7 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   quality: "high",
   mode: "rail",
   detail: null,
+  targeted: null,
 
   setTotal: (n) => set({ total: Math.max(1, n) }),
   setTarget: (v) => set({ target: clamp01(v) }),
@@ -57,4 +60,5 @@ export const useExperience = create<ExperienceState>((set, get) => ({
   setMode: (m) => set({ mode: m }),
   toggleMode: () => set({ mode: get().mode === "rail" ? "explore" : "rail" }),
   openDetail: (id) => set({ detail: id }),
+  setTargeted: (id) => set({ targeted: id }),
 }));

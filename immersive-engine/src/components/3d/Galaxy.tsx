@@ -3,7 +3,7 @@
  * champ d'étoiles, brouillard profond et lumières néon.
  */
 import { BackSide } from "three";
-import { useTexture, Stars } from "@react-three/drei";
+import { useTexture, Stars, Sparkles } from "@react-three/drei";
 import { THEME } from "@/data/experience";
 
 export default function Galaxy() {
@@ -20,6 +20,11 @@ export default function Galaxy() {
       </mesh>
 
       <Stars radius={110} depth={60} count={2600} factor={4} saturation={0} fade speed={0.4} />
+
+      {/* particules d'ambiance (poussière / étincelles cyberpunk) */}
+      <Sparkles count={140} scale={[42, 14, 150]} position={[0, 5, -45]} size={3} speed={0.3} color={THEME.cyan} />
+      <Sparkles count={90} scale={[42, 12, 150]} position={[0, 3, -45]} size={4} speed={0.2} color={THEME.magenta} />
+      <Sparkles count={60} scale={[30, 6, 150]} position={[0, 1, -45]} size={5} speed={0.15} color={THEME.gold} />
 
       <ambientLight intensity={0.55} />
       <pointLight position={[0, 7, -18]} intensity={70} color={THEME.cyan} distance={70} />

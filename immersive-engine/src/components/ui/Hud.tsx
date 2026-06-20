@@ -15,8 +15,10 @@ export default function Hud() {
   const goTo = useExperience((s) => s.goTo);
   const mode = useExperience((s) => s.mode);
   const toggleMode = useExperience((s) => s.toggleMode);
+  const targeted = useExperience((s) => s.targeted);
   const node = PATH[active] ?? PATH[0];
   const rail = mode === "rail";
+  const tnode = PATH.find((n) => n.id === targeted);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-10 select-none">
@@ -79,8 +81,23 @@ export default function Hud() {
         </>
       ) : (
         <>
-          {/* viseur centre */}
-          <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/60" />
+          {/* viseur centre (réagit à l'œuvre visée) */}
+          <div
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all"
+            style={{
+              width: tnode ? 18 : 12,
+              height: tnode ? 18 : 12,
+              borderColor: tnode ? tnode.accent : "rgba(255,255,255,0.6)",
+              boxShadow: tnode ? `0 0 14px ${tnode.accent}` : "none",
+            }}
+          />
+          {/* nom de l'œuvre visée */}
+          {tnode && (
+            <div className="absolute left-1/2 top-1/2 mt-6 -translate-x-1/2 text-center">
+              <div className="text-sm font-medium text-white" style={{ textShadow: "0 2px 12px #000" }}>{tnode.title}</div>
+              <div className="text-[10px] uppercase tracking-[0.25em]" style={{ color: tnode.accent }}>clic pour ouvrir</div>
+            </div>
+          )}
           {/* consignes de marche */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-5 py-2 text-center text-[11px] uppercase tracking-[0.25em] text-white/70 backdrop-blur">
             Clique pour marcher · ZQSD / WASD · Espace = saut · Échap = libérer la souris

@@ -138,11 +138,12 @@ export const PATH: Node[] = [
     accent: "#ff2d7e",
   },
   {
-    // ⬇️ LA PLONGÉE « grand-huit » : la caméra chute d'un coup vers le bas
+    // ⬇️ LA PLONGÉE « grand-huit » : la caméra bascule par-dessus le bord et
+    // chute d'un coup vers le bas (focus très bas = on regarde le vide).
     id: "soutenance",
     kind: "creation",
-    cam: [0, -21, -97],
-    focus: [0, -22, -104],
+    cam: [0, -26, -99],
+    focus: [0, -29, -107],
     title: "Soutenance — Lost Chapter",
     type: "Expérience",
     tech: ["3D", "Présentation", "Cinéma"],
@@ -154,8 +155,8 @@ export const PATH: Node[] = [
   {
     id: "outro",
     kind: "outro",
-    cam: [0, -23, -106],
-    focus: [0, -23, -116],
+    cam: [0, -29, -113],
+    focus: [0, -29, -125],
     kicker: "La suite",
     title: "Construisons la vôtre.",
     body: "Chaque création peut vivre ici. Parlons de votre univers.",

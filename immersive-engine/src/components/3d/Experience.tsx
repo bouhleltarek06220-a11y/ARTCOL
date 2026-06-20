@@ -15,6 +15,9 @@ import Robot from "./Robot";
 import CameraRig from "./CameraRig";
 import Player from "./Player";
 import Ground from "./Ground";
+import Colliders from "./Colliders";
+import Structure from "./Structure";
+import Targeting from "./Targeting";
 import { CREATIONS } from "@/data/experience";
 import { TOTAL } from "@/lib/path";
 import { useExperience } from "@/stores/useExperience";
@@ -38,18 +41,23 @@ export default function Experience() {
     >
       <Suspense fallback={null}>
         <Galaxy />
-        {/* gardien : VRAI modèle 3D animé (glTF) */}
-        <Robot position={[5.4, -3, -11]} scale={1.5} clip="Wave" spin={0.35} accent="#7CFF3D" />
+        {/* gardien : VRAI modèle 3D animé (glTF), PNJ réactif */}
+        <Robot position={[5.2, 0, -12]} scale={1.6} accent="#7CFF3D" />
         {CREATIONS.map((n) => (
           <Exhibit key={n.id} node={n} />
         ))}
 
-        {/* mode marche 1re personne : physique + sol + joueur */}
+        {/* mode marche 1re personne : couloir + physique + sol + joueur + visée */}
         {mode === "explore" && (
-          <Physics gravity={[0, -9.81, 0]}>
-            <Ground />
-            <Player />
-          </Physics>
+          <>
+            <Structure />
+            <Targeting />
+            <Physics gravity={[0, -9.81, 0]}>
+              <Ground />
+              <Colliders />
+              <Player />
+            </Physics>
+          </>
         )}
       </Suspense>
 

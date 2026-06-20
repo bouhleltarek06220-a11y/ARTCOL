@@ -65,3 +65,16 @@ body {
   text-transform: uppercase;
   color: rgba(240, 234, 255, 0.45);
 }
+
+/* bulle de salut du robot PNJ */
+.robot-greet {
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid;
+  background: rgba(8, 6, 18, 0.7);
+  backdrop-filter: blur(6px);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
