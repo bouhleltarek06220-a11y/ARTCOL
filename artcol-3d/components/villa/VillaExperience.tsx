@@ -54,7 +54,7 @@ export function VillaExperience() {
         gl={{
           antialias: false,
           toneMapping: ACESFilmicToneMapping,
-          toneMappingExposure: 1.04,
+          toneMappingExposure: 0.82,
           powerPreference: "high-performance",
         }}
       >
@@ -63,7 +63,7 @@ export function VillaExperience() {
             files="/hdri/qwantani_sunset_puresky_2k.hdr"
             background
             backgroundBlurriness={0.015}
-            environmentIntensity={1.0}
+            environmentIntensity={0.42}
           />
           <Lighting />
 
