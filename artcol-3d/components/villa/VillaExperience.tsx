@@ -13,6 +13,7 @@ import { IntroScreen } from "./ui/IntroScreen";
 import { Hud } from "./ui/Hud";
 import { ConversationPanel } from "./ui/ConversationPanel";
 import { ArtworkPanel } from "./ui/ArtworkPanel";
+import { TouchControls } from "./ui/TouchControls";
 import { CharacterGuide } from "./character/CharacterGuide";
 import { VillaFurniture } from "./world/VillaFurniture";
 import { VillaDining } from "./world/VillaDining";
@@ -23,6 +24,7 @@ import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
 import { CanvasLoader } from "@/components/3d/CanvasLoader";
 import { useHasWebGL } from "@/hooks/useHasWebGL";
+import { useIsTouch } from "@/hooks/useIsTouch";
 import { SceneFallback } from "@/components/ui/SceneFallback";
 
 /** Vue de contrôle (dev) : `?cam=x,y,z,tx,ty,tz` place une caméra orbitale
@@ -48,6 +50,7 @@ function DebugView({ spec }: { spec: string }) {
  */
 export function VillaExperience() {
   const hasWebGL = useHasWebGL();
+  const touch = useIsTouch();
   const phase = useVilla((s) => s.phase);
   const debugCam = useMemo(
     () => (typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("cam") : null),
@@ -114,7 +117,7 @@ export function VillaExperience() {
         ) : (
           <>
             <CameraRig />
-            {phase !== "intro" && <Player />}
+            {phase !== "intro" && <Player touch={touch} />}
           </>
         )}
         <PostFX />
@@ -124,6 +127,7 @@ export function VillaExperience() {
         <>
           <IntroScreen />
           <Hud />
+          {touch && <TouchControls />}
           <ConversationPanel />
           <ArtworkPanel />
         </>

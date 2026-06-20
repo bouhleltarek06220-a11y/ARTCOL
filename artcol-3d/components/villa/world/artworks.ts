@@ -12,6 +12,12 @@ export interface ArtworkMeta {
   description: string;
   /** Anecdote « en savoir plus » (dévoilée à la demande). */
   more: string;
+  /**
+   * Image de l'œuvre, servie depuis /public (ex : "/art/art-1.jpg"). Si le
+   * fichier est absent ou échoue, le cadre retombe sur sa couleur d'origine —
+   * il suffit de déposer les fichiers dans public/art/ pour voir les œuvres.
+   */
+  image?: string;
 }
 
 export const ARTWORKS: Record<string, ArtworkMeta> = {
@@ -23,6 +29,7 @@ export const ARTWORKS: Record<string, ArtworkMeta> = {
     description:
       "Une déflagration de laque grenat où la matière semble encore chaude. L'artiste y cherche le point exact où la couleur devient température.",
     more: "Acquise à Milan — c'est la toute première pièce entrée dans la collection.",
+    image: "/art/art-1.jpg",
   },
   "art-2": {
     id: "art-2",
@@ -32,6 +39,7 @@ export const ARTWORKS: Record<string, ArtworkMeta> = {
     description:
       "Un bleu de Prusse étiré jusqu'à l'apesanteur. De loin, une mer ; de près, mille nuances de nuit.",
     more: "Diptyque conçu pour ce mur précis, sous la double hauteur du hall.",
+    image: "/art/art-2.jpg",
   },
   "art-3": {
     id: "art-3",
@@ -41,6 +49,7 @@ export const ARTWORKS: Record<string, ArtworkMeta> = {
     description:
       "Le vert d'un sous-bois après la pluie, posé en glacis successifs. Une respiration végétale dans le minéral de la villa.",
     more: "Travaillée à la cire chaude, couche après couche, sur près d'un an.",
+    image: "/art/art-3.jpg",
   },
   "art-4": {
     id: "art-4",
@@ -50,6 +59,7 @@ export const ARTWORKS: Record<string, ArtworkMeta> = {
     description:
       "Une tombée de violet impérial traversée d'un éclat d'or. La pièce que je préfère montrer à la nuit tombante.",
     more: "Présentée à la Biennale de Venise avant d'entrer dans cette galerie.",
+    image: "/art/art-4.jpg",
   },
   "art-5": {
     id: "art-5",
@@ -59,5 +69,6 @@ export const ARTWORKS: Record<string, ArtworkMeta> = {
     description:
       "L'ambre d'un dernier rayon, figé dans la résine. Elle dialogue avec le couchant qui inonde le hall.",
     more: "La plus récente acquisition — encore tiède de l'atelier.",
+    image: "/art/art-5.jpg",
   },
 };
