@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>AMAVYA — Villa Galerie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#f7f2e9; --ivory-2:#efe8db; --ink:#221c15; --ink-soft:#4a4036;
+    --taupe:#8c8073; --bronze:#a98a5c; --hair:rgba(34,28,21,.14);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Jost',system-ui,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0a0e14;font-family:var(--sans);color:var(--ink)}
+  #app{position:fixed;inset:0}
+  canvas{display:block}
+
+  /* vignette premium — warm, gentle */
+  #vignette{position:fixed;inset:0;pointer-events:none;z-index:5;
+    box-shadow:inset 0 0 260px 60px rgba(40,22,8,.42);}
+
+  /* HUD */
+  #crosshair{position:fixed;top:50%;left:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;
+    border:1px solid rgba(255,247,235,.7);z-index:6;opacity:0;transition:opacity .5s}
+  #crosshair::after{content:'';position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:50%;background:rgba(255,247,235,.95)}
+  #crosshair.on{opacity:.75}
+
+  .center-screen{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;text-align:center;padding:24px;
+    background:radial-gradient(1400px 900px at 50% 42%, rgba(247,242,233,.30), rgba(247,242,233,.72) 78%);
+    backdrop-filter:blur(4px) saturate(1.05);transition:opacity .8s ease}
+  .center-screen.hide{opacity:0;pointer-events:none}
+  .brand{font-family:var(--sans);font-size:11.5px;font-weight:400;letter-spacing:.52em;color:var(--bronze);
+    margin-bottom:30px;text-transform:uppercase;opacity:0;animation:rise .9s .15s ease forwards}
+  .brand::before,.brand::after{content:'';display:inline-block;width:26px;height:1px;background:var(--bronze);vertical-align:middle;margin:0 16px 3px;opacity:.7}
+  .title{font-family:var(--serif);font-size:clamp(52px,11vw,128px);font-weight:300;letter-spacing:-.01em;line-height:.92;
+    color:var(--ink);margin-bottom:24px;opacity:0;animation:rise 1s .3s ease forwards}
+  .title em{font-style:italic;font-weight:400}
+  .subtitle{font-family:var(--serif);font-size:clamp(17px,2.3vw,22px);color:var(--ink-soft);max-width:520px;font-weight:400;
+    font-style:italic;margin-bottom:42px;line-height:1.5;opacity:0;animation:rise 1s .5s ease forwards}
+  .enter-btn{cursor:pointer;border:1px solid var(--ink);padding:17px 46px;border-radius:0;font-family:var(--sans);
+    font-size:12px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--ivory);
+    background:var(--ink);transition:background .4s,color .4s,letter-spacing .4s;opacity:0;animation:rise 1s .68s ease forwards}
+  .enter-btn:hover{background:transparent;color:var(--ink);letter-spacing:.34em}
+  .hint{margin-top:34px;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--taupe);opacity:0;animation:rise 1s .85s ease forwards}
+  .hint b{color:var(--ink-soft);font-weight:500}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  #loader{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:var(--ivory);transition:opacity 1s ease}
+  #loader.hide{opacity:0;pointer-events:none}
+  #loader .lmark{font-family:var(--sans);font-size:14px;letter-spacing:.6em;color:var(--ink);text-transform:uppercase;padding-left:.6em}
+  #loader .lline{width:160px;height:1px;background:var(--hair);margin:26px 0 16px;position:relative;overflow:hidden}
+  #loader .lline::after{content:'';position:absolute;inset:0;background:var(--bronze);transform-origin:left;animation:load 1.9s ease-in-out infinite}
+  @keyframes load{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0);transform-origin:right}}
+  #loader p{font-family:var(--sans);font-size:10px;letter-spacing:.34em;color:var(--taupe);text-transform:uppercase}
+
+  /* top bar */
+  #topbar{position:fixed;top:0;left:0;right:0;z-index:8;display:flex;justify-content:space-between;align-items:center;
+    padding:22px 30px;pointer-events:none;opacity:0;transition:opacity .8s}
+  #topbar.on{opacity:1}
+  #topbar .logo{font-family:var(--sans);font-weight:400;letter-spacing:.42em;font-size:13px;color:var(--ivory);
+    padding-left:.4em;text-shadow:0 1px 16px rgba(20,10,0,.55)}
+  #topbar .zone{font-family:var(--sans);font-size:10.5px;font-weight:400;letter-spacing:.28em;color:rgba(255,247,235,.9);
+    text-transform:uppercase;text-shadow:0 1px 16px rgba(20,10,0,.6)}
+  #topbar .zone::before{content:'';display:inline-block;width:18px;height:1px;background:var(--bronze);vertical-align:middle;margin:0 12px 2px 0}
+
+  /* artwork panel */
+  #panel{position:fixed;z-index:25;top:0;right:0;height:100%;width:min(440px,88vw);
+    background:linear-gradient(180deg,rgba(247,242,233,.97),rgba(239,232,219,.98));backdrop-filter:blur(26px) saturate(1.1);
+    border-left:1px solid var(--hair);padding:70px 44px;transform:translateX(110%);transition:transform .8s cubic-bezier(.16,.84,.24,1);
+    display:flex;flex-direction:column;gap:0;box-shadow:-30px 0 80px -40px rgba(40,22,8,.4)}
+  #panel.on{transform:translateX(0)}
+  #panel .ptag{font-family:var(--sans);font-size:10px;letter-spacing:.34em;color:var(--bronze);text-transform:uppercase;margin-bottom:14px}
+  #panel h2{font-family:var(--serif);font-size:40px;font-weight:400;line-height:1.04;letter-spacing:-.005em;color:var(--ink)}
+  #panel .meta{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--taupe);margin-top:10px}
+  #panel .rule{height:1px;background:var(--hair);margin:22px 0}
+  #panel p.desc{font-family:var(--serif);font-size:18px;line-height:1.62;color:var(--ink-soft);font-weight:400}
+  #panel .close{position:absolute;top:26px;right:28px;cursor:pointer;width:40px;height:40px;border-radius:50%;
+    border:1px solid var(--hair);background:transparent;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:300;color:var(--ink-soft);transition:.3s}
+  #panel .close:hover{background:var(--ink);color:var(--ivory);border-color:var(--ink)}
+  #panel .swatch{height:180px;border-radius:2px;margin-bottom:26px;box-shadow:0 20px 50px -24px rgba(40,22,8,.6);border:1px solid var(--hair)}
+
+  /* mobile joystick */
+  #stick{position:fixed;z-index:9;left:26px;bottom:30px;width:120px;height:120px;border-radius:50%;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);display:none;touch-action:none}
+  #stick .nub{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;
+    background:rgba(255,255,255,.85);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+  #lookpad{position:fixed;z-index:7;right:0;top:0;bottom:0;width:55%;display:none;touch-action:none}
+  body.touch #stick{display:block}
+  body.touch #lookpad{display:block}
+  body.touch .hint.desktop{display:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="vignette"></div>
+<div id="crosshair"></div>
+
+<div id="topbar">
+  <div class="logo">AMAVYA</div>
+  <div class="zone" id="zone">Allée privée</div>
+</div>
+
+<div id="loader"><div class="lmark">AMAVYA</div><div class="lline"></div><p>Préparation de la villa</p></div>
+
+<div class="center-screen" id="intro">
+  <div class="brand">Collection privée · Côte d'Azur</div>
+  <div class="title">Villa <em>Galerie</em></div>
+  <div class="subtitle">Une propriété d'architecte transformée en galerie d'art contemporain, baignée par la lumière du couchant.</div>
+  <button class="enter-btn" id="enter">Entrer dans la villa</button>
+  <div class="hint desktop">Déplacement <b>Z Q S D</b> &nbsp;·&nbsp; regard <b>souris</b> &nbsp;·&nbsp; <b>clic</b> sur une œuvre &nbsp;·&nbsp; <b>Échap</b> pour quitter</div>
+  <div class="hint" style="display:none" id="touchhint">Joystick pour avancer · glisser à droite pour regarder · toucher une œuvre</div>
+</div>
+
+<div id="panel">
+  <div class="close" id="panelClose">×</div>
+  <div class="swatch" id="panelSwatch"></div>
+  <div class="ptag" id="panelTag">Œuvre</div>
+  <h2 id="panelTitle"></h2>
+  <div class="meta" id="panelMeta"></div>
+  <div class="rule"></div>
+  <p class="desc" id="panelDesc"></p>
+</div>
+
+<div id="stick"><div class="nub" id="nub"></div></div>
+<div id="lookpad"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { Sky } from 'three/addons/objects/Sky.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const gsap = window.gsap;
+const isTouch = matchMedia('(pointer:coarse)').matches || 'ontouchstart' in window;
+if (isTouch) document.body.classList.add('touch');
+
+/* ============ RENDERER / SCENE / CAMERA ============ */
+const app = document.getElementById('app');
+const renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.06;
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0xf3d9c0, 0.0085);
+
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 2000);
+camera.position.set(0, 7, 26);
+
+/* studio environment for clean reflections */
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.06).texture;
+
+/* ============ PROCEDURAL TEXTURES (marbre / béton) ============ */
+const MAXANISO = renderer.capabilities.getMaxAnisotropy();
+function makeMarbleTex(){
+  const c=document.createElement('canvas'); c.width=1024; c.height=1024; const x=c.getContext('2d');
+  x.fillStyle='#f4f2ed'; x.fillRect(0,0,1024,1024);
+  for(let i=0;i<70;i++){ x.globalAlpha=0.05; x.fillStyle=Math.random()<.5?'#e8e4db':'#ffffff';
+    x.beginPath(); x.arc(Math.random()*1024,Math.random()*1024,70+Math.random()*260,0,Math.PI*2); x.fill(); }
+  for(let i=0;i<20;i++){ x.globalAlpha=0.16+Math.random()*0.16; x.strokeStyle='rgba(120,112,99,1)'; x.lineWidth=0.5+Math.random()*2.2;
+    x.beginPath(); let px=Math.random()*1024, py=0; x.moveTo(px,py);
+    for(let k=0;k<16;k++){ px+=(Math.random()-.5)*180; py+=1024/16; x.lineTo(px+(Math.random()-.5)*36,py);} x.stroke(); }
+  x.globalAlpha=1;
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(2,2); t.anisotropy=MAXANISO; return t;
+}
+function makeConcreteTex(){
+  const c=document.createElement('canvas'); c.width=512; c.height=512; const x=c.getContext('2d');
+  x.fillStyle='#ddd7cc'; x.fillRect(0,0,512,512);
+  const img=x.getImageData(0,0,512,512), d=img.data;
+  for(let i=0;i<d.length;i+=4){ const n=(Math.random()-.5)*20; d[i]+=n; d[i+1]+=n; d[i+2]+=n; }
+  x.putImageData(img,0,0);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(4,4); t.anisotropy=MAXANISO; return t;
+}
+const marbleTex=makeMarbleTex(), concreteTex=makeConcreteTex();
+
+/* ============ SKY — GOLDEN HOUR ============ */
+const sky = new Sky();
+sky.scale.setScalar(8000);
+scene.add(sky);
+const su = sky.material.uniforms;
+su['turbidity'].value = 9;
+su['rayleigh'].value = 2.2;
+su['mieCoefficient'].value = 0.006;
+su['mieDirectionalG'].value = 0.85;
+const sun = new THREE.Vector3();
+const elev = 3.2, azim = 168;             // soleil bas = coucher
+const phi = THREE.MathUtils.degToRad(90 - elev);
+const theta = THREE.MathUtils.degToRad(azim);
+sun.setFromSphericalCoords(1, phi, theta);
+su['sunPosition'].value.copy(sun);
+
+/* ============ LIGHTS ============ */
+scene.add(new THREE.HemisphereLight(0xffe8d2, 0x3a4a5a, 0.55));
+const amb = new THREE.AmbientLight(0xfff0e0, 0.25); scene.add(amb);
+
+const sunLight = new THREE.DirectionalLight(0xffd9a8, 3.4);
+sunLight.position.copy(sun).multiplyScalar(60);
+sunLight.castShadow = true;
+sunLight.shadow.mapSize.set(2048, 2048);
+sunLight.shadow.camera.near = 1; sunLight.shadow.camera.far = 200;
+sunLight.shadow.camera.left = -45; sunLight.shadow.camera.right = 45;
+sunLight.shadow.camera.top = 45; sunLight.shadow.camera.bottom = -45;
+sunLight.shadow.bias = -0.0004;
+scene.add(sunLight);
+
+/* warm fill from interior */
+const fill = new THREE.PointLight(0xffcaa0, 60, 40, 2);
+fill.position.set(0, 4, -2);
+scene.add(fill);
+
+/* cool rim/back light for premium separation */
+const rim = new THREE.DirectionalLight(0x9fb8ff, 0.6);
+rim.position.set(22, 16, -20);
+scene.add(rim);
+
+/* ============ MATERIALS ============ */
+const matConcrete = new THREE.MeshStandardMaterial({ color:0xe3dccf, roughness:0.82, metalness:0.0 });
+const matConcreteDark = new THREE.MeshStandardMaterial({ color:0x8d8a86, roughness:0.8 });
+const matMarble = new THREE.MeshStandardMaterial({ color:0xf3f1ee, roughness:0.16, metalness:0.05, envMapIntensity:1.1 });
+const matWood = new THREE.MeshStandardMaterial({ color:0x6b4a2f, roughness:0.55 });
+const matGlass = new THREE.MeshPhysicalMaterial({ color:0xcfeaf2, metalness:0, roughness:0.04, transmission:0.92, thickness:0.4, ior:1.45, transparent:true, envMapIntensity:1.3, side:THREE.DoubleSide });
+const matSteel = new THREE.MeshStandardMaterial({ color:0x2b2f36, roughness:0.3, metalness:0.85 });
+/* textures procédurales appliquées (réalisme matières) */
+matConcrete.map=concreteTex; matConcrete.roughness=0.86; matConcrete.needsUpdate=true;
+matMarble.map=marbleTex; matMarble.needsUpdate=true;
+
+/* ============ GROUND ============ */
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(140, 64),
+  new THREE.MeshStandardMaterial({ color:0xb9b0a3, roughness:0.95 })
+);
+ground.rotation.x = -Math.PI/2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+/* lawn patches */
+const lawnMat = new THREE.MeshStandardMaterial({ color:0x4a6b3a, roughness:1 });
+function lawn(x,z,w,d){ const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),lawnMat); m.rotation.x=-Math.PI/2; m.position.set(x,0.02,z); m.receiveShadow=true; scene.add(m); }
+lawn(-22,2,26,40); lawn(24,-6,24,46); lawn(0,-26,60,22);
+
+/* ============ VILLA SHELL ============ */
+const villa = new THREE.Group(); scene.add(villa);
+function box(w,h,d,mat,x,y,z,castS=true){ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.position.set(x,y,z); m.castShadow=castS; m.receiveShadow=true; villa.add(m); return m; }
+
+/* ground-floor slab */
+box(20,0.4,12, matMarble, 0,0.2,-1, false);
+/* sol marbre poli réfléchissant (sheen galerie) */
+const floorRef = new Reflector(new THREE.PlaneGeometry(19.6,11.6), {
+  clipBias:0.003, textureWidth: Math.floor(innerWidth*0.6), textureHeight: Math.floor(innerHeight*0.6), color:0x6b665f
+});
+floorRef.rotation.x=-Math.PI/2; floorRef.position.set(0,0.405,-1); villa.add(floorRef);
+const floorFilm = new THREE.Mesh(new THREE.PlaneGeometry(19.6,11.6),
+  new THREE.MeshPhysicalMaterial({ map:marbleTex, roughness:0.26, metalness:0, transparent:true, opacity:0.6, envMapIntensity:1 }));
+floorFilm.rotation.x=-Math.PI/2; floorFilm.position.set(0,0.412,-1); floorFilm.receiveShadow=true; villa.add(floorFilm);
+/* allée pavée devant la villa */
+const court=new THREE.Mesh(new THREE.PlaneGeometry(28,17),
+  new THREE.MeshStandardMaterial({ color:0x767069, roughness:0.86, map:concreteTex }));
+court.rotation.x=-Math.PI/2; court.position.set(2,0.014,15); court.receiveShadow=true; scene.add(court);
+/* back + side walls (concrete) */
+box(20,9,0.5, matConcrete, 0,4.5,-7);          // back
+box(0.5,9,12, matConcrete, -10,4.5,-1);          // left
+box(0.5,9,12, matConcrete, 10,4.5,-1);           // right
+/* roof slab (cantilever) */
+box(22,0.5,15, matConcrete, 0,9,-1.5);
+/* mezzanine floor (back half) */
+box(20,0.35,6, matMarble, 0,4.6,-4);
+/* mezzanine guard rail (glass) */
+box(20,1.1,0.12, matGlass, 0,5.3,-1.0, false);
+
+/* front facade: pillars + glass panels, with a central entrance gap */
+box(0.6,9,0.6, matConcrete, -9.4,4.5,4.8);
+box(0.6,9,0.6, matConcrete, 9.4,4.5,4.8);
+box(0.6,9,0.6, matConcrete, -3,9,4.8,false);
+box(0.6,9,0.6, matConcrete, 3,9,4.8,false);
+/* glass panes (left of door, right of door, upper band) */
+function pane(w,h,x,y,z){ const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),matGlass); m.position.set(x,y,z); villa.add(m); return m; }
+pane(5.6,8.2,-6.2,4.4,4.8);
+pane(5.6,8.2, 6.2,4.4,4.8);
+pane(5.6,3.2, 0,7.0,4.8);     // above the door
+/* roof skylight */
+const sky2 = new THREE.Mesh(new THREE.PlaneGeometry(12,5), matGlass); sky2.rotation.x=-Math.PI/2; sky2.position.set(0,9.05,-3); villa.add(sky2);
+
+/* monumental staircase (right side, going up to mezzanine) */
+const stair = new THREE.Group(); villa.add(stair);
+for(let i=0;i<11;i++){
+  const s=new THREE.Mesh(new THREE.BoxGeometry(3.4,0.22,0.7), matMarble);
+  s.position.set(7.0, 0.5+i*0.4, 1.6 - i*0.5);
+  s.castShadow=true; s.receiveShadow=true; stair.add(s);
+}
+
+/* chandelier / light sculpture */
+const chand = new THREE.Group(); chand.position.set(0,7.4,-1); villa.add(chand);
+const bulbMat = new THREE.MeshStandardMaterial({ color:0xfff2dd, emissive:0xffdca8, emissiveIntensity:3, roughness:0.3 });
+for(let i=0;i<14;i++){
+  const b=new THREE.Mesh(new THREE.SphereGeometry(0.09,16,16), bulbMat);
+  const a=(i/14)*Math.PI*2, r=0.5+Math.random()*0.9;
+  b.position.set(Math.cos(a)*r, -Math.random()*1.6, Math.sin(a)*r);
+  chand.add(b);
+}
+const chandLight = new THREE.PointLight(0xffe1b0, 35, 22, 2); chandLight.position.set(0,6.6,-1); villa.add(chandLight);
+
+/* ============ SCULPTURES SUR SOCLES (galerie) ============ */
+function pedestal(x,z){ const p=new THREE.Mesh(new THREE.BoxGeometry(0.9,1.15,0.9), matMarble); p.position.set(x,0.985,z); p.castShadow=true; p.receiveShadow=true; villa.add(p); return p; }
+pedestal(-4.6,1.6);
+const sculptBronze=new THREE.Mesh(new THREE.TorusKnotGeometry(0.4,0.13,180,28),
+  new THREE.MeshStandardMaterial({color:0xb9853f,metalness:1,roughness:0.26,envMapIntensity:1.5}));
+sculptBronze.position.set(-4.6,2.05,1.6); sculptBronze.castShadow=true; villa.add(sculptBronze);
+pedestal(4.6,1.6);
+const sculptChrome=new THREE.Mesh(new THREE.IcosahedronGeometry(0.55,0),
+  new THREE.MeshStandardMaterial({color:0xe2e6ea,metalness:1,roughness:0.05,envMapIntensity:1.6}));
+sculptChrome.position.set(4.6,2.1,1.6); sculptChrome.castShadow=true; villa.add(sculptChrome);
+pedestal(0,-5.2);
+const sculptObsidian=new THREE.Mesh(new THREE.TorusGeometry(0.5,0.17,24,64),
+  new THREE.MeshStandardMaterial({color:0x14161a,metalness:0.9,roughness:0.12,envMapIntensity:1.3}));
+sculptObsidian.position.set(0,2.0,-5.2); sculptObsidian.rotation.x=Math.PI/2.4; sculptObsidian.castShadow=true; villa.add(sculptObsidian);
+
+/* ============ PORTES AUTOMATIQUES (entrée) ============ */
+function makeDoor(side){
+  const g=new THREE.Group();
+  const panel=new THREE.Mesh(new THREE.BoxGeometry(3,5.4,0.1), matGlass); g.add(panel);
+  const edge=new THREE.Mesh(new THREE.BoxGeometry(0.07,5.4,0.16), matSteel); edge.position.x=side*1.46; g.add(edge);
+  g.position.set(side*1.5,2.9,4.85); villa.add(g); return g;
+}
+const doorLG=makeDoor(-1), doorRG=makeDoor(1);
+let doorsOpen=false;
+function openDoors(){ if(doorsOpen) return; doorsOpen=true;
+  gsap.to(doorLG.position,{x:-4.7,duration:1.7,ease:'power3.inOut'});
+  gsap.to(doorRG.position,{x:4.7,duration:1.7,ease:'power3.inOut'});
+}
+
+/* ============ TERRACE (wood deck in front) ============ */
+const deck = new THREE.Mesh(new THREE.BoxGeometry(20,0.2,5.5), matWood);
+deck.position.set(0,0.12,7.6); deck.receiveShadow=true; scene.add(deck);
+
+/* outdoor lounge */
+function lounge(x,z){
+  const g=new THREE.Group();
+  const seat=new THREE.Mesh(new RoundedBoxGeometry(2.2,0.5,0.9,4,0.12), new THREE.MeshStandardMaterial({color:0xece7df,roughness:0.7}));
+  seat.position.y=0.45; seat.castShadow=true;
+  const back=new THREE.Mesh(new RoundedBoxGeometry(2.2,0.7,0.25,4,0.1), seat.material); back.position.set(0,0.85,-0.4); back.castShadow=true;
+  g.add(seat,back); g.position.set(x,0.2,z); scene.add(g);
+}
+lounge(5.5,8.2); lounge(8.2,8.2);
+/* modern brazier */
+const brazier=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.4,24), matSteel);
+brazier.position.set(6.8,0.45,9.8); brazier.castShadow=true; scene.add(brazier);
+const fire=new THREE.PointLight(0xff7a2a,18,12,2); fire.position.set(6.8,0.9,9.8); scene.add(fire);
+
+/* ============ INFINITY POOL (mirror) — front-left ============ */
+const poolReflector = new Reflector(new THREE.PlaneGeometry(6.4,12), {
+  clipBias:0.003, textureWidth: innerWidth*Math.min(devicePixelRatio,2), textureHeight: innerHeight*Math.min(devicePixelRatio,2), color:0x9fd8e6
+});
+poolReflector.rotation.x = -Math.PI/2;
+poolReflector.position.set(-5.2, 0.18, 11);
+scene.add(poolReflector);
+/* tinted water film */
+const water=new THREE.Mesh(new THREE.PlaneGeometry(6.4,12), new THREE.MeshPhysicalMaterial({color:0x2aa6c9,transparent:true,opacity:0.34,roughness:0.1,metalness:0,transmission:0.3}));
+water.rotation.x=-Math.PI/2; water.position.set(-5.2,0.2,11); scene.add(water);
+/* pool coping */
+box(7.0,0.3,12.6, matMarble, -5.2,0.15,11, false);
+
+/* ============ TREES ============ */
+function palm(x,z,s=1){
+  const g=new THREE.Group();
+  const trunkMat=new THREE.MeshStandardMaterial({color:0x8a6b46,roughness:0.9});
+  for(let i=0;i<6;i++){
+    const seg=new THREE.Mesh(new THREE.CylinderGeometry(0.18-i*0.015,0.2-i*0.015,0.7,10), trunkMat);
+    seg.position.set(Math.sin(i*0.4)*0.25*s, 0.35+i*0.66*s, 0); seg.castShadow=true; g.add(seg);
+  }
+  const leafMat=new THREE.MeshStandardMaterial({color:0x3f7a3a,roughness:0.85,side:THREE.DoubleSide});
+  const top=4.2*s, tx=Math.sin(5*0.4)*0.25*s;
+  for(let i=0;i<9;i++){
+    const leaf=new THREE.Mesh(new THREE.PlaneGeometry(0.55*s,2.6*s), leafMat);
+    const a=(i/9)*Math.PI*2;
+    leaf.position.set(tx+Math.cos(a)*0.9*s, top+0.2, Math.sin(a)*0.9*s);
+    leaf.rotation.set(-Math.PI/3.2, a, 0); leaf.castShadow=true; g.add(leaf);
+  }
+  g.position.set(x,0,z); g.scale.setScalar(s); scene.add(g);
+}
+function olive(x,z){
+  const g=new THREE.Group();
+  const t=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.26,1.4,10), new THREE.MeshStandardMaterial({color:0x6e5a44,roughness:0.95}));
+  t.position.y=0.7; t.castShadow=true; g.add(t);
+  const fol=new THREE.MeshStandardMaterial({color:0x7c8b66,roughness:1});
+  for(let i=0;i<5;i++){ const s=new THREE.Mesh(new THREE.IcosahedronGeometry(0.8+Math.random()*0.4,1),fol); s.position.set((Math.random()-.5)*1.1,1.5+Math.random()*0.7,(Math.random()-.5)*1.1); s.scale.y=0.8; s.castShadow=true; g.add(s); }
+  g.position.set(x,0,z); scene.add(g);
+}
+palm(-14,12,1.2); palm(-17,4,1); palm(14,11,1.1); palm(18,3,1.25); palm(-12,-12,1);
+olive(13,-10); olive(-12,16);
+
+/* ============ SUPERCARS (génériques, sans marque) — silhouette affinée ============ */
+function supercar(x,z,rot,paint){
+  const g=new THREE.Group();
+  const paintMat=new THREE.MeshPhysicalMaterial({color:paint,metalness:0.6,roughness:0.22,clearcoat:1,clearcoatRoughness:0.05,envMapIntensity:1.5});
+  const trimMat=new THREE.MeshStandardMaterial({color:0x111315,roughness:0.5,metalness:0.5});
+  const glassMat=new THREE.MeshPhysicalMaterial({color:0x0a0e12,metalness:0.2,roughness:0.04,transmission:0.55,transparent:true,thickness:0.4,envMapIntensity:1.3});
+  /* corps bas et large */
+  const lower=new THREE.Mesh(new RoundedBoxGeometry(2.05,0.42,4.5,5,0.22),paintMat); lower.position.y=0.5; lower.castShadow=true; g.add(lower);
+  /* capot avant */
+  const hood=new THREE.Mesh(new RoundedBoxGeometry(1.9,0.3,2.1,5,0.18),paintMat); hood.position.set(0,0.74,1.05); hood.castShadow=true; g.add(hood);
+  /* canopée vitrée surbaissée */
+  const cabin=new THREE.Mesh(new RoundedBoxGeometry(1.6,0.46,1.7,5,0.3),glassMat); cabin.position.set(0,0.95,-0.2); cabin.castShadow=true; g.add(cabin);
+  /* poupe */
+  const rear=new THREE.Mesh(new RoundedBoxGeometry(1.96,0.36,1.4,5,0.18),paintMat); rear.position.set(0,0.72,-1.7); rear.castShadow=true; g.add(rear);
+  /* lame avant + bas de caisse */
+  const split=new THREE.Mesh(new THREE.BoxGeometry(2.0,0.08,0.5),trimMat); split.position.set(0,0.32,2.25); g.add(split);
+  [-1.03,1.03].forEach(sx=>{const sill=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.18,3.2),trimMat); sill.position.set(sx,0.4,-0.1); g.add(sill);});
+  /* aileron arrière */
+  [-0.7,0.7].forEach(wx=>{const wp=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.3,0.12),trimMat); wp.position.set(wx,1.0,-2.25); g.add(wp);});
+  const wing=new THREE.Mesh(new THREE.BoxGeometry(1.9,0.06,0.5),paintMat); wing.position.set(0,1.17,-2.3); g.add(wing);
+  /* phares + bandeau arrière */
+  [-0.6,0.6].forEach(hx=>{const hl=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.1,0.08),new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xfff3da,emissiveIntensity:2.2})); hl.position.set(hx,0.6,2.28); g.add(hl);});
+  const tl=new THREE.Mesh(new THREE.BoxGeometry(1.7,0.08,0.06),new THREE.MeshStandardMaterial({color:0xff2222,emissive:0xff1414,emissiveIntensity:2.6})); tl.position.set(0,0.74,-2.42); g.add(tl);
+  /* roues : pneu + jante + étrier */
+  const tyre=new THREE.MeshStandardMaterial({color:0x0b0b0d,roughness:0.8});
+  const rimMat=new THREE.MeshStandardMaterial({color:0xc8ccd2,metalness:1,roughness:0.22});
+  const brake=new THREE.MeshStandardMaterial({color:0xd33,metalness:0.3,roughness:0.5});
+  [[0.98,1.5],[-0.98,1.5],[0.98,-1.55],[-0.98,-1.55]].forEach(([wx,wz])=>{
+    const w=new THREE.Mesh(new THREE.CylinderGeometry(0.48,0.48,0.32,28),tyre); w.rotation.z=Math.PI/2; w.position.set(wx,0.48,wz); w.castShadow=true; g.add(w);
+    const r=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.34,12),rimMat); r.rotation.z=Math.PI/2; r.position.set(wx,0.48,wz); g.add(r);
+    const b=new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.2,0.36,16),brake); b.rotation.z=Math.PI/2; b.position.set(wx,0.48,wz); g.add(b);
+  });
+  g.position.set(x,0,z); g.rotation.y=rot; scene.add(g); return g;
+}
+supercar(-6.6,14.2,0.5,0xb01515);   // rouge
+supercar(5.2,14.6,-0.45,0x111418);  // noir
+supercar(8.6,13.1,-0.7,0xe8e4dc);   // blanc nacré
+
+/* ============ ARTWORKS (originaux, générés) ============ */
+const artworks = [
+  {t:'Flux Chromatique',a:'Studio AMAVYA',y:'2025',tech:'Acrylique & pigments sur toile',d:"Une composition gestuelle où les flux de couleur évoquent la circulation des données vivantes au cœur d'un système.",c1:'#ff6b4a',c2:'#1f5fff',mode:'flow'},
+  {t:'Silence Bleu',a:'A. Marenne',y:'2024',tech:'Huile sur lin',d:"Un champ monochrome travaillé en couches profondes. La lumière du couchant y dépose un halo presque liquide.",c1:'#0a3a6b',c2:'#7be0ff',mode:'field'},
+  {t:'Architecture du Vide',a:'Studio AMAVYA',y:'2026',tech:'Encre & feuille métal',d:"Lignes de construction et plans suspendus : l'espace négatif devient le véritable sujet de l'œuvre.",c1:'#0b0e14',c2:'#c8f53a',mode:'lines'},
+  {t:'Aurore Numérique',a:'K. Vasquez',y:'2025',tech:'Sérigraphie sur aluminium',d:"Dégradés saturés inspirés des premières lueurs sur la baie. Le motif vibre selon l'angle de vision.",c1:'#ff2e8b',c2:'#ffb347',mode:'field'},
+  {t:'Mémoire Fragmentée',a:'Studio AMAVYA',y:'2024',tech:'Technique mixte',d:"Des éclats de matière recomposent un visage que l'on devine sans jamais le saisir entièrement.",c1:'#6a3fff',c2:'#19e0c4',mode:'flow'},
+  {t:'Onde Stationnaire',a:'L. Brandt',y:'2026',tech:'Peinture optique',d:"Un motif d'interférence calibré au millimètre. L'œil reconstruit le mouvement là où il n'y en a pas.",c1:'#111418',c2:'#00d4ff',mode:'lines'},
+  {t:'Jardin Suspendu',a:'Studio AMAVYA',y:'2025',tech:'Pastel & résine',d:"Végétation abstraite baignée d'une lumière dorée, en écho au paysage qui entoure la villa.",c1:'#2e7d32',c2:'#ffd54f',mode:'field'},
+  {t:'Signal',a:'A. Marenne',y:'2026',tech:'Acrylique fluo sur toile',d:"Une impulsion verticale traverse la composition : le geste minimal pour un impact maximal.",c1:'#0b0e14',c2:'#c8f53a',mode:'lines'},
+];
+
+function makeArtTexture(art){
+  const c=document.createElement('canvas'); c.width=512; c.height=640; const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,512,640); g.addColorStop(0,art.c1); g.addColorStop(1,art.c2);
+  x.fillStyle=g; x.fillRect(0,0,512,640);
+  if(art.mode==='flow'){
+    for(let i=0;i<80;i++){ x.globalAlpha=0.06+Math.random()*0.18; x.strokeStyle=i%2?art.c2:'#ffffff'; x.lineWidth=2+Math.random()*22;
+      x.beginPath(); let px=Math.random()*512, py=Math.random()*640; x.moveTo(px,py);
+      for(let k=0;k<5;k++){ px+=(Math.random()-.5)*220; py+=(Math.random()-.5)*220; x.quadraticCurveTo(Math.random()*512,Math.random()*640,px,py);} x.stroke(); }
+  } else if(art.mode==='lines'){
+    x.globalAlpha=1; for(let i=0;i<22;i++){ x.strokeStyle=i%3? 'rgba(255,255,255,.5)':art.c2; x.lineWidth=1+Math.random()*5;
+      x.beginPath(); x.moveTo(Math.random()*512,0); x.lineTo(Math.random()*512,640); x.stroke(); }
+    x.globalAlpha=0.9; x.fillStyle=art.c2; x.fillRect(220+Math.random()*60,120,18,400);
+  } else { // field
+    for(let i=0;i<400;i++){ x.globalAlpha=0.02+Math.random()*0.05; x.fillStyle=Math.random()<.5?'#ffffff':art.c1;
+      const r=20+Math.random()*120; x.beginPath(); x.arc(Math.random()*512,Math.random()*640,r,0,Math.PI*2); x.fill(); }
+  }
+  x.globalAlpha=1;
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
+}
+function makeLabelTexture(art){
+  const c=document.createElement('canvas'); c.width=256; c.height=120; const x=c.getContext('2d');
+  x.fillStyle='#f7f2e9'; x.fillRect(0,0,256,120);
+  x.fillStyle='#221c15'; x.font="500 22px 'Cormorant Garamond', Georgia, serif"; x.fillText(art.t,14,34);
+  x.fillStyle='#8c8073'; x.font="italic 14px 'Cormorant Garamond', Georgia, serif"; x.fillText(art.a+' · '+art.y,14,58);
+  x.fillStyle='#a08a72'; x.font="400 10px 'Jost', sans-serif"; x.fillText(art.tech.toUpperCase(),14,80);
+  x.fillStyle='#a98a5c'; x.fillRect(14,96,34,2);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
+}
+
+const clickable = [];
+const frameMat = new THREE.MeshStandardMaterial({ color:0x1b1611, roughness:0.45, metalness:0.45 });
+function hangArt(art, x, y, z, ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=ry;
+  const w=1.7, h=2.12;
+  const frame=new THREE.Mesh(new THREE.BoxGeometry(w+0.16,h+0.16,0.12), frameMat); frame.castShadow=true; g.add(frame);
+  const canvasMesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshStandardMaterial({ map:makeArtTexture(art), roughness:0.42 }));
+  canvasMesh.position.z=0.075; g.add(canvasMesh);
+  const label=new THREE.Mesh(new THREE.PlaneGeometry(0.5,0.235), new THREE.MeshBasicMaterial({ map:makeLabelTexture(art) }));
+  label.position.set(w/2+0.42,-h/2+0.2,0.08); g.add(label);
+  /* picture light */
+  const spot=new THREE.SpotLight(0xfff4e2, 18, 7, Math.PI/7, 0.5, 1.4);
+  spot.position.set(0,1.7,1.1); spot.target.position.set(0,0,0); g.add(spot); g.add(spot.target);
+  canvasMesh.userData.art = art;
+  canvasMesh.userData.home = g.position.clone();
+  canvasMesh.userData.normal = new THREE.Vector3(Math.sin(ry),0,Math.cos(ry));
+  clickable.push(canvasMesh);
+  villa.add(g);
+}
+/* ground floor — back & side walls */
+hangArt(artworks[0], -5.5, 2.6, -6.6, 0);
+hangArt(artworks[1],  0,   2.6, -6.6, 0);
+hangArt(artworks[2],  5.5, 2.6, -6.6, 0);
+hangArt(artworks[3], -9.6, 2.6,  1.5, Math.PI/2);
+hangArt(artworks[7],  9.6, 2.6,  -3, -Math.PI/2);
+/* mezzanine — back wall (upper) */
+hangArt(artworks[4], -4, 6.5, -6.6, 0);
+hangArt(artworks[5],  4, 6.5, -6.6, 0);
+hangArt(artworks[6], -9.6, 6.5, -3.5, Math.PI/2);
+
+/* ============ DIGITAL ART WALL (animated emissive) — left interior ============ */
+const dc=document.createElement('canvas'); dc.width=512; dc.height=256; const dx=dc.getContext('2d');
+const digiTex=new THREE.CanvasTexture(dc); digiTex.colorSpace=THREE.SRGBColorSpace;
+const digiScreen=new THREE.Mesh(new THREE.PlaneGeometry(5.6,2.6), new THREE.MeshBasicMaterial({ map:digiTex }));
+digiScreen.position.set(-9.55,6.5,2.2); digiScreen.rotation.y=Math.PI/2; villa.add(digiScreen);
+const digiGlow=new THREE.PointLight(0xffb066,9,10,2); digiGlow.position.set(-8.6,6.5,2.2); villa.add(digiGlow);
+function drawDigital(t){
+  dx.fillStyle='#140d06'; dx.fillRect(0,0,512,256);
+  for(let i=0;i<28;i++){
+    const y=(i/28)*256; const hue=24+Math.sin(t*0.4+i*0.3)*16;   // amber→gold band
+    const lum=52+Math.sin(t*1.2+i)*14;
+    dx.strokeStyle=`hsla(${hue},78%,${lum}%,0.62)`; dx.lineWidth=1.6; dx.beginPath();
+    for(let xx=0;xx<=512;xx+=16){ const yy=y+Math.sin(xx*0.02+t*1.4+i)*10; xx===0?dx.moveTo(xx,yy):dx.lineTo(xx,yy);} dx.stroke();
+  }
+  digiTex.needsUpdate=true;
+}
+
+/* ============ POST-PROCESSING ============ */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.34, 0.55, 0.82);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+/* ============ CONTROLS ============ */
+const controls = new PointerLockControls(camera, renderer.domElement);
+const keys = { f:false,b:false,l:false,r:false };
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
+const SPEED = 42;
+const LIMX=8.6, ZMIN=-6.4, ZMAX=8.6, EYE=1.7;
+
+let mode = 'intro';  // intro | visiting | inspecting
+
+addEventListener('keydown', e=>{
+  if(mode!=='visiting') return;
+  switch(e.code){ case 'KeyW': case 'ArrowUp': case 'KeyZ': keys.f=true;break;
+    case 'KeyS': case 'ArrowDown': keys.b=true;break;
+    case 'KeyA': case 'ArrowLeft': case 'KeyQ': keys.l=true;break;
+    case 'KeyD': case 'ArrowRight': keys.r=true;break; }
+});
+addEventListener('keyup', e=>{
+  switch(e.code){ case 'KeyW': case 'ArrowUp': case 'KeyZ': keys.f=false;break;
+    case 'KeyS': case 'ArrowDown': keys.b=false;break;
+    case 'KeyA': case 'ArrowLeft': case 'KeyQ': keys.l=false;break;
+    case 'KeyD': case 'ArrowRight': keys.r=false;break; }
+});
+
+const intro = document.getElementById('intro');
+const crosshair = document.getElementById('crosshair');
+const topbar = document.getElementById('topbar');
+const zoneEl = document.getElementById('zone');
+
+document.getElementById('enter').addEventListener('click', startVisit);
+
+function startVisit(){
+  if(isTouch){ enterVisiting(); return; }
+  controls.lock();
+}
+controls.addEventListener('lock', enterVisiting);
+controls.addEventListener('unlock', ()=>{ if(mode==='visiting'){ mode='intro'; intro.classList.remove('hide'); crosshair.classList.remove('on'); topbar.classList.remove('on'); }});
+
+function enterVisiting(){
+  mode='visiting';
+  intro.classList.add('hide');
+  crosshair.classList.add('on');
+  topbar.classList.add('on');
+  if(camera.position.z>16){ // place inside terrace if still far
+    camera.position.set(0,EYE,7);
+  }
+  openDoors();
+}
+
+/* ============ ARTWORK INSPECTION ============ */
+const raycaster = new THREE.Raycaster();
+const panel = document.getElementById('panel');
+let savedPos=new THREE.Vector3(), savedQuat=new THREE.Quaternion();
+
+renderer.domElement.addEventListener('click', ()=>{ if(mode==='visiting' && !isTouch) tryPick(0,0); });
+
+function tryPick(ndcx,ndcy){
+  raycaster.setFromCamera(new THREE.Vector2(ndcx,ndcy), camera);
+  const hits = raycaster.intersectObjects(clickable, false);
+  if(hits.length && hits[0].distance < 22){ inspect(hits[0].object); }
+}
+
+function inspect(mesh){
+  const art = mesh.userData.art;
+  mode='inspecting';
+  if(controls.isLocked) controls.unlock();
+  savedPos.copy(camera.position); savedQuat.copy(camera.quaternion);
+  crosshair.classList.remove('on');
+
+  // world position + normal of the artwork
+  const wp = new THREE.Vector3(); mesh.getWorldPosition(wp);
+  const n = mesh.userData.normal.clone();
+  const dest = wp.clone().add(n.clone().multiplyScalar(3.0)); dest.y = wp.y;
+  const look = wp.clone();
+
+  gsap.to(camera.position, { x:dest.x, y:dest.y, z:dest.z, duration:1.3, ease:'power3.inOut',
+    onUpdate:()=>camera.lookAt(look), onComplete:()=>camera.lookAt(look) });
+
+  // fill panel
+  document.getElementById('panelTitle').textContent = art.t;
+  document.getElementById('panelMeta').textContent = art.a + ' · ' + art.y;
+  document.getElementById('panelDesc').textContent = art.d;
+  document.getElementById('panelTag').textContent = art.tech;
+  document.getElementById('panelSwatch').style.background = `linear-gradient(135deg, ${art.c1}, ${art.c2})`;
+  setTimeout(()=>panel.classList.add('on'), 360);
+  zoneEl.textContent = 'Œuvre — '+art.t;
+}
+
+document.getElementById('panelClose').addEventListener('click', closeInspect);
+function closeInspect(){
+  panel.classList.remove('on');
+  gsap.to(camera.position, { x:savedPos.x, y:savedPos.y, z:savedPos.z, duration:1.1, ease:'power3.inOut',
+    onUpdate:()=>camera.quaternion.slerp(savedQuat,0.12),
+    onComplete:()=>{
+      camera.quaternion.copy(savedQuat);
+      if(isTouch){ mode='visiting'; crosshair.classList.add('on'); zoneEl.textContent='Galerie'; }
+      else { mode='visiting'; crosshair.classList.add('on'); zoneEl.textContent='Galerie'; controls.lock(); }
+    }
+  });
+}
+
+/* ============ MOBILE: joystick + look ============ */
+const stick=document.getElementById('stick'), nub=document.getElementById('nub'), lookpad=document.getElementById('lookpad');
+let stickId=null, stickCx=0, stickCy=0, moveVec={x:0,y:0};
+let lookId=null, lastLX=0, lastLY=0;
+const euler=new THREE.Euler(0,0,0,'YXZ');
+
+if(isTouch){
+  stick.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; stickId=t.identifier; const r=stick.getBoundingClientRect(); stickCx=r.left+r.width/2; stickCy=r.top+r.height/2; e.preventDefault(); },{passive:false});
+  stick.addEventListener('touchmove', e=>{ for(const t of e.changedTouches){ if(t.identifier===stickId){ let dx=t.clientX-stickCx, dy=t.clientY-stickCy; const m=Math.hypot(dx,dy), max=46; if(m>max){dx*=max/m;dy*=max/m;} nub.style.transform=`translate(${dx}px,${dy}px)`; moveVec.x=dx/max; moveVec.y=dy/max; } } e.preventDefault(); },{passive:false});
+  const endStick=e=>{ for(const t of e.changedTouches){ if(t.identifier===stickId){ stickId=null; moveVec={x:0,y:0}; nub.style.transform='translate(0,0)'; } } };
+  stick.addEventListener('touchend',endStick); stick.addEventListener('touchcancel',endStick);
+
+  lookpad.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; lookId=t.identifier; lastLX=t.clientX; lastLY=t.clientY; },{passive:false});
+  lookpad.addEventListener('touchmove', e=>{ for(const t of e.changedTouches){ if(t.identifier===lookId){ const dx=t.clientX-lastLX, dy=t.clientY-lastLY; lastLX=t.clientX; lastLY=t.clientY;
+        euler.setFromQuaternion(camera.quaternion); euler.y-=dx*0.005; euler.x-=dy*0.005; euler.x=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,euler.x)); camera.quaternion.setFromEuler(euler); } } e.preventDefault(); },{passive:false});
+  const endLook=e=>{ for(const t of e.changedTouches){ if(t.identifier===lookId) lookId=null; } };
+  lookpad.addEventListener('touchend',endLook); lookpad.addEventListener('touchcancel',endLook);
+  /* tap on look area to pick artwork (center ray) */
+  lookpad.addEventListener('touchstart', e=>{ if(mode==='visiting'){ const t=e.changedTouches[0]; const nx=(t.clientX/innerWidth)*2-1, ny=-(t.clientY/innerHeight)*2+1; setTimeout(()=>{ if(lookId===null) tryPick(nx,ny); },120);} });
+}
+
+/* ============ ZONE LABELS ============ */
+function updateZone(){
+  if(mode!=='visiting') return;
+  const p=camera.position; let z='Galerie principale';
+  if(p.z>5) z='Terrasse & piscine';
+  else if(p.z>-2 && Math.abs(p.x)<3) z='Hall principal';
+  else if(p.x<-6) z='Galerie · art numérique';
+  else if(p.x>6) z='Galerie · grand format';
+  else if(p.z<-4) z='Galerie · collection';
+  if(zoneEl.textContent!==z) zoneEl.textContent=z;
+}
+
+/* ============ INTRO CINEMATIC ============ */
+function runIntro(){
+  document.getElementById('loader').classList.add('hide');
+  camera.position.set(2,7,30); camera.lookAt(0,3,-2);
+  const proxy={t:0};
+  gsap.to(camera.position,{ x:0,y:2.6,z:9, duration:4.2, ease:'power2.inOut', onUpdate:()=>camera.lookAt(0,3,-2), onComplete:()=>setTimeout(openDoors,500) });
+}
+setTimeout(runIntro, 700);
+
+/* ============ RESIZE ============ */
+addEventListener('resize', ()=>{
+  camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
+  bloom.setSize(innerWidth,innerHeight);
+});
+
+/* ============ LOOP ============ */
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),0.05);
+  const t=clock.elapsedTime;
+
+  if(mode==='visiting'){
+    velocity.x -= velocity.x*9*dt; velocity.z -= velocity.z*9*dt;
+    if(isTouch){
+      direction.set(moveVec.x, 0, moveVec.y).normalize();
+      if(moveVec.x||moveVec.y){ velocity.x += direction.x*SPEED*dt; velocity.z += direction.z*SPEED*dt; }
+      controls.moveRight?.(0); // noop guard
+      // manual move for touch (controls not locked)
+      const fwd=new THREE.Vector3(); camera.getWorldDirection(fwd); fwd.y=0; fwd.normalize();
+      const right=new THREE.Vector3().crossVectors(fwd,new THREE.Vector3(0,1,0)).normalize();
+      camera.position.addScaledVector(fwd, -velocity.z*dt);
+      camera.position.addScaledVector(right, velocity.x*dt);
+    } else {
+      direction.z = Number(keys.f)-Number(keys.b);
+      direction.x = Number(keys.r)-Number(keys.l);
+      direction.normalize();
+      if(keys.f||keys.b) velocity.z -= direction.z*SPEED*dt;
+      if(keys.l||keys.r) velocity.x -= direction.x*SPEED*dt;
+      controls.moveRight(-velocity.x*dt);
+      controls.moveForward(-velocity.z*dt);
+    }
+    const p=camera.position;
+    p.x=Math.max(-LIMX,Math.min(LIMX,p.x));
+    p.z=Math.max(ZMIN,Math.min(ZMAX,p.z));
+    p.y=EYE;
+    updateZone();
+  }
+
+  // chandelier shimmer
+  chandLight.intensity = 33 + Math.sin(t*1.6)*4;
+  fire.intensity = 16 + Math.sin(t*7)*4 + Math.sin(t*13)*2;
+  drawDigital(t);
+
+  composer.render();
+}
+animate();
+</script>
+</body>
+</html>
