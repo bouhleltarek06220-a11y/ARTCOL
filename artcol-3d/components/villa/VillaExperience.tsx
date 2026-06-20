@@ -16,6 +16,7 @@ import { CharacterGuide } from "./character/CharacterGuide";
 import { VillaFurniture } from "./world/VillaFurniture";
 import { VillaDining } from "./world/VillaDining";
 import { VillaRooms } from "./world/VillaRooms";
+import { VillaOffice } from "./world/VillaOffice";
 import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
@@ -91,6 +92,7 @@ export function VillaExperience() {
           <VillaInterior />
           <VillaGrounds />
           <VillaRooms />
+          <VillaOffice />
           <VillaFurniture />
           <VillaDining />
           <CharacterGuide position={[-3.4, 0, 1.2]} rotation={0.2} />

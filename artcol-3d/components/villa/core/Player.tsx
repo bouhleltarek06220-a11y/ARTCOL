@@ -21,7 +21,7 @@ const SPEED = 4.8;
 /** Régions navigables (XZ). Le déplacement est bloqué hors de ces boîtes, ce
  *  qui crée de vraies pièces reliées par des portes (ex : hall ↔ cuisine). */
 const ROOMS: [number, number, number, number][] = [
-  [-10.6, 10.6, -8, 13], // hall + terrasse
+  [-10.6, 10.6, -8.3, 13], // hall + terrasse (fond étendu pour le bureau vitré)
   [-11.6, -10.4, -2.3, -0.7], // embrasure porte cuisine
   [-17.4, -11.0, -5.4, 0.4], // cuisine
   [10.4, 11.6, -1.8, -0.2], // embrasure porte bibliothèque

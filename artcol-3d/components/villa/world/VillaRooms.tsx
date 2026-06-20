@@ -218,64 +218,7 @@ export function VillaRooms() {
       <pointLight position={[CXl, 3.0, CZ]} intensity={11} distance={9} decay={2} color="#ffcf9a" />
       <pointLight position={[CXl, 1.4, -1.5]} intensity={5} distance={6} decay={2} color="#ffdcae" />
 
-      {/* ===================================================================== */}
-      {/* =============================== BUREAU ============================== */}
-      {/* (contre le mur du fond, entre les œuvres x=-6 et x=0 → x ≈ -3.4) ===== */}
-      {/* ===================================================================== */}
-      <group position={[-3.4, 0, -7.4]}>
-        {/* tapis */}
-        <mesh material={leather} position={[0, 0.04, 0.4]} receiveShadow>
-          <boxGeometry args={[3.2, 0.04, 2.4]} />
-        </mesh>
-        {/* bureau */}
-        <mesh material={metal} position={[0, 0.36, 0]} castShadow>
-          <boxGeometry args={[1.9, 0.7, 0.85]} />
-        </mesh>
-        <mesh material={wood} position={[0, 0.75, 0]} castShadow receiveShadow>
-          <boxGeometry args={[2.1, 0.07, 1]} />
-        </mesh>
-        {/* écran + accessoires */}
-        <mesh material={metal} position={[0, 1.1, -0.25]} castShadow>
-          <boxGeometry args={[0.9, 0.55, 0.05]} />
-        </mesh>
-        <mesh material={metal} position={[0, 0.85, -0.25]}>
-          <boxGeometry args={[0.1, 0.2, 0.1]} />
-        </mesh>
-        {/* fauteuil de bureau */}
-        <group position={[0, 0, 0.7]} rotation={[0, Math.PI, 0]}>
-          <mesh material={leather} position={[0, 0.5, 0]} castShadow>
-            <boxGeometry args={[0.6, 0.12, 0.55]} />
-          </mesh>
-          <mesh material={leather} position={[0, 0.85, -0.27]} castShadow>
-            <boxGeometry args={[0.6, 0.6, 0.1]} />
-          </mesh>
-          <mesh material={metal} position={[0, 0.28, 0]}>
-            <cylinderGeometry args={[0.04, 0.04, 0.44, 10]} />
-          </mesh>
-          <mesh material={metal} position={[0, 0.06, 0]}>
-            <cylinderGeometry args={[0.3, 0.3, 0.05, 16]} />
-          </mesh>
-        </group>
-        {/* crédence basse + livres (contre le mur du fond) */}
-        <mesh material={shelfWood} position={[0, 0.4, -1.0]} castShadow receiveShadow>
-          <boxGeometry args={[2.4, 0.8, 0.4]} />
-        </mesh>
-        {Array.from({ length: 10 }).map((_, b) => (
-          <mesh
-            key={b}
-            material={bookMats[(b * 3) % bookMats.length]}
-            position={[-1.0 + b * 0.2, 0.95, -1.0]}
-            castShadow
-          >
-            <boxGeometry args={[0.14, 0.28 + ((b * 5) % 4) * 0.03, 0.28]} />
-          </mesh>
-        ))}
-        {/* lampe de bureau (lumière chaude) */}
-        <mesh material={metal} position={[0.7, 0.95, -0.1]}>
-          <cylinderGeometry args={[0.02, 0.02, 0.4, 8]} />
-        </mesh>
-        <pointLight position={[0.7, 1.15, 0]} intensity={4} distance={4} decay={2} color="#ffd9a0" />
-      </group>
+      {/* Le BUREAU est désormais une vraie pièce vitrée → voir <VillaOffice/>. */}
     </group>
   );
 }
