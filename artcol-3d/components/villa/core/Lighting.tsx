@@ -11,7 +11,7 @@ export function Lighting() {
       {/* Soleil rasant doré, ombres longues. */}
       <directionalLight
         position={[-34, 13, 22]}
-        intensity={2.7}
+        intensity={1.7}
         color="#ffd6a0"
         castShadow
         shadow-mapSize={[2048, 2048]}
@@ -24,9 +24,9 @@ export function Lighting() {
         shadow-camera-bottom={-46}
       />
       {/* Remplissage froid pour la séparation premium. */}
-      <directionalLight position={[24, 16, -22]} intensity={0.5} color="#9fb8ff" />
-      <hemisphereLight args={["#ffe8d2", "#3a4a5a", 0.5]} />
-      <ambientLight intensity={0.14} color="#ffe6c4" />
+      <directionalLight position={[24, 16, -22]} intensity={0.35} color="#9fb8ff" />
+      <hemisphereLight args={["#ffe8d2", "#3a4a5a", 0.3]} />
+      <ambientLight intensity={0.08} color="#ffe6c4" />
     </>
   );
 }
