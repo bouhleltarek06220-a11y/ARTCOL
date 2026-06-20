@@ -3,22 +3,23 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PointerLockControls } from "@react-three/drei";
-import { Vector3 } from "three";
+import { Object3D, Raycaster, Vector2, Vector3 } from "three";
 import type { PointerLockControls as PLC } from "three-stdlib";
 import { useVilla } from "../store";
 
 /**
  * Joueur à la première personne : marche ZQSD/WASD + regard souris (pointer
- * lock), hauteur d'œil fixe, bornes de la propriété (collisions de base).
- * Met à jour la « zone » courante affichée dans le HUD.
+ * lock), bornes de la propriété, détection de zone (HUD), et interaction au
+ * centre de l'écran : viser l'hôte puis cliquer lance la conversation.
  *
- * N'est monté que pendant la phase « visiting ».
+ * Monté pour les phases « visiting » et « talking » ; le déplacement n'est
+ * actif qu'en « visiting » (gelé pendant la conversation et l'inspection).
  */
 const EYE = 1.65;
 const SPEED = 4.8;
 
 export function Player() {
-  const { camera } = useThree();
+  const { camera, scene, gl } = useThree();
   const controls = useRef<PLC>(null);
   const registerLock = useVilla((s) => s.registerLock);
   const setZone = useVilla((s) => s.setZone);
@@ -28,6 +29,8 @@ export function Player() {
   const dir = useMemo(() => new Vector3(), []);
   const right = useMemo(() => new Vector3(), []);
   const up = useMemo(() => new Vector3(0, 1, 0), []);
+  const ray = useMemo(() => new Raycaster(), []);
+  const center = useMemo(() => new Vector2(0, 0), []);
 
   useEffect(() => {
     camera.position.set(-6.5, EYE, 11);
@@ -51,13 +54,40 @@ export function Player() {
     };
   }, [camera]);
 
-  // Enregistre le verrouillage du pointeur pour l'UI (bouton « Entrer »).
+  // Verrouillage du pointeur exposé à l'UI (boutons « Entrer » / fermeture chat).
   useEffect(() => {
     registerLock(() => controls.current?.lock());
   }, [registerLock]);
 
+  // Interaction au centre de l'écran : viser l'hôte et cliquer → conversation.
+  useEffect(() => {
+    const onClick = () => {
+      if (useVilla.getState().phase !== "visiting") return;
+      ray.setFromCamera(center, camera);
+      const hits = ray.intersectObjects(scene.children, true);
+      for (const h of hits) {
+        if (h.distance > 6) break;
+        let o: Object3D | null = h.object;
+        while (o) {
+          if (o.userData?.interactive === "guide") {
+            setPhase("talking");
+            controls.current?.unlock();
+            return;
+          }
+          o = o.parent;
+        }
+      }
+    };
+    const el = gl.domElement;
+    el.addEventListener("click", onClick);
+    return () => el.removeEventListener("click", onClick);
+  }, [camera, scene, gl, ray, center, setPhase]);
+
   const zoneRef = useRef("");
   useFrame((_, delta) => {
+    // Déplacement uniquement en visite (gelé pendant chat / inspection).
+    if (useVilla.getState().phase !== "visiting") return;
+
     const step = SPEED * delta;
     camera.getWorldDirection(dir);
     dir.y = 0;
@@ -75,7 +105,6 @@ export function Player() {
     p.z = Math.max(-8, Math.min(13, p.z));
     p.y = EYE;
 
-    // Détection de zone (HUD).
     let z = "Galerie principale";
     if (p.z > 5) z = "Terrasse & piscine";
     else if (p.z > -2 && Math.abs(p.x) < 3.5) z = "Hall principal";
@@ -91,7 +120,10 @@ export function Player() {
   return (
     <PointerLockControls
       ref={controls}
-      onUnlock={() => setPhase("intro")}
+      onUnlock={() => {
+        // Esc en visite → retour à l'accueil ; en conversation, on ne touche à rien.
+        if (useVilla.getState().phase === "visiting") setPhase("intro");
+      }}
     />
   );
 }
