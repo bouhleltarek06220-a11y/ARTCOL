@@ -26,6 +26,8 @@ const ROOMS: [number, number, number, number][] = [
   [-17.4, -11.0, -5.4, 0.4], // cuisine
   [10.4, 11.6, -1.8, -0.2], // embrasure porte bibliothèque
   [11.0, 17.4, -5.4, 0.4], // bibliothèque
+  [-3.9, -2.1, -8.7, -8.3], // embrasure porte bureau (mur du fond)
+  [-9.5, 3.5, -17, -8.4], // bureau (grande pièce nord)
 ];
 const inAny = (x: number, z: number) =>
   ROOMS.some((b) => x >= b[0] && x <= b[1] && z >= b[2] && z <= b[3]);
@@ -133,6 +135,7 @@ export function Player() {
     let z = "Galerie principale";
     if (nx < -11) z = "Cuisine";
     else if (nx > 11) z = "Bibliothèque";
+    else if (nz < -8.5) z = "Bureau";
     else if (nz > 5) z = "Terrasse & piscine";
     else if (nz > -2 && Math.abs(nx) < 3.5) z = "Hall principal";
     else if (nx < -6) z = "Salle à manger";
