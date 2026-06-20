@@ -16,7 +16,7 @@ export function VillaInterior() {
   const marble = useMemo(
     () =>
       new MeshStandardMaterial({
-        color: "#ece8e1",
+        color: "#dcd6cc",
         roughness: 0.14,
         metalness: 0.1,
         envMapIntensity: 1.2,
@@ -108,7 +108,7 @@ export function VillaInterior() {
             <cylinderGeometry args={[0.04, 0.04, 1.6 - i * 0.15, 8]} />
           </mesh>
         ))}
-        <pointLight position={[0, 5.4, 0]} intensity={22} distance={16} decay={2} color="#ffcf95" />
+        <pointLight position={[0, 5.4, 0]} intensity={30} distance={16} decay={2} color="#ffcf95" />
       </group>
 
       {/* ===== ŒUVRES D'ART (grandes toiles + cadre + spot musée + cartel) ===== */}
@@ -133,8 +133,8 @@ export function VillaInterior() {
       />
 
       {/* Lumière chaude d'ambiance dans le hall */}
-      <pointLight position={[0, 3, 0]} intensity={10} distance={20} decay={2} color="#ffdcae" />
-      <pointLight position={[5, 2.4, -6]} intensity={6} distance={14} decay={2} color="#ffe2ba" />
+      <pointLight position={[0, 3, 0]} intensity={14} distance={20} decay={2} color="#ffdcae" />
+      <pointLight position={[5, 2.4, -6]} intensity={9} distance={14} decay={2} color="#ffe2ba" />
     </group>
   );
 }

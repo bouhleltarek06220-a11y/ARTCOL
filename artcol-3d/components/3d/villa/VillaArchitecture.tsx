@@ -22,7 +22,7 @@ export function VillaArchitecture() {
   const concrete = useMemo(
     () =>
       new MeshStandardMaterial({
-        color: "#c5c0b6",
+        color: "#b3a896",
         roughness: 0.92,
         metalness: 0,
         side: DoubleSide,
