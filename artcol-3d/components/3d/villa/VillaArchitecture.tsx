@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { MeshStandardMaterial, DoubleSide } from "three";
+import { getVillaTextures } from "@/components/villa/textures";
 
 /**
  * Coque de la villa contemporaine — pensée pour être VISITÉE de l'intérieur :
@@ -19,16 +20,22 @@ const WALL_H = 7.4;
 const ROOF_Y = 7.5;
 
 export function VillaArchitecture() {
-  const concrete = useMemo(
-    () =>
-      new MeshStandardMaterial({
-        color: "#b3a896",
-        roughness: 0.92,
-        metalness: 0,
-        side: DoubleSide,
-      }),
-    [],
-  );
+  const concrete = useMemo(() => {
+    const t = getVillaTextures();
+    const m = new MeshStandardMaterial({
+      color: "#b3a896",
+      roughness: 0.92,
+      metalness: 0,
+      side: DoubleSide,
+    });
+    if (t) {
+      const map = t.concrete.clone();
+      map.needsUpdate = true;
+      map.repeat.set(3, 2);
+      m.map = map;
+    }
+    return m;
+  }, []);
   const stone = useMemo(
     () => new MeshStandardMaterial({ color: "#cdbb9c", roughness: 0.85, metalness: 0 }),
     [],

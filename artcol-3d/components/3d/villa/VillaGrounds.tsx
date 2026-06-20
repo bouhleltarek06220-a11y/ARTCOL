@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial } from "@react-three/drei";
 import { MeshStandardMaterial, type PointLight } from "three";
+import { getVillaTextures } from "@/components/villa/textures";
 
 /**
  * Aménagement paysager & piscine de la villa : sol minéral, allée privée,
@@ -11,14 +12,28 @@ import { MeshStandardMaterial, type PointLight } from "three";
  * palmiers et oliviers en silhouette rétro-éclairée (crépuscule premium).
  */
 export function VillaGrounds() {
-  const sandStone = useMemo(
-    () => new MeshStandardMaterial({ color: "#b9b0a0", roughness: 0.95, metalness: 0 }),
-    [],
-  );
-  const wood = useMemo(
-    () => new MeshStandardMaterial({ color: "#5b3f27", roughness: 0.7, metalness: 0 }),
-    [],
-  );
+  const sandStone = useMemo(() => {
+    const t = getVillaTextures();
+    const m = new MeshStandardMaterial({ color: "#b9b0a0", roughness: 0.95, metalness: 0 });
+    if (t) {
+      const map = t.sand.clone();
+      map.needsUpdate = true;
+      map.repeat.set(60, 60);
+      m.map = map;
+    }
+    return m;
+  }, []);
+  const wood = useMemo(() => {
+    const t = getVillaTextures();
+    const m = new MeshStandardMaterial({ color: "#5b3f27", roughness: 0.7, metalness: 0 });
+    if (t) {
+      const map = t.wood.clone();
+      map.needsUpdate = true;
+      map.repeat.set(10, 3);
+      m.map = map;
+    }
+    return m;
+  }, []);
   const coping = useMemo(
     () => new MeshStandardMaterial({ color: "#d8d2c6", roughness: 0.8, metalness: 0 }),
     [],
