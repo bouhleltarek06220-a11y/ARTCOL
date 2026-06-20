@@ -1,16 +1,15 @@
+import { VillaExperience } from "@/components/villa/VillaExperience";
+
 export const metadata = {
   title: "AMAVYA · Villa Galerie",
   description:
-    "Villa d'architecte transformée en galerie d'art contemporain — visite immersive 3D, coucher de soleil, œuvres, sculptures et supercars.",
+    "Villa d'architecte transformée en galerie d'art contemporain — visite immersive 3D temps réel.",
 };
 
 export default function Home() {
   return (
-    <iframe
-      src="/villa.html"
-      title="AMAVYA — Villa Galerie"
-      className="fixed inset-0 h-full w-full border-0"
-      allow="pointer-lock; fullscreen; gyroscope; accelerometer"
-    />
+    <main className="relative h-dvh w-full overflow-hidden bg-[#0a0e14]">
+      <VillaExperience />
+    </main>
   );
 }
