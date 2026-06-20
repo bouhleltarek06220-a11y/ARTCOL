@@ -5,17 +5,17 @@ import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import { Group, type Mesh } from "three";
 
 /**
- * Hôte / gardien de la villa-galerie : vrai modèle 3D rigué (RobotExpressive,
- * three.js — CC) avec animation d'attente « Idle ». Cliquable (raycast
- * centre-écran géré par le <Player/>) pour lancer la conversation : le groupe
- * porte `userData.interactive = "guide"`.
+ * Hôte de la villa-galerie : vrai modèle 3D humain rigué (Soldier, three.js —
+ * CC) avec animation d'attente « Idle ». Cliquable (raycast centre-écran géré
+ * par le <Player/>) pour lancer la conversation : le groupe porte
+ * `userData.interactive = "guide"`.
  */
-const MODEL = "/models/RobotExpressive.glb";
+const MODEL = "/models/Soldier.glb";
 
 export function CharacterGuide({
   position = [-3.4, 0, 1.2],
   rotation = 0.2,
-  scale = 0.42,
+  scale = 1,
 }: {
   position?: [number, number, number];
   rotation?: number;
@@ -36,9 +36,10 @@ export function CharacterGuide({
     });
   }, [scene]);
 
-  // Animation d'attente en boucle (respiration / vie).
+  // Animation d'attente en boucle (« Idle », sinon la 1re disponible).
   useEffect(() => {
-    const idle = actions["Idle"];
+    const names = Object.keys(actions);
+    const idle = actions["Idle"] ?? (names.length ? actions[names[0]] : undefined);
     idle?.reset().fadeIn(0.4).play();
     return () => {
       idle?.fadeOut(0.2);
