@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SENSOR — Démonstration du widget</title>
+    <style>
+      :root {
+        --dark: #080b10;
+        --lime: #c8f53a;
+        --violet: #7b61ff;
+        --texte: #e8edf2;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(1200px 600px at 80% -10%, #11203a 0%, var(--dark) 55%);
+        color: var(--texte);
+        min-height: 100vh;
+      }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 120px; }
+      h1 { font-size: 2.2rem; margin-bottom: 4px; }
+      h1 span { color: var(--lime); }
+      .lead { opacity: 0.75; font-size: 1.05rem; line-height: 1.5; }
+      .card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin-top: 28px;
+      }
+      code, pre {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 0.85rem;
+      }
+      code { padding: 2px 6px; color: var(--lime); }
+      pre { padding: 14px; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.08); }
+      .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+      label { font-size: 0.85rem; opacity: 0.8; }
+      input {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--texte);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+      }
+      button.charger {
+        background: var(--lime);
+        color: var(--dark);
+        border: none;
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .hint { font-size: 0.8rem; opacity: 0.6; margin-top: 16px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>SEN<span>SOR</span> — démo</h1>
+      <p class="lead">
+        Cette page charge le widget de chat embarquable. Renseignez l'URL de votre API et
+        l'identifiant du client, puis cliquez sur « Charger le widget ». La bulle de chat
+        apparaît en bas à droite.
+      </p>
+
+      <div class="card">
+        <strong>1. Paramètres du widget</strong>
+        <div class="row">
+          <label>API :</label>
+          <input id="api" value="http://localhost:8000" size="28" />
+          <label>Client :</label>
+          <input id="client" value="demo" size="14" />
+          <button class="charger" onclick="chargerWidget()">Charger le widget</button>
+        </div>
+        <p class="hint">
+          Astuce : démarrez l'API avec <code>sensor serve</code> et créez le client
+          <code>demo</code> avec <code>sensor init-client --id demo --nom "Démo"</code>,
+          puis ingérez un document.
+        </p>
+      </div>
+
+      <div class="card">
+        <strong>2. Intégration sur un vrai site</strong>
+        <p class="lead" style="font-size: 0.95rem">
+          Une seule balise <code>&lt;script&gt;</code> à coller avant
+          <code>&lt;/body&gt;</code> :
+        </p>
+        <pre>&lt;script
+  src="https://votre-api/sensor-widget.js"
+  data-client="<span id="ex-client">demo</span>"
+  data-api="<span id="ex-api">http://localhost:8000</span>"&gt;
+&lt;/script&gt;</pre>
+      </div>
+
+      <p class="hint">
+        Transparence AI Act : le widget indique en permanence qu'il s'agit d'un assistant IA.
+      </p>
+    </div>
+
+    <script>
+      function chargerWidget() {
+        var api = document.getElementById("api").value.trim().replace(/\/$/, "");
+        var client = document.getElementById("client").value.trim();
+        document.getElementById("ex-client").textContent = client;
+        document.getElementById("ex-api").textContent = api;
+        // Retire un éventuel widget déjà chargé.
+        var ancien = document.getElementById("sensor-loader");
+        if (ancien) ancien.remove();
+        document.querySelectorAll(".sensor-bulle, .sensor-panneau, #sensor-styles").forEach(function (n) {
+          n.remove();
+        });
+        var s = document.createElement("script");
+        s.id = "sensor-loader";
+        s.src = api + "/sensor-widget.js";
+        s.setAttribute("data-client", client);
+        s.setAttribute("data-api", api);
+        // En local, le widget est servi à côté de la démo : on tente d'abord le fichier local.
+        s.onerror = function () {
+          s.src = "sensor-widget.js";
+          document.body.appendChild(s.cloneNode(true));
+        };
+        document.body.appendChild(s);
+      }
+    </script>
+    <!-- Pour tester sans API distante, le widget local est aussi disponible : -->
+    <script
+      src="sensor-widget.js"
+      data-client="demo"
+      data-api="http://localhost:8000"
+    ></script>
+  </body>
+</html>

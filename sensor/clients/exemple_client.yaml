@@ -1,0 +1,79 @@
+# ============================================================================
+# SENSOR — Modèle de configuration client (un fichier YAML par tenant)
+#
+# Copier ce fichier en `clients/<id_client>.yaml` (ou utiliser
+# `sensor init-client --id <id> --nom "<Nom>"`), puis personnaliser.
+# AUCUNE donnée réelle ici : ce n'est qu'un modèle commenté.
+# ============================================================================
+
+# Identifiant unique du client (slug alphanumérique, tirets/underscores autorisés).
+# Doit correspondre au nom du fichier (ex: clients/hotel-azur.yaml -> id_client: hotel-azur).
+id_client: exemple_client
+
+# Nom affiché de l'entreprise (utilisé dans le prompt et le widget).
+nom_entreprise: Entreprise Exemple
+
+# Langue principale des réponses (fr, en, ...).
+langue: fr
+
+# Instructions de style appliquées aux réponses générées.
+ton: professionnel, chaleureux et concis
+
+# (Optionnel) Liste de sujets pour borner le périmètre. Vide = pas de restriction explicite.
+# Toute question hors de ces sujets sera traitée comme hors-scope.
+sujets_autorises: []
+#   - horaires et réservations
+#   - tarifs et prestations
+#   - conditions générales
+
+# Message affiché à l'ouverture du widget.
+message_accueil: "Bonjour ! Je suis l'assistant IA de l'entreprise. Comment puis-je vous aider ?"
+
+# Texte de repli quand l'information n'est pas trouvée dans la base (zéro hallucination).
+message_hors_scope: >-
+  Je n'ai pas trouvé l'information dans notre documentation et je préfère ne pas
+  inventer de réponse.
+
+# Action proposée à l'utilisateur en cas de repli (contact humain).
+action_repli:
+  label: "Contacter notre équipe"
+  email: contact@exemple.fr        # À PERSONNALISER (ou laisser vide: null)
+  url: null                        # ex: https://exemple.fr/contact
+
+# Couleurs du widget embarquable (thème par défaut : sombre / néon AMAVYA).
+couleurs_widget:
+  primaire: "#c8f53a"
+  fond: "#080b10"
+  texte: "#e8edf2"
+  secondaire: "#7b61ff"
+
+# --- Récupération (RAG) ---
+# Nombre de passages récupérés par question.
+top_k: 5
+# Seuil de similarité minimal (0..1). En dessous, la question est jugée hors-scope.
+# Plus le seuil est élevé, plus l'assistant est prudent (refuse plus souvent).
+seuil_similarite_min: 0.35
+# Recherche hybride (sémantique + complément mot-clé). Utile pour les noms propres/réf.
+recherche_hybride: false
+
+# --- Conformité / RGPD ---
+# Durée de conservation des conversations avant purge automatique (jours).
+retention_jours_conversations: 90
+
+# --- Modèles Claude ---
+modele_reponse: claude-sonnet-4-6   # réponses (qualité/fidélité)
+modele_leger: claude-haiku-4-5      # tâches légères (réservé usage futur)
+max_tokens_reponse: 1024
+
+# --- Infrastructure ---
+# Embeddings : "local" (souverain, sentence-transformers) ou "api" (Voyage AI, clé .env).
+embedder: local
+# (Optionnel) surcharge du modèle d'embeddings ; sinon défaut du backend choisi.
+embedder_modele: null
+# Base vectorielle : "sqlite" (local, simple) ou "supabase" (pgvector, mutualisé).
+vectorstore: sqlite
+
+# Domaines autorisés à appeler l'API pour ce client (CORS). Vide = aucun ajouté.
+domaines_autorises: []
+#   - https://www.exemple.fr
+#   - https://exemple.fr
