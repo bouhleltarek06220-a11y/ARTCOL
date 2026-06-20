@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { ContactShadows, Environment } from "@react-three/drei";
+import { Suspense, useEffect, useMemo } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { ContactShadows, Environment, OrbitControls } from "@react-three/drei";
 import { ACESFilmicToneMapping } from "three";
 import { useVilla } from "./store";
 import { Lighting } from "./core/Lighting";
@@ -14,7 +14,8 @@ import { Hud } from "./ui/Hud";
 import { ConversationPanel } from "./ui/ConversationPanel";
 import { CharacterGuide } from "./character/CharacterGuide";
 import { VillaFurniture } from "./world/VillaFurniture";
-import { VillaKitchenDining } from "./world/VillaKitchenDining";
+import { VillaDining } from "./world/VillaDining";
+import { VillaRooms } from "./world/VillaRooms";
 import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
@@ -22,15 +23,34 @@ import { CanvasLoader } from "@/components/3d/CanvasLoader";
 import { useHasWebGL } from "@/hooks/useHasWebGL";
 import { SceneFallback } from "@/components/ui/SceneFallback";
 
+/** Vue de contrôle (dev) : `?cam=x,y,z,tx,ty,tz` place une caméra orbitale
+ *  fixe pour inspecter une pièce en capture. Inerte en usage normal. */
+function DebugView({ spec }: { spec: string }) {
+  const { camera } = useThree();
+  const n = useMemo(() => spec.split(",").map(Number), [spec]);
+  useEffect(() => {
+    if (n.length >= 6) {
+      camera.position.set(n[0], n[1], n[2]);
+      camera.lookAt(n[3], n[4], n[5]);
+    }
+  }, [camera, n]);
+  return (
+    <OrbitControls makeDefault target={n.length >= 6 ? [n[3], n[4], n[5]] : [0, 2, 0]} />
+  );
+}
+
 /**
- * Point d'entrée de l'expérience villa-galerie (Bloc 1 — fondation).
- * Assemble le monde 3D, l'éclairage, la caméra d'intro / le joueur FP et le
- * post-traitement, plus les couches UI (intro AMAVYA + HUD). Le tout est
- * piloté par le store Zustand (phase de l'expérience).
+ * Point d'entrée de l'expérience villa-galerie. Assemble le monde 3D,
+ * l'éclairage, la caméra d'intro / le joueur FP et le post-traitement, plus les
+ * couches UI (intro AMAVYA + HUD). Piloté par le store Zustand.
  */
 export function VillaExperience() {
   const hasWebGL = useHasWebGL();
   const phase = useVilla((s) => s.phase);
+  const debugCam = useMemo(
+    () => (typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("cam") : null),
+    [],
+  );
 
   if (hasWebGL === null) {
     return <div className="h-full w-full bg-[#0a0e14]" aria-hidden />;
@@ -70,8 +90,9 @@ export function VillaExperience() {
           <VillaArchitecture />
           <VillaInterior />
           <VillaGrounds />
+          <VillaRooms />
           <VillaFurniture />
-          <VillaKitchenDining />
+          <VillaDining />
           <CharacterGuide position={[-3.4, 0, 1.2]} rotation={0.2} />
 
           <ContactShadows
@@ -85,14 +106,24 @@ export function VillaExperience() {
           />
         </Suspense>
 
-        <CameraRig />
-        {phase !== "intro" && <Player />}
+        {debugCam ? (
+          <DebugView spec={debugCam} />
+        ) : (
+          <>
+            <CameraRig />
+            {phase !== "intro" && <Player />}
+          </>
+        )}
         <PostFX />
       </Canvas>
 
-      <IntroScreen />
-      <Hud />
-      <ConversationPanel />
+      {!debugCam && (
+        <>
+          <IntroScreen />
+          <Hud />
+          <ConversationPanel />
+        </>
+      )}
     </>
   );
 }

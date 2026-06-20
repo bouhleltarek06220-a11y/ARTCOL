@@ -69,9 +69,16 @@ export function VillaArchitecture() {
       <mesh material={concrete} position={[0, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
         <boxGeometry args={[22.4, WALL_H, 0.4]} />
       </mesh>
-      {/* Mur gauche */}
-      <mesh material={concrete} position={[LEFT_X, WALL_H / 2, -3]} castShadow receiveShadow>
-        <boxGeometry args={[0.4, WALL_H, 11.4]} />
+      {/* Mur gauche : 2 segments + linteau = OUVERTURE de porte vers la cuisine
+          (z ≈ -1.5), sans toucher l'œuvre du mur gauche (z = -3). */}
+      <mesh material={concrete} position={[LEFT_X, WALL_H / 2, -5.5]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 6.4]} />
+      </mesh>
+      <mesh material={concrete} position={[LEFT_X, WALL_H / 2, 1.0]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 3.4]} />
+      </mesh>
+      <mesh material={concrete} position={[LEFT_X, 5.0, -1.5]} castShadow>
+        <boxGeometry args={[0.4, 4.8, 1.6]} />
       </mesh>
       {/* Mur droit */}
       <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, -3]} castShadow receiveShadow>

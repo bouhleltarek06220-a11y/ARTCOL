@@ -18,6 +18,16 @@ import { useVilla } from "../store";
 const EYE = 1.65;
 const SPEED = 4.8;
 
+/** Régions navigables (XZ). Le déplacement est bloqué hors de ces boîtes, ce
+ *  qui crée de vraies pièces reliées par des portes (ex : hall ↔ cuisine). */
+const ROOMS: [number, number, number, number][] = [
+  [-10.6, 10.6, -8, 13], // hall + terrasse
+  [-11.6, -10.4, -2.3, -0.7], // embrasure de la porte cuisine
+  [-17.4, -11.0, -5.4, 0.4], // cuisine
+];
+const inAny = (x: number, z: number) =>
+  ROOMS.some((b) => x >= b[0] && x <= b[1] && z >= b[2] && z <= b[3]);
+
 export function Player() {
   const { camera, scene, gl } = useThree();
   const controls = useRef<PLC>(null);
@@ -94,23 +104,37 @@ export function Player() {
     dir.normalize();
     right.crossVectors(dir, up).normalize();
 
+    const px = camera.position.x;
+    const pz = camera.position.z;
+
     const k = keys.current;
     if (k.f) camera.position.addScaledVector(dir, step);
     if (k.b) camera.position.addScaledVector(dir, -step);
     if (k.r) camera.position.addScaledVector(right, step);
     if (k.l) camera.position.addScaledVector(right, -step);
 
-    const p = camera.position;
-    p.x = Math.max(-10.4, Math.min(10.4, p.x));
-    p.z = Math.max(-8, Math.min(13, p.z));
-    p.y = EYE;
+    // Collisions : on reste dans les pièces, glissement le long des murs.
+    let nx = camera.position.x;
+    let nz = camera.position.z;
+    if (!inAny(nx, nz)) {
+      if (inAny(nx, pz)) nz = pz;
+      else if (inAny(px, nz)) nx = px;
+      else {
+        nx = px;
+        nz = pz;
+      }
+    }
+    camera.position.x = nx;
+    camera.position.z = nz;
+    camera.position.y = EYE;
 
     let z = "Galerie principale";
-    if (p.z > 5) z = "Terrasse & piscine";
-    else if (p.z > -2 && Math.abs(p.x) < 3.5) z = "Hall principal";
-    else if (p.x < -6) z = "Galerie · grand format";
-    else if (p.x > 6) z = "Escalier & mezzanine";
-    else if (p.z < -4) z = "Galerie · collection";
+    if (nx < -11) z = "Cuisine";
+    else if (nz > 5) z = "Terrasse & piscine";
+    else if (nz > -2 && Math.abs(nx) < 3.5) z = "Hall principal";
+    else if (nx < -6) z = "Salle à manger";
+    else if (nx > 6) z = "Escalier & mezzanine";
+    else if (nz < -4) z = "Galerie · collection";
     if (z !== zoneRef.current) {
       zoneRef.current = z;
       setZone(z);
