@@ -206,6 +206,10 @@ Jeu : `react-three-rapier`, `react-postprocessing`, `react-spring`, `zustand`,
 | « particules / étincelles / fumée / poussière magique » | **three-nebula** (ou points GPU custom) |
 | « matière holographique / dégradé / couches » | **lamina** → en pratique **CSM** (lamina archivé) |
 | « un modèle 3D tout prêt » | **glTF-Sample-Models** / `glTF-Sample-Assets` (Khronos) |
+| « du son / musique / bruitage / ping au survol » | **howler.js** |
+| « séquence caméra scriptée / timeline éditable » | **theatre** (`@theatre/core`+`studio`) + **gsap** |
+| « optimiser / compresser un `.glb` » | **gltf-pipeline** (DRACO/meshopt) avant `useGLTF` |
+| « un chatbot / agent IA / RAG / modèle local » | famille IA : **ollama**, **anything-llm**, **llmware**, **chatbot** (hors sites 3D) |
 
 ## 16. VEILLE DES FORKS (autonome)
 
