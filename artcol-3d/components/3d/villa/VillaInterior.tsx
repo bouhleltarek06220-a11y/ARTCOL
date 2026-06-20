@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { MeshStandardMaterial, DoubleSide } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
+import { ARTWORKS, type ArtworkMeta } from "@/components/villa/world/artworks";
 
 /**
  * Intérieur de la villa transformée en galerie : hall double hauteur, sol
@@ -120,15 +121,16 @@ export function VillaInterior() {
 
       {/* ===== ŒUVRES D'ART (grandes toiles + cadre + spot musée + cartel) ===== */}
       {/* Mur du fond (z = -8.3, face +z) */}
-      <Artwork position={[-6, 2.6, -8.28]} color={ART[0]} frameMat={frameMat} />
-      <Artwork position={[0, 2.6, -8.28]} color={ART[1]} frameMat={frameMat} wide />
-      <Artwork position={[6, 2.6, -8.28]} color={ART[2]} frameMat={frameMat} />
+      <Artwork position={[-6, 2.6, -8.28]} color={ART[0]} frameMat={frameMat} meta={ARTWORKS["art-1"]} />
+      <Artwork position={[0, 2.6, -8.28]} color={ART[1]} frameMat={frameMat} meta={ARTWORKS["art-2"]} wide />
+      <Artwork position={[6, 2.6, -8.28]} color={ART[2]} frameMat={frameMat} meta={ARTWORKS["art-3"]} />
       {/* Mur gauche (x = -10.8, face +x) — décalée pour dégager la porte cuisine */}
       <Artwork
         position={[-10.78, 2.6, -5.5]}
         rotation={[0, Math.PI / 2, 0]}
         color={ART[3]}
         frameMat={frameMat}
+        meta={ARTWORKS["art-4"]}
         wide
       />
       {/* Mur droit (x = 10.8, face -x) — décalée pour dégager la porte bibliothèque */}
@@ -137,6 +139,7 @@ export function VillaInterior() {
         rotation={[0, -Math.PI / 2, 0]}
         color={ART[4]}
         frameMat={frameMat}
+        meta={ARTWORKS["art-5"]}
       />
 
       {/* Lumière chaude d'ambiance dans le hall */}
@@ -152,18 +155,26 @@ function Artwork({
   rotation = [0, 0, 0],
   color,
   frameMat,
+  meta,
   wide = false,
 }: {
   position: [number, number, number];
   rotation?: [number, number, number];
   color: string;
   frameMat: MeshStandardMaterial;
+  meta: ArtworkMeta;
   wide?: boolean;
 }) {
   const w = wide ? 4.2 : 2.4;
   const h = 2.8;
   return (
-    <group position={position} rotation={rotation}>
+    // `interactive: "artwork"` + `meta` sont lus par le raycast du <Player/>
+    // (visée au centre de l'écran) pour ouvrir le cartel et cadrer l'œuvre.
+    <group
+      position={position}
+      rotation={rotation}
+      userData={{ interactive: "artwork", meta, halfWidth: w / 2 }}
+    >
       {/* Cadre 3D en relief */}
       <mesh material={frameMat} castShadow>
         <boxGeometry args={[w + 0.2, h + 0.2, 0.12]} />

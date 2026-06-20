@@ -3,20 +3,23 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PointerLockControls } from "@react-three/drei";
-import { Object3D, Raycaster, Vector2, Vector3 } from "three";
+import { Object3D, Quaternion, Raycaster, Vector2, Vector3 } from "three";
 import type { PointerLockControls as PLC } from "three-stdlib";
-import { useVilla } from "../store";
+import { useVilla, type Aim } from "../store";
+import type { ArtworkMeta } from "../world/artworks";
 
 /**
  * Joueur à la première personne : marche ZQSD/WASD + regard souris (pointer
  * lock), bornes de la propriété, détection de zone (HUD), et interaction au
- * centre de l'écran : viser l'hôte puis cliquer lance la conversation.
+ * centre de l'écran : viser l'hôte (→ conversation) ou une œuvre (→ zoom
+ * cinématique + cartel). Le réticule du HUD réagit à ce qui est visé.
  *
- * Monté pour les phases « visiting » et « talking » ; le déplacement n'est
- * actif qu'en « visiting » (gelé pendant la conversation et l'inspection).
+ * Monté pour les phases « visiting », « talking » et « inspecting » ; le
+ * déplacement n'est actif qu'en « visiting » (gelé pendant chat / inspection).
  */
 const EYE = 1.65;
 const SPEED = 4.8;
+const REACH = 6; // portée d'interaction / de visée (m)
 
 /** Régions navigables (XZ). Le déplacement est bloqué hors de ces boîtes, ce
  *  qui crée de vraies pièces reliées par des portes (ex : hall ↔ cuisine). */
@@ -32,12 +35,35 @@ const ROOMS: [number, number, number, number][] = [
 const inAny = (x: number, z: number) =>
   ROOMS.some((b) => x >= b[0] && x <= b[1] && z >= b[2] && z <= b[3]);
 
+/** Premier ancêtre interactif rencontré sur le rayon (centre écran), à portée. */
+function pickInteractive(
+  ray: Raycaster,
+  center: Vector2,
+  camera: Object3D,
+  children: Object3D[],
+): { type: Aim; object: Object3D } | null {
+  ray.setFromCamera(center, camera as never);
+  const hits = ray.intersectObjects(children, true);
+  for (const h of hits) {
+    if (h.distance > REACH) break;
+    let o: Object3D | null = h.object;
+    while (o) {
+      const it = o.userData?.interactive as Aim | undefined;
+      if (it === "guide" || it === "artwork") return { type: it, object: o };
+      o = o.parent;
+    }
+  }
+  return null;
+}
+
 export function Player() {
   const { camera, scene, gl } = useThree();
   const controls = useRef<PLC>(null);
   const registerLock = useVilla((s) => s.registerLock);
   const setZone = useVilla((s) => s.setZone);
   const setPhase = useVilla((s) => s.setPhase);
+  const setAim = useVilla((s) => s.setAim);
+  const inspect = useVilla((s) => s.inspect);
 
   const keys = useRef({ f: false, b: false, l: false, r: false });
   const dir = useMemo(() => new Vector3(), []);
@@ -45,6 +71,21 @@ export function Player() {
   const up = useMemo(() => new Vector3(0, 1, 0), []);
   const ray = useMemo(() => new Raycaster(), []);
   const center = useMemo(() => new Vector2(0, 0), []);
+  const dummy = useMemo(() => new Object3D(), []);
+  // Scratch réutilisés (pas d'allocation dans useFrame / le clic).
+  const tmpPos = useMemo(() => new Vector3(), []);
+  const tmpQuat = useMemo(() => new Quaternion(), []);
+  const tmpNormal = useMemo(() => new Vector3(), []);
+
+  // Tween caméra pour le zoom d'inspection (vers l'œuvre, puis retour).
+  const tween = useRef({
+    mode: "none" as "none" | "in",
+    toPos: new Vector3(),
+    toQuat: new Quaternion(),
+    savedPos: new Vector3(),
+    savedQuat: new Quaternion(),
+  });
+  const prevPhase = useRef(useVilla.getState().phase);
 
   useEffect(() => {
     camera.position.set(-6.5, EYE, 11);
@@ -68,39 +109,78 @@ export function Player() {
     };
   }, [camera]);
 
-  // Verrouillage du pointeur exposé à l'UI (boutons « Entrer » / fermeture chat).
+  // Verrouillage du pointeur exposé à l'UI (boutons « Entrer » / fermetures).
   useEffect(() => {
     registerLock(() => controls.current?.lock());
   }, [registerLock]);
 
-  // Interaction au centre de l'écran : viser l'hôte et cliquer → conversation.
+  // Interaction au centre de l'écran : viser l'hôte (→ parler) ou une œuvre
+  // (→ inspection avec cadrage cinématique).
   useEffect(() => {
     const onClick = () => {
       if (useVilla.getState().phase !== "visiting") return;
-      ray.setFromCamera(center, camera);
-      const hits = ray.intersectObjects(scene.children, true);
-      for (const h of hits) {
-        if (h.distance > 6) break;
-        let o: Object3D | null = h.object;
-        while (o) {
-          if (o.userData?.interactive === "guide") {
-            setPhase("talking");
-            controls.current?.unlock();
-            return;
-          }
-          o = o.parent;
-        }
+      const hit = pickInteractive(ray, center, camera, scene.children);
+      if (!hit) return;
+
+      if (hit.type === "guide") {
+        setPhase("talking");
+        controls.current?.unlock();
+        return;
       }
+
+      // Œuvre : on mémorise la vue de marche, puis on cadre l'œuvre de face.
+      const o = hit.object;
+      const meta = o.userData.meta as ArtworkMeta;
+      const halfW = (o.userData.halfWidth as number) ?? 1.2;
+      o.getWorldPosition(tmpPos);
+      o.getWorldQuaternion(tmpQuat);
+      tmpNormal.set(0, 0, 1).applyQuaternion(tmpQuat).normalize();
+
+      const tw = tween.current;
+      tw.savedPos.copy(camera.position);
+      tw.savedQuat.copy(camera.quaternion);
+      tw.toPos.copy(tmpPos).addScaledVector(tmpNormal, 2.2 + halfW * 1.15);
+      tw.toPos.y = tmpPos.y; // vue horizontale, centrée sur l'œuvre
+      dummy.position.copy(tw.toPos);
+      dummy.lookAt(tmpPos);
+      tw.toQuat.copy(dummy.quaternion);
+      tw.mode = "in";
+
+      inspect(meta);
+      controls.current?.unlock();
     };
     const el = gl.domElement;
     el.addEventListener("click", onClick);
     return () => el.removeEventListener("click", onClick);
-  }, [camera, scene, gl, ray, center, setPhase]);
+  }, [camera, scene, gl, ray, center, dummy, tmpPos, tmpQuat, tmpNormal, setPhase, inspect]);
 
   const zoneRef = useRef("");
+  const aimRef = useRef<Aim>(null);
+  const tick = useRef(0);
+
   useFrame((_, delta) => {
+    const phase = useVilla.getState().phase;
+    const tw = tween.current;
+
+    // Sortie d'inspection : on restaure la vue de marche (cut net — compatible
+    // avec le reverrouillage pointeur qui doit suivre le geste de fermeture).
+    if (prevPhase.current === "inspecting" && phase !== "inspecting") {
+      camera.position.copy(tw.savedPos);
+      camera.quaternion.copy(tw.savedQuat);
+      tw.mode = "none";
+    }
+    prevPhase.current = phase;
+
+    // Zoom cinématique vers l'œuvre pendant l'inspection.
+    if (tw.mode === "in") {
+      const k = Math.min(1, delta * 3.4);
+      camera.position.lerp(tw.toPos, k);
+      camera.quaternion.slerp(tw.toQuat, k);
+      return;
+    }
+
     // Déplacement uniquement en visite (gelé pendant chat / inspection).
-    if (useVilla.getState().phase !== "visiting") return;
+    if (phase !== "visiting") return;
 
     const step = SPEED * delta;
     camera.getWorldDirection(dir);
@@ -145,13 +225,24 @@ export function Player() {
       zoneRef.current = z;
       setZone(z);
     }
+
+    // Visée du réticule (throttlée pour limiter le coût du raycast).
+    tick.current++;
+    if (tick.current % 9 === 0) {
+      const aim = pickInteractive(ray, center, camera, scene.children)?.type ?? null;
+      if (aim !== aimRef.current) {
+        aimRef.current = aim;
+        setAim(aim);
+      }
+    }
   });
 
   return (
     <PointerLockControls
       ref={controls}
       onUnlock={() => {
-        // Esc en visite → retour à l'accueil ; en conversation, on ne touche à rien.
+        // Esc en visite → retour à l'accueil ; en conversation/inspection, on
+        // ne touche à rien (la fermeture du panneau gère le retour).
         if (useVilla.getState().phase === "visiting") setPhase("intro");
       }}
     />
