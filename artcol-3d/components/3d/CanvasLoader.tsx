@@ -4,8 +4,8 @@ import { Html, useProgress } from "@react-three/drei";
 
 /**
  * Fallback affiché *à l'intérieur* du Canvas pendant le chargement
- * asynchrone (modèles, textures, environnements) via <Suspense>.
- * Utilise `useProgress` de drei pour afficher l'avancement réel.
+ * asynchrone du modèle (via <Suspense>). Purement visuel, sans texte :
+ * une fine barre de progression qui se remplit selon l'avancement réel.
  */
 export function CanvasLoader() {
   const { progress } = useProgress();
@@ -13,12 +13,17 @@ export function CanvasLoader() {
   return (
     <Html center>
       <div
-        role="status"
-        aria-live="polite"
-        className="flex flex-col items-center gap-2 text-sm text-white/80"
+        role="progressbar"
+        aria-label="Chargement de la scène 3D"
+        aria-valuenow={Math.round(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        className="h-[3px] w-40 overflow-hidden rounded-full bg-white/15"
       >
-        <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-        <span>Chargement de la scène… {Math.round(progress)}%</span>
+        <div
+          className="h-full rounded-full bg-white/80 transition-[width] duration-200 ease-out"
+          style={{ width: `${progress}%` }}
+        />
       </div>
     </Html>
   );
