@@ -16,8 +16,12 @@ const easeInOutCubic = (x: number) =>
  */
 export function CinematicRig({
   target = [0, 3.4, -2],
+  skip = false,
+  onDone,
 }: {
   target?: [number, number, number];
+  skip?: boolean;
+  onDone?: () => void;
 }) {
   const { camera } = useThree();
   const reduce = usePrefersReducedMotion();
@@ -30,10 +34,11 @@ export function CinematicRig({
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (reduce) {
+    if (reduce || skip) {
       camera.position.copy(hero);
       camera.lookAt(look);
       setDone(true);
+      onDone?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -43,7 +48,10 @@ export function CinematicRig({
     t.current = Math.min(1, t.current + delta / 6.5);
     camera.position.lerpVectors(start, hero, easeInOutCubic(t.current));
     camera.lookAt(look);
-    if (t.current >= 1) setDone(true);
+    if (t.current >= 1) {
+      setDone(true);
+      onDone?.();
+    }
   });
 
   if (!done) return null;
