@@ -1,21 +1,32 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  MeshStandardMaterial,
-  MeshPhysicalMaterial,
-  DoubleSide,
-} from "three";
+import { MeshStandardMaterial, DoubleSide } from "three";
 
 /**
- * Architecture de la villa contemporaine (béton, pierre naturelle, verre,
- * métal sombre). Volumes épurés, grands débords, immenses baies vitrées avec
- * lueur intérieure chaude. Modélisée en primitives, pensée pour un rendu
- * « golden hour » premium.
+ * Coque de la villa contemporaine — pensée pour être VISITÉE de l'intérieur :
+ * murs périphériques (béton, double face), grande baie vitrée en façade avec
+ * une OUVERTURE d'entrée, toit, mur-lame en pierre. L'intérieur (sol marbre,
+ * mezzanine, escalier, œuvres…) est dans <VillaInterior/>.
+ *
+ * Repère : façade vitrée en z = +2.5, mur arrière en z = -8.5, double hauteur.
  */
+const FRONT_Z = 2.5;
+const BACK_Z = -8.5;
+const LEFT_X = -11;
+const RIGHT_X = 11;
+const WALL_H = 7.4;
+const ROOF_Y = 7.5;
+
 export function VillaArchitecture() {
   const concrete = useMemo(
-    () => new MeshStandardMaterial({ color: "#c7c2b8", roughness: 0.92, metalness: 0 }),
+    () =>
+      new MeshStandardMaterial({
+        color: "#c5c0b6",
+        roughness: 0.92,
+        metalness: 0,
+        side: DoubleSide,
+      }),
     [],
   );
   const stone = useMemo(
@@ -26,11 +37,10 @@ export function VillaArchitecture() {
     () => new MeshStandardMaterial({ color: "#1b1c1e", roughness: 0.4, metalness: 0.8 }),
     [],
   );
-  const woodSoffit = useMemo(
-    () => new MeshStandardMaterial({ color: "#6e4e30", roughness: 0.6, metalness: 0 }),
+  const wood = useMemo(
+    () => new MeshStandardMaterial({ color: "#5b3f27", roughness: 0.6, metalness: 0 }),
     [],
   );
-  // Verre teinté réfléchissant : capte le ciel coucher de soleil.
   const glass = useMemo(
     () =>
       new MeshStandardMaterial({
@@ -39,96 +49,66 @@ export function VillaArchitecture() {
         metalness: 0.1,
         envMapIntensity: 1.6,
         transparent: true,
-        opacity: 0.38,
+        opacity: 0.32,
         side: DoubleSide,
-      }),
-    [],
-  );
-  // Intérieur chaud visible derrière les vitres.
-  const interiorGlow = useMemo(
-    () =>
-      new MeshStandardMaterial({
-        color: "#241708",
-        emissive: "#ffb866",
-        emissiveIntensity: 1.5,
-        toneMapped: false,
       }),
     [],
   );
 
   return (
     <group>
-      {/* ===== REZ-DE-CHAUSSÉE (long volume béton) ===== */}
-      <mesh material={concrete} position={[0, 1.7, -3]} castShadow receiveShadow>
-        <boxGeometry args={[22, 3.4, 11]} />
+      {/* ===== MURS PÉRIPHÉRIQUES (béton, double face) ===== */}
+      {/* Mur arrière */}
+      <mesh material={concrete} position={[0, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
+        <boxGeometry args={[22.4, WALL_H, 0.4]} />
       </mesh>
-      {/* Toit débordant du rez */}
-      <mesh material={concrete} position={[0, 3.5, -3]} castShadow>
-        <boxGeometry args={[23.4, 0.3, 12.4]} />
+      {/* Mur gauche */}
+      <mesh material={concrete} position={[LEFT_X, WALL_H / 2, -3]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 11.4]} />
+      </mesh>
+      {/* Mur droit */}
+      <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, -3]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, WALL_H, 11.4]} />
+      </mesh>
+      {/* Bandeau béton au-dessus de la façade (linteau) */}
+      <mesh material={concrete} position={[0, 7.0, FRONT_Z]} castShadow>
+        <boxGeometry args={[22.4, 0.9, 0.5]} />
       </mesh>
 
-      {/* Intérieur lumineux + grande baie vitrée (façade piscine, z = +2.5) */}
-      <mesh material={interiorGlow} position={[1, 1.7, 2.46]}>
-        <planeGeometry args={[15, 2.8]} />
+      {/* ===== TOIT (dalle débordante) ===== */}
+      <mesh material={concrete} position={[0, ROOF_Y, -3]} castShadow>
+        <boxGeometry args={[23.6, 0.3, 12.4]} />
       </mesh>
-      <mesh material={glass} position={[1, 1.7, 2.55]}>
-        <planeGeometry args={[15.4, 3]} />
+
+      {/* ===== FAÇADE VITRÉE avec OUVERTURE d'entrée (vers x = -6.5) ===== */}
+      {/* Panneau gauche (de x=-11 à x=-7.7) */}
+      <mesh material={glass} position={[-9.35, 3.35, FRONT_Z]}>
+        <planeGeometry args={[3.3, 6.5]} />
       </mesh>
-      {/* Meneaux verticaux (métal sombre) */}
-      {[-6.5, -3, 0.5, 4, 7.5].map((x) => (
-        <mesh key={x} material={darkMetal} position={[x, 1.7, 2.6]}>
-          <boxGeometry args={[0.1, 3, 0.1]} />
+      {/* Panneau droit (de x=-5.3 à x=11) */}
+      <mesh material={glass} position={[2.85, 3.35, FRONT_Z]}>
+        <planeGeometry args={[16.3, 6.5]} />
+      </mesh>
+      {/* Meneaux verticaux (métal) */}
+      {[-9.35, -3, 0.5, 4, 7.5, 10.3].map((x) => (
+        <mesh key={x} material={darkMetal} position={[x, 3.35, FRONT_Z + 0.04]}>
+          <boxGeometry args={[0.1, 6.5, 0.1]} />
         </mesh>
       ))}
 
-      {/* ===== ÉTAGE (volume en porte-à-faux décalé) ===== */}
-      <mesh material={concrete} position={[3.5, 5.3, -3.6]} castShadow receiveShadow>
-        <boxGeometry args={[15, 3.2, 9.2]} />
-      </mesh>
-      {/* Soffite bois sous le cantilever */}
-      <mesh material={woodSoffit} position={[3.5, 3.68, 0.6]} castShadow>
-        <boxGeometry args={[15, 0.12, 2.2]} />
-      </mesh>
-      {/* Toit de l'étage */}
-      <mesh material={concrete} position={[3.5, 7.0, -3.6]} castShadow>
-        <boxGeometry args={[16, 0.28, 10]} />
-      </mesh>
+      {/* ===== PORTE PIVOT OUVERTE (entrée, x = -6.5) ===== */}
+      <group position={[-7.5, 1.6, FRONT_Z]} rotation={[0, Math.PI / 2.4, 0]}>
+        <mesh material={wood} castShadow>
+          <boxGeometry args={[2.2, 3.2, 0.14]} />
+        </mesh>
+        <mesh material={darkMetal} position={[0.8, 0, 0.1]}>
+          <boxGeometry args={[0.06, 1.6, 0.06]} />
+        </mesh>
+      </group>
 
-      {/* Bandeau vitré de l'étage (façade piscine, z = -3.6 + 4.6 = 1.0) */}
-      <mesh material={interiorGlow} position={[3.5, 5.3, 0.96]}>
-        <planeGeometry args={[13.5, 2.2]} />
-      </mesh>
-      <mesh material={glass} position={[3.5, 5.3, 1.02]}>
-        <planeGeometry args={[14, 2.4]} />
-      </mesh>
-      {/* Garde-corps verre de la terrasse d'étage */}
-      <mesh material={glass} position={[3.5, 4.1, 1.9]}>
-        <planeGeometry args={[14, 1.1]} />
-      </mesh>
-      <mesh material={darkMetal} position={[3.5, 3.55, 1.9]}>
-        <boxGeometry args={[14, 0.06, 0.12]} />
-      </mesh>
-
-      {/* ===== TOUR DE PIERRE (entrée, à gauche) ===== */}
-      <mesh material={stone} position={[-10.5, 4.2, -1]} castShadow receiveShadow>
-        <boxGeometry args={[3, 8.6, 7]} />
-      </mesh>
-      {/* Fente lumineuse verticale dans la pierre */}
-      <mesh material={interiorGlow} position={[-9, 4.2, 2.52]}>
-        <planeGeometry args={[0.5, 6]} />
-      </mesh>
-
-      {/* ===== PORTE PIVOT (entrée) ===== */}
-      <mesh material={woodSoffit} position={[-6.5, 1.5, 2.5]} castShadow>
-        <boxGeometry args={[2.2, 3, 0.14]} />
-      </mesh>
-      <mesh material={darkMetal} position={[-5.7, 1.5, 2.58]}>
-        <boxGeometry args={[0.06, 1.4, 0.06]} />
-      </mesh>
-
-      {/* ===== MUR PLEIN ARRIÈRE / PIGNONS (béton) ===== */}
-      <mesh material={concrete} position={[11.2, 1.7, -3]} castShadow>
-        <boxGeometry args={[0.4, 3.4, 11]} />
+      {/* ===== MUR-LAME EN PIERRE (feature d'entrée, à l'extérieur) ===== */}
+      <mesh material={stone} position={[-10, 3.5, 4.2]} castShadow receiveShadow>
+        <boxGeometry args={[0.5, 7, 5]} />
       </mesh>
     </group>
   );
