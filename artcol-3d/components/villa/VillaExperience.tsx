@@ -12,6 +12,7 @@ import { Player } from "./core/Player";
 import { IntroScreen } from "./ui/IntroScreen";
 import { Hud } from "./ui/Hud";
 import { ConversationPanel } from "./ui/ConversationPanel";
+import { ArtworkPanel } from "./ui/ArtworkPanel";
 import { CharacterGuide } from "./character/CharacterGuide";
 import { VillaFurniture } from "./world/VillaFurniture";
 import { VillaDining } from "./world/VillaDining";
@@ -124,6 +125,7 @@ export function VillaExperience() {
           <IntroScreen />
           <Hud />
           <ConversationPanel />
+          <ArtworkPanel />
         </>
       )}
     </>
