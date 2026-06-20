@@ -13,8 +13,6 @@ import Exhibit from "./Exhibit";
 import Robot from "./Robot";
 import CameraRig from "./CameraRig";
 import FlyController from "./FlyController";
-import Ground from "./Ground";
-import Structure from "./Structure";
 import Targeting from "./Targeting";
 import { CREATIONS } from "@/data/experience";
 import { TOTAL } from "@/lib/path";
@@ -45,11 +43,9 @@ export default function Experience() {
           <Exhibit key={n.id} node={n} />
         ))}
 
-        {/* mode exploration : VOL LIBRE (aucun mur, aucun sol) + couloir + visée */}
+        {/* mode exploration : VOL LIBRE pur (aucun décor au sol, aucun poteau) */}
         {mode === "explore" && (
           <>
-            <Structure />
-            <Ground />
             <Targeting />
             <FlyController />
           </>
