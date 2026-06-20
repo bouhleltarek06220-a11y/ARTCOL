@@ -65,9 +65,16 @@ export function VillaArchitecture() {
   return (
     <group>
       {/* ===== MURS PÉRIPHÉRIQUES (béton, double face) ===== */}
-      {/* Mur arrière */}
-      <mesh material={concrete} position={[0, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
-        <boxGeometry args={[22.4, WALL_H, 0.4]} />
+      {/* Mur arrière : 2 segments + linteau = OUVERTURE vers le BUREAU
+          (porte à x = -3, entre les œuvres x=-6 et x=0). */}
+      <mesh material={concrete} position={[-7.55, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
+        <boxGeometry args={[7.3, WALL_H, 0.4]} />
+      </mesh>
+      <mesh material={concrete} position={[4.55, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
+        <boxGeometry args={[13.3, WALL_H, 0.4]} />
+      </mesh>
+      <mesh material={concrete} position={[-3, 5.0, BACK_Z]} castShadow>
+        <boxGeometry args={[1.8, 4.8, 0.4]} />
       </mesh>
       {/* Mur gauche : 2 segments + linteau = OUVERTURE de porte vers la cuisine
           (z ≈ -1.5), sans toucher l'œuvre du mur gauche (z = -3). */}
