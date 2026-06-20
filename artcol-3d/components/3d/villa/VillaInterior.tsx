@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { MeshStandardMaterial, DoubleSide } from "three";
+import { getVillaTextures } from "@/components/villa/textures";
 
 /**
  * Intérieur de la villa transformée en galerie : hall double hauteur, sol
@@ -13,16 +14,22 @@ import { MeshStandardMaterial, DoubleSide } from "three";
 const ART = ["#7b2d3a", "#1f3a5f", "#2f5d4a", "#6a4a86", "#b5762a"];
 
 export function VillaInterior() {
-  const marble = useMemo(
-    () =>
-      new MeshStandardMaterial({
-        color: "#dcd6cc",
-        roughness: 0.14,
-        metalness: 0.1,
-        envMapIntensity: 1.2,
-      }),
-    [],
-  );
+  const marble = useMemo(() => {
+    const t = getVillaTextures();
+    const m = new MeshStandardMaterial({
+      color: "#cfc9bf",
+      roughness: 0.22,
+      metalness: 0.1,
+      envMapIntensity: 1.2,
+    });
+    if (t) {
+      const map = t.marble.clone();
+      map.needsUpdate = true;
+      map.repeat.set(4, 2);
+      m.map = map;
+    }
+    return m;
+  }, []);
   const plaster = useMemo(
     () => new MeshStandardMaterial({ color: "#d8d3ca", roughness: 0.95, side: DoubleSide }),
     [],
