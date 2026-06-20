@@ -8,14 +8,12 @@ import { Suspense, useEffect } from "react";
 import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-import { Physics } from "@react-three/rapier";
 import Galaxy from "./Galaxy";
 import Exhibit from "./Exhibit";
 import Robot from "./Robot";
 import CameraRig from "./CameraRig";
-import Player from "./Player";
+import FlyController from "./FlyController";
 import Ground from "./Ground";
-import Colliders from "./Colliders";
 import Structure from "./Structure";
 import Targeting from "./Targeting";
 import { CREATIONS } from "@/data/experience";
@@ -41,22 +39,19 @@ export default function Experience() {
     >
       <Suspense fallback={null}>
         <Galaxy />
-        {/* gardien : VRAI modèle 3D animé (glTF), PNJ réactif */}
-        <Robot position={[5.2, 0, -12]} scale={1.6} accent="#7CFF3D" />
+        {/* gardien : VRAI modèle 3D animé (glTF), PNJ réactif — petit format */}
+        <Robot position={[4.5, 0, -10]} scale={0.6} accent="#7CFF3D" />
         {CREATIONS.map((n) => (
           <Exhibit key={n.id} node={n} />
         ))}
 
-        {/* mode marche 1re personne : couloir + physique + sol + joueur + visée */}
+        {/* mode exploration : VOL LIBRE (aucun mur, aucun sol) + couloir + visée */}
         {mode === "explore" && (
           <>
             <Structure />
+            <Ground />
             <Targeting />
-            <Physics gravity={[0, -9.81, 0]}>
-              <Ground />
-              <Colliders />
-              <Player />
-            </Physics>
+            <FlyController />
           </>
         )}
       </Suspense>

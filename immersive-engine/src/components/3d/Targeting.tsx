@@ -37,6 +37,7 @@ export default function Targeting() {
 
   useEffect(() => {
     const onClick = () => {
+      if (!document.pointerLockElement) return; // seulement quand la souris est verrouillée (vraie visée)
       const { targeted, openDetail } = useExperience.getState();
       if (targeted) {
         openDetail(targeted);

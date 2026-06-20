@@ -22,7 +22,8 @@ const KEYS = [
   { name: "backward", keys: ["ArrowDown", "s", "S"] },
   { name: "left", keys: ["ArrowLeft", "a", "A", "q", "Q"] },
   { name: "right", keys: ["ArrowRight", "d", "D"] },
-  { name: "jump", keys: ["Space"] },
+  { name: "jump", keys: ["Space"] },              // monter
+  { name: "descend", keys: ["ShiftLeft", "ShiftRight", "c", "C"] }, // descendre
 ];
 
 export default function Page() {
