@@ -1,7 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
-import { MeshStandardMaterial, DoubleSide } from "three";
+import { useEffect, useMemo, useState } from "react";
+import {
+  MeshStandardMaterial,
+  DoubleSide,
+  SRGBColorSpace,
+  Texture,
+  TextureLoader,
+} from "three";
 import { getVillaTextures } from "@/components/villa/textures";
 import { ARTWORKS, type ArtworkMeta } from "@/components/villa/world/artworks";
 
@@ -167,6 +173,34 @@ function Artwork({
 }) {
   const w = wide ? 4.2 : 2.4;
   const h = 2.8;
+
+  // Image de l'œuvre chargée à la volée ; repli silencieux sur la couleur si
+  // le fichier est absent (aucune erreur, aucun crash de Suspense).
+  const [tex, setTex] = useState<Texture | null>(null);
+  useEffect(() => {
+    if (!meta.image) return;
+    let alive = true;
+    new TextureLoader().load(
+      meta.image,
+      (t) => {
+        if (!alive) {
+          t.dispose();
+          return;
+        }
+        t.colorSpace = SRGBColorSpace;
+        t.anisotropy = 8;
+        setTex(t);
+      },
+      undefined,
+      () => {
+        /* image absente → on garde la couleur d'origine */
+      },
+    );
+    return () => {
+      alive = false;
+    };
+  }, [meta.image]);
+
   return (
     // `interactive: "artwork"` + `meta` sont lus par le raycast du <Player/>
     // (visée au centre de l'écran) pour ouvrir le cartel et cadrer l'œuvre.
@@ -179,10 +213,17 @@ function Artwork({
       <mesh material={frameMat} castShadow>
         <boxGeometry args={[w + 0.2, h + 0.2, 0.12]} />
       </mesh>
-      {/* Toile (couleur riche, légèrement lumineuse → lecture « musée ») */}
+      {/* Toile : vraie image si disponible, sinon aplat de couleur « musée ». */}
       <mesh position={[0, 0, 0.08]}>
         <planeGeometry args={[w, h]} />
-        <meshStandardMaterial color={color} roughness={0.55} emissive={color} emissiveIntensity={0.4} />
+        <meshStandardMaterial
+          map={tex ?? undefined}
+          color={tex ? "#ffffff" : color}
+          roughness={0.5}
+          metalness={0}
+          emissive={tex ? "#000000" : color}
+          emissiveIntensity={tex ? 0 : 0.4}
+        />
       </mesh>
       {/* Cartel d'exposition */}
       <mesh position={[-(w / 2) + 0.3, -(h / 2) - 0.35, 0.08]}>

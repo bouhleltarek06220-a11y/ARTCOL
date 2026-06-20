@@ -3,23 +3,26 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PointerLockControls } from "@react-three/drei";
-import { Object3D, Quaternion, Raycaster, Vector2, Vector3 } from "three";
+import { Euler, Object3D, Quaternion, Raycaster, Vector2, Vector3 } from "three";
 import type { PointerLockControls as PLC } from "three-stdlib";
 import { useVilla, type Aim } from "../store";
 import type { ArtworkMeta } from "../world/artworks";
+import { touchInput } from "./touchInput";
 
 /**
- * Joueur à la première personne : marche ZQSD/WASD + regard souris (pointer
- * lock), bornes de la propriété, détection de zone (HUD), et interaction au
- * centre de l'écran : viser l'hôte (→ conversation) ou une œuvre (→ zoom
- * cinématique + cartel). Le réticule du HUD réagit à ce qui est visé.
+ * Joueur à la première personne.
  *
- * Monté pour les phases « visiting », « talking » et « inspecting » ; le
- * déplacement n'est actif qu'en « visiting » (gelé pendant chat / inspection).
+ * Bureau : marche ZQSD/WASD + regard souris (pointer lock).
+ * Mobile / tablette : joystick (déplacement) + glisser sur la scène (regard),
+ *   sans pointer lock — la caméra est alors pilotée par des angles maison.
+ *
+ * Interaction au centre de l'écran : viser l'hôte (→ conversation) ou une œuvre
+ * (→ zoom cinématique + cartel). Le réticule du HUD réagit à ce qui est visé.
  */
 const EYE = 1.65;
 const SPEED = 4.8;
-const REACH = 6; // portée d'interaction / de visée (m)
+const REACH = 12; // portée d'interaction / de visée (m)
+const LOOK_SENS = 0.0032; // sensibilité du regard tactile
 
 /** Régions navigables (XZ). Le déplacement est bloqué hors de ces boîtes, ce
  *  qui crée de vraies pièces reliées par des portes (ex : hall ↔ cuisine). */
@@ -56,7 +59,7 @@ function pickInteractive(
   return null;
 }
 
-export function Player() {
+export function Player({ touch = false }: { touch?: boolean }) {
   const { camera, scene, gl } = useThree();
   const controls = useRef<PLC>(null);
   const registerLock = useVilla((s) => s.registerLock);
@@ -76,6 +79,9 @@ export function Player() {
   const tmpPos = useMemo(() => new Vector3(), []);
   const tmpQuat = useMemo(() => new Quaternion(), []);
   const tmpNormal = useMemo(() => new Vector3(), []);
+  const tmpEuler = useMemo(() => new Euler(0, 0, 0, "YXZ"), []);
+  // Angles de regard tactile (yaw/pitch), entretenus à la main.
+  const look = useRef({ yaw: 0, pitch: 0 });
 
   // Tween caméra pour le zoom d'inspection (vers l'œuvre, puis retour).
   const tween = useRef({
@@ -89,7 +95,7 @@ export function Player() {
 
   useEffect(() => {
     camera.position.set(-6.5, EYE, 11);
-    camera.lookAt(-6.5, EYE, 0);
+    camera.lookAt(-6.5, EYE, 0); // regard vers -Z → yaw/pitch = 0
 
     const set = (code: string, v: boolean) => {
       switch (code) {
@@ -110,15 +116,79 @@ export function Player() {
   }, [camera]);
 
   // Verrouillage du pointeur exposé à l'UI (boutons « Entrer » / fermetures).
+  // Sur tactile, pas de pointer lock : la fonction est inerte.
   useEffect(() => {
     registerLock(() => controls.current?.lock());
   }, [registerLock]);
 
+  // Regard tactile : glisser sur la scène fait tourner la caméra. On suit un
+  // doigt précis (par identifiant) pour cohabiter avec le joystick.
+  useEffect(() => {
+    if (!touch) return;
+    const el = gl.domElement;
+    let id: number | null = null;
+    let lastX = 0;
+    let lastY = 0;
+    let moved = 0;
+
+    const onStart = (e: TouchEvent) => {
+      if (id !== null) return;
+      for (const t of Array.from(e.changedTouches)) {
+        if (t.target === el) {
+          id = t.identifier;
+          lastX = t.clientX;
+          lastY = t.clientY;
+          moved = 0;
+          touchInput.suppressTap = false;
+          break;
+        }
+      }
+    };
+    const onMove = (e: TouchEvent) => {
+      if (id === null) return;
+      for (const t of Array.from(e.touches)) {
+        if (t.identifier !== id) continue;
+        const dx = t.clientX - lastX;
+        const dy = t.clientY - lastY;
+        lastX = t.clientX;
+        lastY = t.clientY;
+        moved += Math.abs(dx) + Math.abs(dy);
+        touchInput.look.dx += dx;
+        touchInput.look.dy += dy;
+        if (moved > 12) touchInput.suppressTap = true;
+        break;
+      }
+    };
+    const onEnd = (e: TouchEvent) => {
+      for (const t of Array.from(e.changedTouches)) {
+        if (t.identifier === id) {
+          id = null;
+          break;
+        }
+      }
+    };
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: true });
+    el.addEventListener("touchend", onEnd, { passive: true });
+    el.addEventListener("touchcancel", onEnd, { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("touchcancel", onEnd);
+    };
+  }, [touch, gl]);
+
   // Interaction au centre de l'écran : viser l'hôte (→ parler) ou une œuvre
-  // (→ inspection avec cadrage cinématique).
+  // (→ inspection avec cadrage cinématique). Déclenché au clic (souris) ou au
+  // tap (mobile) — un glissé de regard annule le tap (suppressTap).
   useEffect(() => {
     const onClick = () => {
       if (useVilla.getState().phase !== "visiting") return;
+      if (touchInput.suppressTap) {
+        touchInput.suppressTap = false;
+        return;
+      }
       const hit = pickInteractive(ray, center, camera, scene.children);
       if (!hit) return;
 
@@ -182,6 +252,18 @@ export function Player() {
     // Déplacement uniquement en visite (gelé pendant chat / inspection).
     if (phase !== "visiting") return;
 
+    // Regard tactile : applique les deltas accumulés et reconstruit la caméra.
+    if (touch) {
+      const lk = look.current;
+      lk.yaw -= touchInput.look.dx * LOOK_SENS;
+      lk.pitch -= touchInput.look.dy * LOOK_SENS;
+      lk.pitch = Math.max(-1.3, Math.min(1.3, lk.pitch));
+      touchInput.look.dx = 0;
+      touchInput.look.dy = 0;
+      tmpEuler.set(lk.pitch, lk.yaw, 0);
+      camera.quaternion.setFromEuler(tmpEuler);
+    }
+
     const step = SPEED * delta;
     camera.getWorldDirection(dir);
     dir.y = 0;
@@ -192,10 +274,10 @@ export function Player() {
     const pz = camera.position.z;
 
     const k = keys.current;
-    if (k.f) camera.position.addScaledVector(dir, step);
-    if (k.b) camera.position.addScaledVector(dir, -step);
-    if (k.r) camera.position.addScaledVector(right, step);
-    if (k.l) camera.position.addScaledVector(right, -step);
+    const mf = (k.f ? 1 : 0) - (k.b ? 1 : 0) + (touch ? touchInput.move.y : 0);
+    const mr = (k.r ? 1 : 0) - (k.l ? 1 : 0) + (touch ? touchInput.move.x : 0);
+    if (mf) camera.position.addScaledVector(dir, mf * step);
+    if (mr) camera.position.addScaledVector(right, mr * step);
 
     // Collisions : on reste dans les pièces, glissement le long des murs.
     let nx = camera.position.x;
@@ -236,6 +318,10 @@ export function Player() {
       }
     }
   });
+
+  // Sur tactile, pas de PointerLockControls (incompatible) : la caméra est
+  // pilotée par les angles de regard maison.
+  if (touch) return null;
 
   return (
     <PointerLockControls
