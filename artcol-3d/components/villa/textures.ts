@@ -10,6 +10,8 @@ import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from "three";
 type VillaTextures = {
   marble: CanvasTexture;
   concrete: CanvasTexture;
+  /** Relief (bump) assorti au béton banché : joints + trous de banche + grain. */
+  concreteBump: CanvasTexture;
   wood: CanvasTexture;
   sand: CanvasTexture;
 };
@@ -96,12 +98,120 @@ function makeWood() {
   return tex(c);
 }
 
+/**
+ * Béton banché architectural : au lieu d'un grain plat, on superpose plusieurs
+ * échelles de variation (grandes taches d'humidité, marbrures moyennes, grain
+ * fin) + les JOINTS HORIZONTAUX des planches de banche et leurs TROUS de banche.
+ * Renvoie la carte de couleur ET une bump map alignée (mêmes joints/trous) pour
+ * que la lumière rasante accroche le relief. C'est ce qui sort les murs de
+ * l'effet « carton beige uni ».
+ */
+function makeConcrete(): { map: CanvasTexture; bump: CanvasTexture } {
+  const S = 1024;
+  const col = canvas(S, S);
+  const bmp = canvas(S, S);
+
+  // Fond béton chaud.
+  col.x.fillStyle = "#b3a896";
+  col.x.fillRect(0, 0, S, S);
+  bmp.x.fillStyle = "#8a8a8a"; // gris moyen = niveau de relief neutre
+  bmp.x.fillRect(0, 0, S, S);
+
+  // 1) Grandes taches douces (coulures, humidité) — variation à basse fréquence.
+  for (let i = 0; i < 34; i++) {
+    const r = 120 + Math.random() * 360;
+    const cx = Math.random() * S;
+    const cy = Math.random() * S;
+    const dark = Math.random() < 0.5;
+    col.x.globalAlpha = 0.07 + Math.random() * 0.09;
+    col.x.fillStyle = dark ? "#857a64" : "#ccc4b0";
+    col.x.beginPath();
+    col.x.arc(cx, cy, r, 0, Math.PI * 2);
+    col.x.fill();
+  }
+  col.x.globalAlpha = 1;
+
+  // 2) Marbrures moyennes (nuages de ciment).
+  for (let i = 0; i < 90; i++) {
+    col.x.globalAlpha = 0.03 + Math.random() * 0.05;
+    col.x.fillStyle = Math.random() < 0.5 ? "#a59a85" : "#c2b9a4";
+    col.x.beginPath();
+    col.x.arc(Math.random() * S, Math.random() * S, 24 + Math.random() * 90, 0, Math.PI * 2);
+    col.x.fill();
+  }
+  col.x.globalAlpha = 1;
+
+  // 3) JOINTS DE BANCHE : 4 panneaux verticaux (lignes horizontales tous les
+  //    ~S/4) — légère ombre côté couleur, sillon côté bump.
+  const rows = 4;
+  const tieCols = 5;
+  for (let r = 1; r < rows; r++) {
+    const y = (r * S) / rows;
+    col.x.globalAlpha = 0.16;
+    col.x.fillStyle = "#7d7361";
+    col.x.fillRect(0, y - 1.5, S, 3);
+    col.x.globalAlpha = 0.1;
+    col.x.fillStyle = "#d8d0bf";
+    col.x.fillRect(0, y + 1.5, S, 1.5);
+    // bump : sillon sombre (creux).
+    bmp.x.fillStyle = "#3c3c3c";
+    bmp.x.fillRect(0, y - 1.5, S, 3);
+  }
+  col.x.globalAlpha = 1;
+
+  // 4) TROUS DE BANCHE : petits disques réguliers (tie-holes) en relief négatif.
+  for (let r = 0; r < rows; r++) {
+    const y = (r + 0.5) * (S / rows);
+    for (let c = 0; c < tieCols; c++) {
+      const x = (c + 0.5) * (S / tieCols) + (Math.random() - 0.5) * 12;
+      col.x.globalAlpha = 0.22;
+      col.x.fillStyle = "#766c5b";
+      col.x.beginPath();
+      col.x.arc(x, y, 4.5, 0, Math.PI * 2);
+      col.x.fill();
+      bmp.x.fillStyle = "#2e2e2e";
+      bmp.x.beginPath();
+      bmp.x.arc(x, y, 4.5, 0, Math.PI * 2);
+      bmp.x.fill();
+      bmp.x.fillStyle = "#c8c8c8"; // léger bourrelet clair autour
+      bmp.x.beginPath();
+      bmp.x.arc(x, y, 7, 0, Math.PI * 2);
+      bmp.x.fill();
+      bmp.x.fillStyle = "#2e2e2e";
+      bmp.x.beginPath();
+      bmp.x.arc(x, y, 4.5, 0, Math.PI * 2);
+      bmp.x.fill();
+    }
+  }
+  col.x.globalAlpha = 1;
+
+  // 5) Grain fin (pores du béton) sur la couleur ET le relief.
+  const cd = col.x.getImageData(0, 0, S, S);
+  const bd = bmp.x.getImageData(0, 0, S, S);
+  for (let i = 0; i < cd.data.length; i += 4) {
+    const n = (Math.random() - 0.5) * 14;
+    cd.data[i] += n;
+    cd.data[i + 1] += n;
+    cd.data[i + 2] += n;
+    const bn = (Math.random() - 0.5) * 26;
+    bd.data[i] += bn;
+    bd.data[i + 1] += bn;
+    bd.data[i + 2] += bn;
+  }
+  col.x.putImageData(cd, 0, 0);
+  bmp.x.putImageData(bd, 0, 0);
+
+  return { map: tex(col.c), bump: tex(bmp.c) };
+}
+
 export function getVillaTextures(): VillaTextures | null {
   if (cache) return cache;
   if (typeof document === "undefined") return null;
+  const concrete = makeConcrete();
   cache = {
     marble: makeMarble(),
-    concrete: noiseMap(512, "#b3a896", 16),
+    concrete: concrete.map,
+    concreteBump: concrete.bump,
     wood: makeWood(),
     sand: noiseMap(512, "#b9b0a0", 14),
   };

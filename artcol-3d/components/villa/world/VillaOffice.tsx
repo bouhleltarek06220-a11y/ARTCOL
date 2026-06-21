@@ -26,6 +26,11 @@ export function VillaOffice() {
       map.needsUpdate = true;
       map.repeat.set(3, 1.5);
       m.map = map;
+      const bump = t.concreteBump.clone();
+      bump.needsUpdate = true;
+      bump.repeat.set(3, 1.5);
+      m.bumpMap = bump;
+      m.bumpScale = 0.9;
     }
     return m;
   }, []);
