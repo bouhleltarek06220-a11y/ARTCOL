@@ -60,10 +60,16 @@ export function VillaInterior() {
 
   return (
     <group>
-      {/* ===== SOL MARBRE POLI ===== */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -3]} receiveShadow>
-        <planeGeometry args={[21.6, 10.8]} />
-        <primitive object={marble} attach="material" />
+      {/* ===== SOL MARBRE POLI (3 morceaux — trémie d'escalier vers le sous-sol
+            laissée libre à gauche, x[-10.2,-7.8] z[-3.0,2.4]) ===== */}
+      <mesh material={marble} rotation={[-Math.PI / 2, 0, 0]} position={[1.5, 0.02, -3]} receiveShadow>
+        <planeGeometry args={[18.6, 10.8]} />
+      </mesh>
+      <mesh material={marble} rotation={[-Math.PI / 2, 0, 0]} position={[-9.3, 0.02, -5.7]} receiveShadow>
+        <planeGeometry args={[3.0, 5.4]} />
+      </mesh>
+      <mesh material={marble} rotation={[-Math.PI / 2, 0, 0]} position={[-10.5, 0.02, -0.3]} receiveShadow>
+        <planeGeometry args={[0.6, 5.4]} />
       </mesh>
       {/* Plafond du hall, remonté sous la nouvelle toiture (hall triple hauteur) */}
       <mesh material={plaster} position={[0, 11.0, -3]}>

@@ -69,6 +69,18 @@ const stair2Floor = (x: number) => {
   return MEZZ_Y + Math.max(0, Math.min(1, t)) * (R2_FLOOR - MEZZ_Y);
 };
 
+/* ===== Sous-sol (niveau −1) : escalier de descente (le long de Z) + plancher ===== */
+const BASE_FLOOR = -3.85;
+const STAIRD = { x0: -10.3, x1: -7.7, z0: -3.2, z1: 2.2, zTop: 2.0, zBot: -3.0 };
+const onStairD = (x: number, z: number) =>
+  x >= STAIRD.x0 && x <= STAIRD.x1 && z >= STAIRD.z0 && z <= STAIRD.z1;
+const inBasement = (x: number, z: number) => x >= -10.4 && x <= 10.4 && z >= -8.2 && z <= 2.2;
+/** Hauteur du sol sur l'escalier de descente (0 en haut → BASE_FLOOR en bas). */
+const stairDFloor = (z: number) => {
+  const t = (STAIRD.zTop - z) / (STAIRD.zTop - STAIRD.zBot);
+  return Math.max(0, Math.min(1, t)) * BASE_FLOOR;
+};
+
 /** Premier ancêtre interactif rencontré sur le rayon (centre écran), à portée. */
 function pickInteractive(
   ray: Raycaster,
@@ -313,10 +325,21 @@ export function Player({ touch = false }: { touch?: boolean }) {
 
     // Collisions : on reste dans les pièces (ou sur l'escalier / la mezzanine
     // selon le niveau courant), glissement le long des murs.
+    // Un escalier n'est praticable que DEPUIS l'un de ses 2 niveaux adjacents
+    // (sinon, au sous-sol par ex., on serait téléporté en haut en passant sous
+    // l'emprise XZ d'un escalier supérieur).
+    const stairValid = (x: number, zz: number) => {
+      const L = level.current;
+      if ((L === 0 || L === -1) && onStairD(x, zz)) return true;
+      if ((L === 0 || L === 1) && onStair(x, zz)) return true;
+      if ((L === 1 || L === 2) && onStair2(x, zz)) return true;
+      return false;
+    };
     const valid = (x: number, zz: number) => {
-      if (onStair(x, zz) || onStair2(x, zz)) return true;
+      if (stairValid(x, zz)) return true;
       if (level.current === 2) return inR2(x, zz);
       if (level.current === 1) return inMezz(x, zz);
+      if (level.current === -1) return inBasement(x, zz);
       return inAny(x, zz);
     };
     let nx = camera.position.x;
@@ -333,11 +356,18 @@ export function Player({ touch = false }: { touch?: boolean }) {
     camera.position.z = nz;
 
     // Hauteur de l'œil selon escalier(s) / niveaux, et bascule de niveau.
-    if (onStair2(nx, nz)) {
+    // (mêmes gardes de niveau que stairValid : un escalier n'agit que depuis un
+    // de ses 2 niveaux adjacents.)
+    const L = level.current;
+    if (onStairD(nx, nz) && (L === 0 || L === -1)) {
+      const f = stairDFloor(nz);
+      camera.position.y = f + EYE;
+      level.current = f < BASE_FLOOR / 2 ? -1 : 0;
+    } else if (onStair2(nx, nz) && (L === 1 || L === 2)) {
       const f = stair2Floor(nx);
       camera.position.y = f + EYE;
       level.current = f > (MEZZ_Y + R2_FLOOR) / 2 ? 2 : 1;
-    } else if (onStair(nx, nz)) {
+    } else if (onStair(nx, nz) && (L === 0 || L === 1)) {
       const f = stairFloor(nz);
       camera.position.y = f + EYE;
       level.current = f > MEZZ_Y / 2 ? 1 : 0;
@@ -345,14 +375,17 @@ export function Player({ touch = false }: { touch?: boolean }) {
       camera.position.y = R2_FLOOR + EYE;
     } else if (level.current === 1) {
       camera.position.y = MEZZ_Y + EYE;
+    } else if (level.current === -1) {
+      camera.position.y = BASE_FLOOR + EYE;
     } else {
       camera.position.y = EYE;
     }
 
     let z = "Galerie principale";
-    if (level.current === 2) z = "Étage · chambres";
+    if (level.current === -1) z = "Sous-sol · spa";
+    else if (level.current === 2) z = "Étage · chambres";
     else if (level.current === 1) z = "Mezzanine · étage";
-    else if (onStair2(nx, nz) || onStair(nx, nz)) z = "Escalier";
+    else if (onStairD(nx, nz) || onStair2(nx, nz) || onStair(nx, nz)) z = "Escalier";
     else if (nx < -11) z = "Cuisine";
     else if (nx > 11) z = "Bibliothèque";
     else if (nz < -8.5) z = "Bureau";
