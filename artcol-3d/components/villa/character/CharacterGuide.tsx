@@ -5,12 +5,12 @@ import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import { Group, type Mesh } from "three";
 
 /**
- * Hôte de la villa-galerie : vrai modèle 3D humain rigué (Soldier, three.js —
- * CC) avec animation d'attente « Idle ». Cliquable (raycast centre-écran géré
- * par le <Player/>) pour lancer la conversation : le groupe porte
- * `userData.interactive = "guide"`.
+ * Hôte de la villa-galerie : modèle 3D humain rigué neutre (CesiumMan, Khronos —
+ * CC-BY 4.0, attribution dans public/models/README.md). Placeholder « humain
+ * normal » en attendant l'avatar perso (ReadyPlayerMe) de l'hôte. Cliquable
+ * (raycast centre-écran géré par le <Player/>) : `userData.interactive = "guide"`.
  */
-const MODEL = "/models/Soldier.glb";
+const MODEL = "/models/CesiumMan.glb";
 
 export function CharacterGuide({
   position = [-3.4, 0, 1.2],
@@ -36,13 +36,21 @@ export function CharacterGuide({
     });
   }, [scene]);
 
-  // Animation d'attente en boucle (« Idle », sinon la 1re disponible).
+  // Animation d'attente : si une clip « Idle » existe, on la joue en boucle ;
+  // sinon (cas CesiumMan, seule une marche) on GÈLE la pose à ~35 % du cycle
+  // pour obtenir une posture debout naturelle (pas de marche sur place).
   useEffect(() => {
     const names = Object.keys(actions);
-    const idle = actions["Idle"] ?? (names.length ? actions[names[0]] : undefined);
-    idle?.reset().fadeIn(0.4).play();
+    const idleName = names.find((n) => /idle/i.test(n));
+    const clip = idleName ? actions[idleName] : names.length ? actions[names[0]] : undefined;
+    if (!clip) return;
+    clip.reset().fadeIn(0.4).play();
+    if (!idleName) {
+      clip.paused = true;
+      clip.time = 0.35 * clip.getClip().duration;
+    }
     return () => {
-      idle?.fadeOut(0.2);
+      clip.fadeOut(0.2);
     };
   }, [actions]);
 
