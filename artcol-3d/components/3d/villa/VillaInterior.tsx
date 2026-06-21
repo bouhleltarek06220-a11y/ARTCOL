@@ -65,8 +65,8 @@ export function VillaInterior() {
         <planeGeometry args={[21.6, 10.8]} />
         <primitive object={marble} attach="material" />
       </mesh>
-      {/* Plafond du hall (sous le toit) */}
-      <mesh material={plaster} position={[0, 7.25, -3]}>
+      {/* Plafond du hall, remonté sous la nouvelle toiture (hall triple hauteur) */}
+      <mesh material={plaster} position={[0, 11.0, -3]}>
         <boxGeometry args={[21.6, 0.1, 10.8]} />
       </mesh>
 

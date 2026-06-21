@@ -16,8 +16,8 @@ const FRONT_Z = 2.5;
 const BACK_Z = -8.5;
 const LEFT_X = -11;
 const RIGHT_X = 11;
-const WALL_H = 7.4;
-const ROOF_Y = 7.5;
+const WALL_H = 11.2; // bloc principal sur 3 niveaux (R0 + R1 + R2)
+const ROOF_Y = 11.4;
 
 export function VillaArchitecture() {
   const concrete = useMemo(() => {
@@ -78,8 +78,8 @@ export function VillaArchitecture() {
       <mesh material={concrete} position={[4.55, WALL_H / 2, BACK_Z]} castShadow receiveShadow>
         <boxGeometry args={[13.3, WALL_H, 0.4]} />
       </mesh>
-      <mesh material={concrete} position={[-3, 5.0, BACK_Z]} castShadow>
-        <boxGeometry args={[1.8, 4.8, 0.4]} />
+      <mesh material={concrete} position={[-3, 6.9, BACK_Z]} castShadow>
+        <boxGeometry args={[1.8, 8.6, 0.4]} />
       </mesh>
       {/* Mur gauche : 2 segments + linteau = OUVERTURE de porte vers la cuisine
           (z ≈ -1.5), sans toucher l'œuvre du mur gauche (z = -3). */}
@@ -89,8 +89,8 @@ export function VillaArchitecture() {
       <mesh material={concrete} position={[LEFT_X, WALL_H / 2, 1.0]} castShadow receiveShadow>
         <boxGeometry args={[0.4, WALL_H, 3.4]} />
       </mesh>
-      <mesh material={concrete} position={[LEFT_X, 5.0, -1.5]} castShadow>
-        <boxGeometry args={[0.4, 4.8, 1.6]} />
+      <mesh material={concrete} position={[LEFT_X, 6.9, -1.5]} castShadow>
+        <boxGeometry args={[0.4, 8.6, 1.6]} />
       </mesh>
       {/* Mur droit : 2 segments + linteau = OUVERTURE vers la bibliothèque
           (z ≈ -1, accès depuis le salon). */}
@@ -100,8 +100,8 @@ export function VillaArchitecture() {
       <mesh material={concrete} position={[RIGHT_X, WALL_H / 2, 1.25]} castShadow receiveShadow>
         <boxGeometry args={[0.4, WALL_H, 2.9]} />
       </mesh>
-      <mesh material={concrete} position={[RIGHT_X, 5.0, -1]} castShadow>
-        <boxGeometry args={[0.4, 4.8, 1.6]} />
+      <mesh material={concrete} position={[RIGHT_X, 6.9, -1]} castShadow>
+        <boxGeometry args={[0.4, 8.6, 1.6]} />
       </mesh>
       {/* Bandeau béton au-dessus de la façade (linteau) */}
       <mesh material={concrete} position={[0, 7.0, FRONT_Z]} castShadow>
@@ -126,6 +126,21 @@ export function VillaArchitecture() {
       {[-9.35, -3, 0.5, 4, 7.5, 10.3].map((x) => (
         <mesh key={x} material={darkMetal} position={[x, 3.35, FRONT_Z + 0.04]}>
           <boxGeometry args={[0.1, 6.5, 0.1]} />
+        </mesh>
+      ))}
+
+      {/* ===== BANDE VITRÉE HAUTE (façade des étages R1 + R2) ===== */}
+      <mesh material={glass} position={[0, 9.35, FRONT_Z]}>
+        <planeGeometry args={[22.4, 3.7]} />
+      </mesh>
+      {/* Traverse horizontale à la ligne de plancher R2 (y≈7.6) */}
+      <mesh material={darkMetal} position={[0, 7.6, FRONT_Z + 0.04]}>
+        <boxGeometry args={[22.4, 0.12, 0.1]} />
+      </mesh>
+      {/* Meneaux verticaux de la bande haute */}
+      {[-9, -6, -3, 0, 3, 6, 9].map((x) => (
+        <mesh key={`up${x}`} material={darkMetal} position={[x, 9.35, FRONT_Z + 0.04]}>
+          <boxGeometry args={[0.1, 3.7, 0.1]} />
         </mesh>
       ))}
 
