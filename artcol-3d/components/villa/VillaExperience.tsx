@@ -99,7 +99,7 @@ export function VillaExperience() {
           <VillaOffice />
           <VillaFurniture />
           <VillaDining />
-          <CharacterGuide position={[-3.4, 0, 1.2]} rotation={0.2} />
+          <CharacterGuide position={[-3.4, 0, 1.2]} rotation={Math.PI + 0.2} />
 
           <ContactShadows
             position={[0, 0.04, 0]}

@@ -19,3 +19,10 @@ Déposer ici les modèles 3D au format **GLTF / GLB**.
 
 > Les chemins sont relatifs à `public/`, donc `public/models/x.glb` se charge
 > via l'URL `/models/x.glb`.
+
+## Crédits / licences des modèles
+
+- **CesiumMan.glb** — hôte humain neutre (placeholder). Source : Khronos
+  glTF-Sample-Assets, modèle « CesiumMan » par **Cesium**. Licence **CC-BY 4.0**
+  (attribution requise). À remplacer par l'avatar perso de l'hôte (ReadyPlayerMe).
+- **Soldier.glb / RobotExpressive.glb** — exemples three.js (CC).
