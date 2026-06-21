@@ -22,6 +22,8 @@ import { VillaOffice } from "./world/VillaOffice";
 import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { UpperFloors } from "@/components/3d/villa/UpperFloors";
+import { UpperMasterSuite } from "@/components/3d/villa/UpperMasterSuite";
+import { UpperGuestRooms } from "@/components/3d/villa/UpperGuestRooms";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
 import { GardenSport } from "@/components/3d/villa/GardenSport";
 import { PoolHouse } from "@/components/3d/villa/PoolHouse";
@@ -100,6 +102,8 @@ export function VillaExperience() {
           <VillaArchitecture />
           <VillaInterior />
           <UpperFloors />
+          <UpperMasterSuite />
+          <UpperGuestRooms />
           <VillaGrounds />
           <GardenSport />
           <PoolHouse />
