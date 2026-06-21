@@ -23,6 +23,9 @@ import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
 import { GardenSport } from "@/components/3d/villa/GardenSport";
+import { PoolHouse } from "@/components/3d/villa/PoolHouse";
+import { LandscapePlanting } from "@/components/3d/villa/LandscapePlanting";
+import { EntranceGate } from "@/components/3d/villa/EntranceGate";
 import { CanvasLoader } from "@/components/3d/CanvasLoader";
 import { useHasWebGL } from "@/hooks/useHasWebGL";
 import { useIsTouch } from "@/hooks/useIsTouch";
@@ -97,6 +100,9 @@ export function VillaExperience() {
           <VillaInterior />
           <VillaGrounds />
           <GardenSport />
+          <PoolHouse />
+          <LandscapePlanting />
+          <EntranceGate />
           <VillaRooms />
           <VillaOffice />
           <VillaFurniture />
