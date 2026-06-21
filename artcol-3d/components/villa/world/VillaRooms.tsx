@@ -21,6 +21,11 @@ export function VillaRooms() {
       map.needsUpdate = true;
       map.repeat.set(2, 1);
       m.map = map;
+      const bump = t.concreteBump.clone();
+      bump.needsUpdate = true;
+      bump.repeat.set(2, 1);
+      m.bumpMap = bump;
+      m.bumpScale = 0.9;
     }
     return m;
   }, []);

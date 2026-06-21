@@ -42,3 +42,4 @@ next-env.d.ts
 shot.mjs
 shotcam.mjs
 shot1.mjs
+shot-*.png
