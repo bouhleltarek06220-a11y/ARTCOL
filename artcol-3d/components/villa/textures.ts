@@ -14,6 +14,8 @@ type VillaTextures = {
   concreteBump: CanvasTexture;
   wood: CanvasTexture;
   sand: CanvasTexture;
+  /** Pelouse procédurale (jardin paysager). */
+  grass: CanvasTexture;
 };
 
 let cache: VillaTextures | null = null;
@@ -204,6 +206,37 @@ function makeConcrete(): { map: CanvasTexture; bump: CanvasTexture } {
   return { map: tex(col.c), bump: tex(bmp.c) };
 }
 
+/** Pelouse : base verte + touffes claires/sombres multi-échelles + grain. */
+function makeGrass(): CanvasTexture {
+  const S = 512;
+  const { c, x } = canvas(S, S);
+  x.fillStyle = "#3f5a2a";
+  x.fillRect(0, 0, S, S);
+  // taches de tonalité (zones plus claires/sèches, plus sombres/humides)
+  for (let i = 0; i < 60; i++) {
+    x.globalAlpha = 0.06 + Math.random() * 0.1;
+    x.fillStyle = Math.random() < 0.5 ? "#4d6b33" : "#34501f";
+    x.beginPath();
+    x.arc(Math.random() * S, Math.random() * S, 12 + Math.random() * 60, 0, Math.PI * 2);
+    x.fill();
+  }
+  x.globalAlpha = 1;
+  // brins (petits traits verticaux) pour casser l'aplat
+  for (let i = 0; i < 4000; i++) {
+    const gx = Math.random() * S;
+    const gy = Math.random() * S;
+    const l = 1.5 + Math.random() * 3;
+    const v = 70 + Math.random() * 70;
+    x.strokeStyle = `rgba(${(v * 0.5) | 0},${v | 0},${(v * 0.35) | 0},0.5)`;
+    x.lineWidth = 0.8;
+    x.beginPath();
+    x.moveTo(gx, gy);
+    x.lineTo(gx + (Math.random() - 0.5) * 1.5, gy - l);
+    x.stroke();
+  }
+  return tex(c);
+}
+
 export function getVillaTextures(): VillaTextures | null {
   if (cache) return cache;
   if (typeof document === "undefined") return null;
@@ -214,6 +247,7 @@ export function getVillaTextures(): VillaTextures | null {
     concreteBump: concrete.bump,
     wood: makeWood(),
     sand: noiseMap(512, "#b9b0a0", 14),
+    grass: makeGrass(),
   };
   return cache;
 }

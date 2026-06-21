@@ -12,13 +12,24 @@ import { getVillaTextures } from "@/components/villa/textures";
  * palmiers et oliviers en silhouette rétro-éclairée (crépuscule premium).
  */
 export function VillaGrounds() {
+  const grass = useMemo(() => {
+    const t = getVillaTextures();
+    const m = new MeshStandardMaterial({ color: "#3f5a2a", roughness: 1, metalness: 0 });
+    if (t) {
+      const map = t.grass.clone();
+      map.needsUpdate = true;
+      map.repeat.set(120, 120);
+      m.map = map;
+    }
+    return m;
+  }, []);
   const sandStone = useMemo(() => {
     const t = getVillaTextures();
-    const m = new MeshStandardMaterial({ color: "#b9b0a0", roughness: 0.95, metalness: 0 });
+    const m = new MeshStandardMaterial({ color: "#c4bcab", roughness: 0.9, metalness: 0 });
     if (t) {
       const map = t.sand.clone();
       map.needsUpdate = true;
-      map.repeat.set(60, 60);
+      map.repeat.set(24, 18);
       m.map = map;
     }
     return m;
@@ -45,36 +56,42 @@ export function VillaGrounds() {
 
   return (
     <group>
-      {/* ===== SOL MINÉRAL (large dalle de pierre claire) ===== */}
+      {/* ===== PELOUSE (grand jardin paysager, base du parc) ===== */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[400, 400]} />
+        <primitive object={grass} attach="material" />
+      </mesh>
+
+      {/* ===== DALLE DE PIERRE (parvis sous la villa + terrasse + piscine) ===== */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
+        <planeGeometry args={[46, 38]} />
         <primitive object={sandStone} attach="material" />
       </mesh>
 
-      {/* ===== ALLÉE PRIVÉE (dalles, approche depuis l'avant) ===== */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-3, 0.02, 22]} receiveShadow>
-        <planeGeometry args={[7, 34]} />
+      {/* ===== ALLÉE PRIVÉE (approche depuis le portail, à l'ouest de la piscine) ===== */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-9.5, 0.02, 26]} receiveShadow>
+        <planeGeometry args={[6, 36]} />
         <meshStandardMaterial color="#9a9183" roughness={0.9} />
       </mesh>
 
       {/* ===== TERRASSE BOIS (entre villa et piscine) ===== */}
-      <mesh material={wood} position={[1, 0.08, 4.4]} receiveShadow>
-        <boxGeometry args={[20, 0.16, 4]} />
+      <mesh material={wood} position={[1, 0.08, 4.6]} receiveShadow>
+        <boxGeometry args={[22, 0.16, 4.2]} />
       </mesh>
 
-      {/* ===== PISCINE À DÉBORDEMENT MIROIR ===== */}
-      {/* Margelle */}
-      <mesh material={coping} position={[1, 0.12, 9]} receiveShadow>
-        <boxGeometry args={[18.6, 0.24, 7.6]} />
+      {/* ===== GRANDE PISCINE À DÉBORDEMENT MIROIR (déplacée + agrandie) ===== */}
+      {/* Margelle pierre */}
+      <mesh material={coping} position={[3, 0.12, 12]} receiveShadow>
+        <boxGeometry args={[24, 0.24, 11]} />
       </mesh>
       {/* Bassin sombre */}
-      <mesh position={[1, 0.16, 9]}>
-        <boxGeometry args={[18, 0.4, 7]} />
+      <mesh position={[3, 0.16, 12]}>
+        <boxGeometry args={[22.4, 0.4, 9.4]} />
         <meshStandardMaterial color="#06222b" roughness={0.2} metalness={0.3} />
       </mesh>
       {/* Surface d'eau réfléchissante (miroir) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[1, 0.33, 9]}>
-        <planeGeometry args={[18, 7]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[3, 0.33, 12]}>
+        <planeGeometry args={[22, 9]} />
         <MeshReflectorMaterial
           resolution={1024}
           blur={[120, 40]}
@@ -88,30 +105,34 @@ export function VillaGrounds() {
           metalness={0.7}
         />
       </mesh>
-      {/* Lèvre de débordement (côté vue) + fine lame d'eau */}
-      <mesh material={coping} position={[1, 0.14, 12.7]}>
-        <boxGeometry args={[18, 0.28, 0.3]} />
+      {/* Lèvre de débordement (côté sud) + fine lame d'eau */}
+      <mesh material={coping} position={[3, 0.14, 16.7]}>
+        <boxGeometry args={[22, 0.28, 0.3]} />
       </mesh>
 
-      {/* ===== SALON EXTÉRIEUR (canapés bas + table) ===== */}
-      <Lounge position={[-6, 0, 6.5]} />
+      {/* ===== SALON EXTÉRIEUR (à l'ouest de la piscine) ===== */}
+      <Lounge position={[-15, 0, 11]} />
 
       {/* ===== BRASERO MODERNE ===== */}
-      <FirePit position={[-2, 0, 7]} />
+      <FirePit position={[-13, 0, 15.5]} />
 
-      {/* ===== JARDINIÈRES + VÉGÉTATION ===== */}
-      <mesh material={planter} position={[10, 0.4, 6]} receiveShadow castShadow>
-        <boxGeometry args={[1.4, 0.8, 6]} />
+      {/* ===== JARDINIÈRES + VÉGÉTATION (périmètre du parc, sur la pelouse) ===== */}
+      <mesh material={planter} position={[16, 0.4, 10]} receiveShadow castShadow>
+        <boxGeometry args={[1.4, 0.8, 8]} />
       </mesh>
-      <OliveTree position={[10, 0.8, 6]} />
+      <OliveTree position={[16, 0.8, 10]} />
 
-      {/* Palmiers (silhouettes élégantes, rétro-éclairés) */}
-      <Palm position={[12.5, 0, 9]} scale={1.15} tilt={0.05} />
-      <Palm position={[-12, 0, 8]} scale={1.3} tilt={-0.08} />
-      {/* Repositionnés hors des nouvelles ailes (cuisine ouest / bibliothèque est) */}
-      <Palm position={[20.5, 0, 3]} scale={1.0} tilt={0.04} />
-      <OliveTree position={[-20.5, 0.2, 3]} scale={1.1} />
-      <OliveTree position={[20, 0.2, -3]} scale={0.9} />
+      {/* Palmiers & oliviers — alignement de parc */}
+      <Palm position={[17, 0, 16]} scale={1.2} tilt={0.05} />
+      <Palm position={[-17, 0, 16]} scale={1.3} tilt={-0.08} />
+      <Palm position={[24, 0, 4]} scale={1.05} tilt={0.04} />
+      <Palm position={[-24, 0, 6]} scale={1.1} tilt={-0.05} />
+      <Palm position={[28, 0, 20]} scale={1.25} tilt={0.06} />
+      <Palm position={[-28, 0, 22]} scale={1.2} tilt={-0.06} />
+      <OliveTree position={[-22, 0.2, -8]} scale={1.1} />
+      <OliveTree position={[22, 0.2, -10]} scale={0.95} />
+      <OliveTree position={[-26, 0.2, 28]} scale={1.0} />
+      <OliveTree position={[26, 0.2, 30]} scale={1.05} />
     </group>
   );
 }
