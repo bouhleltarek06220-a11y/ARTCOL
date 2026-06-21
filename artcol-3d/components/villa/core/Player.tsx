@@ -57,6 +57,18 @@ const stairFloor = (z: number) => {
   return Math.max(0, Math.min(1, t)) * MEZZ_Y;
 };
 
+/* ===== Étage 2 (R2) : 2e volée d'escalier (le long de X) + plancher ===== */
+const R2_FLOOR = 7.75;
+const STAIR2 = { x0: -10.6, x1: -3.0, z0: -7.9, z1: -6.0, xBot: -10, xTop: -3.5 };
+const onStair2 = (x: number, z: number) =>
+  x >= STAIR2.x0 && x <= STAIR2.x1 && z >= STAIR2.z0 && z <= STAIR2.z1;
+const inR2 = (x: number, z: number) => x >= MEZZ.x0 && x <= MEZZ.x1 && z >= -8.4 && z <= -4.95;
+/** Hauteur du sol sur la 2e volée (rampe linéaire de xBot→xTop, R1→R2). */
+const stair2Floor = (x: number) => {
+  const t = (x - STAIR2.xBot) / (STAIR2.xTop - STAIR2.xBot);
+  return MEZZ_Y + Math.max(0, Math.min(1, t)) * (R2_FLOOR - MEZZ_Y);
+};
+
 /** Premier ancêtre interactif rencontré sur le rayon (centre écran), à portée. */
 function pickInteractive(
   ray: Raycaster,
@@ -301,8 +313,12 @@ export function Player({ touch = false }: { touch?: boolean }) {
 
     // Collisions : on reste dans les pièces (ou sur l'escalier / la mezzanine
     // selon le niveau courant), glissement le long des murs.
-    const valid = (x: number, zz: number) =>
-      onStair(x, zz) || (level.current === 1 ? inMezz(x, zz) : inAny(x, zz));
+    const valid = (x: number, zz: number) => {
+      if (onStair(x, zz) || onStair2(x, zz)) return true;
+      if (level.current === 2) return inR2(x, zz);
+      if (level.current === 1) return inMezz(x, zz);
+      return inAny(x, zz);
+    };
     let nx = camera.position.x;
     let nz = camera.position.z;
     if (!valid(nx, nz)) {
@@ -316,11 +332,17 @@ export function Player({ touch = false }: { touch?: boolean }) {
     camera.position.x = nx;
     camera.position.z = nz;
 
-    // Hauteur de l'œil selon escalier / mezzanine / sol, et bascule de niveau.
-    if (onStair(nx, nz)) {
+    // Hauteur de l'œil selon escalier(s) / niveaux, et bascule de niveau.
+    if (onStair2(nx, nz)) {
+      const f = stair2Floor(nx);
+      camera.position.y = f + EYE;
+      level.current = f > (MEZZ_Y + R2_FLOOR) / 2 ? 2 : 1;
+    } else if (onStair(nx, nz)) {
       const f = stairFloor(nz);
       camera.position.y = f + EYE;
       level.current = f > MEZZ_Y / 2 ? 1 : 0;
+    } else if (level.current === 2) {
+      camera.position.y = R2_FLOOR + EYE;
     } else if (level.current === 1) {
       camera.position.y = MEZZ_Y + EYE;
     } else {
@@ -328,8 +350,9 @@ export function Player({ touch = false }: { touch?: boolean }) {
     }
 
     let z = "Galerie principale";
-    if (level.current === 1) z = "Mezzanine · étage";
-    else if (onStair(nx, nz)) z = "Escalier";
+    if (level.current === 2) z = "Étage · chambres";
+    else if (level.current === 1) z = "Mezzanine · étage";
+    else if (onStair2(nx, nz) || onStair(nx, nz)) z = "Escalier";
     else if (nx < -11) z = "Cuisine";
     else if (nx > 11) z = "Bibliothèque";
     else if (nz < -8.5) z = "Bureau";
