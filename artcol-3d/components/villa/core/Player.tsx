@@ -38,6 +38,25 @@ const ROOMS: [number, number, number, number][] = [
 const inAny = (x: number, z: number) =>
   ROOMS.some((b) => x >= b[0] && x <= b[1] && z >= b[2] && z <= b[3]);
 
+/* ===== Étage : escalier praticable + mezzanine =====================
+ * L'escalier monumental (<VillaInterior/>) monte de y≈0 (z=-2.6) à y≈3.95
+ * (z=-7.1) dans l'emprise x∈[4.8,8.2]. La mezzanine (dalle y=3.95) couvre la
+ * moitié arrière du hall : x∈[-10.4,10.4], z∈[-8.4,-3.6], garde-corps en façade.
+ * Un niveau courant (0 sol / 1 mezzanine) lève l'ambiguïté car les deux
+ * partagent la même empreinte XZ. */
+const MEZZ_Y = 3.95;
+const STAIR = { x0: 4.8, x1: 8.2, zBot: -2.4, zTop: -7.3 };
+const MEZZ = { x0: -10.4, x1: 10.4, z0: -8.4, z1: -3.6 };
+const onStair = (x: number, z: number) =>
+  x >= STAIR.x0 && x <= STAIR.x1 && z <= STAIR.zBot && z >= STAIR.zTop;
+const inMezz = (x: number, z: number) =>
+  x >= MEZZ.x0 && x <= MEZZ.x1 && z >= MEZZ.z0 && z <= MEZZ.z1;
+/** Hauteur du sol sur l'escalier (rampe linéaire de zBot→zTop). */
+const stairFloor = (z: number) => {
+  const t = (STAIR.zBot - z) / (STAIR.zBot - STAIR.zTop);
+  return Math.max(0, Math.min(1, t)) * MEZZ_Y;
+};
+
 /** Premier ancêtre interactif rencontré sur le rayon (centre écran), à portée. */
 function pickInteractive(
   ray: Raycaster,
@@ -227,6 +246,7 @@ export function Player({ touch = false }: { touch?: boolean }) {
   const zoneRef = useRef("");
   const aimRef = useRef<Aim>(null);
   const tick = useRef(0);
+  const level = useRef(0); // 0 = sol, 1 = mezzanine (étage)
 
   useFrame((_, delta) => {
     const phase = useVilla.getState().phase;
@@ -279,12 +299,15 @@ export function Player({ touch = false }: { touch?: boolean }) {
     if (mf) camera.position.addScaledVector(dir, mf * step);
     if (mr) camera.position.addScaledVector(right, mr * step);
 
-    // Collisions : on reste dans les pièces, glissement le long des murs.
+    // Collisions : on reste dans les pièces (ou sur l'escalier / la mezzanine
+    // selon le niveau courant), glissement le long des murs.
+    const valid = (x: number, zz: number) =>
+      onStair(x, zz) || (level.current === 1 ? inMezz(x, zz) : inAny(x, zz));
     let nx = camera.position.x;
     let nz = camera.position.z;
-    if (!inAny(nx, nz)) {
-      if (inAny(nx, pz)) nz = pz;
-      else if (inAny(px, nz)) nx = px;
+    if (!valid(nx, nz)) {
+      if (valid(nx, pz)) nz = pz;
+      else if (valid(px, nz)) nx = px;
       else {
         nx = px;
         nz = pz;
@@ -292,10 +315,22 @@ export function Player({ touch = false }: { touch?: boolean }) {
     }
     camera.position.x = nx;
     camera.position.z = nz;
-    camera.position.y = EYE;
+
+    // Hauteur de l'œil selon escalier / mezzanine / sol, et bascule de niveau.
+    if (onStair(nx, nz)) {
+      const f = stairFloor(nz);
+      camera.position.y = f + EYE;
+      level.current = f > MEZZ_Y / 2 ? 1 : 0;
+    } else if (level.current === 1) {
+      camera.position.y = MEZZ_Y + EYE;
+    } else {
+      camera.position.y = EYE;
+    }
 
     let z = "Galerie principale";
-    if (nx < -11) z = "Cuisine";
+    if (level.current === 1) z = "Mezzanine · étage";
+    else if (onStair(nx, nz)) z = "Escalier";
+    else if (nx < -11) z = "Cuisine";
     else if (nx > 11) z = "Bibliothèque";
     else if (nz < -8.5) z = "Bureau";
     else if (nz > 5) z = "Terrasse & piscine";
