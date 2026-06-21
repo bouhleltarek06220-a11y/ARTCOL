@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { MeshStandardMaterial, DoubleSide } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
+import { ARTWORKS } from "@/components/villa/world/artworks";
+import { Artwork } from "@/components/villa/world/Artwork";
 
 /**
  * BUREAU = grande pièce fermée (aile NORD de la villa), dans le même esprit que
@@ -152,6 +154,15 @@ export function VillaOffice() {
           </group>
         ))}
       </group>
+
+      {/* ===================== ŒUVRE (mur est, au-dessus de la vitrine) ===================== */}
+      <Artwork
+        position={[3.5, 2.25, -13.0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        meta={ARTWORKS["art-6"]}
+      />
+      {/* spot dédié, chaud, pour détacher la toile du mur */}
+      <pointLight position={[2.4, 3.1, -13.0]} intensity={5} distance={6} decay={2} color="#ffe6c0" />
 
       {/* ===================== ÉCLAIRAGE ===================== */}
       <pointLight position={[CX, 3.2, -11]} intensity={16} distance={12} decay={2} color="#ffe1b4" />

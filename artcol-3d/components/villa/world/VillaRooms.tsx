@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { MeshStandardMaterial, DoubleSide } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
+import { ARTWORKS } from "@/components/villa/world/artworks";
+import { Artwork } from "@/components/villa/world/Artwork";
 
 /**
  * Pièces attenantes ajoutées à l'architecture de la villa (Bloc 3) :
@@ -219,6 +221,15 @@ export function VillaRooms() {
           </mesh>
         ))}
       </group>
+      {/* œuvre encadrée (mur est, à gauche de la fenêtre) + spot */}
+      <Artwork
+        position={[17.6, 2.0, -4.65]}
+        rotation={[0, -Math.PI / 2, 0]}
+        meta={ARTWORKS["art-7"]}
+        size={[2.3, 1.6]}
+      />
+      <pointLight position={[16.5, 2.9, -4.65]} intensity={4} distance={5} decay={2} color="#ffe6c0" />
+
       {/* éclairage bibliothèque (chaud, feutré) */}
       <pointLight position={[CXl, 3.0, CZ]} intensity={11} distance={9} decay={2} color="#ffcf9a" />
       <pointLight position={[CXl, 1.4, -1.5]} intensity={5} distance={6} decay={2} color="#ffdcae" />

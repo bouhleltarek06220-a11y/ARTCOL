@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import {
-  MeshStandardMaterial,
-  DoubleSide,
-  SRGBColorSpace,
-  Texture,
-  TextureLoader,
-} from "three";
+import { useMemo } from "react";
+import { MeshStandardMaterial, DoubleSide } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
-import { ARTWORKS, type ArtworkMeta } from "@/components/villa/world/artworks";
+import { ARTWORKS } from "@/components/villa/world/artworks";
+import { Artwork } from "@/components/villa/world/Artwork";
 
 /**
  * Intérieur de la villa transformée en galerie : hall double hauteur, sol
@@ -47,10 +42,6 @@ export function VillaInterior() {
   );
   const metal = useMemo(
     () => new MeshStandardMaterial({ color: "#1b1c1e", roughness: 0.35, metalness: 0.85 }),
-    [],
-  );
-  const frameMat = useMemo(
-    () => new MeshStandardMaterial({ color: "#171715", roughness: 0.5, metalness: 0.3 }),
     [],
   );
   const chandelierMat = useMemo(
@@ -127,15 +118,14 @@ export function VillaInterior() {
 
       {/* ===== ŒUVRES D'ART (grandes toiles + cadre + spot musée + cartel) ===== */}
       {/* Mur du fond (z = -8.3, face +z) */}
-      <Artwork position={[-6, 2.6, -8.28]} color={ART[0]} frameMat={frameMat} meta={ARTWORKS["art-1"]} />
-      <Artwork position={[0, 2.6, -8.28]} color={ART[1]} frameMat={frameMat} meta={ARTWORKS["art-2"]} wide />
-      <Artwork position={[6, 2.6, -8.28]} color={ART[2]} frameMat={frameMat} meta={ARTWORKS["art-3"]} />
+      <Artwork position={[-6, 2.6, -8.28]} color={ART[0]} meta={ARTWORKS["art-1"]} />
+      <Artwork position={[0, 2.6, -8.28]} color={ART[1]} meta={ARTWORKS["art-2"]} wide />
+      <Artwork position={[6, 2.6, -8.28]} color={ART[2]} meta={ARTWORKS["art-3"]} />
       {/* Mur gauche (x = -10.8, face +x) — décalée pour dégager la porte cuisine */}
       <Artwork
         position={[-10.78, 2.6, -5.5]}
         rotation={[0, Math.PI / 2, 0]}
         color={ART[3]}
-        frameMat={frameMat}
         meta={ARTWORKS["art-4"]}
         wide
       />
@@ -144,96 +134,12 @@ export function VillaInterior() {
         position={[10.78, 2.6, -5.5]}
         rotation={[0, -Math.PI / 2, 0]}
         color={ART[4]}
-        frameMat={frameMat}
         meta={ARTWORKS["art-5"]}
       />
 
       {/* Lumière chaude d'ambiance dans le hall */}
       <pointLight position={[0, 3, 0]} intensity={14} distance={20} decay={2} color="#ffdcae" />
       <pointLight position={[5, 2.4, -6]} intensity={9} distance={14} decay={2} color="#ffe2ba" />
-    </group>
-  );
-}
-
-/* ---------- Une œuvre encadrée + cartel + spot ---------- */
-function Artwork({
-  position,
-  rotation = [0, 0, 0],
-  color,
-  frameMat,
-  meta,
-  wide = false,
-}: {
-  position: [number, number, number];
-  rotation?: [number, number, number];
-  color: string;
-  frameMat: MeshStandardMaterial;
-  meta: ArtworkMeta;
-  wide?: boolean;
-}) {
-  // Cadres en PAYSAGE (ratio ~1.45) pour épouser les miniatures de sites.
-  const w = wide ? 4.2 : 2.9;
-  const h = wide ? 2.9 : 2.0;
-
-  // Image de l'œuvre chargée à la volée ; repli silencieux sur la couleur si
-  // le fichier est absent (aucune erreur, aucun crash de Suspense).
-  const [tex, setTex] = useState<Texture | null>(null);
-  useEffect(() => {
-    if (!meta.image) return;
-    let alive = true;
-    new TextureLoader().load(
-      meta.image,
-      (t) => {
-        if (!alive) {
-          t.dispose();
-          return;
-        }
-        t.colorSpace = SRGBColorSpace;
-        t.anisotropy = 8;
-        setTex(t);
-      },
-      undefined,
-      () => {
-        /* image absente → on garde la couleur d'origine */
-      },
-    );
-    return () => {
-      alive = false;
-    };
-  }, [meta.image]);
-
-  return (
-    // `interactive: "artwork"` + `meta` sont lus par le raycast du <Player/>
-    // (visée au centre de l'écran) pour ouvrir le cartel et cadrer l'œuvre.
-    <group
-      position={position}
-      rotation={rotation}
-      userData={{ interactive: "artwork", meta, halfWidth: w / 2 }}
-    >
-      {/* Cadre 3D en relief */}
-      <mesh material={frameMat} castShadow>
-        <boxGeometry args={[w + 0.2, h + 0.2, 0.12]} />
-      </mesh>
-      {/* Toile : vraie image si disponible, sinon aplat de couleur « musée ». */}
-      <mesh position={[0, 0, 0.08]}>
-        <planeGeometry args={[w, h]} />
-        {/* `key` force le remount du matériau quand la texture arrive : sinon le
-            shader, compilé sans `map`, ne l'échantillonne jamais (cadre blanc). */}
-        <meshStandardMaterial
-          key={tex ? "img" : "plain"}
-          map={tex ?? undefined}
-          color={tex ? "#ffffff" : color}
-          roughness={0.5}
-          metalness={0}
-          emissive={tex ? "#000000" : color}
-          emissiveIntensity={tex ? 0 : 0.4}
-        />
-      </mesh>
-      {/* Cartel d'exposition */}
-      <mesh position={[-(w / 2) + 0.3, -(h / 2) - 0.35, 0.08]}>
-        <planeGeometry args={[0.5, 0.22]} />
-        <meshStandardMaterial color="#f4f1ea" roughness={0.8} emissive="#f4f1ea" emissiveIntensity={0.15} />
-      </mesh>
     </group>
   );
 }
