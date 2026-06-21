@@ -22,6 +22,7 @@ import { VillaOffice } from "./world/VillaOffice";
 import { VillaArchitecture } from "@/components/3d/villa/VillaArchitecture";
 import { VillaInterior } from "@/components/3d/villa/VillaInterior";
 import { VillaGrounds } from "@/components/3d/villa/VillaGrounds";
+import { GardenSport } from "@/components/3d/villa/GardenSport";
 import { CanvasLoader } from "@/components/3d/CanvasLoader";
 import { useHasWebGL } from "@/hooks/useHasWebGL";
 import { useIsTouch } from "@/hooks/useIsTouch";
@@ -95,6 +96,7 @@ export function VillaExperience() {
           <VillaArchitecture />
           <VillaInterior />
           <VillaGrounds />
+          <GardenSport />
           <VillaRooms />
           <VillaOffice />
           <VillaFurniture />

@@ -18,10 +18,10 @@ export function Lighting() {
         shadow-bias={-0.0004}
         shadow-camera-near={1}
         shadow-camera-far={130}
-        shadow-camera-left={-46}
-        shadow-camera-right={46}
-        shadow-camera-top={46}
-        shadow-camera-bottom={-46}
+        shadow-camera-left={-60}
+        shadow-camera-right={60}
+        shadow-camera-top={60}
+        shadow-camera-bottom={-60}
       />
       {/* Remplissage froid pour la séparation premium. */}
       <directionalLight position={[24, 16, -22]} intensity={0.35} color="#9fb8ff" />
