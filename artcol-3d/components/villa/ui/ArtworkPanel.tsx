@@ -82,13 +82,27 @@ export function ArtworkPanel() {
             </p>
           )}
 
-          <div className="mt-6 flex items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {artwork.url && (
+              <button
+                type="button"
+                onClick={() => window.open(artwork.url, "_blank", "noopener,noreferrer")}
+                className="pointer-events-auto rounded-full bg-[#221c15] px-5 py-2.5 text-[11px] uppercase text-[#f7f2e9] transition hover:opacity-90"
+                style={{ fontFamily: "'Jost', system-ui, sans-serif", letterSpacing: "0.2em" }}
+              >
+                Ouvrir le projet ↗
+              </button>
+            )}
             {!showMore && (
               <button
                 type="button"
                 onClick={() => setShowMore(true)}
-                className="pointer-events-auto rounded-full bg-[#221c15] px-5 py-2.5 text-[11px] uppercase text-[#f7f2e9] transition hover:opacity-90"
-                style={{ fontFamily: "'Jost', system-ui, sans-serif", letterSpacing: "0.2em" }}
+                className="pointer-events-auto rounded-full px-5 py-2.5 text-[11px] uppercase text-[#4a4036] transition hover:bg-[rgba(34,28,21,.06)]"
+                style={{
+                  fontFamily: "'Jost', system-ui, sans-serif",
+                  letterSpacing: "0.2em",
+                  border: "1px solid rgba(34,28,21,.18)",
+                }}
               >
                 En savoir plus
               </button>

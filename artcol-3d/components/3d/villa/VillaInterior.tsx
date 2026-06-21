@@ -171,8 +171,9 @@ function Artwork({
   meta: ArtworkMeta;
   wide?: boolean;
 }) {
-  const w = wide ? 4.2 : 2.4;
-  const h = 2.8;
+  // Cadres en PAYSAGE (ratio ~1.45) pour épouser les miniatures de sites.
+  const w = wide ? 4.2 : 2.9;
+  const h = wide ? 2.9 : 2.0;
 
   // Image de l'œuvre chargée à la volée ; repli silencieux sur la couleur si
   // le fichier est absent (aucune erreur, aucun crash de Suspense).
@@ -216,7 +217,10 @@ function Artwork({
       {/* Toile : vraie image si disponible, sinon aplat de couleur « musée ». */}
       <mesh position={[0, 0, 0.08]}>
         <planeGeometry args={[w, h]} />
+        {/* `key` force le remount du matériau quand la texture arrive : sinon le
+            shader, compilé sans `map`, ne l'échantillonne jamais (cadre blanc). */}
         <meshStandardMaterial
+          key={tex ? "img" : "plain"}
           map={tex ?? undefined}
           color={tex ? "#ffffff" : color}
           roughness={0.5}
