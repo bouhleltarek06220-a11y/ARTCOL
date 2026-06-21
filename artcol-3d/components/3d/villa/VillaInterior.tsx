@@ -136,6 +136,15 @@ export function VillaInterior() {
         color={ART[4]}
         meta={ARTWORKS["art-5"]}
       />
+      {/* ÉTAGE — œuvre sur le mur gauche de la mezzanine (y ≈ 5), face +x */}
+      <Artwork
+        position={[-10.78, 5.0, -6.0]}
+        rotation={[0, Math.PI / 2, 0]}
+        color={ART[0]}
+        meta={ARTWORKS["art-8"]}
+        wide
+      />
+      <pointLight position={[-9.4, 6.2, -6.0]} intensity={6} distance={7} decay={2} color="#ffe6c0" />
 
       {/* Lumière chaude d'ambiance dans le hall */}
       <pointLight position={[0, 3, 0]} intensity={14} distance={20} decay={2} color="#ffdcae" />
