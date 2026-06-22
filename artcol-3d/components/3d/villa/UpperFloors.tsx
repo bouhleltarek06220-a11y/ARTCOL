@@ -19,12 +19,22 @@ const R2_Y = 7.6; // centre de la dalle
 export function UpperFloors() {
   const marble = useMemo(() => {
     const t = getVillaTextures();
-    const m = new MeshStandardMaterial({ color: "#cfc9bf", roughness: 0.22, metalness: 0.1, envMapIntensity: 1.2 });
+    const m = new MeshStandardMaterial({ color: "#ece6da", roughness: 1, metalness: 0.12, envMapIntensity: 1.7 });
     if (t) {
+      const rep = 2.6;
       const map = t.marble.clone();
       map.needsUpdate = true;
-      map.repeat.set(4, 2);
+      map.repeat.set(rep, rep * 0.62);
       m.map = map;
+      const rgh = t.marbleRough.clone();
+      rgh.needsUpdate = true;
+      rgh.repeat.set(rep, rep * 0.62);
+      m.roughnessMap = rgh;
+      const nrm = t.marbleNormal.clone();
+      nrm.needsUpdate = true;
+      nrm.repeat.set(rep, rep * 0.62);
+      m.normalMap = nrm;
+      m.normalScale.set(0.32, 0.32);
     }
     return m;
   }, []);
