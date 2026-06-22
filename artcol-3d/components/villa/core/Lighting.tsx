@@ -25,8 +25,8 @@ export function Lighting() {
       />
       {/* Remplissage froid pour la séparation premium. */}
       <directionalLight position={[24, 16, -22]} intensity={0.35} color="#9fb8ff" />
-      <hemisphereLight args={["#ffe8d2", "#3a4a5a", 0.3]} />
-      <ambientLight intensity={0.08} color="#ffe6c4" />
+      <hemisphereLight args={["#ffe8d2", "#4a4438", 0.34]} />
+      <ambientLight intensity={0.12} color="#ffe2bc" />
     </>
   );
 }
