@@ -31,10 +31,10 @@ export const WAYPOINTS: Record<string, Waypoint> = {
 
   // ---------- ÉTAGE ----------
   "r1-suite": { id: "r1-suite", label: "Suite parentale", level: 1, pos: [1.3, 5.6, -4], target: [2, 5.2, -7.6] },
-  "r2-chambres": { id: "r2-chambres", label: "Chambres", level: 2, pos: [3, 9.4, -5], target: [6, 9.1, -7.6] },
+  "r2-chambres": { id: "r2-chambres", label: "Chambres", level: 2, pos: [5, 9.4, -5.6], target: [6.5, 8.9, -8] },
 
   // ---------- SOUS-SOL ----------
-  "ss-spa": { id: "ss-spa", label: "Spa & détente", level: -1, pos: [-1, -2.2, -0.5], target: [-6, -2.5, -5] },
+  "ss-spa": { id: "ss-spa", label: "Spa & détente", level: -1, pos: [-0.5, -2.2, 1.5], target: [-5, -2.8, -5] },
 };
 
 /** Groupes pour le menu (ordre d'affichage). */
