@@ -9,6 +9,10 @@ import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from "three";
 
 type VillaTextures = {
   marble: CanvasTexture;
+  /** Rugosité du marbre (poli + veines mates) — espace linéaire. */
+  marbleRough: CanvasTexture;
+  /** Normal map du marbre (micro-relief des veines) — espace linéaire. */
+  marbleNormal: CanvasTexture;
   concrete: CanvasTexture;
   /** Relief (bump) assorti au béton banché : joints + trous de banche + grain. */
   concreteBump: CanvasTexture;
@@ -35,34 +39,111 @@ function tex(c: HTMLCanvasElement) {
   return t;
 }
 
-function makeMarble() {
-  const { c, x } = canvas(1024, 1024);
-  x.fillStyle = "#e9e5dd";
-  x.fillRect(0, 0, 1024, 1024);
-  for (let i = 0; i < 80; i++) {
-    x.globalAlpha = 0.04;
-    x.fillStyle = Math.random() < 0.5 ? "#dcd6ca" : "#ffffff";
-    x.beginPath();
-    x.arc(Math.random() * 1024, Math.random() * 1024, 60 + Math.random() * 240, 0, Math.PI * 2);
-    x.fill();
-  }
-  for (let i = 0; i < 24; i++) {
-    x.globalAlpha = 0.1 + Math.random() * 0.14;
-    x.strokeStyle = Math.random() < 0.5 ? "#9a9182" : "#b7a98f";
-    x.lineWidth = 0.6 + Math.random() * 2.4;
-    x.beginPath();
-    let px = Math.random() * 1024;
-    let py = 0;
-    x.moveTo(px, py);
-    for (let k = 0; k < 18; k++) {
-      px += (Math.random() - 0.5) * 150;
-      py += 1024 / 18;
-      x.lineTo(px + (Math.random() - 0.5) * 30, py);
+/** Texture de DONNÉES (rugosité, normal, AO) — espace linéaire, pas sRGB. */
+function dataTex(c: HTMLCanvasElement) {
+  const t = new CanvasTexture(c);
+  t.wrapS = t.wrapT = RepeatWrapping;
+  t.anisotropy = 8;
+  return t;
+}
+
+/** Normal map dérivée d'un champ de hauteur (canal R = hauteur) par Sobel. */
+function heightToNormal(src: HTMLCanvasElement, strength = 2): CanvasTexture {
+  const w = src.width;
+  const h = src.height;
+  const hd = src.getContext("2d")!.getImageData(0, 0, w, h).data;
+  const { c, x } = canvas(w, h);
+  const out = x.createImageData(w, h);
+  const od = out.data;
+  const H = (xx: number, yy: number) => hd[((((yy + h) % h) * w + ((xx + w) % w)) * 4)] / 255;
+  for (let yy = 0; yy < h; yy++) {
+    for (let xx = 0; xx < w; xx++) {
+      const dx = (H(xx - 1, yy) - H(xx + 1, yy)) * strength;
+      const dy = (H(xx, yy - 1) - H(xx, yy + 1)) * strength;
+      const len = Math.hypot(dx, dy, 1);
+      const i = (yy * w + xx) * 4;
+      od[i] = ((dx / len) * 0.5 + 0.5) * 255;
+      od[i + 1] = ((dy / len) * 0.5 + 0.5) * 255;
+      od[i + 2] = (1 / len) * 255;
+      od[i + 3] = 255;
     }
-    x.stroke();
   }
-  x.globalAlpha = 1;
-  return tex(c);
+  x.putImageData(out, 0, 0);
+  return dataTex(c);
+}
+
+/**
+ * Marbre poli PBR : carte de COULEUR (veines) + carte de RUGOSITÉ (poli lisse,
+ * veines un peu plus mates → reflets variés réalistes) + NORMAL map (micro-creux
+ * des veines). Sort le sol de l'effet « patinoire uniforme ».
+ */
+function makeMarble(): { map: CanvasTexture; rough: CanvasTexture; normal: CanvasTexture } {
+  const S = 1024;
+  const col = canvas(S, S);
+  const ht = canvas(S, S); // champ de hauteur (blanc = haut)
+  const rg = canvas(S, S); // rugosité (sombre = poli)
+
+  col.x.fillStyle = "#f1ece2"; // blanc chaud (Calacatta)
+  col.x.fillRect(0, 0, S, S);
+  ht.x.fillStyle = "#ffffff";
+  ht.x.fillRect(0, 0, S, S);
+  rg.x.fillStyle = "#1c1c1c"; // ~0.11 = poli miroir net
+  rg.x.fillRect(0, 0, S, S);
+
+  // nuages doux (variation chaude)
+  for (let i = 0; i < 70; i++) {
+    col.x.globalAlpha = 0.05;
+    col.x.fillStyle = Math.random() < 0.5 ? "#ded6c6" : "#ffffff";
+    col.x.beginPath();
+    col.x.arc(Math.random() * S, Math.random() * S, 60 + Math.random() * 240, 0, Math.PI * 2);
+    col.x.fill();
+  }
+  col.x.globalAlpha = 1;
+
+  // veines marquées (quelques grandes + plusieurs fines)
+  for (let i = 0; i < 34; i++) {
+    const main = i < 7;
+    const lw = main ? 2.5 + Math.random() * 3 : 0.6 + Math.random() * 1.6;
+    col.x.globalAlpha = main ? 0.32 + Math.random() * 0.22 : 0.16 + Math.random() * 0.16;
+    col.x.strokeStyle = Math.random() < 0.4 ? "#857a64" : "#a99a7e";
+    col.x.lineWidth = lw;
+    ht.x.globalAlpha = 0.6;
+    ht.x.strokeStyle = "#8f8f8f"; // veine = creux
+    ht.x.lineWidth = lw + 0.5;
+    rg.x.globalAlpha = 0.6;
+    rg.x.strokeStyle = "#666666"; // veine = plus mate
+    rg.x.lineWidth = lw + 1;
+    let px = Math.random() * S;
+    let py = 0;
+    col.x.beginPath(); col.x.moveTo(px, py);
+    ht.x.beginPath(); ht.x.moveTo(px, py);
+    rg.x.beginPath(); rg.x.moveTo(px, py);
+    for (let k = 0; k < 20; k++) {
+      px += (Math.random() - 0.5) * (main ? 120 : 170);
+      py += S / 20;
+      const nx = px + (Math.random() - 0.5) * 26;
+      col.x.lineTo(nx, py);
+      ht.x.lineTo(nx, py);
+      rg.x.lineTo(nx, py);
+    }
+    col.x.stroke();
+    ht.x.stroke();
+    rg.x.stroke();
+    // ramifications fines sur les grandes veines
+    if (main) {
+      col.x.globalAlpha = 0.14;
+      col.x.lineWidth = 0.8;
+      col.x.beginPath();
+      col.x.moveTo(px, py - S / 4);
+      col.x.lineTo(px + (Math.random() - 0.5) * 120, py - S / 8);
+      col.x.stroke();
+    }
+  }
+  col.x.globalAlpha = 1;
+  ht.x.globalAlpha = 1;
+  rg.x.globalAlpha = 1;
+
+  return { map: tex(col.c), rough: dataTex(rg.c), normal: heightToNormal(ht.c, 1.4) };
 }
 
 function noiseMap(w: number, base: string, amp: number) {
@@ -241,8 +322,11 @@ export function getVillaTextures(): VillaTextures | null {
   if (cache) return cache;
   if (typeof document === "undefined") return null;
   const concrete = makeConcrete();
+  const marble = makeMarble();
   cache = {
-    marble: makeMarble(),
+    marble: marble.map,
+    marbleRough: marble.rough,
+    marbleNormal: marble.normal,
     concrete: concrete.map,
     concreteBump: concrete.bump,
     wood: makeWood(),
