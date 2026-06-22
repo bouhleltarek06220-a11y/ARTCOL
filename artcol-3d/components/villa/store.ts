@@ -59,7 +59,7 @@ export const useVilla = create<VillaState>((set, get) => ({
   aim: null,
   lock: undefined,
 
-  tourId: null,
+  tourId: "ext-entree", // on démarre au point de vue de l'entrée
   tourGo: null,
   tourBusy: false,
   syncLevel: null,

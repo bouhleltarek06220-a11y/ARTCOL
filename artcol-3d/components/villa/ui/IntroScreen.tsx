@@ -11,13 +11,10 @@ import { useIsTouch } from "@/hooks/useIsTouch";
 export function IntroScreen() {
   const phase = useVilla((s) => s.phase);
   const setPhase = useVilla((s) => s.setPhase);
-  const lock = useVilla((s) => s.lock);
   const touch = useIsTouch();
 
   const enter = () => {
     setPhase("visiting");
-    // Le verrouillage doit suivre le geste utilisateur (clic).
-    requestAnimationFrame(() => lock?.());
   };
 
   return (
@@ -69,15 +66,14 @@ export function IntroScreen() {
       >
         {touch ? (
           <>
-            Déplacement <b className="text-[#4a4036]">joystick</b> · regard{" "}
+            Choisissez une <b className="text-[#4a4036]">destination</b> · regard{" "}
             <b className="text-[#4a4036]">glisser</b> · <b className="text-[#4a4036]">taper</b> une
             œuvre
           </>
         ) : (
           <>
-            Déplacement <b className="text-[#4a4036]">Z Q S D</b> · regard{" "}
-            <b className="text-[#4a4036]">souris</b> · <b className="text-[#4a4036]">Échap</b> pour
-            sortir
+            Choisissez une <b className="text-[#4a4036]">destination</b> dans le menu · regard{" "}
+            <b className="text-[#4a4036]">glisser la souris</b> · clic sur une œuvre
           </>
         )}
       </div>
