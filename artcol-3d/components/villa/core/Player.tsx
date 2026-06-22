@@ -50,7 +50,7 @@ const FLOOR2 = CORE.Y.r2; // 7.75
 const BASE_FLOOR = CORE.Y.s1; // -3.85
 /** Empreintes praticables HORS noyau, par niveau. */
 const onFloor1 = (x: number, z: number) => x >= -10.4 && x <= 10.4 && z >= -8.4 && z <= -3.5;
-const onFloor2 = (x: number, z: number) => x >= -10.4 && x <= 10.4 && z >= -8.4 && z <= -4.95;
+const onFloor2 = (x: number, z: number) => x >= -10.4 && x <= 10.4 && z >= -8.4 && z <= -3.5;
 const inBasement = (x: number, z: number) => x >= -10.4 && x <= 10.4 && z >= -8.2 && z <= 2.2;
 
 /** Premier ancêtre interactif rencontré sur le rayon (centre écran), à portée. */
