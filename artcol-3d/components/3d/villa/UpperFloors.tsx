@@ -46,41 +46,37 @@ export function UpperFloors() {
 
   return (
     <group>
-      {/* ===== DALLE R2 — trouée sur l'emprise du NOYAU (alignée mezzanine) =====
-            Trémie ouverte x[-10.3,-6.5] z[-8.2,-4.95] ; bande arrière + palier
-            d'arrivée (qui prolonge le plancher jusqu'à z=-3.5 au droit du noyau). */}
+      {/* ===== DALLE R2 — identique à la mezzanine : trouée sur le NOYAU =====
+            Trémie ouverte x[-10.3,-6.5] z[-8.2,-4.4] ; bande arrière + palier
+            d'arrivée (front). Profondeur jusqu'à z=-3.5 (couloir d'accès chambres). */}
       {/* bande droite (x -6.5..10.7) */}
-      <mesh material={marble} position={[2.1, R2_Y, -6.725]} castShadow receiveShadow>
-        <boxGeometry args={[17.2, 0.3, 3.55]} />
+      <mesh material={marble} position={[2.1, R2_Y, -6]} castShadow receiveShadow>
+        <boxGeometry args={[17.2, 0.3, 5]} />
       </mesh>
       {/* fine bande gauche le long du mur */}
-      <mesh material={marble} position={[-10.5, R2_Y, -6.725]} castShadow receiveShadow>
-        <boxGeometry args={[0.4, 0.3, 3.55]} />
+      <mesh material={marble} position={[-10.5, R2_Y, -6]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, 0.3, 5]} />
       </mesh>
       {/* bande arrière du noyau (contre le mur du fond) */}
       <mesh material={marble} position={[-8.4, R2_Y, -8.35]} castShadow receiveShadow>
         <boxGeometry args={[3.8, 0.3, 0.3]} />
       </mesh>
-      {/* palier d'arrivée du noyau (front, prolonge le plancher à z=-3.5) */}
-      <mesh material={marble} position={[-8.4, R2_Y, -4.225]} castShadow receiveShadow>
-        <boxGeometry args={[3.8, 0.3, 1.45]} />
+      {/* palier d'arrivée du noyau (front) */}
+      <mesh material={marble} position={[-8.4, R2_Y, -3.95]} castShadow receiveShadow>
+        <boxGeometry args={[3.8, 0.3, 0.9]} />
       </mesh>
 
-      {/* ===== GARDE-CORPS VERRE (façade — segment droit ; le noyau ouvre devant) ===== */}
-      <mesh position={[2.1, R2_Y + 0.7, -4.95]}>
+      {/* ===== GARDE-CORPS VERRE (façade z=-3.5 — segment droit ; noyau ouvre devant) ===== */}
+      <mesh position={[2.1, R2_Y + 0.7, -3.5]}>
         <boxGeometry args={[17.2, 1.1, 0.06]} />
         <primitive object={glassRail} attach="material" />
       </mesh>
-      <mesh material={metal} position={[2.1, R2_Y + 0.2, -4.95]}>
+      <mesh material={metal} position={[2.1, R2_Y + 0.2, -3.5]}>
         <boxGeometry args={[17.2, 0.06, 0.1]} />
       </mesh>
-      {/* garde-corps le long de la trémie (côté hall, x=-6.5) + front du palier */}
-      <mesh position={[-6.5, R2_Y + 0.7, -6.35]}>
-        <boxGeometry args={[0.06, 1.1, 2.7]} />
-        <primitive object={glassRail} attach="material" />
-      </mesh>
-      <mesh position={[-8.4, R2_Y + 0.7, -3.5]}>
-        <boxGeometry args={[3.8, 1.1, 0.06]} />
+      {/* garde-corps le long de la trémie (côté hall, x=-6.5) */}
+      <mesh position={[-6.5, R2_Y + 0.7, -6.3]}>
+        <boxGeometry args={[0.06, 1.1, 3.8]} />
         <primitive object={glassRail} attach="material" />
       </mesh>
 

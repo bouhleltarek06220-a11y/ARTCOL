@@ -67,17 +67,11 @@ export function UpperMasterSuite() {
 
   // ---------- Sous-composants ----------
 
-  // Cloison haute 2.4 m (de y=3.95 à y=6.35) avec épaisseur fine
-  function Partition({
-    position,
-    size,
-  }: {
-    position: Vec3;
-    size: [number, number]; // [longueur, épaisseur]
-  }) {
+  // Cloison verticale (le long de Z), h 2.4 m, épaisseur 0.1 m.
+  function WallZ({ x, z0, z1 }: { x: number; z0: number; z1: number }) {
     return (
-      <mesh position={position} material={wallMat} castShadow receiveShadow>
-        <boxGeometry args={[size[0], 2.4, size[1]]} />
+      <mesh position={[x, 1.2, (z0 + z1) / 2]} material={wallMat} castShadow receiveShadow>
+        <boxGeometry args={[0.1, 2.4, Math.abs(z1 - z0)]} />
       </mesh>
     );
   }
@@ -276,56 +270,48 @@ export function UpperMasterSuite() {
   // ---------- Layout ----------
   return (
     <group position={[0, FLOOR, 0]}>
-      {/* ===== CLOISONS (h 2.4 m, centre à y=1.2 au-dessus du sol) ===== */}
-      {/* Cloison SdB / Dressing (gauche, en z≈−6.1) */}
-      <Partition position={[-6.85, 1.2, -6.1]} size={[7.3, 0.1]} />
-      {/* Cloison verticale séparant zone gauche de la chambre, en x≈−3.1 (ouverture ≈0.9 m) */}
-      <mesh position={[-3.1, 1.2, -7.1]} material={wallMat} castShadow receiveShadow>
-        <boxGeometry args={[0.1, 2.4, 2.8]} />
-      </mesh>
-      <mesh position={[-3.1, 1.2, -4.55]} material={wallMat} castShadow receiveShadow>
-        <boxGeometry args={[0.1, 2.4, 1.5]} />
+      {/* ===== CLOISONS (toutes en x > −6.4 : le NOYAU occupe l'arrière-gauche) =====
+            On débouche du noyau (palier avant-gauche) dans la suite par
+            l'ouverture avant (z > −5.2) le long de la cloison x=−6.4. */}
+      {/* Cloison noyau / suite (laisse l'entrée à l'avant) */}
+      <WallZ x={-6.4} z0={-8.3} z1={-5.2} />
+      {/* Cloison dressing / chambre (ouverture avant) */}
+      <WallZ x={-3.0} z0={-8.3} z1={-5.6} />
+      {/* Cloison chambre / salle de bain (ouverture avant) */}
+      <WallZ x={5.6} z0={-8.3} z1={-5.2} />
+
+      {/* ===== DRESSING (gauche, x[−6.3,−3]) ===== */}
+      <ClosetModule position={[-5.9, 0, -7.9]} />
+      <ClosetModule position={[-4.8, 0, -7.9]} />
+      <ClosetModule position={[-3.7, 0, -7.9]} />
+      <Wardrobe position={[-4.7, 0, -5.3]} />
+      <mesh position={[-4.7, 0.45, -6.4]} material={woodMat} castShadow receiveShadow>
+        <boxGeometry args={[1.4, 0.9, 0.9]} />
       </mesh>
 
-      {/* Cloison avant le long de z≈−3.8 (suite / palier) avec ouverture vers l'escalier */}
-      <mesh position={[-3.35, 1.2, -3.8]} material={wallMat} castShadow receiveShadow>
-        <boxGeometry args={[14.7, 2.4, 0.1]} />
-      </mesh>
-      <mesh position={[9.35, 1.2, -3.8]} material={wallMat} castShadow receiveShadow>
-        <boxGeometry args={[2.7, 2.4, 0.1]} />
-      </mesh>
-
-      {/* ===== CHAMBRE (centre-droit) ===== */}
-      <Bed position={[3.5, 0, -7.0]} />
-      <Nightstand position={[1.9, 0, -7.7]} />
-      <Nightstand position={[5.1, 0, -7.7]} />
-      <Bench position={[3.5, 0, -4.7]} />
-      <Wardrobe position={[9.6, 0, -7.7]} />
-      <mesh position={[3.5, 0.01, -6.2]} material={rugMat} receiveShadow>
+      {/* ===== CHAMBRE (centre, x[−3,5.6]) ===== */}
+      <Bed position={[1.3, 0, -7.0]} />
+      <Nightstand position={[-0.3, 0, -7.7]} />
+      <Nightstand position={[2.9, 0, -7.7]} />
+      <Bench position={[1.3, 0, -4.7]} />
+      <mesh position={[1.3, 0.01, -6.2]} material={rugMat} receiveShadow>
         <boxGeometry args={[4.0, 0.02, 4.0]} />
       </mesh>
-      <mesh position={[7.0, 1.6, -8.42]} material={metalMat} castShadow>
+      {/* TV murale (mur du fond) */}
+      <mesh position={[1.3, 1.6, -8.42]} material={metalMat} castShadow>
         <boxGeometry args={[1.8, 1.0, 0.06]} />
       </mesh>
 
-      {/* ===== SALLE DE BAIN (gauche-fond) ===== */}
-      <Vanity position={[-9.0, 0, -8.1]} />
-      <Bathtub position={[-4.6, 0, -7.3]} />
-      <Shower position={[-9.2, 0, -6.9]} />
-      <Toilet position={[-6.6, 0, -8.1]} />
-
-      {/* ===== DRESSING (gauche-avant) ===== */}
-      <ClosetModule position={[-10.0, 0, -5.7]} />
-      <ClosetModule position={[-8.9, 0, -5.7]} />
-      <ClosetModule position={[-7.8, 0, -5.7]} />
-      <ClosetModule position={[-6.7, 0, -5.7]} />
-      <mesh position={[-5.0, 0.45, -5.0]} material={woodMat} castShadow receiveShadow>
-        <boxGeometry args={[1.6, 0.9, 0.9]} />
-      </mesh>
+      {/* ===== SALLE DE BAIN (droite, x[5.8,10]) ===== */}
+      <Vanity position={[8.4, 0, -8.0]} />
+      <Bathtub position={[8.6, 0, -5.0]} />
+      <Shower position={[9.3, 0, -6.9]} />
+      <Toilet position={[6.4, 0, -8.0]} />
 
       {/* ===== ÉCLAIRAGE chaud ===== */}
-      <pointLight position={[3.5, 2.4, -6.5]} color="#ffdca6" intensity={7} distance={8} decay={2} />
-      <pointLight position={[-6.5, 2.4, -7.2]} color="#ffdca6" intensity={6} distance={8} decay={2} />
+      <pointLight position={[1.3, 2.4, -6.5]} color="#ffdca6" intensity={7} distance={8} decay={2} />
+      <pointLight position={[8.3, 2.4, -6.8]} color="#ffdca6" intensity={6} distance={8} decay={2} />
+      <pointLight position={[-4.6, 2.4, -6.6]} color="#ffdca6" intensity={5} distance={7} decay={2} />
     </group>
   );
 }
