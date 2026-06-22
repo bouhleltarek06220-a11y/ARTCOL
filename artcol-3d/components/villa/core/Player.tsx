@@ -2,9 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { PointerLockControls } from "@react-three/drei";
 import { Euler, Object3D, Quaternion, Raycaster, Vector2, Vector3 } from "three";
-import type { PointerLockControls as PLC } from "three-stdlib";
 import { useVilla, type Aim } from "../store";
 import type { ArtworkMeta } from "../world/artworks";
 import { touchInput } from "./touchInput";
@@ -13,7 +11,7 @@ import { CORE, CORE_LEVELS, inCore, onCoreWalk, coreHeights } from "../dimension
 /**
  * Joueur à la première personne.
  *
- * Bureau : marche ZQSD/WASD + regard souris (pointer lock).
+ * Bureau : marche ZQSD/WASD (optionnelle) + regard en glissant la souris.
  * Mobile / tablette : joystick (déplacement) + glisser sur la scène (regard),
  *   sans pointer lock — la caméra est alors pilotée par des angles maison.
  *
@@ -76,8 +74,6 @@ function pickInteractive(
 
 export function Player({ touch = false }: { touch?: boolean }) {
   const { camera, scene, gl } = useThree();
-  const controls = useRef<PLC>(null);
-  const registerLock = useVilla((s) => s.registerLock);
   const setZone = useVilla((s) => s.setZone);
   const setPhase = useVilla((s) => s.setPhase);
   const setAim = useVilla((s) => s.setAim);
@@ -130,51 +126,45 @@ export function Player({ touch = false }: { touch?: boolean }) {
     };
   }, [camera]);
 
-  // Verrouillage du pointeur exposé à l'UI (boutons « Entrer » / fermetures).
-  // Sur tactile, pas de pointer lock : la fonction est inerte.
+  // Regard par GLISSER (souris ou doigt) — PAS de pointer lock : le curseur
+  // reste libre pour cliquer le menu de visite, et Échap ne fait rien.
   useEffect(() => {
-    registerLock(() => controls.current?.lock());
-  }, [registerLock]);
-
-  // Regard tactile : glisser sur la scène fait tourner la caméra. On suit un
-  // doigt précis (par identifiant) pour cohabiter avec le joystick.
-  useEffect(() => {
-    if (!touch) return;
     const el = gl.domElement;
-    let id: number | null = null;
-    let lastX = 0;
-    let lastY = 0;
-    let moved = 0;
 
-    const onStart = (e: TouchEvent) => {
+    // ---- Tactile (suit un doigt précis pour cohabiter avec le joystick) ----
+    let id: number | null = null;
+    let tLastX = 0;
+    let tLastY = 0;
+    let tMoved = 0;
+    const onTStart = (e: TouchEvent) => {
       if (id !== null) return;
       for (const t of Array.from(e.changedTouches)) {
         if (t.target === el) {
           id = t.identifier;
-          lastX = t.clientX;
-          lastY = t.clientY;
-          moved = 0;
+          tLastX = t.clientX;
+          tLastY = t.clientY;
+          tMoved = 0;
           touchInput.suppressTap = false;
           break;
         }
       }
     };
-    const onMove = (e: TouchEvent) => {
+    const onTMove = (e: TouchEvent) => {
       if (id === null) return;
       for (const t of Array.from(e.touches)) {
         if (t.identifier !== id) continue;
-        const dx = t.clientX - lastX;
-        const dy = t.clientY - lastY;
-        lastX = t.clientX;
-        lastY = t.clientY;
-        moved += Math.abs(dx) + Math.abs(dy);
+        const dx = t.clientX - tLastX;
+        const dy = t.clientY - tLastY;
+        tLastX = t.clientX;
+        tLastY = t.clientY;
+        tMoved += Math.abs(dx) + Math.abs(dy);
         touchInput.look.dx += dx;
         touchInput.look.dy += dy;
-        if (moved > 12) touchInput.suppressTap = true;
+        if (tMoved > 12) touchInput.suppressTap = true;
         break;
       }
     };
-    const onEnd = (e: TouchEvent) => {
+    const onTEnd = (e: TouchEvent) => {
       for (const t of Array.from(e.changedTouches)) {
         if (t.identifier === id) {
           id = null;
@@ -182,17 +172,52 @@ export function Player({ touch = false }: { touch?: boolean }) {
         }
       }
     };
-    el.addEventListener("touchstart", onStart, { passive: true });
-    el.addEventListener("touchmove", onMove, { passive: true });
-    el.addEventListener("touchend", onEnd, { passive: true });
-    el.addEventListener("touchcancel", onEnd, { passive: true });
-    return () => {
-      el.removeEventListener("touchstart", onStart);
-      el.removeEventListener("touchmove", onMove);
-      el.removeEventListener("touchend", onEnd);
-      el.removeEventListener("touchcancel", onEnd);
+
+    // ---- Souris (glisser bouton gauche enfoncé sur la scène) ----
+    let dragging = false;
+    let mLastX = 0;
+    let mLastY = 0;
+    let mMoved = 0;
+    const onMDown = (e: MouseEvent) => {
+      if (e.button !== 0 || e.target !== el) return;
+      dragging = true;
+      mLastX = e.clientX;
+      mLastY = e.clientY;
+      mMoved = 0;
+      touchInput.suppressTap = false;
     };
-  }, [touch, gl]);
+    const onMMove = (e: MouseEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - mLastX;
+      const dy = e.clientY - mLastY;
+      mLastX = e.clientX;
+      mLastY = e.clientY;
+      mMoved += Math.abs(dx) + Math.abs(dy);
+      touchInput.look.dx += dx;
+      touchInput.look.dy += dy;
+      if (mMoved > 6) touchInput.suppressTap = true;
+    };
+    const onMUp = () => {
+      dragging = false;
+    };
+
+    el.addEventListener("touchstart", onTStart, { passive: true });
+    el.addEventListener("touchmove", onTMove, { passive: true });
+    el.addEventListener("touchend", onTEnd, { passive: true });
+    el.addEventListener("touchcancel", onTEnd, { passive: true });
+    el.addEventListener("mousedown", onMDown);
+    window.addEventListener("mousemove", onMMove);
+    window.addEventListener("mouseup", onMUp);
+    return () => {
+      el.removeEventListener("touchstart", onTStart);
+      el.removeEventListener("touchmove", onTMove);
+      el.removeEventListener("touchend", onTEnd);
+      el.removeEventListener("touchcancel", onTEnd);
+      el.removeEventListener("mousedown", onMDown);
+      window.removeEventListener("mousemove", onMMove);
+      window.removeEventListener("mouseup", onMUp);
+    };
+  }, [gl]);
 
   // Interaction au centre de l'écran : viser l'hôte (→ parler) ou une œuvre
   // (→ inspection avec cadrage cinématique). Déclenché au clic (souris) ou au
@@ -209,7 +234,6 @@ export function Player({ touch = false }: { touch?: boolean }) {
 
       if (hit.type === "guide") {
         setPhase("talking");
-        controls.current?.unlock();
         return;
       }
 
@@ -232,7 +256,6 @@ export function Player({ touch = false }: { touch?: boolean }) {
       tw.mode = "in";
 
       inspect(meta);
-      controls.current?.unlock();
     };
     const el = gl.domElement;
     el.addEventListener("click", onClick);
@@ -243,6 +266,7 @@ export function Player({ touch = false }: { touch?: boolean }) {
   const aimRef = useRef<Aim>(null);
   const tick = useRef(0);
   const level = useRef(0); // 0 = sol, 1 = mezzanine (étage)
+  const prevBusy = useRef(false); // était-on en plein vol guidé la frame d'avant ?
 
   useFrame((_, delta) => {
     const phase = useVilla.getState().phase;
@@ -269,7 +293,18 @@ export function Player({ touch = false }: { touch?: boolean }) {
     if (phase !== "visiting") return;
 
     // Visite guidée : pendant un glissement caméra, le TourController pilote tout.
-    if (useVilla.getState().tourBusy) return;
+    if (useVilla.getState().tourBusy) {
+      prevBusy.current = true;
+      return;
+    }
+    // À l'arrivée d'un vol, synchronise le regard (yaw/pitch) sur l'orientation
+    // atteinte — sinon le prochain glisser ferait claquer la vue.
+    if (prevBusy.current) {
+      prevBusy.current = false;
+      tmpEuler.setFromQuaternion(camera.quaternion, "YXZ");
+      look.current.yaw = tmpEuler.y;
+      look.current.pitch = tmpEuler.x;
+    }
     // Après un vol, synchronise le niveau du joueur (consommé une fois) pour que
     // la marche libre reste cohérente.
     const sl = useVilla.getState().syncLevel;
@@ -278,8 +313,9 @@ export function Player({ touch = false }: { touch?: boolean }) {
       useVilla.getState().consumeSyncLevel();
     }
 
-    // Regard tactile : applique les deltas accumulés et reconstruit la caméra.
-    if (touch) {
+    // Regard par glisser (souris/doigt) : applique les deltas et reconstruit la
+    // caméra. Au repos (deltas nuls) la pose reste inchangée.
+    {
       const lk = look.current;
       lk.yaw -= touchInput.look.dx * LOOK_SENS;
       lk.pitch -= touchInput.look.dy * LOOK_SENS;
@@ -400,18 +436,8 @@ export function Player({ touch = false }: { touch?: boolean }) {
     }
   });
 
-  // Sur tactile, pas de PointerLockControls (incompatible) : la caméra est
-  // pilotée par les angles de regard maison.
-  if (touch) return null;
-
-  return (
-    <PointerLockControls
-      ref={controls}
-      onUnlock={() => {
-        // Esc en visite → retour à l'accueil ; en conversation/inspection, on
-        // ne touche à rien (la fermeture du panneau gère le retour).
-        if (useVilla.getState().phase === "visiting") setPhase("intro");
-      }}
-    />
-  );
+  // Plus de PointerLockControls : la caméra est pilotée par le regard-au-glisser
+  // (souris/doigt) et la visite guidée. Le curseur reste libre (menu cliquable),
+  // et Échap ne sort plus de la visite.
+  return null;
 }
