@@ -33,11 +33,11 @@ export function VillaArchitecture() {
       map.needsUpdate = true;
       map.repeat.set(3, 2);
       m.map = map;
-      const bump = t.concreteBump.clone();
-      bump.needsUpdate = true;
-      bump.repeat.set(3, 2);
-      m.bumpMap = bump;
-      m.bumpScale = 0.9;
+      const nrm = t.concreteNormal.clone();
+      nrm.needsUpdate = true;
+      nrm.repeat.set(3, 2);
+      m.normalMap = nrm;
+      m.normalScale.set(0.85, 0.85);
     }
     return m;
   }, []);

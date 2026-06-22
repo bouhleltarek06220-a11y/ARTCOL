@@ -16,6 +16,8 @@ type VillaTextures = {
   concrete: CanvasTexture;
   /** Relief (bump) assorti au béton banché : joints + trous de banche + grain. */
   concreteBump: CanvasTexture;
+  /** Normal map du béton banché (dérivée du relief) — espace linéaire. */
+  concreteNormal: CanvasTexture;
   wood: CanvasTexture;
   sand: CanvasTexture;
   /** Pelouse procédurale (jardin paysager). */
@@ -189,7 +191,7 @@ function makeWood() {
  * que la lumière rasante accroche le relief. C'est ce qui sort les murs de
  * l'effet « carton beige uni ».
  */
-function makeConcrete(): { map: CanvasTexture; bump: CanvasTexture } {
+function makeConcrete(): { map: CanvasTexture; bump: CanvasTexture; normal: CanvasTexture } {
   const S = 1024;
   const col = canvas(S, S);
   const bmp = canvas(S, S);
@@ -284,7 +286,7 @@ function makeConcrete(): { map: CanvasTexture; bump: CanvasTexture } {
   col.x.putImageData(cd, 0, 0);
   bmp.x.putImageData(bd, 0, 0);
 
-  return { map: tex(col.c), bump: tex(bmp.c) };
+  return { map: tex(col.c), bump: tex(bmp.c), normal: heightToNormal(bmp.c, 2.6) };
 }
 
 /** Pelouse : base verte + touffes claires/sombres multi-échelles + grain. */
@@ -329,6 +331,7 @@ export function getVillaTextures(): VillaTextures | null {
     marbleNormal: marble.normal,
     concrete: concrete.map,
     concreteBump: concrete.bump,
+    concreteNormal: concrete.normal,
     wood: makeWood(),
     sand: noiseMap(512, "#b9b0a0", 14),
     grass: makeGrass(),
