@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { DoubleSide, MeshStandardMaterial } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
+import { CORE } from "@/components/villa/dimensions";
+import { CoreStairs } from "./CoreStairs";
 
 /**
  * Étage 2 (R2) du bloc principal : dalle de plancher (moitié arrière, trémie
@@ -26,10 +28,6 @@ export function UpperFloors() {
     }
     return m;
   }, []);
-  const step = useMemo(
-    () => new MeshStandardMaterial({ color: "#e6e1d8", roughness: 0.2, metalness: 0.1 }),
-    [],
-  );
   const metal = useMemo(
     () => new MeshStandardMaterial({ color: "#1b1c1e", roughness: 0.35, metalness: 0.85 }),
     [],
@@ -46,53 +44,48 @@ export function UpperFloors() {
     [],
   );
 
-  // 2e volée : 16 marches montant le long de X (de x=-10/y≈3.95 à x=-3.5/y≈7.75),
-  // à z=-6.9, dans la trémie laissée libre dans la dalle.
-  const steps = Array.from({ length: 16 });
-
   return (
     <group>
-      {/* ===== DALLE R2 (3 bandes — trémie d'escalier laissée libre à gauche) ===== */}
-      {/* bande arrière (z -8.5..-7.6) */}
-      <mesh material={marble} position={[0, R2_Y, -8.05]} castShadow receiveShadow>
-        <boxGeometry args={[21.4, 0.3, 0.9]} />
+      {/* ===== DALLE R2 — trouée sur l'emprise du NOYAU (alignée mezzanine) =====
+            Trémie ouverte x[-10.3,-6.5] z[-8.2,-4.95] ; bande arrière + palier
+            d'arrivée (qui prolonge le plancher jusqu'à z=-3.5 au droit du noyau). */}
+      {/* bande droite (x -6.5..10.7) */}
+      <mesh material={marble} position={[2.1, R2_Y, -6.725]} castShadow receiveShadow>
+        <boxGeometry args={[17.2, 0.3, 3.55]} />
       </mesh>
-      {/* bande avant (z -6.2..-4.95) */}
-      <mesh material={marble} position={[0, R2_Y, -5.575]} castShadow receiveShadow>
-        <boxGeometry args={[21.4, 0.3, 1.25]} />
+      {/* fine bande gauche le long du mur */}
+      <mesh material={marble} position={[-10.5, R2_Y, -6.725]} castShadow receiveShadow>
+        <boxGeometry args={[0.4, 0.3, 3.55]} />
       </mesh>
-      {/* bande centrale droite (x -2.8..10.7, z -7.6..-6.2) — laisse la trémie à gauche */}
-      <mesh material={marble} position={[3.95, R2_Y, -6.9]} castShadow receiveShadow>
-        <boxGeometry args={[13.5, 0.3, 1.4]} />
+      {/* bande arrière du noyau (contre le mur du fond) */}
+      <mesh material={marble} position={[-8.4, R2_Y, -8.35]} castShadow receiveShadow>
+        <boxGeometry args={[3.8, 0.3, 0.3]} />
+      </mesh>
+      {/* palier d'arrivée du noyau (front, prolonge le plancher à z=-3.5) */}
+      <mesh material={marble} position={[-8.4, R2_Y, -4.225]} castShadow receiveShadow>
+        <boxGeometry args={[3.8, 0.3, 1.45]} />
       </mesh>
 
-      {/* ===== GARDE-CORPS VERRE (façade de l'étage, z=-4.95) ===== */}
-      <mesh position={[0, R2_Y + 0.7, -4.95]}>
-        <boxGeometry args={[21.4, 1.1, 0.06]} />
+      {/* ===== GARDE-CORPS VERRE (façade — segment droit ; le noyau ouvre devant) ===== */}
+      <mesh position={[2.1, R2_Y + 0.7, -4.95]}>
+        <boxGeometry args={[17.2, 1.1, 0.06]} />
         <primitive object={glassRail} attach="material" />
       </mesh>
-      <mesh material={metal} position={[0, R2_Y + 0.2, -4.95]}>
-        <boxGeometry args={[21.4, 0.06, 0.1]} />
+      <mesh material={metal} position={[2.1, R2_Y + 0.2, -4.95]}>
+        <boxGeometry args={[17.2, 0.06, 0.1]} />
+      </mesh>
+      {/* garde-corps le long de la trémie (côté hall, x=-6.5) + front du palier */}
+      <mesh position={[-6.5, R2_Y + 0.7, -6.35]}>
+        <boxGeometry args={[0.06, 1.1, 2.7]} />
+        <primitive object={glassRail} attach="material" />
+      </mesh>
+      <mesh position={[-8.4, R2_Y + 0.7, -3.5]}>
+        <boxGeometry args={[3.8, 1.1, 0.06]} />
+        <primitive object={glassRail} attach="material" />
       </mesh>
 
-      {/* ===== 2e VOLÉE D'ESCALIER (R1 → R2), le long de X à z=-6.9 ===== */}
-      <group>
-        {steps.map((_, i) => (
-          <mesh
-            key={i}
-            material={step}
-            position={[-10 + i * 0.4333, 4.07 + i * 0.2375, -6.9]}
-            castShadow
-            receiveShadow
-          >
-            <boxGeometry args={[0.5, 0.24, 1.4]} />
-          </mesh>
-        ))}
-        {/* limon latéral */}
-        <mesh material={metal} position={[-6.75, 5.85, -7.55]} rotation={[0, 0, -Math.PI / 4.05]}>
-          <boxGeometry args={[6.8, 0.12, 0.5]} />
-        </mesh>
-      </group>
+      {/* ===== NOYAU DE CIRCULATION — volée R1→R2 ===== */}
+      <CoreStairs loY={CORE.Y.r1} hiY={CORE.Y.r2} />
     </group>
   );
 }
