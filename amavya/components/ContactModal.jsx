@@ -20,12 +20,25 @@ const EMPTY = {
   email: "",
   phone: "",
   company: "",
+  outil: "",
   type_entreprise: "",
   secteur: "",
   ville: "",
   code_postal: "",
   message: "",
 };
+
+// Catalogue des outils/services AMAVYA — l'axe produit du lead (valeur = slug
+// stocké dans le CRM pour le filtrage, libellé = affiché au prospect).
+const OUTILS = [
+  { value: "qualiopi", label: "Qualiopi Engine — logiciel pour centre de formation" },
+  { value: "crm", label: "CRM intelligent sur-mesure" },
+  { value: "machine", label: "Machine de prospection (génération de leads)" },
+  { value: "agents-ia", label: "Agents IA & automatisation des process" },
+  { value: "saas", label: "Site web / application sur-mesure" },
+  { value: "formation-ia", label: "Formation IA & métier" },
+  { value: "autre", label: "Je ne sais pas encore / autre" },
+];
 
 // Listes FR — affichées tel quel quel que soit `lang` (le marché cible est PACA)
 const TYPES_ENTREPRISE = [
@@ -144,6 +157,7 @@ export default function ContactModal() {
           email: data.email,
           phone: data.phone,
           company: data.company,
+          outil: data.outil,
           type_entreprise: data.type_entreprise,
           secteur: data.secteur,
           ville: data.ville,
@@ -298,6 +312,23 @@ export default function ContactModal() {
                         Ces infos nous aident à préparer votre rappel et à
                         identifier les bons prospects pour votre métier.
                       </p>
+
+                      <div className="relative mt-4 flex flex-col gap-1.5">
+                        <label className="text-xs text-muted">Quel outil vous intéresse ?</label>
+                        <select
+                          value={data.outil}
+                          onChange={set("outil")}
+                          className={`${selectField} border-white/10`}
+                        >
+                          <option value="">— Sélectionner —</option>
+                          {OUTILS.map((opt) => (
+                            <option key={opt.value} value={opt.value} className="bg-ink">
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="pointer-events-none absolute right-4 top-9 text-muted">▾</span>
+                      </div>
 
                       <div className="mt-4 grid gap-4 sm:grid-cols-2">
                         <div className="relative flex flex-col gap-1.5">
