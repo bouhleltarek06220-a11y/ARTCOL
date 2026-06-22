@@ -9,7 +9,9 @@ import { Lighting } from "./core/Lighting";
 import { PostFX } from "./core/PostFX";
 import { CameraRig } from "./core/CameraRig";
 import { Player } from "./core/Player";
+import { TourController } from "./core/TourController";
 import { IntroScreen } from "./ui/IntroScreen";
+import { NavMenu } from "./ui/NavMenu";
 import { Hud } from "./ui/Hud";
 import { ConversationPanel } from "./ui/ConversationPanel";
 import { ArtworkPanel } from "./ui/ArtworkPanel";
@@ -86,8 +88,8 @@ export function VillaExperience() {
 
       <Canvas
         shadows
-        dpr={[1, 2]}
-        camera={{ position: [24, 9, 22], fov: 50, near: 0.1, far: 600 }}
+        dpr={touch ? [1, 1.5] : [1, 2]}
+        camera={{ position: [24, 9, 22], fov: 50, near: 0.1, far: 200 }}
         gl={{
           antialias: false,
           toneMapping: ACESFilmicToneMapping,
@@ -127,11 +129,11 @@ export function VillaExperience() {
 
           <ContactShadows
             position={[0, 0.04, 0]}
-            scale={70}
-            resolution={1024}
-            far={22}
-            blur={2.6}
-            opacity={0.5}
+            scale={55}
+            resolution={512}
+            far={16}
+            blur={2.4}
+            opacity={0.42}
             color="#1c150c"
           />
         </Suspense>
@@ -142,6 +144,7 @@ export function VillaExperience() {
           <>
             <CameraRig />
             {phase !== "intro" && <Player touch={touch} />}
+            {phase !== "intro" && <TourController />}
           </>
         )}
         <PostFX />
@@ -150,6 +153,7 @@ export function VillaExperience() {
       {!debugCam && (
         <>
           <IntroScreen />
+          <NavMenu />
           <Hud />
           {touch && <TouchControls />}
           <ConversationPanel />

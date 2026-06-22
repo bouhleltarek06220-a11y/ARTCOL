@@ -268,6 +268,16 @@ export function Player({ touch = false }: { touch?: boolean }) {
     // Déplacement uniquement en visite (gelé pendant chat / inspection).
     if (phase !== "visiting") return;
 
+    // Visite guidée : pendant un glissement caméra, le TourController pilote tout.
+    if (useVilla.getState().tourBusy) return;
+    // Après un vol, synchronise le niveau du joueur (consommé une fois) pour que
+    // la marche libre reste cohérente.
+    const sl = useVilla.getState().syncLevel;
+    if (sl !== null) {
+      level.current = sl;
+      useVilla.getState().consumeSyncLevel();
+    }
+
     // Regard tactile : applique les deltas accumulés et reconstruit la caméra.
     if (touch) {
       const lk = look.current;
@@ -280,84 +290,86 @@ export function Player({ touch = false }: { touch?: boolean }) {
       camera.quaternion.setFromEuler(tmpEuler);
     }
 
-    const step = SPEED * delta;
-    camera.getWorldDirection(dir);
-    dir.y = 0;
-    dir.normalize();
-    right.crossVectors(dir, up).normalize();
-
-    const px = camera.position.x;
-    const pz = camera.position.z;
-
     const k = keys.current;
     const mf = (k.f ? 1 : 0) - (k.b ? 1 : 0) + (touch ? touchInput.move.y : 0);
     const mr = (k.r ? 1 : 0) - (k.l ? 1 : 0) + (touch ? touchInput.move.x : 0);
-    if (mf) camera.position.addScaledVector(dir, mf * step);
-    if (mr) camera.position.addScaledVector(right, mr * step);
+    const moving = mf !== 0 || mr !== 0;
 
-    // Collisions : on reste dans les pièces (ou sur l'escalier selon la hauteur
-    // courante), glissement le long des murs.
-    // NOYAU : on n'est « sur » une volée que si l'une de ses hauteurs candidates
-    // est proche de la hauteur actuelle (continuité) — sinon on passe DESSOUS
-    // (trémie/vide) sans être téléporté. Source unique : CORE/coreHeights.
-    const curY = camera.position.y - EYE;
-    const coreStep = (x: number, zz: number): number | null => {
-      if (!onCoreWalk(x, zz)) return null;
-      let best: number | null = null;
-      let bd = Infinity;
-      for (const h of coreHeights(x, zz)) {
-        const d = Math.abs(h - curY);
-        if (d < bd) {
-          bd = d;
-          best = h;
-        }
-      }
-      return best !== null && bd <= 1.3 ? best : null;
-    };
-    const valid = (x: number, zz: number) => {
-      if (coreStep(x, zz) !== null) return true;
-      if (inCore(x, zz)) return false; // trémie (vide)
-      if (level.current === 2) return onFloor2(x, zz);
-      if (level.current === 1) return onFloor1(x, zz);
-      if (level.current === -1) return inBasement(x, zz);
-      return inAny(x, zz);
-    };
     let nx = camera.position.x;
     let nz = camera.position.z;
-    if (!valid(nx, nz)) {
-      if (valid(nx, pz)) nz = pz;
-      else if (valid(px, nz)) nx = px;
-      else {
-        nx = px;
-        nz = pz;
-      }
-    }
-    camera.position.x = nx;
-    camera.position.z = nz;
 
-    // Hauteur de l'œil : sur le noyau, hauteur de volée la plus proche (+ bascule
-    // de niveau = sol empilé le plus proche) ; sinon, sol du niveau courant.
-    const cs = coreStep(nx, nz);
-    if (cs !== null) {
-      camera.position.y = cs + EYE;
-      let li = 0;
-      let bd = Infinity;
-      for (let i = 0; i < CORE_LEVELS.length; i++) {
-        const d = Math.abs(CORE_LEVELS[i] - cs);
-        if (d < bd) {
-          bd = d;
-          li = i;
+    // Marche libre (optionnelle) : seulement quand une direction est pressée. Au
+    // repos on ne touche PAS la caméra → les poses de visite guidée tiennent.
+    if (moving) {
+      const step = SPEED * delta;
+      camera.getWorldDirection(dir);
+      dir.y = 0;
+      dir.normalize();
+      right.crossVectors(dir, up).normalize();
+
+      const px = camera.position.x;
+      const pz = camera.position.z;
+      if (mf) camera.position.addScaledVector(dir, mf * step);
+      if (mr) camera.position.addScaledVector(right, mr * step);
+
+      // Collisions + escalier (noyau) — voir CORE/coreHeights (source unique).
+      const curY = camera.position.y - EYE;
+      const coreStep = (x: number, zz: number): number | null => {
+        if (!onCoreWalk(x, zz)) return null;
+        let best: number | null = null;
+        let bd = Infinity;
+        for (const h of coreHeights(x, zz)) {
+          const d = Math.abs(h - curY);
+          if (d < bd) {
+            bd = d;
+            best = h;
+          }
+        }
+        return best !== null && bd <= 1.3 ? best : null;
+      };
+      const valid = (x: number, zz: number) => {
+        if (coreStep(x, zz) !== null) return true;
+        if (inCore(x, zz)) return false; // trémie (vide)
+        if (level.current === 2) return onFloor2(x, zz);
+        if (level.current === 1) return onFloor1(x, zz);
+        if (level.current === -1) return inBasement(x, zz);
+        return inAny(x, zz);
+      };
+      nx = camera.position.x;
+      nz = camera.position.z;
+      if (!valid(nx, nz)) {
+        if (valid(nx, pz)) nz = pz;
+        else if (valid(px, nz)) nx = px;
+        else {
+          nx = px;
+          nz = pz;
         }
       }
-      level.current = li - 1; // s1→-1, r0→0, r1→1, r2→2
-    } else if (level.current === 2) {
-      camera.position.y = FLOOR2 + EYE;
-    } else if (level.current === 1) {
-      camera.position.y = FLOOR1 + EYE;
-    } else if (level.current === -1) {
-      camera.position.y = BASE_FLOOR + EYE;
-    } else {
-      camera.position.y = EYE;
+      camera.position.x = nx;
+      camera.position.z = nz;
+
+      const cs = coreStep(nx, nz);
+      if (cs !== null) {
+        camera.position.y = cs + EYE;
+        let li = 0;
+        let bd = Infinity;
+        for (let i = 0; i < CORE_LEVELS.length; i++) {
+          const d = Math.abs(CORE_LEVELS[i] - cs);
+          if (d < bd) {
+            bd = d;
+            li = i;
+          }
+        }
+        level.current = li - 1; // s1→-1, r0→0, r1→1, r2→2
+      } else if (level.current === 2) {
+        camera.position.y = FLOOR2 + EYE;
+      } else if (level.current === 1) {
+        camera.position.y = FLOOR1 + EYE;
+      } else if (level.current === -1) {
+        camera.position.y = BASE_FLOOR + EYE;
+      } else {
+        camera.position.y = EYE;
+      }
     }
 
     let z = "Galerie principale";
