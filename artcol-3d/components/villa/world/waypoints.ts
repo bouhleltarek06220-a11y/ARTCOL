@@ -27,7 +27,7 @@ export const WAYPOINTS: Record<string, Waypoint> = {
   "rdc-hall": { id: "rdc-hall", label: "Hall / Galerie", level: 0, pos: [0, 1.7, 1.5], target: [0, 2.2, -7] },
   "rdc-cuisine": { id: "rdc-cuisine", label: "Cuisine", level: 0, pos: [-12.5, 1.7, -1], target: [-16, 1.5, -3] },
   "rdc-biblio": { id: "rdc-biblio", label: "Bibliothèque", level: 0, pos: [12.5, 1.7, -1], target: [16, 1.5, -3] },
-  "rdc-bureau": { id: "rdc-bureau", label: "Bureau", level: 0, pos: [-3, 1.7, -9.2], target: [-3, 1.6, -13.5] },
+  "rdc-bureau": { id: "rdc-bureau", label: "Bureau", level: 0, pos: [-2, 1.7, -9.6], target: [-6, 1.3, -14] },
 
   // ---------- ÉTAGE ----------
   "r1-suite": { id: "r1-suite", label: "Suite parentale", level: 1, pos: [1.3, 5.6, -4], target: [2, 5.2, -7.6] },
