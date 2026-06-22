@@ -287,7 +287,6 @@ export function PoolHouse() {
           distance={9}
           decay={2}
           position={[0, -0.2, 0]}
-          castShadow
         />
       </group>
     </group>

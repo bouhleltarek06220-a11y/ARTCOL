@@ -14,7 +14,7 @@ export function Lighting() {
         intensity={2.3}
         color="#ffca8a"
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0004}
         shadow-camera-near={1}
         shadow-camera-far={130}
