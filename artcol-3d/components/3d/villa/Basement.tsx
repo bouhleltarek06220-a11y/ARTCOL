@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { DoubleSide, MeshStandardMaterial } from "three";
 import { getVillaTextures } from "@/components/villa/textures";
+import { CORE } from "@/components/villa/dimensions";
+import { CoreStairs } from "./CoreStairs";
 
 /**
  * Sous-sol (niveau −1) du bloc principal : coque enterrée (dalle y=−4, murs de
@@ -42,19 +44,6 @@ export function Basement() {
     }
     return m;
   }, []);
-  const step = useMemo(
-    () => new MeshStandardMaterial({ color: "#d8d2c6", roughness: 0.3 }),
-    [],
-  );
-  const metal = useMemo(
-    () => new MeshStandardMaterial({ color: "#1b1c1e", roughness: 0.35, metalness: 0.85 }),
-    [],
-  );
-
-  // Escalier de descente : 16 marches le long de z (de z=2.0/y≈0 à z=-3.0/y≈-3.9),
-  // à x=-9, dans la trémie laissée libre dans le sol du hall.
-  const steps = Array.from({ length: 16 });
-
   return (
     <group>
       {/* ===== DALLE SOL (marbre) ===== */}
@@ -76,26 +65,8 @@ export function Basement() {
         <boxGeometry args={[0.3, 4, 11]} />
       </mesh>
 
-      {/* ===== ESCALIER DE DESCENTE (trémie x=-9) ===== */}
-      <group>
-        {steps.map((_, i) => (
-          <mesh
-            key={i}
-            material={step}
-            position={[-9, -0.12 - i * 0.247, 2.0 - i * 0.333]}
-            castShadow
-            receiveShadow
-          >
-            <boxGeometry args={[2.0, 0.2, 0.42]} />
-          </mesh>
-        ))}
-        {/* limons */}
-        {[-9.95, -8.05].map((x) => (
-          <mesh key={x} material={metal} position={[x, -2.0, -0.5]} rotation={[Math.PI / 3.6, 0, 0]}>
-            <boxGeometry args={[0.1, 0.4, 6.2]} />
-          </mesh>
-        ))}
-      </group>
+      {/* ===== NOYAU DE CIRCULATION — volée de descente R0→S−1 ===== */}
+      <CoreStairs loY={CORE.Y.s1} hiY={CORE.Y.r0} />
 
       {/* ===== ÉCLAIRAGE (sous-sol, chaud + appoint froid) ===== */}
       <pointLight position={[-6, -1.2, -1]} intensity={9} distance={12} decay={2} color="#ffe0b4" />
