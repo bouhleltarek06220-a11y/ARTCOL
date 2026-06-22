@@ -59,7 +59,7 @@ export function UpperMasterSuite() {
       new MeshStandardMaterial({
         color: "#ffdca6",
         emissive: "#ffdca6",
-        emissiveIntensity: 1.5,
+        emissiveIntensity: 1.1,
         roughness: 0.5,
       }),
     [],
@@ -309,7 +309,7 @@ export function UpperMasterSuite() {
       <Toilet position={[6.4, 0, -8.0]} />
 
       {/* ===== ÉCLAIRAGE chaud ===== */}
-      <pointLight position={[1.3, 2.4, -6.5]} color="#ffdca6" intensity={7} distance={8} decay={2} />
+      <pointLight position={[1.3, 2.4, -6.5]} color="#ffdca6" intensity={4.6} distance={8} decay={2} />
       <pointLight position={[8.3, 2.4, -6.8]} color="#ffdca6" intensity={6} distance={8} decay={2} />
       <pointLight position={[-4.6, 2.4, -6.6]} color="#ffdca6" intensity={5} distance={7} decay={2} />
     </group>

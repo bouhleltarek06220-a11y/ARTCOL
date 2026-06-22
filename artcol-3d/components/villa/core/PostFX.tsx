@@ -16,7 +16,7 @@ export function PostFX() {
   return (
     <EffectComposer multisampling={0}>
       <DepthOfField focusDistance={0.025} focalLength={0.04} bokehScale={1.4} />
-      <Bloom mipmapBlur intensity={0.58} luminanceThreshold={0.9} luminanceSmoothing={0.25} />
+      <Bloom mipmapBlur intensity={0.6} luminanceThreshold={0.95} luminanceSmoothing={0.2} />
       <Vignette eskil={false} offset={0.2} darkness={0.82} />
       <SMAA />
     </EffectComposer>
