@@ -12,6 +12,32 @@ const SUPA_URL = "https://qrotbfsvaouwyoyqtqlr.supabase.co";
 const SUPA_ANON =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyb3RiZnN2YW91d3lveXF0cWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODA0OTcsImV4cCI6MjA5Njk1NjQ5N30.Pb8o-rLCkUGsrmb81kqEASAf0BJ36Ms6pO56JeywcHU";
 
+// Rate-limit basique en mémoire (best-effort par instance Vercel).
+// Même style que /api/chat. 5 requêtes / 10 min par IP.
+const RATE_WINDOW = 600_000;
+const RATE_MAX = 5;
+const rateMap = new Map();
+
+function rateLimited(ip) {
+  const now = Date.now();
+  const arr = (rateMap.get(ip) || []).filter((t) => now - t < RATE_WINDOW);
+  if (arr.length >= RATE_MAX) {
+    rateMap.set(ip, arr);
+    return true;
+  }
+  arr.push(now);
+  rateMap.set(ip, arr);
+  return false;
+}
+
+function getIp(req) {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "anon"
+  );
+}
+
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
 const esc = (s) =>
@@ -113,6 +139,13 @@ export async function POST(req) {
   const codePostal = clip(body.code_postal, 10);
 
   if (honeypot) return Response.json({ ok: true }); // bot silencieux
+
+  // Rate-limit par IP avant toute écriture Supabase / envoi d'email.
+  const ip = getIp(req);
+  if (rateLimited(ip)) {
+    return Response.json({ ok: false, error: "rate_limited" }, { status: 429 });
+  }
+
   if (full_name.length < 2) return Response.json({ ok: false, error: "name" }, { status: 400 });
   if (!EMAIL_RX.test(email)) return Response.json({ ok: false, error: "email" }, { status: 400 });
   if (message.length < 2) return Response.json({ ok: false, error: "message" }, { status: 400 });
