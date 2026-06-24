@@ -19,10 +19,10 @@ export default function MentionsLegales() {
         <li>Forme juridique : SASU</li>
         <li>Capital social : 1,00 €</li>
         <li>SIREN / SIRET : 105 546 634 / 105 546 634 00012</li>
-        <li>RCS : Nice 105 546 634</li>
+        <li>RCS : Antibes 105 546 634</li>
         <li>Code APE/NAF : 62.01Z (programmation informatique)</li>
         <li>N° TVA intracommunautaire : FR01105546634</li>
-        <li>Siège social : <span className="todo">[adresse du siège à compléter]</span></li>
+        <li>Siège social : 195 chemin des Plateaux Fleuris, 06600 Antibes</li>
         <li>Email : <a href="mailto:contact@amavya.cloud">contact@amavya.cloud</a></li>
         <li>Président : <strong>Tarek Bouhlel</strong></li>
       </ul>
