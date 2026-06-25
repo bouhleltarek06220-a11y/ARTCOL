@@ -1,0 +1,480 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>/* ============== OGHJI — DESIGN SYSTEM ============== */
+@font-face{font-family:'SG';src:url('assets/fonts/sg-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'SG';src:url('assets/fonts/sg-500.woff2') format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'SG';src:url('assets/fonts/sg-600.woff2') format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'SG';src:url('assets/fonts/sg-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-600.woff2') format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'JB';src:url('assets/fonts/jb-500.woff2') format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'JB';src:url('assets/fonts/jb-700.woff2') format('woff2');font-weight:700;font-display:block}
+
+:root{
+  --green:#2BE08A; --green-d:#15B673; --teal:#15D6C6; --lime:#C6FF4A;
+  --ink:#ECF7F1; --ink-2:#A6C1B8; --ink-3:#6F8880; --ink-4:#51655e;
+  --bg0:#05110D;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.055);
+  --card:rgba(255,255,255,.034); --card-2:rgba(255,255,255,.052);
+  --glass-hl:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0));
+  --shadow:0 28px 60px -20px rgba(0,0,0,.6);
+  --accent:linear-gradient(100deg,var(--green),var(--teal));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#020806}
+.deck{display:flex;flex-direction:column;align-items:center;gap:34px;padding:34px}
+
+.slide{
+  width:1280px;height:720px;position:relative;overflow:hidden;
+  background:var(--bg0);color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;
+  isolation:isolate;
+}
+/* SVG sizing safety net — bare icons never balloon; component rules override */
+.slide svg{width:18px;height:18px;flex:none;vertical-align:middle}
+.mk svg{width:62%;height:62%}
+/* layered background: base gradient + glows + vignette */
+.bg{position:absolute;inset:0;z-index:0}
+.bg::before{content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.021) 1px,transparent 1px) 0 0/46px 46px,
+    linear-gradient(90deg,rgba(255,255,255,.021) 1px,transparent 1px) 0 0/46px 46px;
+  -webkit-mask-image:radial-gradient(120% 110% at 50% 40%,#000 55%,transparent 100%);
+          mask-image:radial-gradient(120% 110% at 50% 40%,#000 55%,transparent 100%);}
+.bg{
+  background:
+    radial-gradient(900px 560px at 86% -12%,rgba(43,224,138,.17),transparent 60%),
+    radial-gradient(760px 620px at -8% 112%,rgba(21,214,198,.11),transparent 58%),
+    linear-gradient(157deg,#06150F 0%,#04110E 42%,#051a1d 100%);}
+.bg::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(135% 130% at 50% 46%,transparent 58%,rgba(0,0,0,.55));}
+/* faint PCB traces */
+.trace{position:absolute;inset:0;z-index:0;opacity:.5}
+.content,.head,.foot{position:absolute;z-index:2}
+
+/* ---- header / footer ---- */
+.head{top:46px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center}
+.kick{display:flex;align-items:center;gap:13px;font-family:'JB';font-weight:700;
+  font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--green)}
+.kick .bar{width:26px;height:2px;border-radius:2px;background:var(--accent);box-shadow:0 0 12px rgba(43,224,138,.6)}
+.kick .sec{color:var(--ink-2);letter-spacing:.22em}
+.kick .num{color:var(--green)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .mk{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:var(--accent);color:#04110e;box-shadow:0 4px 14px rgba(43,224,138,.35)}
+.brand .mk svg{width:16px;height:16px;stroke-width:2.4}
+.brand .wd{font-family:'SG';font-weight:700;font-size:18px;letter-spacing:.04em}
+.brand .pg{font-family:'JB';font-weight:500;font-size:12px;color:var(--ink-3);letter-spacing:.12em;margin-left:4px}
+
+.foot{bottom:30px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--line-2);padding-top:13px;
+  font-family:'JB';font-weight:500;font-size:11.5px;letter-spacing:.12em;color:var(--ink-3)}
+.foot .dot{color:var(--green)}
+
+.content{left:64px;right:64px;top:112px;bottom:74px}
+
+/* ---- typography ---- */
+.h1{font-family:'SG';font-weight:600;font-size:50px;line-height:1.04;letter-spacing:-1.4px;color:#fff}
+.h1.sm{font-size:43px}
+.em{background:var(--accent);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:17.5px;line-height:1.5;color:var(--ink-2);font-weight:400;max-width:760px}
+.eyebrow{font-family:'JB';font-weight:700;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--green)}
+
+/* ---- icon chip ---- */
+.chip{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(158deg,rgba(43,224,138,.20),rgba(21,214,198,.05));
+  border:1px solid rgba(43,224,138,.30);color:var(--green);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px -10px rgba(43,224,138,.5)}
+.chip svg{width:23px;height:23px;stroke-width:1.9}
+.chip.sm{width:38px;height:38px;border-radius:11px}
+.chip.sm svg{width:19px;height:19px}
+.chip.lg{width:54px;height:54px;border-radius:15px}
+.chip.lg svg{width:27px;height:27px}
+.chip.red{background:linear-gradient(158deg,rgba(255,86,86,.20),rgba(255,86,86,.05));border-color:rgba(255,99,99,.4);color:#ff7d7d;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px -10px rgba(255,86,86,.5)}
+.chip.warn{background:linear-gradient(158deg,rgba(255,179,71,.2),rgba(255,179,71,.05));border-color:rgba(255,191,99,.4);color:#ffc36b}
+
+/* ---- card ---- */
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:22px 22px;overflow:hidden;box-shadow:0 12px 30px -22px rgba(0,0,0,.7)}
+.card::before{content:'';position:absolute;top:0;left:18px;right:18px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)}
+.card .ct{font-family:'SG';font-weight:600;font-size:17.5px;letter-spacing:-.2px;color:#fff;margin-top:15px}
+.card .cd{font-size:13.4px;line-height:1.46;color:var(--ink-2);margin-top:7px}
+.card.glow{border-color:rgba(43,224,138,.34);background:linear-gradient(168deg,rgba(43,224,138,.08),rgba(255,255,255,.02))}
+
+/* pills / tags */
+.row{display:flex;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.03);font-weight:600;font-size:13px;color:var(--ink-2)}
+.pill svg{width:16px;height:16px;color:var(--green);stroke-width:2}
+.pill.acc{border-color:rgba(43,224,138,.32);background:rgba(43,224,138,.08);color:#bff5da}
+.pill.big{padding:11px 18px;font-size:14px}
+
+.badge{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;
+  border:1px solid rgba(43,224,138,.34);background:linear-gradient(160deg,rgba(43,224,138,.12),rgba(21,214,198,.04));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.badge .bl{font-family:'JB';font-weight:700;font-size:11px;letter-spacing:.18em;color:var(--green);text-transform:uppercase}
+.badge .bv{font-family:'JB';font-weight:700;font-size:15px;color:#fff;letter-spacing:.04em}
+
+/* product shot tile (for white-bg photos) */
+.shot{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+  background:radial-gradient(130% 120% at 28% 0%,#ffffff,#e7edec 78%,#d8e2df);
+  box-shadow:var(--shadow);display:grid;place-items:center}
+.shot img{display:block;width:100%;height:100%;object-fit:contain}
+.shot.pad{padding:18px}
+.shot .cap{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:10px;background:rgba(4,17,14,.82);backdrop-filter:blur(6px);
+  font-family:'JB';font-weight:500;font-size:11px;letter-spacing:.05em;color:#cfeee0;border:1px solid rgba(255,255,255,.12)}
+.shot .cap .dot{color:var(--green)}
+/* dark screen frame */
+.screen{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.14);
+  background:#0a0f0d;box-shadow:var(--shadow);padding:9px}
+.screen img{display:block;width:100%;border-radius:9px}
+.screenglow{position:absolute;border-radius:24px;filter:blur(40px);background:radial-gradient(closest-side,rgba(43,224,138,.5),transparent);z-index:-1}
+
+/* feature list row */
+.frow{display:flex;align-items:flex-start;gap:15px;padding:13px 0}
+.frow+.frow{border-top:1px solid var(--line-2)}
+.frow .ft{font-family:'SG';font-weight:600;font-size:16px;color:#fff;letter-spacing:-.2px}
+.frow .fd{font-size:13.2px;line-height:1.42;color:var(--ink-2);margin-top:3px}
+
+/* pipeline (mesure>protege>pilote>anticipe) */
+.pipe{display:flex;align-items:stretch;gap:0}
+.pipe .st{flex:1;text-align:center;position:relative;padding:0 6px}
+.pipe .st .ic{width:56px;height:56px;border-radius:16px;margin:0 auto;display:grid;place-items:center;
+  background:linear-gradient(158deg,rgba(43,224,138,.18),rgba(21,214,198,.05));
+  border:1px solid rgba(43,224,138,.3);color:var(--green);box-shadow:0 10px 24px -12px rgba(43,224,138,.6)}
+.pipe .st .ic svg{width:27px;height:27px;stroke-width:1.9}
+.pipe .st .nm{font-family:'SG';font-weight:600;font-size:15.5px;color:#fff;margin-top:12px}
+.pipe .cn{display:flex;align-items:center;color:var(--green);opacity:.55;padding-top:18px}
+.pipe .cn svg{width:20px;height:20px}
+
+/* comparison table */
+.cmp{display:grid;grid-template-columns:1fr 56px 1fr;gap:0;align-items:stretch}
+.cmp .ch{padding:14px 20px;display:flex;align-items:center;gap:11px;font-family:'SG';font-weight:600;font-size:16px}
+.cmp .ch.l{color:var(--ink-2);justify-content:flex-end;text-align:right}
+.cmp .ch.r{color:#fff}
+.cmp .rr{display:contents}
+.cmp .cl,.cmp .cr{padding:14px 20px;font-size:14px;display:flex;align-items:center;gap:11px;line-height:1.3}
+.cmp .cl{color:var(--ink-3);justify-content:flex-end;text-align:right;border-top:1px solid var(--line-2)}
+.cmp .cr{color:var(--ink);border-top:1px solid rgba(43,224,138,.14)}
+.cmp .mid{display:grid;place-items:center;border-top:1px solid transparent}
+.cmp .ic-x{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(255,99,99,.12);color:#ff8585;flex:none}
+.cmp .ic-x svg{width:15px;height:15px;stroke-width:2.6}
+.cmp .ic-c{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(43,224,138,.16);color:var(--green);flex:none}
+.cmp .ic-c svg{width:15px;height:15px;stroke-width:2.6}
+.cmp-wrap{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.cmp-wrap .ogcol{position:absolute;top:0;bottom:0;right:0;width:calc(50% - 28px);
+  background:linear-gradient(180deg,rgba(43,224,138,.09),rgba(43,224,138,.02));
+  border-left:1px solid rgba(43,224,138,.22);border-right:1px solid rgba(43,224,138,.22)}
+
+/* numbered steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 18px}
+.step .no{font-family:'SG';font-weight:700;font-size:13px;color:#04110e;background:var(--accent);
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(43,224,138,.6)}
+.step .sic{position:absolute;top:18px;right:18px;color:var(--green);opacity:.85}
+.step .sic svg{width:22px;height:22px;stroke-width:1.8}
+.step .stt{font-family:'SG';font-weight:600;font-size:16px;color:#fff;margin-top:16px;letter-spacing:-.2px}
+.step .std{font-size:13px;line-height:1.45;color:var(--ink-2);margin-top:7px}
+
+/* stat chips */
+.stat{font-family:'SG'}
+.stat .v{font-weight:700;font-size:26px;color:#fff;letter-spacing:-.5px}
+.stat .v .u{font-size:15px;color:var(--green);font-weight:600}
+.stat .l{font-family:'Inter';font-weight:500;font-size:12px;color:var(--ink-3);margin-top:2px}
+
+/* floating chip over visuals */
+.fchip{position:absolute;display:inline-flex;align-items:center;gap:9px;padding:10px 14px;border-radius:13px;
+  background:rgba(7,20,16,.82);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.8)}
+.fchip svg{width:18px;height:18px;color:var(--green);stroke-width:2}
+.fchip .fv{font-family:'SG';font-weight:600;font-size:14px;color:#fff}
+.fchip .fl{font-size:11px;color:var(--ink-3);font-weight:500}
+
+/* mini bar gauge */
+.gauge{display:flex;align-items:flex-end;gap:7px;height:84px}
+.gauge .b{flex:1;border-radius:5px 5px 3px 3px;background:linear-gradient(180deg,var(--green),rgba(21,214,198,.5));
+  box-shadow:0 0 14px -2px rgba(43,224,138,.5)}
+.gauge .b.dim{background:linear-gradient(180deg,rgba(166,193,184,.5),rgba(166,193,184,.15));box-shadow:none}
+
+/* web browser mock */
+.win{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:#0a1311;box-shadow:var(--shadow)}
+.win .tb{height:34px;display:flex;align-items:center;gap:7px;padding:0 13px;background:#0e1a17;border-bottom:1px solid rgba(255,255,255,.07)}
+.win .tb i{width:9px;height:9px;border-radius:50%;background:#33433d;display:block}
+.win .tb .ad{margin-left:10px;height:16px;border-radius:5px;background:rgba(255,255,255,.06);flex:1;max-width:240px}
+.win .bd{padding:14px}
+
+/* segment grid */
+.seg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+.seg .sn{font-family:'SG';font-weight:600;font-size:15px;color:#fff;letter-spacing:-.2px}
+
+/* generic helpers */
+.g{display:grid}
+.fx{display:flex}
+.mut{color:var(--ink-3)}
+.callout{border-left:2px solid var(--green);padding:4px 0 4px 16px;font-size:14.5px;line-height:1.5;color:var(--ink-2)}
+.callout b{color:#fff;font-weight:600}
+</style></head>
+<body><div class="deck"><section class="slide"><div class="bg"></div><svg class="trace" viewBox="0 0 1280 720" fill="none" preserveAspectRatio="none">
+    <g stroke="rgba(43,224,138,.16)" stroke-width="1.4">
+      <path d="M0 150 H120 V70"/><circle cx="120" cy="64" r="4" fill="rgba(43,224,138,.5)" stroke="none"/>
+      <path d="M1280 560 H1140 V640"/><circle cx="1140" cy="646" r="4" fill="rgba(43,224,138,.5)" stroke="none"/>
+      <path d="M1280 240 H1180 V300 H1090"/><circle cx="1090" cy="300" r="3.5" fill="rgba(21,214,198,.5)" stroke="none"/>
+    </g></svg>
+  <div class="content" style="top:0;bottom:0;left:0;right:0;padding:0">
+    <div style="position:absolute;left:64px;top:60px;display:flex;align-items:center;gap:12px">
+      <span class="mk" style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--accent);color:#04110e;box-shadow:0 6px 18px rgba(43,224,138,.4)"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span>
+      <span style="font-family:'SG';font-weight:700;font-size:23px;letter-spacing:.04em">oghji</span>
+      <span style="width:1px;height:20px;background:var(--line);margin:0 4px"></span>
+      <span style="font-family:'JB';font-weight:500;font-size:12px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">smart energy</span>
+    </div>
+
+    <!-- left column -->
+    <div style="position:absolute;left:64px;top:188px;width:560px">
+      <div class="pill acc big" style="margin-bottom:26px"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-radio"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M16.247 7.761a6 6 0 0 1 0 8.478" />  <path d="M19.075 4.933a10 10 0 0 1 0 14.134" />  <path d="M4.925 19.067a10 10 0 0 1 0-14.134" />  <path d="M7.753 16.239a6 6 0 0 1 0-8.478" />  <circle cx="12" cy="12" r="2" /></svg>&nbsp;Contrôle en temps réel</div>
+      <div class="h1" style="font-size:62px;line-height:1.02;letter-spacing:-2px">Le cerveau<br><span class="em">énergétique</span><br>de votre installation.</div>
+      <div class="lead" style="margin-top:24px;max-width:500px">OGHJI remplace votre tableau électrique par un système <b style="color:#fff;font-weight:600">100 % numérique</b> qui mesure, protège, pilote et anticipe — circuit par circuit.</div>
+      <div style="display:flex;gap:10px;margin-top:30px">
+        <div class="pill"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-cpu"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 20v2" />  <path d="M12 2v2" />  <path d="M17 20v2" />  <path d="M17 2v2" />  <path d="M2 12h2" />  <path d="M2 17h2" />  <path d="M2 7h2" />  <path d="M20 12h2" />  <path d="M20 17h2" />  <path d="M20 7h2" />  <path d="M7 20v2" />  <path d="M7 2v2" />  <rect x="4" y="4" width="16" height="16" rx="2" />  <rect x="8" y="8" width="8" height="8" rx="1" /></svg>&nbsp;100 % Numérique</div>
+        <div class="pill"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-wifi"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 20h.01" />  <path d="M2 8.82a15 15 0 0 1 20 0" />  <path d="M5 12.859a10 10 0 0 1 14 0" />  <path d="M8.5 16.429a5 5 0 0 1 7 0" /></svg>&nbsp;Connecté</div>
+        <div class="pill"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-sparkles"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />  <path d="M20 2v4" />  <path d="M22 4h-4" />  <circle cx="4" cy="20" r="2" /></svg>&nbsp;Intelligent</div>
+      </div>
+    </div>
+
+    <!-- right visual -->
+    <div style="position:absolute;right:70px;top:170px;width:470px">
+      <div class="screenglow" style="inset:30px 20px 60px 30px"></div>
+      <div class="screen" style="transform:rotate(.5deg)">
+        <img src="assets/screen-dashboard.png" alt="Écran OGHJI">
+      </div>
+      <div class="fchip" style="right:-26px;top:60px"><span><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-shield-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />  <path d="m9 12 2 2 4-4" /></svg></span><div><div class="fv">Type B</div><div class="fl">+ détection d'arc</div></div></div>
+      <div class="fchip" style="left:-34px;top:200px"><span><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-layout-grid"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect width="7" height="7" x="3" y="3" rx="1" />  <rect width="7" height="7" x="14" y="3" rx="1" />  <rect width="7" height="7" x="14" y="14" rx="1" />  <rect width="7" height="7" x="3" y="14" rx="1" /></svg></span><div><div class="fv">8 circuits</div><div class="fl">extensible</div></div></div>
+      <div class="fchip" style="right:6px;bottom:-26px"><span><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-badge-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />  <path d="m9 12 2 2 4-4" /></svg></span><div><div class="fv">Breveté</div><div class="fl">FR3055478B1</div></div></div>
+    </div>
+  </div>
+  <div class="foot" style="bottom:34px"><span><span class="dot">●</span>&nbsp; PRÉSENTATION COMMERCIALE</span><span>oghji · smart energy</span></div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">02</span><span class="sec">LE CONSTAT</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">02 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div class="h1">Votre tableau électrique est <span class="em">aveugle.</span></div>
+        <div class="lead" style="margin-top:16px">Un coffret passif qui distribue le courant… sans rien voir, sans rien dire.</div>
+      </div>
+      <div class="pill" style="border-color:rgba(255,99,99,.3);color:#ff9a9a;background:rgba(255,99,99,.07)"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-alert-triangle"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />  <path d="M12 9v4" />  <path d="M12 17h.01" /></svg>&nbsp;Le statu quo</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px">
+      <div class="card" style="padding:22px 20px"><div class="chip red"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-eye-off"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />  <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />  <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />  <path d="m2 2 20 20" /></svg></div><div class="ct">Aucune visibilité</div><div class="cd">Vous payez sans savoir où part votre énergie.</div></div><div class="card" style="padding:22px 20px"><div class="chip red"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-trending-up"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M16 7h6v6" />  <path d="m22 7-8.5 8.5-5-5L2 17" /></svg></div><div class="ct">Factures qui grimpent</div><div class="cd">Sans mesure, aucun levier pour les réduire.</div></div><div class="card" style="padding:22px 20px"><div class="chip red"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-flame"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg></div><div class="ct">Risque électrique</div><div class="cd">Surcharges, arcs, départs de feu : vus trop tard.</div></div><div class="card" style="padding:22px 20px"><div class="chip red"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-power"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 2v10" />  <path d="M18.4 6.6a9 9 0 1 1-12.77.04" /></svg></div><div class="ct">Zéro pilotage</div><div class="cd">Impossible de suivre ou couper un circuit à distance.</div></div>
+    </div>
+    <div style="margin-top:30px;display:flex;align-items:center;gap:18px;padding:20px 26px;border-radius:16px;background:linear-gradient(100deg,rgba(43,224,138,.10),rgba(255,255,255,.02));border:1px solid rgba(43,224,138,.24)">
+      <span class="chip lg"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span>
+      <div style="font-family:'SG';font-weight:600;font-size:25px;color:#fff;letter-spacing:-.6px">Il est temps de lui donner un <span class="em">cerveau.</span></div>
+      <span style="margin-left:auto;color:var(--green)"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-arrow-right"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M5 12h14" />  <path d="m12 5 7 7-7 7" /></svg></span>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">03</span><span class="sec">LA SOLUTION</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">03 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div class="h1 sm"><span class="em">OGHJI</span>, le cerveau énergétique &amp; électrique.</div>
+    <div style="display:grid;grid-template-columns:1fr 442px;gap:48px;margin-top:26px;align-items:start">
+      <div>
+        <div class="lead" style="max-width:none">OGHJI remplace votre tableau et se branche entre le disjoncteur général et vos circuits. 100 % numérique, il mesure, protège, pilote et anticipe — <b style="color:#fff;font-weight:600">en temps réel</b>.</div>
+        <div class="pipe" style="margin-top:34px">
+          <div class="st"><div class="ic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-gauge"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m12 14 4-4" />  <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg></div><div class="nm">Mesure</div></div><div class="cn"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-chevron-right"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m9 18 6-6-6-6" /></svg></div><div class="st"><div class="ic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-shield-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />  <path d="m9 12 2 2 4-4" /></svg></div><div class="nm">Protège</div></div><div class="cn"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-chevron-right"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m9 18 6-6-6-6" /></svg></div><div class="st"><div class="ic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-sliders-horizontal"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10 5H3" />  <path d="M12 19H3" />  <path d="M14 3v4" />  <path d="M16 17v4" />  <path d="M21 12h-9" />  <path d="M21 19h-5" />  <path d="M21 5h-7" />  <path d="M8 10v4" />  <path d="M8 12H3" /></svg></div><div class="nm">Pilote</div></div><div class="cn"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-chevron-right"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m9 18 6-6-6-6" /></svg></div><div class="st"><div class="ic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-radar"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" />  <path d="M4 6h.01" />  <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" />  <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" />  <path d="M12 18h.01" />  <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" />  <circle cx="12" cy="12" r="2" />  <path d="m13.41 10.59 5.66-5.66" /></svg></div><div class="nm">Anticipe</div></div>
+        </div>
+        <div class="callout" style="margin-top:36px">Pas des modules vissés sur un tableau bête. <b>Un système nativement intelligent, conçu d'un seul bloc.</b></div>
+      </div>
+      <div style="position:relative">
+        <div class="screenglow" style="inset:20px 10px 30px 10px"></div>
+        <div class="screen"><img src="assets/screen-dashboard.png" alt="Écran de contrôle OGHJI"></div>
+        <div style="text-align:center;margin-top:14px;font-family:'JB';font-weight:500;font-size:11.5px;letter-spacing:.08em;color:var(--ink-3)">L'ÉCRAN DE CONTRÔLE OGHJI</div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">04</span><span class="sec">LE PRODUIT</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">04 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div class="h1">Un écran. Des boîtiers. <span class="em">Une intelligence.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 432px;gap:48px;margin-top:30px;align-items:center">
+      <div>
+        <div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-monitor"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect width="20" height="14" x="2" y="3" rx="2" />  <line x1="8" x2="16" y1="21" y2="21" />  <line x1="12" x2="12" y1="17" y2="21" /></svg></span><div><div class="ft">Écran 10″ tactile</div><div class="fd">Pilotage, graphiques et alertes en un coup d'œil.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-radar"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" />  <path d="M4 6h.01" />  <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" />  <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" />  <path d="M12 18h.01" />  <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" />  <circle cx="12" cy="12" r="2" />  <path d="m13.41 10.59 5.66-5.66" /></svg></span><div><div class="ft">Capteurs présence &amp; luminosité</div><div class="fd">Pour automatiser éclairage et confort.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-move-diagonal"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11 19H5v-6" />  <path d="M13 5h6v6" />  <path d="M19 5 5 19" /></svg></span><div><div class="ft">Écran déportable &amp; discret</div><div class="fd">À poser où vous voulez, loin du tableau.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-boxes"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" />  <path d="m7 16.5-4.74-2.85" />  <path d="m7 16.5 5-3" />  <path d="M7 16.5v5.17" />  <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" />  <path d="m17 16.5-5-3" />  <path d="m17 16.5 4.74-2.85" />  <path d="M17 16.5v5.17" />  <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z" />  <path d="M12 8 7.26 5.15" />  <path d="m12 8 4.74-2.85" />  <path d="M12 13.5V8" /></svg></span><div><div class="ft">Boîtiers de puissance</div><div class="fd">8 circuits, extensible selon vos besoins.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-ruler"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" />  <path d="m14.5 12.5 2-2" />  <path d="m11.5 9.5 2-2" />  <path d="m8.5 6.5 2-2" />  <path d="m17.5 15.5 2-2" /></svg></span><div><div class="ft">Boîtier + couvercle</div><div class="fd">Format compact 35 × 25 × 10 cm.</div></div></div>
+      </div>
+      <div style="position:relative">
+        <div class="screenglow" style="inset:24px 14px 24px 14px"></div>
+        <div class="screen"><img src="assets/screen-dashboard.png" alt="Écran OGHJI"></div>
+        <div class="shot pad" style="position:absolute;left:-30px;bottom:-26px;width:188px;height:120px;border-radius:14px"><img src="assets/boxes-3.png" alt="Boîtiers de puissance OGHJI"></div>
+        <div class="fchip" style="right:-22px;top:-16px"><span><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-ruler"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" />  <path d="m14.5 12.5 2-2" />  <path d="m11.5 9.5 2-2" />  <path d="m8.5 6.5 2-2" />  <path d="m17.5 15.5 2-2" /></svg></span><div><div class="fv">35×25×10</div><div class="fl">cm</div></div></div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">05</span><span class="sec">SOUS LE CAPOT</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">05 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div class="h1">Tout est intégré. <span class="em">Nativement.</span></div>
+      <div class="badge"><span class="bl">Breveté</span><span class="bv">FR3055478B1</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:430px 1fr;gap:42px;margin-top:26px;align-items:center">
+      <div class="shot" style="height:300px"><img src="assets/internals.png" alt="Intérieur OGHJI"><div class="cap"><span class="dot">●</span> Borniers · Linky · circuits — Rail DIN 6 modules</div></div>
+      <div>
+        <div class="lead" style="margin-bottom:14px;max-width:none">Là où les autres vissent des modules sur un coffret classique, OGHJI intègre la mesure, la protection et la communication dans <b style="color:#fff;font-weight:600">un seul système conçu pour ça</b>.</div>
+        <div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-gauge"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m12 14 4-4" />  <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg></span><div><div class="ft">Mesure par circuit intégrée</div><div class="fd">La consommation de chaque départ, nativement.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-shield-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />  <path d="m9 12 2 2 4-4" /></svg></span><div><div class="ft">Protection avancée embarquée</div><div class="fd">Différentiel type B + détection d'arc dans le système.</div></div></div><div class="frow"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-network"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect x="16" y="16" width="6" height="6" rx="1" />  <rect x="2" y="16" width="6" height="6" rx="1" />  <rect x="9" y="2" width="6" height="6" rx="1" />  <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />  <path d="M12 12V8" /></svg></span><div><div class="ft">Communication native</div><div class="fd">Écran, application mobile et interface web reliés.</div></div></div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">06</span><span class="sec">LES BÉNÉFICES</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">06 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div class="h1">Ce qu'OGHJI vous <span class="em">apporte.</span></div>
+      <div class="lead" style="max-width:330px;text-align:right;font-size:15px">Six leviers concrets, du premier jour, sur un seul écran.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:16px;margin-top:30px">
+      <div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-activity"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></svg></span><div class="ct" style="margin-top:0">Mesure en temps réel</div></div><div class="cd" style="margin-top:12px">Puissance, conso &amp; production, circuit par circuit.</div></div><div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-sliders-horizontal"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10 5H3" />  <path d="M12 19H3" />  <path d="M14 3v4" />  <path d="M16 17v4" />  <path d="M21 12h-9" />  <path d="M21 19h-5" />  <path d="M21 5h-7" />  <path d="M8 10v4" />  <path d="M8 12H3" /></svg></span><div class="ct" style="margin-top:0">Pilotage total</div></div><div class="cd" style="margin-top:12px">Coupez ou activez chaque circuit, à distance.</div></div><div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-shield-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />  <path d="m9 12 2 2 4-4" /></svg></span><div class="ct" style="margin-top:0">Sécurité avancée</div></div><div class="cd" style="margin-top:12px">Différentiel type B + détection d'arc.</div></div><div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-wrench"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></svg></span><div class="ct" style="margin-top:0">Maintenance prédictive</div></div><div class="cd" style="margin-top:12px">OGHJI surveille et prévient avant la panne.</div></div><div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-leaf"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg></span><div class="ct" style="margin-top:0">Économies d'énergie</div></div><div class="cd" style="margin-top:12px">Repérez les postes énergivores, baissez la facture.</div></div><div class="card" style="padding:20px"><div style="display:flex;align-items:center;gap:14px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-battery-charging"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m11 7-3 5h4l-3 5" />  <path d="M14.856 6H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.935" />  <path d="M22 14v-4" />  <path d="M5.14 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.936" /></svg></span><div class="ct" style="margin-top:0">Multi-tableaux &amp; VE</div></div><div class="cd" style="margin-top:12px">Plusieurs sites et la recharge, au même endroit.</div></div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">07</span><span class="sec">LE VERROU OGHJI</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">07 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div class="h1">La sécurité qui <span class="em">ne dort jamais.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 430px;gap:44px;margin-top:24px;align-items:start">
+      <div>
+        <div class="lead" style="max-width:none;margin-bottom:8px">Protection différentielle type B + détection d'arc — le niveau le plus exigeant. OGHJI détecte l'anomalie et vous alerte <b style="color:#fff;font-weight:600">avant l'accident</b>.</div>
+        <div class="frow" style="padding:11px 0"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-shield-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />  <path d="m9 12 2 2 4-4" /></svg></span><div><div class="ft">Différentiel type B</div><div class="fd">Le niveau de protection le plus exigeant.</div></div></div><div class="frow" style="padding:11px 0"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-zap"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg></span><div><div class="ft">Détection d'arc électrique</div><div class="fd">Repère l'amorçage avant le départ de feu.</div></div></div><div class="frow" style="padding:11px 0"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-bell-ring"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10.268 21a2 2 0 0 0 3.464 0" />  <path d="M22 8c0-2.3-.8-4.3-2-6" />  <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />  <path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></span><div><div class="ft">Alertes multi-canal</div><div class="fd">Couleur, écran, sonore &amp; SMS.</div></div></div><div class="frow" style="padding:11px 0"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-siren"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M7 18v-6a5 5 0 1 1 10 0v6" />  <path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" />  <path d="M21 12h1" />  <path d="M18.5 4.5 18 5" />  <path d="M2 12h1" />  <path d="M12 2v1" />  <path d="m4.929 4.929.707.707" />  <path d="M12 12v6" /></svg></span><div><div class="ft">Bouton d'arrêt d'urgence</div><div class="fd">Coupez tout, instantanément.</div></div></div><div class="frow" style="padding:11px 0"><span class="chip sm"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-scroll-text"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M15 12h-5" />  <path d="M15 8h-5" />  <path d="M19 17V5a2 2 0 0 0-2-2H4" />  <path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" /></svg></span><div><div class="ft">Journal &amp; alertes temps réel</div><div class="fd">Chaque événement tracé et horodaté.</div></div></div>
+      </div>
+      <div style="position:relative">
+        <div class="screenglow" style="inset:30px 10px 30px 10px;background:radial-gradient(closest-side,rgba(255,120,90,.35),transparent)"></div>
+        <div class="screen"><img src="assets/screen-alerts.png" alt="Journal d'alertes OGHJI"></div>
+        <div class="fchip" style="right:-20px;top:-18px"><span style="color:#ff8a6b"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-bell-ring"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10.268 21a2 2 0 0 0 3.464 0" />  <path d="M22 8c0-2.3-.8-4.3-2-6" />  <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />  <path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></span><div><div class="fv">Alertes</div><div class="fl">temps réel</div></div></div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">08</span><span class="sec">TROIS INTERFACES</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">08 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div class="h1">Pilotez OGHJI <span class="em">où vous voulez.</span></div>
+      <div class="pill acc"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-refresh-cw"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />  <path d="M21 3v5h-5" />  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />  <path d="M8 16H3v5" /></svg>&nbsp;Données synchronisées</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px">
+      <div class="card" style="padding:22px">
+        <div style="display:flex;align-items:center;gap:13px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-monitor"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect width="20" height="14" x="2" y="3" rx="2" />  <line x1="8" x2="16" y1="21" y2="21" />  <line x1="12" x2="12" y1="17" y2="21" /></svg></span><div class="ct" style="margin-top:0">Écran de contrôle</div></div>
+        <div class="screen" style="margin-top:18px;padding:7px"><img src="assets/screen-dashboard.png" alt=""></div>
+        <div class="cd" style="margin-top:16px">Sur place, en un coup d'œil. Pilotage, graphiques, arrêt d'urgence.</div>
+      </div>
+      <div class="card" style="padding:22px">
+        <div style="display:flex;align-items:center;gap:13px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-smartphone"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />  <path d="M12 18h.01" /></svg></span><div class="ct" style="margin-top:0">App mobile</div></div>
+        <div style="margin-top:18px;height:158px;display:grid;place-items:center;background:radial-gradient(120% 120% at 30% 0%,#fff,#e7edec);border-radius:14px;border:1px solid var(--line)"><img src="assets/phone-app.png" alt="" style="height:140px"></div>
+        <div class="cd" style="margin-top:16px">À distance, partout. Conso, alertes SMS, multi-tableaux.</div>
+      </div>
+      <div class="card" style="padding:22px">
+        <div style="display:flex;align-items:center;gap:13px"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-globe"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />  <path d="M2 12h20" /></svg></span><div class="ct" style="margin-top:0">Interface web</div></div>
+        <div class="win" style="margin-top:18px">
+          <div class="tb"><i></i><i></i><i></i><div class="ad"></div></div>
+          <div class="bd"><div style="display:flex;gap:8px;margin-bottom:12px"><div style="flex:1;height:30px;border-radius:7px;background:rgba(43,224,138,.12);border:1px solid rgba(43,224,138,.2)"></div><div style="flex:1;height:30px;border-radius:7px;background:rgba(255,255,255,.05)"></div><div style="flex:1;height:30px;border-radius:7px;background:rgba(255,255,255,.05)"></div></div>
+            <div class="gauge" style="height:64px"><div class="b" style="height:40%"></div><div class="b" style="height:68%"></div><div class="b" style="height:52%"></div><div class="b" style="height:82%"></div><div class="b" style="height:60%"></div><div class="b" style="height:74%"></div><div class="b" style="height:46%"></div><div class="b" style="height:90%"></div></div>
+          </div>
+        </div>
+        <div class="cd" style="margin-top:16px">Vue d'ensemble. Analyses, multi-sites, gestion des comptes.</div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">09</span><span class="sec">LA DIFFÉRENCE</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">09 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div class="h1">OGHJI vs tableau connecté <span class="em">classique.</span></div>
+    <div class="cmp-wrap" style="position:relative;margin-top:28px">
+      <div class="ogcol"></div>
+      <div class="cmp" style="position:relative">
+        <div class="ch l"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-plug"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 22v-5" />  <path d="M15 8V2" />  <path d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z" />  <path d="M9 8V2" /></svg>&nbsp;Tableau connecté classique</div>
+        <div class="mid"></div>
+        <div class="ch r"><span class="mk" style="width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--accent);color:#04110e"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span>&nbsp;OGHJI</div>
+        
+          <div class="cl"><span>Modules ajoutés sur un coffret passif</span><span class="ic-x"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-x"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 6 6 18" />  <path d="m6 6 12 12" /></svg></span></div>
+          <div class="mid" style="border-top:1px solid transparent"></div>
+          <div class="cr"><span class="ic-c"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span><span>Système nativement numérique</span></div>
+          <div class="cl"><span>Capteurs vissés en supplément</span><span class="ic-x"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-x"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 6 6 18" />  <path d="m6 6 12 12" /></svg></span></div>
+          <div class="mid" style="border-top:1px solid transparent"></div>
+          <div class="cr"><span class="ic-c"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span><span>Tout intégré dès la conception</span></div>
+          <div class="cl"><span>Mesure partielle des circuits</span><span class="ic-x"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-x"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 6 6 18" />  <path d="m6 6 12 12" /></svg></span></div>
+          <div class="mid" style="border-top:1px solid transparent"></div>
+          <div class="cr"><span class="ic-c"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span><span>Mesure circuit par circuit</span></div>
+          <div class="cl"><span>Fonctions &amp; apps éparpillées</span><span class="ic-x"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-x"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 6 6 18" />  <path d="m6 6 12 12" /></svg></span></div>
+          <div class="mid" style="border-top:1px solid transparent"></div>
+          <div class="cr"><span class="ic-c"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span><span>Écran + app + web unifiés</span></div>
+          <div class="cl"><span>Sécurité standard</span><span class="ic-x"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-x"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 6 6 18" />  <path d="m6 6 12 12" /></svg></span></div>
+          <div class="mid" style="border-top:1px solid transparent"></div>
+          <div class="cr"><span class="ic-c"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span><span>Type B + détection d'arc</span></div>
+      </div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">10</span><span class="sec">POUR QUI ?</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">10 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div class="h1">Le cerveau énergétique de <span class="em">chaque lieu.</span></div>
+    </div>
+    <div class="lead" style="margin-top:14px">Maison, appartement, bureau, boutique, garage, entrepôt… partout où il y a un tableau électrique.</div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:28px">
+      <div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-house"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />  <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span><div class="sn">Maison &amp; appart.</div></div><div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-building-2"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10 12h4" />  <path d="M10 8h4" />  <path d="M14 21v-3a2 2 0 0 0-4 0v3" />  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></svg></span><div class="sn">Bureaux &amp; tertiaire</div></div><div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-store"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5" />  <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244" />  <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05" /></svg></span><div class="sn">Commerces</div></div><div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-car"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />  <circle cx="7" cy="17" r="2" />  <path d="M9 17h6" />  <circle cx="17" cy="17" r="2" /></svg></span><div class="sn">Garages</div></div><div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-warehouse"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M18 21V10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v11" />  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 1.132-1.803l7.95-3.974a2 2 0 0 1 1.837 0l7.948 3.974A2 2 0 0 1 22 8z" />  <path d="M6 13h12" />  <path d="M6 17h12" /></svg></span><div class="sn">Entrepôts</div></div><div class="seg"><span class="chip"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-landmark"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M10 18v-7" />  <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />  <path d="M14 18v-7" />  <path d="M18 18v-7" />  <path d="M3 22h18" />  <path d="M6 18v-7" /></svg></span><div class="sn">Collectivités</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px">
+      <div style="text-align:center;padding:16px;border-radius:14px;background:linear-gradient(160deg,rgba(43,224,138,.10),rgba(21,214,198,.03));border:1px solid rgba(43,224,138,.24);font-family:'SG';font-weight:600;font-size:17px;color:#fff;letter-spacing:.01em">Smart Home</div><div style="text-align:center;padding:16px;border-radius:14px;background:linear-gradient(160deg,rgba(43,224,138,.10),rgba(21,214,198,.03));border:1px solid rgba(43,224,138,.24);font-family:'SG';font-weight:600;font-size:17px;color:#fff;letter-spacing:.01em">Smart Building</div><div style="text-align:center;padding:16px;border-radius:14px;background:linear-gradient(160deg,rgba(43,224,138,.10),rgba(21,214,198,.03));border:1px solid rgba(43,224,138,.24);font-family:'SG';font-weight:600;font-size:17px;color:#fff;letter-spacing:.01em">Smart Service</div><div style="text-align:center;padding:16px;border-radius:14px;background:linear-gradient(160deg,rgba(43,224,138,.10),rgba(21,214,198,.03));border:1px solid rgba(43,224,138,.24);font-family:'SG';font-weight:600;font-size:17px;color:#fff;letter-spacing:.01em">Smart City</div>
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><div class="head">
+    <div class="kick"><span class="bar"></span><span class="num">11</span><span class="sec">SIMPLE & RAPIDE</span></div>
+    <div class="brand"><span class="mk"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span><span class="wd">oghji</span><span class="pg">11 / 12</span></div>
+  </div><div class="foot"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div>
+  <div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div class="h1">Installé en <span class="em">4 étapes.</span></div>
+      <div class="shot" style="width:280px;height:118px;padding:0"><img src="assets/install-beforeafter.png" alt="Avant / après OGHJI"><div class="cap"><span class="dot">●</span> Du tableau classique… à OGHJI</div></div>
+    </div>
+    <div class="steps" style="margin-top:34px">
+      <div class="step"><div style="display:flex;align-items:center;justify-content:space-between"><div class="no">01</div></div><div class="sic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-replace"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M14 4a1 1 0 0 1 1-1" />  <path d="M15 10a1 1 0 0 1-1-1" />  <path d="M21 4a1 1 0 0 0-1-1" />  <path d="M21 9a1 1 0 0 1-1 1" />  <path d="m3 7 3 3 3-3" />  <path d="M6 10V5a2 2 0 0 1 2-2h2" />  <rect x="3" y="14" width="7" height="7" rx="1" /></svg></div><div class="stt">Je remplace mon tableau</div><div class="std">OGHJI se branche entre le disjoncteur général et les circuits.</div></div><div class="step"><div style="display:flex;align-items:center;justify-content:space-between"><div class="no">02</div></div><div class="sic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-settings-2"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M14 17H5" />  <path d="M19 7h-9" />  <circle cx="17" cy="17" r="3" />  <circle cx="7" cy="7" r="3" /></svg></div><div class="stt">Je configure</div><div class="std">L'assistant intégré guide chaque circuit, pas à pas.</div></div><div class="step"><div style="display:flex;align-items:center;justify-content:space-between"><div class="no">03</div></div><div class="sic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-radar"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" />  <path d="M4 6h.01" />  <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" />  <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" />  <path d="M12 18h.01" />  <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" />  <circle cx="12" cy="12" r="2" />  <path d="m13.41 10.59 5.66-5.66" /></svg></div><div class="stt">Je surveille</div><div class="std">OGHJI mesure, protège et m'alerte au moindre défaut.</div></div><div class="step"><div style="display:flex;align-items:center;justify-content:space-between"><div class="no">04</div></div><div class="sic"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-smartphone"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />  <path d="M12 18h.01" /></svg></div><div class="stt">Je connecte l'app</div><div class="std">Pilotage à distance depuis mobile et web (option).</div></div>
+    </div>
+    <div style="margin-top:24px;display:flex;align-items:center;gap:12px;justify-content:center;font-family:'JB';font-weight:500;font-size:12px;letter-spacing:.1em;color:var(--ink-3)">
+      <!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-clock"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <path d="M12 6v6l4 2" /></svg>&nbsp; UN REMPLACEMENT, PAS UN CHANTIER
+    </div>
+  </div></section>
+<section class="slide"><div class="bg"></div><svg class="trace" viewBox="0 0 1280 720" fill="none" preserveAspectRatio="none">
+    <g stroke="rgba(43,224,138,.16)" stroke-width="1.4">
+      <path d="M0 150 H120 V70"/><circle cx="120" cy="64" r="4" fill="rgba(43,224,138,.5)" stroke="none"/>
+      <path d="M1280 560 H1140 V640"/><circle cx="1140" cy="646" r="4" fill="rgba(43,224,138,.5)" stroke="none"/>
+      <path d="M1280 240 H1180 V300 H1090"/><circle cx="1090" cy="300" r="3.5" fill="rgba(21,214,198,.5)" stroke="none"/>
+    </g></svg>
+  <div class="content" style="top:0;bottom:0;left:0;right:0;padding:0">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:30px">
+        <span class="mk" style="width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:#04110e;box-shadow:0 8px 24px rgba(43,224,138,.45)"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-brain-circuit"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />  <path d="M9 13a4.5 4.5 0 0 0 3-4" />  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />  <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />  <path d="M6 18a4 4 0 0 1-1.967-.516" />  <path d="M12 13h4" />  <path d="M12 18h6a2 2 0 0 1 2 2v1" />  <path d="M12 8h8" />  <path d="M16 8V5a2 2 0 0 1 2-2" />  <circle cx="16" cy="13" r=".5" />  <circle cx="18" cy="3" r=".5" />  <circle cx="20" cy="21" r=".5" />  <circle cx="20" cy="8" r=".5" /></svg></span>
+        <span style="font-family:'SG';font-weight:700;font-size:28px;letter-spacing:.04em">oghji</span>
+      </div>
+      <div class="h1" style="font-size:60px;letter-spacing:-1.8px;line-height:1.05">Donnez un cerveau<br>à <span class="em">votre énergie.</span></div>
+      <div class="lead" style="margin-top:22px;text-align:center;max-width:560px">Rejoignez les premiers à équiper leurs installations du tableau électrique intelligent OGHJI.</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-top:36px">
+        <div style="display:inline-flex;align-items:center;gap:11px;padding:16px 30px;border-radius:14px;background:var(--accent);color:#04110e;font-family:'SG';font-weight:700;font-size:17px;box-shadow:0 18px 40px -14px rgba(43,224,138,.6)"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-calendar-check"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M8 2v4" />  <path d="M16 2v4" />  <rect width="18" height="18" x="3" y="4" rx="2" />  <path d="M3 10h18" />  <path d="m9 16 2 2 4-4" /></svg>&nbsp;Demander une démo</div>
+        <div class="pill big"><!-- @license lucide-static v1.21.0 - ISC --><svg  class="lucide lucide-rocket"  xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />  <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" />  <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" />  <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg>&nbsp;Précommandes à venir</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot" style="bottom:34px"><span><span class="dot">●</span>&nbsp; oghji · smart energy</span><span>Le cerveau énergétique et électrique</span></div></section></div></body></html>
