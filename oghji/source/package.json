@@ -1,0 +1,21 @@
+{
+  "name": "oghji-presentation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OGHJI — présentation commerciale (génération HTML → images → PPTX/PDF)",
+  "type": "module",
+  "scripts": {
+    "gen": "node gen.mjs",
+    "render": "node render.mjs",
+    "pptx": "node build-pptx.mjs",
+    "pdf": "node build-pdf.mjs",
+    "overview": "node overview.mjs",
+    "build": "node gen.mjs && node render.mjs && node build-pptx.mjs && node build-pdf.mjs"
+  },
+  "dependencies": {
+    "lucide-static": "^1.21.0",
+    "pdf-lib": "^1.17.1",
+    "playwright": "^1.61.1",
+    "pptxgenjs": "^4.0.1"
+  }
+}
