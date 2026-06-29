@@ -17,16 +17,34 @@ L'univers réunit désormais **Brain + Shrine + Compta SASU** sous une seule top
 mon-monde/
 ├── index.html        ← Shell : topbar unifiée BRAIN / SHRINE / COMPTA + 3 iframes
 ├── brain.html        ← Xiaomi Brain v0.8.8 BRIDGED (identique à l'original)
-├── shrine.html       ← Xiaomi Shrine v3.8 GARDIENNE DU SEUIL (identique à l'original)
+├── shrine.html       ← Xiaomi Shrine GARDIENNE DU SEUIL (+ Gardienne 3D — Phase A)
 ├── compta.html       ← Xiaomi Compta v1.0 SASU (nouveau - Phase 2)
+├── robot3d.js        ← Module Gardienne 3D (Three.js, robot humanoïde animé au centre)
+├── models/           ← RobotExpressive.glb (modèle riggé du robot)
+├── vendor/three/     ← Three.js 0.184 auto-hébergé (ESM, zéro build, marche hors-ligne)
 ├── sw.js             ← Service worker minimal (PWA installable, pas de cache)
 ├── manifest.json     ← Manifeste PWA "Mon Monde"
 └── src/
     ├── brain-v0.8.8.html    ← Backup gelé (référence)
-    ├── shrine-v3.8.html     ← Backup gelé (référence)
+    ├── shrine-v3.8.html     ← Backup gelé (référence — rollback Shrine d'origine)
     ├── brain-sw.js          ← SW Brain d'origine
     └── shrine-sw.js         ← SW Shrine d'origine
 ```
+
+### Gardienne 3D (Phase A)
+
+Le visage-photo central du Shrine est désormais doublé d'un **robot humanoïde 3D
+animé** (modèle `RobotExpressive.glb`), monté via `robot3d.js` (Three.js auto-hébergé,
+**sans build**). Le robot :
+- salue à l'ouverture, **hoche la tête quand l'assistante parle**, s'illumine en cyan
+  à l'écoute, en rouge en alerte — piloté par les classes CSS de `#portrait` (zéro
+  modification de la logique du Shrine) ;
+- **se désactive proprement** si WebGL est absent ou hors-ligne → la photo persona
+  d'origine reste affichée (aucune régression).
+
+> Note : `shrine.html` n'est donc plus identique au backup gelé `src/shrine-v3.8.html`
+> (qui reste la référence de rollback). Les greffes sont minimales et additives
+> (import-map, point de montage `#robot3d`, CSS `.robot-on`, balise module).
 
 ### Principe
 
@@ -34,12 +52,12 @@ mon-monde/
 - Chaque module vit dans un `<iframe>` séparé, **même origine** → le bus
   `BroadcastChannel('xiaomi-os')` fonctionne automatiquement entre les deux
 - Le pont Shrine→Brain (clé API en RAM via `shrine:key:unlocked`) marche tel quel
-- **Aucune modification** des fichiers Brain et Shrine d'origine — preuve :
-  les SHA256 sont identiques aux sources :
+- **Brain reste identique à l'origine** (SHA256 inchangé) ; **Shrine** a reçu la
+  Gardienne 3D (Phase A) — greffes additives, backup d'origine conservé dans
+  `src/shrine-v3.8.html`.
 
   ```
-  brain.html  : 58dbb2e178575846ac8a50cef60a8086c2f164df1c9becfc1a03e85d34e59454
-  shrine.html : b4abcf0fc50e949cb44c053cf1f36d3f0dfa68fc21405a1c260996824979997a
+  brain.html (inchangé) : 58dbb2e178575846ac8a50cef60a8086c2f164df1c9becfc1a03e85d34e59454
   ```
 
 ### Raccourcis clavier
