@@ -1487,6 +1487,7 @@ const XC = (() => {
     toast('Écriture enregistrée ✓', 'success');
     renderEcritures();
     notifyBus({ type: 'compta:ecriture:new', ecriture: ec });
+    pushComptaState();
   }
 
   // ─── FACTURES ───
@@ -1610,6 +1611,7 @@ const XC = (() => {
     renderFactures();
     notifyBus({ type: 'compta:facture:new', facture: fac });
     notifyBus({ type: 'compta:ecriture:new', ecriture: ec });
+    pushComptaState();
   }
 
   function renderFactures() {
@@ -2180,10 +2182,17 @@ const XC = (() => {
         } else if (m.type === 'brain:hello' || m.type === 'shrine:hello') {
           _bus.postMessage({ type: 'compta:hello', source: 'compta' });
           document.getElementById('xc-bus-dot').classList.add('ok');
+        } else if (m.type === 'compta:request:state') {
+          // La Shrine (ou Brain) demande l'état comptable live → on le pousse
+          pushComptaState();
+        } else if (m.type === 'shrine:compta:invoice-draft' && m.draft) {
+          // La Shrine prépare un brouillon de facture → on l'ouvre pré-rempli (NON enregistré)
+          applyInvoiceDraft(m.draft);
         }
       };
       _bus.postMessage({ type: 'compta:hello', source: 'compta' });
       _bus.postMessage({ type: 'brain:request:key' }); // request key if Shrine is unlocked
+      pushComptaState(); // expose l'état dès le départ pour la Shrine
       document.getElementById('xc-bus-dot').classList.add('ok');
     } catch (e) {
       console.warn('[XC] bus init failed:', e);
@@ -2191,6 +2200,68 @@ const XC = (() => {
   }
   function notifyBus(payload) {
     if (_bus) try { _bus.postMessage(payload); } catch (e) {}
+  }
+
+  // Construit un snapshot de l'état comptable pour la Shrine (chiffres réels)
+  function buildComptaState() {
+    let kpi = null;
+    try { kpi = computeKPIs(); } catch (e) { kpi = null; }
+    let exLabel = '';
+    try { exLabel = exerciceBounds().label; } catch (e) {}
+    const t = today();
+    const impayes = STATE.factures.filter(f => f.statut === 'envoyee' && f.echeance < t);
+    const recentFactures = STATE.factures.slice(-5).map(f => ({
+      numero: f.numero, date: f.date, echeance: f.echeance, statut: f.statut,
+      client: f.client && f.client.nom, ttc: f.ttc,
+    }));
+    const recentEcritures = STATE.ecritures.slice(-5).map(e => ({
+      date: e.date, journal: e.journal, piece: e.piece, libelle: e.libelle,
+    }));
+    return {
+      societe: {
+        raisonSociale: STATE.societe.raisonSociale, siret: STATE.societe.siret,
+        regimeTVA: STATE.societe.regimeTVA, cloture: STATE.societe.cloture,
+      },
+      exercice: exLabel,
+      kpi,
+      impayes: impayes.length,
+      impayesTotal: round2(impayes.reduce((s, f) => s + (Number(f.ttc) || 0), 0)),
+      nbFactures: STATE.factures.length,
+      nbEcritures: STATE.ecritures.length,
+      recentFactures, recentEcritures,
+      ts: Date.now(),
+    };
+  }
+  function pushComptaState() {
+    try { notifyBus({ type: 'compta:state', state: buildComptaState() }); } catch (e) {}
+  }
+
+  // Ouvre un brouillon de facture pré-rempli depuis la Shrine (NON enregistré : Tarek valide)
+  function applyInvoiceDraft(draft) {
+    try {
+      openFactureModal(); // initialise le modal + prestasBrouillon
+      const c = draft.client || {};
+      document.getElementById('xc-cli-nom').value = c.nom || '';
+      document.getElementById('xc-cli-adresse').value = c.adresse || '';
+      document.getElementById('xc-cli-siret').value = c.siret || '';
+      document.getElementById('xc-cli-tva').value = c.tvaIntra || '';
+      const jours = Number.isFinite(draft.echeanceJours) ? draft.echeanceJours : 30;
+      document.getElementById('xc-fac-echeance').value = addDays(today(), jours);
+      document.getElementById('xc-fac-statut').value = 'brouillon';
+      const lignes = Array.isArray(draft.prestations) ? draft.prestations : [];
+      prestasBrouillon = lignes.length ? lignes.map(p => ({
+        description: p.description || '',
+        quantite: Number(p.quantite) > 0 ? Number(p.quantite) : 1,
+        prixHT: Number(p.prixHT) || 0,
+        tauxTVA: (p.tauxTVA != null) ? Number(p.tauxTVA) : 20,
+      })) : [{ description: '', quantite: 1, prixHT: 0, tauxTVA: 20 }];
+      renderPrestas();
+      switchView('factures');
+      document.getElementById('xc-modal-facture-bg').classList.add('open');
+      toast('Brouillon de facture préparé par la Shrine — vérifie et enregistre ✓', 'success');
+    } catch (e) {
+      console.warn('[XC] applyInvoiceDraft failed:', e);
+    }
   }
 
   // ─── INIT ───
