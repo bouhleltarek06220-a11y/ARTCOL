@@ -302,6 +302,64 @@ export const LABS_SERVICES = [
       "Nombre de cas d'usage déployés en interne",
     ],
   },
+  {
+    id: "site-web-sur-mesure",
+    label: "Sites & landing sur mesure",
+    tagline: "Un site qui vous ressemble, et qui convertit",
+    definition:
+      "Nous concevons et développons votre site vitrine, votre landing page ou votre mini-site événementiel de A à Z : design premium, animations soignées, performance et référencement au rendez-vous. Chaque formulaire est branché directement à votre CRM — vos visiteurs deviennent des contacts qualifiés, sans ressaisie.",
+    benefits: [
+      "Design sur-mesure et premium : une image pro qui inspire confiance dès la première seconde.",
+      "Pensé pour convertir : parcours clair, appels à l'action, formulaires courts et efficaces.",
+      "Rapide et bien référencé : chargement optimisé, structure SEO, rendu mobile impeccable.",
+      "Vos leads arrivent directement dans votre CRM (ou par email) — zéro copier-coller.",
+    ],
+    sectors: [
+      {
+        sector: "Événementiel / spectacle",
+        useCase:
+          "Mini-site immersif (vidéo, musique, teaser), inscriptions, comptes à rebours et capture d'audience.",
+      },
+      {
+        sector: "Artisan / commerce local",
+        useCase:
+          "Vitrine crédible, prise de contact et demande de devis, référencement local, avis clients.",
+      },
+      {
+        sector: "Association / patrimoine / territoire",
+        useCase:
+          "Présentation du projet, dons & mécénat, formulaires partenaires et collectivités.",
+      },
+      {
+        sector: "Artiste / créateur / marque perso",
+        useCase:
+          "Portfolio, univers visuel fort, capture d'audience et passerelle vers les réseaux.",
+      },
+      {
+        sector: "PME / lancement de produit",
+        useCase:
+          "Landing de lancement, liste d'attente, mise en avant d'une offre, tests A/B.",
+      },
+    ],
+    kpi: [
+      "Taux de conversion visiteurs → contacts",
+      "Vitesse de chargement (Core Web Vitals)",
+      "Nombre de leads générés / mois",
+    ],
+    exampleHeader: "Nos réalisations en ligne",
+    examples: [
+      {
+        name: "Lost Chapter",
+        tagline: "Site immersif d'une aventure grandeur nature (événementiel).",
+        href: "https://lostchapter.vercel.app",
+      },
+      {
+        name: "ARTCOL",
+        tagline: "Univers artistique & capture d'audience.",
+        href: "https://artcol.online",
+      },
+    ],
+  },
 ];
 
 export function getLabsService(id) {

@@ -151,7 +151,7 @@ export default function ServiceDetailModal({ service, onClose }) {
               <>
                 <div className="my-7 h-px bg-[linear-gradient(90deg,transparent,rgba(240,210,122,0.5),transparent)]" />
                 <h3 className="text-xs uppercase tracking-[0.22em] text-gold-bright">
-                  Un produit AMAVYA déjà en ligne
+                  {service.exampleHeader || "Un produit AMAVYA déjà en ligne"}
                 </h3>
 
                 {service.example && (
