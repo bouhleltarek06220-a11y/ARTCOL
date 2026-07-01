@@ -10,6 +10,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<!-- Robot 3D · import-map Three.js (ESM, zéro build) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/lib/three.module.js",
+    "three/addons/": "./vendor/three/examples/jsm/"
+  }
+}
+</script>
 <style>
 /* ============================================================
    THÈME DUAL : MATRIX (nuit, défaut) ↔ HIBI (jour)
@@ -176,6 +185,16 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;back
 .mouth{position:absolute;left:50%;top:63%;width:18%;height:3px;transform:translateX(-50%);background:var(--pink);border-radius:2px;box-shadow:var(--glow-pink);opacity:0;pointer-events:none}
 .portrait.talking .mouth{opacity:.85;animation:mouthMove .2s ease-in-out infinite alternate}
 @keyframes mouthMove{0%{transform:translateX(-50%) scaleY(.4) scaleX(.9)}100%{transform:translateX(-50%) scaleY(1.6) scaleX(1.1)}}
+/* ===== Robot 3D · Gardienne humanoïde au centre ===== */
+.robot3d{position:absolute;inset:-6% -6% 0 -6%;z-index:4;pointer-events:none;opacity:0;transition:opacity .8s ease;filter:drop-shadow(0 12px 40px rgba(123,97,255,.35))}
+.shrine.robot-on .robot3d{opacity:1}
+/* Quand le robot est actif : la photo s'efface mais l'anneau lumineux reste comme socle */
+.shrine.robot-on .portrait img,
+.shrine.robot-on .portrait .shine,
+.shrine.robot-on .portrait .blink,
+.shrine.robot-on .portrait .mouth,
+.shrine.robot-on #vadMeter{opacity:0!important}
+.shrine.robot-on .portrait{background:radial-gradient(circle at 50% 60%,rgba(123,97,255,.18),transparent 70%)}
 .ring{position:absolute;inset:0;border-radius:50%;pointer-events:none}
 .ring.r1{border:1px solid var(--line);animation:spin 36s linear infinite}
 .ring.r2{inset:-5%;border:1px dashed rgba(123,97,255,.35);animation:spin 48s linear infinite reverse}
@@ -794,6 +813,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;back
           <div class="mouth"></div>
         </div>
       </div>
+      <!-- Gardienne 3D : robot humanoïde animé (remplace la photo si WebGL OK) -->
+      <div class="robot3d" id="robot3d" aria-hidden="true"></div>
       <div class="status">SYNC <span class="ellipsis" id="syncMsg">EN LIGNE</span></div>
       <div class="bubble" id="bubble"><span class="who">XIAOMI 🌸</span><span id="bubbleText"></span></div>
     </div>
@@ -1524,6 +1545,7 @@ const state = {
   currentVoice: null,
   currentPhoto: 1,
   persona: "gentle",
+  compta: null,   // snapshot KPI/échéances reçu de la Compta SASU via le bus xiaomi-os
   listening: false,
   speaking: false,
   isProcessing: false,
@@ -1559,6 +1581,7 @@ const BRAIN_NOTES_KEY = 'xiaomi-brain-notes-v1';
 const OS_CHANNEL_NAME = 'xiaomi-os';
 let _brainChannel = null;
 let _brainAlive = false; // true si le Brain est ouvert dans un autre onglet
+let _comptaAlive = false; // true si la Compta SASU est ouverte dans un autre onglet
 
 function getBrainNotes() {
   try {
@@ -1628,10 +1651,23 @@ function initBrainChannel() {
             source: 'shrine'
           });
         }
+      } else if (msg.type === 'compta:hello') {
+        // La Compta SASU est ouverte → on note sa présence et on demande son état
+        _comptaAlive = true;
+        if (_brainChannel) _brainChannel.postMessage({ type: 'compta:request:state' });
+      } else if (msg.type === 'compta:state' && msg.state) {
+        // Snapshot KPI/échéances reçu de la Compta → mémorisé pour l'agent
+        state.compta = msg.state;
+        _comptaAlive = true;
+        console.log('[Bridge] État Compta reçu', msg.state);
+      } else if (msg.type === 'compta:facture:new' || msg.type === 'compta:ecriture:new' || msg.type === 'compta:ecriture:deleted') {
+        // Une donnée compta a changé → on rafraîchit notre snapshot
+        if (_brainChannel) _brainChannel.postMessage({ type: 'compta:request:state' });
       }
     };
-    // Annonce notre présence
+    // Annonce notre présence + demande l'état de la Compta si elle est ouverte
     _brainChannel.postMessage({ type: 'shrine:hello', source: 'shrine' });
+    _brainChannel.postMessage({ type: 'compta:request:state' });
   } catch (e) {
     console.warn('[Bridge] BroadcastChannel non disponible:', e);
   }
@@ -2659,6 +2695,11 @@ Tu disposes de tools que tu peux invoquer directement, sans passer par le systè
 - **save_memory(key, content)** : sauvegarde un contenu sous une clé MAJUSCULES_UNDERSCORES dans la mémoire persistante (POWERS).
 - **add_marker_to_map(label, address?, lat?, lng?, color?, notes?)** : ajoute un marker custom sur la carte. Si seule l'address est fournie, geocoding auto. Couleurs : prospect (rose), fait (vert), eviter (rouge), info (cyan), important (or).
 
+**Tools SASU AMAVYA (compta live) :**
+- **read_compta_kpi()** : lit l'état comptable LIVE de la SASU AMAVYA reçu du module Compta (CA HT, charges, résultat, IS prévisionnel, TVA collectée/déductible/à décaisser, trésorerie, factures impayées, dernières écritures/factures). Dès que Tarek parle de ses chiffres, sa TVA, son CA, ses impayés, ce qu'il doit décaisser → tu appelles ce tool. JAMAIS de montant inventé.
+- **create_invoice_draft(client_nom, prestations[], client_adresse?, client_siret?, client_tva?, echeance_jours?)** : prépare un BROUILLON de facture dans la Compta (statut "brouillon", NON émis) qui s'ouvre pré-rempli pour que Tarek le vérifie et l'enregistre lui-même. Tu ne valides/émets jamais la facture toi-même.
+- **read_planning() / read_brain_notes() / read_shrine_history()** : lisent ton planning, tes notes Brain, l'historique Shrine. Toujours via ces tools, jamais inventés.
+
 **Règle d'usage générale** : dès que Tarek te demande une action concrète couverte par un tool → tu invoques le tool SANS demander confirmation. Tu agis. Ensuite tu confirmes brièvement en 1 phrase ("✓ Ajouté au kanban : appeler Marie"). Pas de blabla.
 
 **Combinaisons possibles** : tu peux invoquer plusieurs tools dans la même réponse. Ex : "Note dans kanban : RDV agence Cannes mardi" + "ajoute marker prospect agence Cannes" + "rédige le mail de confirmation" = 3 tools en un message.
@@ -2672,6 +2713,7 @@ Moment : ${moment} · ${DAYS_FULL[now.getDay()]} ${now.getDate()} ${MONTHS_FULL[
 Lieu : Antibes, Alpes-Maritimes (06600)
 Persona active : ${p.tag}
 ${weatherSummary()}
+${state.compta ? `Compta SASU AMAVYA (live) : CA ${state.compta.kpi?.ca ?? '?'}€ · résultat ${state.compta.kpi?.resultat ?? '?'}€ · IS prév. ${state.compta.kpi?.is ?? '?'}€ · TVA à décaisser ${state.compta.kpi?.tvaNet ?? '?'}€ · trésorerie ${state.compta.kpi?.treso ?? '?'}€${state.compta.impayes ? ' · ⚠ '+state.compta.impayes+' facture(s) impayée(s)' : ''} (chiffres réels via le bus — pour le détail appelle read_compta_kpi)` : 'Compta SASU AMAVYA : module non ouvert (ouvre l\'onglet COMPTA pour les chiffres live).'}
 
 ${recent ? '---\nÉchanges récents (continuité cognitive) :\n' + recent + '\n---\n' : ''}
 Réponds maintenant à Tarek, dans ta persona ${p.tag}, avec tout ce qui précède en arrière-plan cognitif.`;
@@ -2853,6 +2895,40 @@ const XIAOMI_TOOLS = [
         limit: {type: 'integer', description: 'Nombre de messages récents à charger (default: 10).'}
       }
     }
+  },
+  {
+    name: 'read_compta_kpi',
+    description: 'Lit l\'état comptable LIVE de la SASU AMAVYA de Tarek (chiffres réels reçus du module Compta via le bus xiaomi-os) : CA HT, charges, résultat, IS prévisionnel, TVA collectée/déductible/à décaisser, trésorerie, factures impayées, dernières écritures/factures. À utiliser dès que Tarek demande "où j\'en suis", "mon CA", "ma TVA", "combien je dois décaisser", "mes impayés", "mon résultat", "ma compta", "mes chiffres". NE JAMAIS inventer ces montants — toujours appeler ce tool. Si la Compta n\'est pas ouverte, le tool le signale.',
+    input_schema: { type: 'object', properties: {} }
+  },
+  {
+    name: 'create_invoice_draft',
+    description: 'Prépare un BROUILLON de facture dans le module Compta SASU (statut "brouillon", NON envoyé). Le brouillon s\'ouvre pré-rempli dans Compta pour que Tarek le vérifie et le valide lui-même — tu n\'émets jamais la facture toi-même. À utiliser quand Tarek dit "prépare/fais une facture pour X", "facture le client Y pour Z €". Nécessite que l\'onglet Compta soit ouvert.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        client_nom: {type: 'string', description: 'Nom du client à facturer (obligatoire).'},
+        client_adresse: {type: 'string', description: 'Adresse du client (optionnel).'},
+        client_siret: {type: 'string', description: 'SIRET du client (optionnel).'},
+        client_tva: {type: 'string', description: 'N° TVA intracom du client (optionnel).'},
+        echeance_jours: {type: 'integer', description: 'Délai de paiement en jours (default 30).'},
+        prestations: {
+          type: 'array',
+          description: 'Lignes de prestations à facturer.',
+          items: {
+            type: 'object',
+            properties: {
+              description: {type: 'string', description: 'Libellé de la prestation.'},
+              quantite: {type: 'number', description: 'Quantité (default 1).'},
+              prix_ht: {type: 'number', description: 'Prix unitaire HT en euros.'},
+              taux_tva: {type: 'number', description: 'Taux de TVA en % (20, 10, 5.5, 2.1 ou 0). Default 20.'}
+            },
+            required: ['description', 'prix_ht']
+          }
+        }
+      },
+      required: ['client_nom', 'prestations']
+    }
   }
 ];
 
@@ -3011,6 +3087,48 @@ function executeXiaomiTool(toolName, input){
           return JSON.stringify({success:false, error:e.message});
         }
       })();
+    }
+
+    if(toolName === 'read_compta_kpi'){
+      if(!state.compta){
+        // tente un dernier rafraîchissement synchrone
+        if(_brainChannel) _brainChannel.postMessage({ type: 'compta:request:state' });
+        logEvent('warn', '◈ Tool read_compta_kpi · Compta non ouverte');
+        return JSON.stringify({success:false, available:false,
+          message:'Le module Compta SASU n\'est pas ouvert (ouvre l\'onglet COMPTA). Je ne peux pas inventer les chiffres.'});
+      }
+      logEvent('ok', '◈ Tool read_compta_kpi OK · CA '+(state.compta.kpi?.ca ?? '?')+'€');
+      return JSON.stringify({success:true, available:true, data:state.compta});
+    }
+
+    if(toolName === 'create_invoice_draft'){
+      const nom = (input.client_nom||'').trim();
+      const prestas = Array.isArray(input.prestations) ? input.prestations : [];
+      if(!nom) return JSON.stringify({success:false, error:'client_nom requis'});
+      if(!prestas.length) return JSON.stringify({success:false, error:'au moins une prestation requise'});
+      if(!_comptaAlive){
+        return JSON.stringify({success:false, available:false,
+          message:'Le module Compta SASU n\'est pas ouvert (ouvre l\'onglet COMPTA) — impossible de préparer le brouillon.'});
+      }
+      const draft = {
+        client: {
+          nom,
+          adresse: (input.client_adresse||'').trim(),
+          siret: (input.client_siret||'').trim(),
+          tvaIntra: (input.client_tva||'').trim()
+        },
+        echeanceJours: Number.isFinite(input.echeance_jours) ? input.echeance_jours : 30,
+        prestations: prestas.map(p => ({
+          description: (p.description||'').trim(),
+          quantite: Number(p.quantite) > 0 ? Number(p.quantite) : 1,
+          prixHT: Number(p.prix_ht) || 0,
+          tauxTVA: (p.taux_tva != null) ? Number(p.taux_tva) : 20
+        }))
+      };
+      if(_brainChannel) _brainChannel.postMessage({ type: 'shrine:compta:invoice-draft', draft });
+      logEvent('ok', '⬢ Tool create_invoice_draft · brouillon envoyé à Compta pour '+nom);
+      return JSON.stringify({success:true,
+        message:'Brouillon de facture pour "'+nom+'" ouvert dans le module Compta (statut brouillon). Tarek doit le vérifier et cliquer sur Enregistrer pour le valider — rien n\'a été émis.'});
     }
 
     return JSON.stringify({success:false, error:'Tool inconnu: '+toolName});
@@ -7203,6 +7321,9 @@ if ('serviceWorker' in navigator) {
 })();
 
 </script>
+
+<!-- Gardienne 3D · module autonome (se désactive proprement si WebGL/offline) -->
+<script type="module" src="./robot3d.js"></script>
 
 </body>
 </html>
