@@ -2729,8 +2729,10 @@ window.addEventListener('scroll',()=>{
 },{passive:true});
 
 /* ============ MODAL + FORM SUPABASE ============ */
-const SUPA_URL  = 'https://dmztalsmreugfwojsaar.supabase.co';
-const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw';
+/* Leads → CRM Amavya (projet qrotbfsvaouwyoyqtqlr, table partner_leads / « Leads entrants »).
+   Un trigger côté base envoie aussi chaque lead par email à bastien.vergoni@playazur.fr. */
+const SUPA_URL  = 'https://qrotbfsvaouwyoyqtqlr.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyb3RiZnN2YW91d3lveXF0cWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODA0OTcsImV4cCI6MjA5Njk1NjQ5N30.Pb8o-rLCkUGsrmb81kqEASAf0BJ36Ms6pO56JeywcHU';
 
 const modal       = document.getElementById('leadModal');
 const formState   = document.getElementById('formState');
@@ -3013,11 +3015,13 @@ form.addEventListener('submit', async (e) => {
     : '';
 
   const data = {
+    source:       'lostchapter',
+    status:       'new',
     full_name:    form.full_name.value.trim(),
-    structure:    structureValue,
+    structure:    (structureValue && structureValue.trim().length >= 2) ? structureValue.trim().slice(0, 200) : 'Particulier',
     role:         roleValue,
     email:        form.email.value.trim(),
-    phone:        form.phone.value.trim(),
+    phone:        form.phone.value.trim().slice(0, 30),
     postal_code:  form.postal_code.value.trim(),
     city:         form.city.value.trim(),
     monument:     currentFlow === 'commune' ? form.monument.value.trim() : '',
@@ -3038,7 +3042,7 @@ form.addEventListener('submit', async (e) => {
     media_name:        currentFlow === 'presse' ? form.media_name.value.trim()         : '',
     audience_size:     currentFlow === 'presse' ? form.audience_size.value.trim()      : '',
     coverage_type:     coverageTypeValue,
-    message:      messageValue,
+    message:      (messageValue || '').slice(0, 3000),
     honeypot_filled: honeypot.length > 0,
     user_agent:   navigator.userAgent.slice(0,500),
     page_url:     location.href.slice(0,500),

@@ -491,8 +491,9 @@ body::after{
 // ═══════════════════════════════════════════════════════════════════
 // IMAGINE TON LOST CHAPTER — Mini-jeu interactif
 // ═══════════════════════════════════════════════════════════════════
-const SUPA_URL  = 'https://dmztalsmreugfwojsaar.supabase.co';
-const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtenRhbHNtcmV1Z2Z3b2pzYWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTA3MzMsImV4cCI6MjA5MTMyNjczM30.6UVnPjYKYm81S-DNGHwunllBMgwB-B0FS7fFNhBUEaw';
+/* Leads → CRM Amavya (partner_leads) + email auto à bastien.vergoni@playazur.fr (trigger DB). */
+const SUPA_URL  = 'https://qrotbfsvaouwyoyqtqlr.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyb3RiZnN2YW91d3lveXF0cWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODA0OTcsImV4cCI6MjA5Njk1NjQ5N30.Pb8o-rLCkUGsrmb81kqEASAf0BJ36Ms6pO56JeywcHU';
 
 // ═══ DATA ═══
 const DATA = {
@@ -684,6 +685,8 @@ const GAME = {
     btn.innerHTML = '⏳ Envoi en cours…';
 
     const payload = {
+      source: 'lostchapter',
+      status: 'new',
       full_name: name,
       structure: 'Particulier · Imagine Game',
       role: '',
@@ -698,7 +701,7 @@ const GAME = {
       audience_range:'',content_type:'',
       activity_type:'',skills_experience:'',availability:'',portfolio_url:'',
       media_type:'',media_name:'',audience_size:'',coverage_type:'',
-      message: this.scenarioPlainText(),
+      message: (this.scenarioPlainText() || '').slice(0, 3000),
       honeypot_filled: false,
       user_agent: navigator.userAgent.slice(0,500),
       page_url: location.href.slice(0,500),
