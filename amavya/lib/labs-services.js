@@ -11,6 +11,11 @@ export const LABS_SERVICES = [
     id: "agents-ia",
     label: "Agents IA",
     tagline: "Vos collaborateurs numériques autonomes",
+    example: {
+      name: "CoachForge AI",
+      tagline: "Un coach IA personnel, spécialisé et disponible 24/7.",
+      href: "https://coachforgeia.amavya.cloud/presentation.html",
+    },
     definition:
       "Des agents intelligents qui comprennent vos processus, prennent des décisions et exécutent des tâches complexes sans intervention humaine. Ils s'intègrent à vos outils existants (CRM, email, ERP, bases de données) et apprennent en continu pour devenir plus précis dans le temps.",
     benefits: [
@@ -56,6 +61,12 @@ export const LABS_SERVICES = [
     id: "crm-intelligent",
     label: "CRM intelligent",
     tagline: "Un CRM qui travaille pour vous",
+    example: {
+      name: "VoltPilot",
+      tagline: "Le CRM métier des électriciens : devis, factures, chantiers.",
+      href: "https://voltpilot.amavya.cloud/presentation.html",
+    },
+    soon: "CRM Amavya — version commercialisable bientôt.",
     definition:
       "Bien plus qu'un carnet d'adresses : un CRM augmenté par IA qui qualifie automatiquement vos leads, priorise les opportunités à fort potentiel et enrichit chaque fiche contact en temps réel. Vos commerciaux ne perdent plus de temps à mettre à jour la donnée — ils la consomment.",
     benefits: [
@@ -96,6 +107,11 @@ export const LABS_SERVICES = [
     id: "automatisation",
     label: "Automatisation",
     tagline: "Éliminez les tâches répétitives",
+    example: {
+      name: "Stockaly",
+      tagline: "Gestion de stock intelligente : alertes & réappro automatiques.",
+      href: "https://stockaly.amavya.cloud/presentation.html",
+    },
     definition:
       "Connectez tous vos outils (Gmail, Slack, Notion, Sheets, votre CRM, votre compta…) et automatisez vos workflows de bout en bout. Plus de copier-coller, plus de ressaisies : vos processus s'exécutent seuls, sans erreur et sans friction.",
     benefits: [
@@ -136,6 +152,11 @@ export const LABS_SERVICES = [
     id: "prospection-ia",
     label: "Prospection IA",
     tagline: "Remplissez votre pipeline en pilote automatique",
+    example: {
+      name: "Machine de Prospection",
+      tagline: "8 agents IA qui prospectent pendant que vous dormez.",
+      href: "https://machine.amavya.cloud/presentation.html",
+    },
     definition:
       "Identifiez vos prospects idéaux, lancez des séquences personnalisées et relancez automatiquement — le tout piloté par IA. Vos commerciaux se concentrent sur la signature, pas sur la recherche froide.",
     benefits: [
@@ -176,6 +197,23 @@ export const LABS_SERVICES = [
     id: "saas-sur-mesure",
     label: "SaaS sur mesure",
     tagline: "Votre plateforme, conçue pour vous",
+    examples: [
+      {
+        name: "VoltPilot",
+        tagline: "Plateforme métier électriciens (CRM, devis, chantiers).",
+        href: "https://voltpilot.amavya.cloud/presentation.html",
+      },
+      {
+        name: "Stockaly",
+        tagline: "Gestion de stock multi-métier pour artisans & commerçants.",
+        href: "https://stockaly.amavya.cloud/presentation.html",
+      },
+      {
+        name: "Qualiopi par AMAVYA",
+        tagline: "Tout l'organisme de formation + conformité Qualiopi.",
+        href: "https://qualiopi.amavya.cloud/presentation.html",
+      },
+    ],
     definition:
       "Nous concevons et développons des plateformes web et mobile élégantes, performantes et scalables, taillées précisément pour votre activité — de la première maquette à la mise en production, avec l'IA au cœur du produit.",
     benefits: [
@@ -216,6 +254,18 @@ export const LABS_SERVICES = [
     id: "formation",
     label: "Formation",
     tagline: "Montez vos équipes en compétence",
+    examples: [
+      {
+        name: "SEPT — Académie Claude Code",
+        tagline: "Maîtrise l'IA et Claude Code en 7 jours.",
+        href: "https://academy.amavya.cloud/presentation.html",
+      },
+      {
+        name: "Qualiopi par AMAVYA",
+        tagline: "Gère ton organisme de formation et ta certification.",
+        href: "https://qualiopi.amavya.cloud/presentation.html",
+      },
+    ],
     definition:
       "Nous accompagnons vos équipes pour intégrer concrètement l'IA dans leur quotidien : ateliers pratiques, montée en compétences, mise en place d'outils adaptés à vos métiers, et suivi post-formation pour ancrer la nouvelle pratique.",
     benefits: [

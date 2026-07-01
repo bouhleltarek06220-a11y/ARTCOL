@@ -146,6 +146,65 @@ export default function ServiceDetailModal({ service, onClose }) {
               </>
             )}
 
+            {/* Exemple concret : un vrai produit AMAVYA en ligne */}
+            {(service.example || service.examples) && (
+              <>
+                <div className="my-7 h-px bg-[linear-gradient(90deg,transparent,rgba(240,210,122,0.5),transparent)]" />
+                <h3 className="text-xs uppercase tracking-[0.22em] text-gold-bright">
+                  Un produit AMAVYA déjà en ligne
+                </h3>
+
+                {service.example && (
+                  <a
+                    href={service.example.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group mt-4 flex items-center justify-between gap-4 rounded-2xl border border-gold/30 bg-[linear-gradient(135deg,rgba(212,175,55,0.10),rgba(212,175,55,0.02))] p-4 transition-all hover:-translate-y-0.5 hover:border-gold/60"
+                  >
+                    <span className="min-w-0">
+                      <span
+                        className="block text-base font-semibold text-paper"
+                        style={{ fontFamily: "var(--font-space-grotesk), system-ui, sans-serif" }}
+                      >
+                        {service.example.name}
+                      </span>
+                      <span className="mt-0.5 block text-sm text-paper/70">
+                        {service.example.tagline}
+                      </span>
+                    </span>
+                    <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-gold-bright">
+                      Voir la présentation
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} />
+                    </span>
+                  </a>
+                )}
+
+                {service.examples && (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {service.examples.map((ex, i) => (
+                      <a
+                        key={i}
+                        href={ex.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between gap-3 rounded-2xl border border-gold/25 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.01))] p-3.5 transition-all hover:-translate-y-0.5 hover:border-gold/60"
+                      >
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-paper">{ex.name}</span>
+                          <span className="mt-0.5 block truncate text-xs text-paper/65">{ex.tagline}</span>
+                        </span>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-gold-bright transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} />
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {service.soon && (
+                  <p className="mt-3 text-xs italic text-muted-soft">Bientôt : {service.soon}</p>
+                )}
+              </>
+            )}
+
             {/* CTA final */}
             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
               <a
