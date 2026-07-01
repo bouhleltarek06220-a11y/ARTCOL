@@ -38,6 +38,25 @@ function getIp(req) {
   );
 }
 
+// Anti-abus cross-site : le formulaire n'est soumis que depuis amavya.cloud.
+// On refuse toute requête d'une autre origine (limite le spam scripté du CRM).
+const ALLOWED_HOSTS = new Set([
+  "amavya.cloud",
+  "www.amavya.cloud",
+  "localhost",
+  "localhost:3000",
+]);
+function originAllowed(req) {
+  const src = req.headers.get("origin") || req.headers.get("referer") || "";
+  if (!src) return false;
+  try {
+    const h = new URL(src).host;
+    return ALLOWED_HOSTS.has(h) || h.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+}
+
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
 const esc = (s) =>
@@ -116,6 +135,9 @@ async function sendNotificationEmail(lead, qualif) {
 }
 
 export async function POST(req) {
+  if (!originAllowed(req)) {
+    return Response.json({ ok: false, error: "forbidden" }, { status: 403 });
+  }
   let body;
   try {
     body = await req.json();

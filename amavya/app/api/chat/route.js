@@ -35,6 +35,26 @@ function getIp(req) {
   );
 }
 
+// Anti-abus cross-site : ce chatbot n'est appelé que par le navigateur depuis
+// amavya.cloud. On refuse toute requête d'une autre origine (empêche qu'un tiers
+// consomme la clé Anthropic depuis son propre site).
+const ALLOWED_HOSTS = new Set([
+  "amavya.cloud",
+  "www.amavya.cloud",
+  "localhost",
+  "localhost:3000",
+]);
+function originAllowed(req) {
+  const src = req.headers.get("origin") || req.headers.get("referer") || "";
+  if (!src) return false;
+  try {
+    const h = new URL(src).host;
+    return ALLOWED_HOSTS.has(h) || h.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+}
+
 function sanitizeHistory(messages) {
   if (!Array.isArray(messages)) return [];
   return messages
@@ -48,6 +68,9 @@ function sanitizeHistory(messages) {
 }
 
 export async function POST(req) {
+  if (!originAllowed(req)) {
+    return Response.json({ ok: false, error: "forbidden" }, { status: 403 });
+  }
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return Response.json(
